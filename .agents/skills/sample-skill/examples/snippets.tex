@@ -1,0 +1,35 @@
+% ==============================================================================
+% Reference Snippets: Tables, Math, Figures
+% ==============================================================================
+
+% --- 1. Publication-Quality Table (booktabs + tabularx) ---
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison of experimental metrics across baseline models.}
+  \label{tab:baseline_comparison}
+  \begin{tabularx}{\linewidth}{l X r r}
+    \toprule
+    \textbf{Model} & \textbf{Architecture} & \textbf{Accuracy (\%)} & \textbf{Latency (ms)} \\
+    \midrule
+    Baseline A     & Transformer (6 layers) & 84.2                    & 12.4                  \\
+    Baseline B     & Hybrid CNN-RNN         & 81.7                    & 9.1                   \\
+    \textbf{Ours}  & Modular Bi-LSTM        & \textbf{89.5}           & \textbf{7.8}          \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% --- 2. Multiline Aligned Equation ---
+\begin{align}
+  \label{eq:optimization_objective}
+  \mathcal{L}(\theta) &= \mathbb{E}_{x \sim \mathcal{D}} \left[ -\log p_\theta(x) \right] + \lambda \mathcal{R}(\theta) \\
+  &= \frac{1}{N} \sum_{i=1}^{N} \ell(f_\theta(x_i), y_i) + \frac{\lambda}{2} \|\theta\|_2^2.
+\end{align}
+
+% --- 3. Professional Figure with caption and cleveref label ---
+\begin{figure}[htbp]
+  \centering
+  % \includegraphics[width=0.8\linewidth]{figures/pdf/architecture.pdf}
+  \caption{Overview of the end-to-end data processing pipeline.}
+  \label{fig:pipeline_overview}
+\end{figure}
+

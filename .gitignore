@@ -1,0 +1,54 @@
+# ==========================================
+# Git Ignore Rules
+# ==========================================
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.local.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# LaTeX Build & Auxiliary Files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex
+*.xdv
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.brf
+*.upa
+*.upb
+
+# Output and temporary directories
+build/
+dist/
+out/
+_minted-*/
+auto/
+
+# OS Artifacts
+.DS_Store
+Thumbs.db

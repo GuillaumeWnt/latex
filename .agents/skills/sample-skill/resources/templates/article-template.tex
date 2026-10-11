@@ -1,0 +1,69 @@
+% ==============================================================================
+% Modern LaTeX Article Template
+% ==============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% --- Core Geometry & Fonts ---
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{microtype}
+
+% --- Language & Typography ---
+\usepackage[french,english]{babel}
+\usepackage{csquotes}
+
+% --- Mathematics ---
+\usepackage{amsmath,amssymb,mathtools}
+
+% --- Tables & Graphics ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+% --- Bibliography (BibLaTeX + Biber) ---
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+% \addbibresource{bib/references.bib}
+
+% --- Hyperlinks & Clever References ---
+\usepackage[colorlinks=true,linkcolor=blue!70!black,citecolor=green!50!black,urlcolor=blue]{hyperref}
+\usepackage{cleveref}
+
+% --- Metadata ---
+\title{\textbf{Document Title Here}}
+\author{Author Name \and Second Author}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This is a concise summary of the article's objectives, methods, and main findings.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+This is the introduction.
+Use semantic line breaks to ensure that each sentence is on its own line.
+Here is a cross-reference to \cref{sec:methodology}.
+
+\section{Methodology}
+\label{sec:methodology}
+We describe our main approach here.
+Equations should be written using AMS environments:
+\begin{equation}
+  \label{eq:sample_formula}
+  f(x) = \int_{0}^{\infty} e^{-t x} \, \mathrm{d}t.
+\end{equation}
+
+\section{Conclusion}
+\label{sec:conclusion}
+Conclusive remarks and prospective work.
+
+% \printbibliography
+
+\end{document}
+

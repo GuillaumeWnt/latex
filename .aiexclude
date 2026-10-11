@@ -1,0 +1,36 @@
+# ==========================================
+# AI Exclusion Rules (Google & Gemini Tools)
+# ==========================================
+
+# Secrets & Environment variables
+.env
+.env.*
+*.key
+*.pem
+*.secret
+*.local.json
+
+# Python Virtualenv & Cache
+.venv/
+__pycache__/
+*.pyc
+
+# Heavy Binary & Internal Build Artifacts
+# Note: *.log and *.bbl are purposely ALLOWED so the AI can diagnose compilation errors!
+*.synctex.gz
+*.synctex
+*.fls
+*.fdb_latexmk
+*.xdv
+*.nav
+*.snm
+*.vrb
+
+# Output and temporary directories to skip from background indexing
+dist/
+_minted-*/
+auto/
+
+# OS Artifacts
+.DS_Store
+Thumbs.db

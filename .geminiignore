@@ -1,0 +1,36 @@
+# ==========================================
+# Gemini CLI Exclusion Rules
+# ==========================================
+
+# Secrets & Environment
+.env
+.env.*
+*.key
+*.pem
+*.secret
+*.local.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Heavy Binary & Internal Build Artifacts
+# Note: *.log and *.bbl are ALLOWED for error diagnosis
+*.synctex.gz
+*.synctex
+*.fls
+*.fdb_latexmk
+*.xdv
+*.nav
+*.snm
+*.vrb
+
+# Build directories
+dist/
+_minted-*/
+auto/
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
