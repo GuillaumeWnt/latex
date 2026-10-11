@@ -1,9 +1,8 @@
 # Repository Instructions
 
-This repository is configured for modular LaTeX authoring.
-
-* **Primary Directives:** See [`AGENTS.md`](../AGENTS.md).
-* **Detailed Rules & Architecture:** See [`.agents/rules/`](../.agents/rules/).
-* **Workflows & Diagnostic Procedures:** See [`.agents/workflows/`](../.agents/workflows/).
-* **Skills, Scripts & Templates:** See [`.agents/skills/`](../.agents/skills/).
-
+All project-specific guidelines, standards, and operations are maintained in:
+* [`AGENTS.md`](../AGENTS.md) — Root project overview and primary directives.
+* [`.agents/rules/`](../.agents/rules/) — Domain rules, coding standards, and architectural constraints.
+* [`.agents/workflows/`](../.agents/workflows/) — Step-by-step procedures and runbooks.
+* [`.agents/skills/`](../.agents/skills/) — Reusable capabilities, templates, documentation, and tools.
+* [`.agents/scripts/`](../.agents/scripts/) — Project-level automation scripts.

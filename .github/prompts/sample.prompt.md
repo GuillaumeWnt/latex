@@ -1,18 +1,9 @@
 ---
-description: Review and format a LaTeX document following project guidelines
+description: Audit code against workspace standards defined in .agents/
 ---
 
-Review the currently active LaTeX file or selection against our workspace standards:
+Review the active file or selection against our workspace standards:
 
-1. **Check Coding Style:**
-   - Verify 2-space indentation inside environments.
-   - Verify semantic line breaks (one sentence per line).
-   - Ensure tables use `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) with zero vertical bars.
-   - Check that math uses proper AMS environments (`\[ ... \]`, `align`) and not `$$ ... $$`.
-   - Ensure labels follow standard prefixes (`sec:`, `fig:`, `tab:`, `eq:`) and are referenced via `\cref{}`.
-
-2. **Check Rules in `.agents/`:**
-   - Refer to [.agents/rules/coding-style.md](../../.agents/rules/coding-style.md) for full style constraints.
-
-Highlight any violations found and propose the corrected code.
-
+1. Discover and apply the rules defined in `.agents/rules/`.
+2. Verify compliance with the project conventions and constraints established in `AGENTS.md`.
+3. Highlight any violations and propose the corrected code adhering strictly to the repository standards.

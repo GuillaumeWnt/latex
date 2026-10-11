@@ -1,14 +1,10 @@
-# Gemini Workspace Directives — LaTeX Authoring
+# Gemini Workspace Directives — AI Context Router
 
-> **Primary Source:** All detailed guidelines, document layouts, templates, and scripts are centralized in the [`.agents/`](../.agents) directory.
+> **Single Source of Truth:** All project-specific guidelines, coding standards, architecture rules, and workflows are centralized in [`AGENTS.md`](../AGENTS.md) and the [`.agents/`](../.agents) directory.
 
 ---
 
 ## Directives
-1. **Conventions & Quality Standards:** Adhere to the rules in [`.agents/rules/`](../.agents/rules/):
-   - Modular layout per [`architecture.md`](../.agents/rules/architecture.md).
-   - Coding and AMS math formatting per [`coding-style.md`](../.agents/rules/coding-style.md).
-   - Security constraints per [`security.md`](../.agents/rules/security.md).
-2. **Compilation & Diagnostic:** Follow the build and verification runbook in [`.agents/workflows/sample-workflow.md`](../.agents/workflows/sample-workflow.md).
-3. **Templates & Tools:** Utilize the templates and scripts available in [`.agents/skills/sample-skill/`](../.agents/skills/sample-skill/).
-
+1. **Context Discovery:** Check [`AGENTS.md`](../AGENTS.md) and [`.agents/rules/`](../.agents/rules/) for project-specific conventions, style guidelines, and constraints.
+2. **Standard Procedures:** Execute tasks following the established runbooks in [`.agents/workflows/`](../.agents/workflows/).
+3. **Capabilities & Utilities:** Utilize available templates, documentation references, and helper scripts in [`.agents/skills/`](../.agents/skills/) and [`.agents/scripts/`](../.agents/scripts/).
