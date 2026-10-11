@@ -1,0 +1,32 @@
+%------------------------------------------------------------------------------------
+%  SECTION 1 : PRÉSENTATION ET TYPOGRAPHIE
+%------------------------------------------------------------------------------------
+\section{Présentation et Typographie}
+\label{sec:presentation}
+
+Ce premier chapitre a pour objectif de démontrer les capacités graphiques et typographiques de ce modèle.
+Chaque phrase est rédigée sur une ligne distincte afin de faciliter les revues de code et le versionnement sous Git.
+
+\subsection{Familles de polices disponibles}
+\label{subsec:polices}
+
+Le modèle intègre plusieurs polices configurables :
+\begin{itemize}
+  \item \textbf{Police par défaut :} Calibri (sobre, fluide et parfaitement adaptée aux rapports académiques).
+  \item \textbf{Police de titre / accentuation :} {\AsapFont Asap Condensed pour les titres principaux}.
+  \item \textbf{Police spécifique :} {\ComicSansMSFont Comic Sans MS} (via \texttt{\textbackslash ComicSansMSFont}).
+\end{itemize}
+
+\subsection{Unités et formules scientifiques}
+\label{subsec:sciences}
+
+Le package \texttt{siunitx} permet d'écrire des grandeurs physiques sans ambiguïté :
+Une vitesse de \qty{25}{\meter\per\second}, une température de \qty{37.2}{\degreeCelsius}, ou encore une masse de \qtyrange{50}{80}{\kilo\gram}.
+
+Les équations mathématiques sont formatées selon les recommandations modernes :
+\begin{equation}
+  \label{eq:frequence_cardiaque}
+  f_{\text{max}} = 220 - \text{âge} \pm \epsilon,
+\end{equation}
+où $\epsilon$ représente la marge d'erreur individuelle.
+Une référence intelligente pointe vers l'\cref{eq:frequence_cardiaque}.

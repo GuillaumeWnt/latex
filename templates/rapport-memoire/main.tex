@@ -1,0 +1,74 @@
+%====================================================================================
+%  DOCUMENT PRINCIPAL - TEMPLATE RAPPORT & MÉMOIRE UNIVERSITAIRE
+%  Compilation : latexmk -lualatex -outdir=build main.tex
+%====================================================================================
+\documentclass[
+  % draft,             % Activer pour masquer les images et accélérer la compilation
+  french,              % Langue principale
+  english,             % Langue secondaire
+  font=calibri,        % Options de police : calibri, comicsans, standard
+  todoNote             % Activer l'affichage des notes et révisions
+]{ClasseGuillaume}
+
+% --- MÉTADONNÉES DU DOCUMENT ---
+\title{Modèle Universitaire pour Mémoires, Thèses et Rapports d'Ingénierie}
+\author{Guillaume \textsc{Winant}}
+\date{\today}
+
+% --- BASE BIBLIOGRAPHIQUE ---
+\addbibresource{bib/references.bib}
+
+%====================================================================================
+%  DÉBUT DU DOCUMENT
+%====================================================================================
+\begin{document}
+
+%------------------------------------------------------------------------------------
+%  PRÉ-CONTENU (FRONTMATTER : Numérotation romaine, sans logo)
+%------------------------------------------------------------------------------------
+\frontmatter
+\masquerLogo % Le logo ne s'affiche pas sur la page de garde ni les préliminaires
+
+% Page de garde principale
+\input{chapters/00_frontmatter/titlepage.tex}
+
+% Résumé bilingue
+\input{chapters/00_frontmatter/abstract.tex}
+
+% Table des matières et listes
+\setcounter{tocdepth}{2}
+\listoftodos[Liste des révisions et tâches en attente]
+\tableofcontents
+\listoffigures
+\listofillustrations
+
+%------------------------------------------------------------------------------------
+%  CORPS DU TEXTE (MAINMATTER : Numérotation arabe, activation du logo)
+%------------------------------------------------------------------------------------
+\mainmatter
+\afficherLogo % Réactivation du logo pour le corps du document
+
+% --- CHAPITRE I ---
+\chapter{Cadre Théorique et Fondements}
+\label{chap:fondements}
+
+\input{chapters/01_chapitre1/sec01_presentation.tex}
+\input{chapters/01_chapitre1/sec02_tableaux.tex}
+\input{chapters/01_chapitre1/sec03_illustrations.tex}
+
+% --- CHAPITRE II ---
+\chapter{Méthodologie et Analyse Pratique}
+\label{chap:methodologie}
+
+\input{chapters/02_chapitre2/sec01_annotations_todos.tex}
+\input{chapters/02_chapitre2/sec02_references.tex}
+
+%------------------------------------------------------------------------------------
+%  POST-CONTENU (BACKMATTER : Bibliographie, annexes)
+%------------------------------------------------------------------------------------
+\backmatter
+
+\printbibliography[heading=bibintoc, title={Références Bibliographiques}]
+
+\end{document}
+

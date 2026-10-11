@@ -1,0 +1,24 @@
+%------------------------------------------------------------------------------------
+%  SECTION 1 : ANNOTATIONS ET SUIVI DES MODIFICATIONS
+%------------------------------------------------------------------------------------
+\section{Annotations et Notes de Suivi}
+\label{sec:todos}
+
+Durant la phase de rédaction, il est essentiel de pouvoir annoter le document sans polluer le texte définitif.
+L'option de classe \texttt{todoNote} active l'affichage des notes marginales et de la table des révisions.
+
+\subsection{Notes dans la marge et surlignage}
+\label{subsec:notes_marge}
+
+La commande personnalisée \texttt{\textbackslash todoH} permet d'associer directement un surlignage coloré dans le corps du texte à une note en marge :
+
+Dans cette phrase, nous identifions un point à relire avec attention \todoH{MarieStyle}{Emerald!30}{Vérifier les données statistiques}{les données cliniques présentées ici}.
+De plus, une seconde remarque peut être formulée pour l'auteur \todoH{GuillaumeStyle}{Apricot!40}{Ajouter la référence manquante}{concernant l'algorithme d'imagerie médicale}.
+
+\subsection{Gestion des figures provisoires}
+\label{subsec:missing_figures}
+
+Lorsqu'une figure n'est pas encore finalisée, la commande \texttt{\textbackslash missingfigure} réserve l'espace dans la mise en page sans bloquer la compilation :
+
+\missingfigure[figwidth=\linewidth, figheight=4.5cm, figcolor=RoyalBlue!20]{Schéma de synthèse du protocole d'étude à insérer}
+
