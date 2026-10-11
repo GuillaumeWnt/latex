@@ -4,6 +4,51 @@
       "url": "https://mcp.draw.io/mcp",
       "gallery": "https://api.mcp.github.com",
       "version": "1.0.3"
+    },
+    "latex-compiler": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/RobertoDure/mcp-latex-server",
+        "latex-server"
+      ],
+      "env": {
+        "LATEX_SERVER_BASE_PATH": "${workspaceFolder}"
+      }
+    },
+    "latex-workshop-assistant": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/Yeok-c/latex-mcp-server",
+        "latex-mcp-server",
+        "--workspace",
+        "${workspaceFolder}"
+      ]
+    },
+    "arxiv-latex": {
+      "command": "uvx",
+      "args": [
+        "arxiv-latex-mcp"
+      ]
+    },
+    "zotero-citations": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@oscardvs/zoteus"
+      ],
+      "env": {
+        "ZOTEUS_LOCAL": "true"
+      }
+    },
+    "workspace-filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ]
     }
   }
 }
