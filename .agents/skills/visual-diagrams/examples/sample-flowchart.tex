@@ -1,0 +1,51 @@
+% sample-flowchart.tex
+% Standalone or includable TikZ flowchart snippet.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance=1.5cm,
+    auto,
+    block/.style={
+      rectangle,
+      draw=black!75,
+      fill=blue!10,
+      thick,
+      rounded corners=3pt,
+      text width=3.2cm,
+      text centered,
+      minimum height=1.1cm,
+      font=\small\sffamily
+    },
+    decision/.style={
+      diamond,
+      draw=black!75,
+      fill=yellow!20,
+      thick,
+      aspect=2,
+      text width=2.5cm,
+      text centered,
+      font=\footnotesize\sffamily
+    },
+    line/.style={
+      draw=black!85,
+      -stealth,
+      thick
+    }
+  ]
+    \node [block] (init) {Initialisation des données};
+    \node [block, below=of init] (process) {Calcul des paramètres et optimisation};
+    \node [decision, below=of process] (decide) {Convergence atteinte ?};
+    \node [block, right=2cm of decide] (update) {Ajustement du pas de gradient};
+    \node [block, below=of decide] (stop) {Génération du rapport et métriques};
+
+    \path [line] (init) -- (process);
+    \path [line] (process) -- (decide);
+    \path [line] (decide) -- node [near start, right] {Oui} (stop);
+    \path [line] (decide) -- node [near start, above] {Non} (update);
+    \path [line] (update) |- (process);
+  \end{tikzpicture}
+  \caption{Schéma algorithmique du processus d'optimisation itérative.}
+  \label{fig:flux-optimisation}
+\end{figure}
+

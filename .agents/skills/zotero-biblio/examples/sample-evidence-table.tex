@@ -1,0 +1,22 @@
+% sample-evidence-table.tex
+% Modular synthesis table generated from literature evidence extraction.
+% Uses tabularx + booktabs for publication-grade layout.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Synthèse comparative de la littérature récente sur les méthodes analysées.}
+  \label{tab:synthese-litterature}
+  \begin{tabularx}{\linewidth}{@{} p{3.2cm} p{2.2cm} X p{3.0cm} @{}}
+    \toprule
+    \textbf{Étude / Auteurs} & \textbf{Approche} & \textbf{Principaux Résultats} & \textbf{Limites Identifiées} \\
+    \midrule
+    \textcite{smith2024deep} & Réseaux convolutifs profonds & Précision de segmentation supérieure à 94\,\% sur corpus technique. & Temps d'inférence élevé sur matériel standard. \\
+    \addlinespace
+    \textcite{dupont2023ia} & Modèles de langage hybrides & Amélioration de 18\,\% de la cohérence sémantique des synthèses. & Sensibilité accrue au bruit dans les entrées. \\
+    \addlinespace
+    \textcite{martin2022analyse} & Analyse statistique bayésienne & Réduction des faux positifs de 30\,\% en milieu contraint. & Nécessite des a priori calibrés manuellement. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+

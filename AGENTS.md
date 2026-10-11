@@ -28,7 +28,11 @@
    - Adopt **semantic line breaks** (one sentence or clause per line). This minimizes Git merge conflicts and makes diffs readable.
    - Maintain a 2-space indentation inside environments (`\begin{...}` ... `\end{...}`).
 
----
+5. **Rule Adaptability & Escalation to User (Feedback Loop):**
+   - If an AI agent encounters a situation where an existing rule, constraint, or guideline in this workspace is ill-adapted, overly rigid, contradictory, or preventing the best technical outcome:
+     - **Never ignore or bypass the rule silently.**
+     - **Escalate the issue to the user immediately:** explain clearly why the rule is problematic or ill-adapted in the current context, and suggest modifying or removing it.
+     - **Update/remove the rule upon agreement:** with the user's validation, edit the relevant rule file in `.agents/rules/` or `AGENTS.md` so that the documentation stays living, pragmatic, and aligned with real project needs.
 
 ## 2. Directory Navigation for Agents
 
@@ -42,4 +46,5 @@ Refer to the following `.agents/` resources when working on this repository:
 | [`.agents/rules/security.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/security.md) | `-shell-escape` restrictions, data hygiene | When executing scripts or adding tools |
 | [`.agents/workflows/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/workflows) | Step-by-step procedures (clean build, release) | When executing multi-step operations |
 | [`.agents/skills/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/skills) | Reusable skills, templates, scripts & cheatsheets | On demand for specialized workflows |
+| [`.agents/subagents/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/subagents) | Specialized subagent roles (biblio, diagrams, QA, compiler, memory & web research) | When delegating focused domain tasks |
 

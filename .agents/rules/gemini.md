@@ -8,6 +8,7 @@
   - Ensure tables use `booktabs` without vertical lines.
   - Suggest `\cref` instead of hardcoded labels.
   - Remind the user if a package is obsolete (e.g. suggesting `biblatex` instead of raw `bibtex`).
+- **Rule Flexibility & User Escalation:** If you wish to propose a solution or implement a feature that is hindered by an existing workspace rule that appears ill-adapted, explain the conflict to the user, propose adjusting or deleting the rule, and update the rule files upon agreement.
 
 ---
 

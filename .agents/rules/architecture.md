@@ -1,38 +1,47 @@
 # Document Architecture & Modular Layout
 
-## 1. Recommended Workspace Directory Tree
+## 1. Recommended Workspace Directory Trees
 
-For all multi-page LaTeX documents, adhere to this modular layout:
+This workspace supports two clean, modular architectures for LaTeX authoring:
+
+### Layout A: Class-Based Template (`templates/rapport-memoire/`)
+Recommended for theses, dissertations, portfolios, and comprehensive university reports:
 
 ```text
-├── main.tex                 # Master file (calls preambles and content)
+templates/rapport-memoire/
+├── README.md                 # Complete documentation and cheatsheet
+├── main.tex                 # Master file (calls chapters, frontmatter, backmatter)
+├── ClasseGuillaume.cls      # Modular KOMA-Script custom class (styling, packages, fonts)
+├── Fonts/                   # Local TrueType / OpenType font families (Asap, Calibri, ComicSans)
+├── images/                  # Institutional and graphic assets (logos, diagrams)
+├── chapters/                # Modular document chapters
+│   ├── 00_frontmatter/      # Title page, abstract, todolist
+│   ├── 01_chapitre1/        # Chapter I modular sections
+│   └── 02_chapitre2/        # Chapter II modular sections
+├── tables/                  # Externalized booktabs/tabularx tables
+├── bib/                     # BibLaTeX database (references.bib)
+├── scripts/                 # Compilation and maintenance scripts (compile.ps1, clean.ps1)
+└── build/                   # Compilation output directory (gitignored)
+```
+
+### Layout B: Preamble-Folder Layout (`preamble/`)
+Recommended for articles and modular multi-author papers without custom `.cls`:
+
+```text
+├── main.tex                 # Master file
 ├── preamble/                # Modular configuration files
-│   ├── packages.tex         # All \usepackage imports
+│   ├── packages.tex         # \usepackage imports
 │   ├── geometry.tex         # Page margins, headers & footers
-│   ├── typography.tex       # Fonts, language (babel/polyglossia), microtype
+│   ├── typography.tex       # Fonts, language (babel), microtype
 │   ├── math.tex             # AMS packages, custom theorem environments
-│   ├── tables.tex           # booktabs, tabularx, array adjustments
-│   ├── graphics.tex         # graphicx, tikz, figure setup
-│   ├── biblio.tex           # biblatex configuration & style
+│   ├── tables.tex           # booktabs, tabularx
+│   ├── graphics.tex         # graphicx, figure setup
+│   ├── biblio.tex           # biblatex configuration
 │   ├── hyperref.tex         # hyperref, cleveref, PDF metadata
-│   └── commands.tex         # Custom shortcuts and project-specific macros
-│
-├── content/                 # Document body (or chapters/ for books/theses)
-│   ├── 00_abstract.tex
-│   ├── 01_introduction.tex
-│   ├── 02_state_of_the_art.tex
-│   ├── 03_methodology.tex
-│   ├── 04_experiments.tex
-│   └── 05_conclusion.tex
-│
+│   └── commands.tex         # Custom shortcuts and macros
+├── content/                 # Document body sections
 ├── figures/                 # All visual assets
-│   ├── pdf/                 # High-resolution vector diagrams
-│   ├── png/                 # Screenshots or bitmaps
-│   └── tikz/                # TikZ or standalone source codes
-│
 ├── bib/                     # Bibliography files
-│   └── references.bib       # Clean, deduplicated BibLaTeX database
-│
 └── build/                   # Compilation output directory (gitignored)
 ```
 
@@ -40,35 +49,56 @@ For all multi-page LaTeX documents, adhere to this modular layout:
 
 ## 2. Master File Anatomy (`main.tex`)
 
-A typical master file must remain clean and readable:
+A clean master file delegates all styling to the class/preamble and orchestrates structure:
 
 ```latex
-\documentclass[11pt,a4paper]{article}
+\documentclass[
+  french,
+  english,
+  font=calibri,
+  todoNote
+]{ClasseGuillaume}
 
-% --- Modular Preambles ---
-\input{preamble/packages.tex}
-\input{preamble/geometry.tex}
-\input{preamble/typography.tex}
-\input{preamble/math.tex}
-\input{preamble/biblio.tex}
-\input{preamble/commands.tex}
-\input{preamble/hyperref.tex} % Loaded last with cleveref
+% --- Metadata ---
+\title{Document Title}
+\author{Author Name}
+\date{\today}
 
+% --- Bibliography Database ---
 \addbibresource{bib/references.bib}
 
 \begin{document}
 
-\maketitle
-\input{content/00_abstract.tex}
-
+% --- Frontmatter ---
+\frontmatter
+\masquerLogo
+\geometrieLarge
+\input{chapters/00_frontmatter/titlepage.tex}
+\geometrieWord
+\begin{singlespace}
+  \listoftodos[Liste des révisions]
+  \label{table_todos}
+\end{singlespace}
+\input{chapters/00_frontmatter/abstract.tex}
 \tableofcontents
-\newpage
 
-\input{content/01_introduction.tex}
-\input{content/02_methodology.tex}
-\input{content/03_conclusion.tex}
+% --- Mainmatter ---
+\mainmatter
+\afficherLogo
+\chapter{First Chapter}
+\input{chapters/01_chapitre1/sec01_presentation.tex}
 
-\printbibliography
+% --- Annexes ---
+\appendix
+\chapter{Documents Complémentaires}
+\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{documents/annexe.pdf}
+
+% --- Backmatter ---
+\backmatter
+\listoffigures
+\listofillustrations
+\listoftables
+\printbibliography[heading=bibintoc, title={Références Bibliographiques}]
 
 \end{document}
 ```
@@ -78,11 +108,31 @@ A typical master file must remain clean and readable:
 ## 3. Inclusion Rules: `\input{}` vs `\include{}`
 
 - **Use `\input{path/file.tex}`:**
-  - For preamble components.
-  - For sections of an article or short reports.
-  - Does NOT enforce a page break before/after.
+  - For preamble components and `.cls` sub-modules.
+  - For sections, tables, and subsections inside chapters.
+  - Does NOT enforce an unwanted page break.
 - **Use `\include{path/file}` (without `.tex` extension):**
-  - Only for chapters in `report` or `book` classes.
+  - Only for entire standalone chapters in `report` or `book` classes.
   - Automatically inserts `\clearpage`.
-  - Enables fast draft compilation via `\includeonly{...}` in the preamble.
+  - **Never use `\include{}` inside sections, tables, or another included file.**
+
+---
+
+## 4. Specialized AI Assistants & Skills Tree (`.agents/`)
+
+```text
+.agents/
+├── subagents/
+│   ├── biblio-researcher.md     # Zotero MCP, arXiv, Brave Search, BibLaTeX evidence synthesis
+│   ├── diagram-designer.md      # Draw.io MCP, TikZ, cadreFigure, illustration float
+│   ├── latex-qa-reviewer.md     # Typographical auditing, booktabs, ~ spacing, memory recall
+│   ├── compiler-debugger.md     # LuaLaTeX logs, geometry/KOMA conflicts, fontspec
+│   └── knowledge-curator.md     # Memory MCP (knowledge graph), Brave Search fact-checking
+└── skills/
+    ├── latex-document-manager/  # Core LaTeX authoring runbook, KOMA+geometry guide
+    ├── zotero-biblio/           # Literature research, evidence tables, bib audit
+    ├── visual-diagrams/         # Draw.io MCP & TikZ schematics, cadreFigure
+    ├── latex-quality-auditor/   # Pre-flight publishing audit, lint-latex.ps1
+    └── project-memory/          # Knowledge graph persistence, styling recall, web search
+```
 

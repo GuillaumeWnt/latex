@@ -1,0 +1,19 @@
+% sample-cadre-figure.tex
+% Example of cadreFigure encapsulation with tcolorbox in ClasseGuillaume.cls
+
+\begin{cadreFigure}{Représentation schématique du pipeline de traitement}
+  \centering
+  \begin{tikzpicture}[node distance=2cm, auto]
+    \node[draw, rounded corners, fill=blue!10, text width=3cm, align=center] (a) {Entrée : Données brutes};
+    \node[draw, rounded corners, fill=teal!10, text width=3cm, align=center, right=of a] (b) {Transformation \& Normalisation};
+    \node[draw, rounded corners, fill=green!10, text width=3cm, align=center, right=of b] (c) {Sortie : Visualisation};
+    
+    \draw[->, thick] (a) -- (b);
+    \draw[->, thick] (b) -- (c);
+  \end{tikzpicture}
+  \vspace{0.5em}
+  
+  \captionof{figure}{Architecture modulaire des flux de données.}
+  \label{fig:pipeline-traitement}
+\end{cadreFigure}
+

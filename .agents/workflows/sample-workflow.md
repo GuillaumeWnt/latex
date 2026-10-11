@@ -5,7 +5,7 @@ This runbook describes the standard procedure for building a LaTeX document from
 ---
 
 ## Prerequisites
-- A TeX distribution installed and accessible in the system PATH (`latexmk`, `pdflatex` or `lualatex`).
+- A TeX distribution installed and accessible in the system PATH (`latexmk`, `lualatex`).
 - Standard bibliography engine (`biber`).
 
 ---
@@ -19,10 +19,11 @@ latexmk -c -outdir=build
 ```
 
 ### Step 2: Execute Primary Compilation
-Run `latexmk` targeting the master document:
+Run `latexmk` targeting the master document with LuaLaTeX:
 ```powershell
-latexmk -pdf -outdir=build -interaction=nonstopmode -synctex=1 main.tex
+latexmk -lualatex -outdir=build -interaction=nonstopmode -synctex=1 main.tex
 ```
+*(Or run `.\scripts\compile.ps1` if using `templates/rapport-memoire/`)*.
 
 ### Step 3: Check Return Status & Log
 - If compilation exits with code 0:
@@ -37,7 +38,8 @@ latexmk -pdf -outdir=build -interaction=nonstopmode -synctex=1 main.tex
    - Match `l.<number>` in the log file.
 3. Check common culprits:
    - Unescaped `%`, `_`, `&`, or `#`.
+   - Math symbol outside math mode (`\rightarrow` instead of `$\rightarrow$`).
+   - Missing `luacolor` for `lua-ul`.
+   - Font loading error in `fontspec`.
    - Missing `\end{...}` closing tag.
-   - Package incompatibility in `preamble/`.
 4. Apply the fix and re-run Step 2.
-
