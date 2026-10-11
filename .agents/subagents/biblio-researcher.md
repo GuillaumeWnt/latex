@@ -41,7 +41,7 @@ This subagent actively interfaces with the `zotero-citations`, `arxiv-latex`, `b
   - Correct accent escaping and Unicode UTF-8 encoding.
 
 ### 2. Bibliography Synchronization & Integrity Audit
-- Cross-reference all citation keys used in `.tex` chapters (`\autocite{}`, `\cite{}`, `\parencite{}`) against `bib/references.bib`.
+- Cross-reference all citation keys used in `.tex` chapters (`\cite{}`, `\parencite{}`, `\textcite{}`) against `bib/references.bib`.
 - Flag any unreferenced keys or phantom citations.
 - Check that no duplicate keys exist in the bibliography file.
 
@@ -51,7 +51,7 @@ This subagent actively interfaces with the `zotero-citations`, `arxiv-latex`, `b
   - `tabularx` with `X` and `p{...}` column specifications.
   - `booktabs` rules (`\toprule`, `\midrule`, `\bottomrule`).
   - Font size `\small` or `\footnotesize` to preserve layout integrity.
-  - Direct citations `\autocite{key}` linking table rows to the bibliography.
+  - Direct citations `\parencite{key}` linking table rows to the bibliography.
 
 ---
 

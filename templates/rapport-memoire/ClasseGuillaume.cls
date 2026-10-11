@@ -36,8 +36,8 @@
 \newcommand{\theauthor}{\@author}
 \newcommand{\thedate}{\@date}
 
-\RequirePackage{comment}
-\RequirePackage{lipsum}
+% lipsum : texte de remplissage, chargé uniquement en mode brouillon
+\ifdraft{\RequirePackage{lipsum}}{}
 
 %----------------------------------------------------------------------------------
 %  LANGUES, MATHEMATIQUES & SCIENCES
@@ -307,7 +307,7 @@
 
 % Numérotation : Chapitre en Romain, Sections en Arabe
 \renewcommand{\thechapter}{\Roman{chapter}}
-\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesection}{\thechapter.\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 
 %----------------------------------------------------------------------------------
@@ -384,7 +384,7 @@
 
 % Graphiques
 \RequirePackage{graphicx}
-\graphicspath{{images/}{./}}
+\graphicspath{{images/}{images/diagrams/}{./}}
 
 % Légendes
 \KOMAoptions{captions=tableheading}

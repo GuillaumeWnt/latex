@@ -43,7 +43,7 @@ This subagent interfaces directly with the `io.draw/mcp` server:
 
 ### 2. Crafting Native TikZ Graphics
 1. Use modular styles (`tikzset{...}`) defined either locally or in `preamble/packages.tex`.
-2. Follow strict color harmony matching `ClasseGuillaume.cls` (e.g., `maincolor`, `accentcolor`, subtle pastel fills like `blue!8`, `teal!10`, `black!60` borders).
+2. Follow strict color harmony matching `ClasseGuillaume.cls` (e.g., `primaryColor`, `secondaryColor`, `accentColor`, subtle pastel fills like `blue!8`, `teal!10`, `black!60` borders).
 3. Ensure all text inside nodes uses `\small` or `\footnotesize` to blend seamlessly with document body text.
 4. Avoid hardcoded absolute coordinates when relative positioning (`right=of ...`, `below=of ...`) provides cleaner maintainability.
 
@@ -51,9 +51,9 @@ This subagent interfaces directly with the `io.draw/mcp` server:
 Always encapsulate figures according to the project's styling conventions:
 - For styled figure boxes: use the `cadreFigure` environment (`tcolorbox`):
   ```latex
-  \begin{cadreFigure}{Titre de l'illustration ou schéma}
+  \begin{cadreFigure}[width=0.85\textwidth]
     \centering
-    % TikZ code or \includegraphics[width=0.85\linewidth]{...}
+    % TikZ code or \includegraphics[width=\linewidth]{...}
   \end{cadreFigure}
   ```
 - For standard numbered floating figures:
@@ -65,7 +65,7 @@ Always encapsulate figures according to the project's styling conventions:
     \label{fig:nom-descriptif}
   \end{figure}
   ```
-- For dedicated standalone schemas or large process flows: place the code in a modular file under `figures/` or `images/` and include via `\input{}` or `\includegraphics{}`.
+- For dedicated standalone schemas or large process flows: place the code in a modular file under `images/` and include via `\input{}` or `\includegraphics{}`.
 
 ---
 
