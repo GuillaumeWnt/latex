@@ -1,0 +1,31 @@
+Note utile pour ce template :
+
+pour citer des sources bibliographique : \hyperref[sec:biblio]{\parencite{nieva2024impact}}
+pour changer la langue : 
+pour changer la police :
+pour changer l'interligne :
+pour mettre des commentaires :
+pour faire un tableau :
+pour faire une minipage :
+pour mettre des images :
+pour mettre une liste à puce :
+
+Effet	              Commande (Court extrait)	  Bascule (Paragraphe entier)
+Gras	              \textbf{Texte}	          \bfseries
+Italique	          \textit{Texte}	          \itshape
+Gras Italique	      \textbf{\textit{Texte}}	  \bfseries\itshape
+Petite Capitale	      \textsc{Texte}	          \scshape
+Sans Serif	          \textsf{Texte}	          \sffamily
+Monospace	          \texttt{Texte}	          \ttfamily
+Serif (Roman)	      \textrm{Texte}	          \rmfamily
+Normal (Reset)	      \textnormal{Texte}	      \normalfont
+Emphase               \emph{Texte}                \em
+Utiliser \underLine{} et \non underline{} pour conserver la césure.
+
+
+test0\\     --> coupure de ligne
+test1
+            --> paragraphe
+test2\\
+            --> mauvaise pratique
+test3

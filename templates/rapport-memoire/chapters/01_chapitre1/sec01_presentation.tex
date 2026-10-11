@@ -29,4 +29,25 @@ Les équations mathématiques sont formatées selon les recommandations modernes
   f_{\text{max}} = 220 - \text{âge} \pm \epsilon,
 \end{equation}
 où $\epsilon$ représente la marge d'erreur individuelle.
-Une référence intelligente pointe vers l'\cref{eq:frequence_cardiaque}.
+Une référence intelligente pointe vers l'\cref{eq:frequence_cardiaque} située à la \cpageref{eq:frequence_cardiaque}.
+
+\subsection{Structuration par paragraphes avec puces en ligne}
+\label{subsec:paragraphes}
+
+La classe personnalise la commande \texttt{\textbackslash paragraph} pour insérer une puce discrète et enchaîner le texte directement sur la même ligne :
+
+\paragraph{Critère de complétude}
+Le document doit couvrir l'ensemble des axes d'analyse de manière exhaustive et rigoureuse.
+
+\paragraph{Critère d'accessibilité visuelle}
+Les contrastes de couleurs, la taille des polices et la structure hiérarchique doivent garantir un confort de lecture optimal.
+
+\subsection{Encadrés et boîtes visuelles (tcolorbox)}
+\label{subsec:boites}
+
+Le package \texttt{tcolorbox} est configuré pour enrichir la mise en page d'éléments d'accroche :
+
+\begin{boiteSynthese}{Synthèse méthodologique}
+  Ce modèle applique les principes de modularité, de compilation reproductible et de séparation stricte entre le contenu et la mise en forme.
+  Toutes les fonctionnalités additionnelles (annotations rétractables, encadrés, géométries adaptatives) sont prêtes à l'emploi.
+\end{boiteSynthese}

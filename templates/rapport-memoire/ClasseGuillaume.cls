@@ -1,10 +1,10 @@
 %----------------------------------------------------------------------------------
-%  CLASSE GUILLAUME - TEMPLATE UNIVERSITAIRE MODERNE & COMPLET
+%  CLASSE GUILLAUME - TEMPLATE UNIVERSITAIRE MODERNE & COMPLET (v2.1)
 %  Moteur recommandé : LuaLaTeX
 %----------------------------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}[2020/01/01]
 \newcommand{\classname}{ClasseGuillaume}
-\ProvidesClass{\classname}[2026/10/11 v2.0 Classe de rapport/memoire universitaire personnalisee]
+\ProvidesClass{\classname}[2026/10/11 v2.1 Classe de rapport/memoire universitaire personnalisee]
 
 % Base KOMA-Script
 \providecommand{\baseclass}{scrbook}
@@ -13,6 +13,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
 \RequirePackage{scrhack}     % Corrige les avertissements avec hyperref, float, listings
+\RequirePackage{xstring}     % Manipulation de chaînes (troncature des notes)
 
 % --- Options de classe ---
 \newif\ifusetodos
@@ -63,7 +64,7 @@
 }
 
 %----------------------------------------------------------------------------------
-%  COULEURS & SURLIGNAGE
+%  COULEURS & SURLIGNAGE SÉCURISÉ (LUA-UL)
 %----------------------------------------------------------------------------------
 \RequirePackage[table,xcdraw,dvipsnames]{xcolor}
 \colorlet{mdtRed}{red!50!black}
@@ -145,19 +146,21 @@
 \setmathfont{XITS Math}[Scale=MatchLowercase]
 
 %----------------------------------------------------------------------------------
-%  MISE EN PAGE, GEOMETRIE ET ESPACEMENT
+%  MISE EN PAGE, GÉOMÉTRIES MULTIPLES ET ESPACEMENT
 %----------------------------------------------------------------------------------
-% Configuration KOMA avec dimensions d'en-tête et de pied adaptées
+% Configuration KOMA de base
 \KOMAoptions{
   usegeometry=true,
   fontsize=11pt,
   paper=a4,
   twoside=false,
   twocolumn=false,
-  BCOR=1cm,
+  BCOR=0cm,
   DIV=12,
   headheight=26pt,
-  footheight=26pt
+  footheight=26pt,
+  appendixprefix=true,        % Préfixe "Annexe A :" dans les annexes
+  numbers=noenddot            % Pas de point final aux numéros de sections (1.2 au lieu de 1.2.)
 }
 
 \RequirePackage{geometry}
@@ -167,33 +170,48 @@
 }
 \recalctypearea
 
-% Commandes de bascule de géométrie
+% 1. Géométrie standard (restauration des réglages KOMA)
 \newcommand{\geometrieStandard}{%
   \cleardoublepage%
   \restoregeometry%
 }
 
-\newcommand{\geometrieExemple}{%
+% 2. Géométrie Word (marges de 2.5 cm partout avec marge de notes)
+\newcommand{\geometrieWord}{%
   \cleardoublepage%
   \newgeometry{
-    left=1.5cm, right=1.5cm,
-    top=1.8cm, bottom=1.8cm,
+    left=2.5cm, right=2.5cm,
+    top=2.5cm, bottom=2.5cm,
     headheight=26pt, headsep=10pt,
     footskip=26pt, footnotesep=10pt,
-    marginparwidth=0mm, marginparsep=0mm,
+    marginparwidth=2.2cm, marginparsep=3mm,
     twoside=false, bindingoffset=0cm, twocolumn=false
   }%
 }
 
+% 3. Géométrie large / couverture / grands tableaux (marges compactes de 1.2 cm)
+\newcommand{\geometrieLarge}{%
+  \cleardoublepage%
+  \newgeometry{
+    left=1.2cm, right=1.2cm,
+    top=1.6cm, bottom=1.6cm,
+    headheight=26pt, headsep=8pt,
+    footskip=26pt, footnotesep=8pt,
+    marginparwidth=0mm, marginparsep=0mm,
+    twoside=false, bindingoffset=0cm, twocolumn=false
+  }%
+}
+\newcommand{\geometrieExemple}{\geometrieLarge}
+
 % Espace inter-paragraphe et interligne
 \KOMAoptions{parskip=half}
 \RequirePackage{setspace}
-\onehalfspacing % Interligne 1.5 par défaut (bien plus équilibré et professionnel que doublespacing)
+\onehalfspacing % Interligne 1.5 par défaut
 
 \raggedbottom
 
 %----------------------------------------------------------------------------------
-%  EN-TETES ET PIEDS DE PAGE (scrlayer-scrpage)
+%  EN-TÊTES ET PIEDS DE PAGE (scrlayer-scrpage)
 %----------------------------------------------------------------------------------
 \RequirePackage[
   automark,
@@ -247,11 +265,16 @@
 \pagestyle{scrheadings}
 
 %----------------------------------------------------------------------------------
-%  TITRES ET HIERARCHIE
+%  TITRES ET HIÉRARCHIE TYPOGRAPHIQUE
 %----------------------------------------------------------------------------------
 \setcounter{secnumdepth}{3}
 
 \addtokomafont{disposition}{\bfseries\color{primaryColor}}
+
+% Forcer l'interligne simple dans les titres (évite l'étirement dû à \onehalfspacing)
+\addtokomafont{section}{\setstretch{1}\selectfont}
+\addtokomafont{subsection}{\setstretch{1}\selectfont}
+\addtokomafont{subsubsection}{\setstretch{1}\selectfont}
 
 \KOMAoptions{chapterprefix=false}
 \renewcommand*{\raggedchapter}{\centering}
@@ -274,6 +297,13 @@
   beforeskip=-8pt,
   afterskip=6pt
 ]{subsection}
+
+% Paragraphe en ligne précédé d'une puce discrète
+\RedeclareSectionCommand[
+  indent=5mm,
+  afterskip=-1em,
+  font={\color{primaryColor}\bfseries\textbullet~}
+]{paragraph}
 
 % Numérotation : Chapitre en Romain, Sections en Arabe
 \renewcommand{\thechapter}{\Roman{chapter}}
@@ -306,12 +336,36 @@
 \interfootnotelinepenalty=9999
 
 %----------------------------------------------------------------------------------
-%  FIGURES, TABLEAUX, FLOTTANTS & LISTES
+%  FIGURES, TABLEAUX, ENCADRÉS (tcolorbox) & DOCUMENTS EXTERNES (pdfpages)
 %----------------------------------------------------------------------------------
 \RequirePackage{adjustbox}
 \RequirePackage{rotating}
 \RequirePackage{float}
 \RequirePackage{tocbasic}
+\RequirePackage{pdfpages}       % Pour insérer des documents PDF externes dans les annexes
+
+% Boîtes et encadrés modernes
+\RequirePackage[skins,breakable]{tcolorbox}
+
+% Environnements de boîtes prédéfinis
+\newtcolorbox{cadreFigure}[1][]{
+  colframe=primaryColor!80!black,
+  colback=white,
+  boxrule=1.5pt,
+  arc=10pt,
+  halign=center,
+  #1
+}
+
+\newtcolorbox{boiteSynthese}[2][]{
+  colframe=primaryColor,
+  colback=primaryColor!6,
+  fonttitle=\bfseries\sffamily,
+  title={#2},
+  arc=4pt,
+  boxrule=1pt,
+  #1
+}
 
 % Liste personnalisée d'illustrations
 \DeclareNewTOC[%
@@ -355,15 +409,21 @@
 }
 \renewcommand\thesubfigure{(\alph{subfigure})}
 
+% Gestion des listes (listes compactes par défaut)
 \RequirePackage{enumitem}
+\setlist{noitemsep}
 
 %----------------------------------------------------------------------------------
-%  CITATIONS & BIBLIOGRAPHIE
+%  CITATIONS & BIBLIOGRAPHIE (biber + vancouver)
 %----------------------------------------------------------------------------------
 \RequirePackage[
   autostyle=true,
   style=french
 ]{csquotes}
+
+% Protection de \theauthor avant le chargement de biblatex
+\let\oldtheauthor\theauthor
+\let\theauthor\relax
 
 \RequirePackage[
   backend=biber,
@@ -374,6 +434,8 @@
   hyperref=true,
   backref=true
 ]{biblatex}
+
+\let\theauthor\oldtheauthor
 
 % Localisation soignée pour le style Vancouver en français
 \DefineBibliographyStrings{french}{
@@ -389,8 +451,9 @@
 }
 
 %----------------------------------------------------------------------------------
-%  NOTES TODO & HIGHLIGHTING SÉCURISÉ (LUA-UL)
+%  NOTES MARGINALES AVANCÉES (TRONCATURE, INFOBULLE ET LIEN RETOUR)
 %----------------------------------------------------------------------------------
+\RequirePackage{pdfcomment} % Pour l'infobulle interactive au survol
 \setlength{\marginparwidth}{2.2cm}
 
 \ifusetodos
@@ -399,24 +462,37 @@
   \RequirePackage[colorinlistoftodos, disable]{todonotes}
 \fi
 
-\setuptodonotes{color=red!30}
+\setuptodonotes{size=\tiny, color=red!30}
+\usetikzlibrary{shadows}
 
-% Commande de surlignage robuste sans soul (utilise lua-ul et luacolor)
+% Commande \todoH avancée :
+% - Troncature automatique des messages > 30 caractères avec infobulle (\pdftooltip)
+% - Préservation intégrale des commandes LaTeX telles que \url{...}
+% - Surlignage robuste via lua-ul/luacolor (aucun bug UTF-8)
+% - Lien hypertexte cliquable depuis le surlignage vers la liste des todos (label: table_todos)
 \makeatletter
 \newcommand{\todoH}[4]{%
   \if@todonotes@disabled
     #4%
   \else
-    \todo[#1,color=#2]{#3}%
-    \highLight[#2]{#4}%
+    \IfSubStr{\detokenize{#3}}{\@backslashchar}{%
+      % CAS 1 : Une commande LaTeX est présente (ex: \url) -> pas de troncature
+      \todo[#1,color=#2]{#3}%
+    }{%
+      % CAS 2 : Texte simple -> troncature à 30 caractères + infobulle complète
+      \StrLeft{#3}{30}[\apercu]%
+      \todo[#1,color=#2]{\pdftooltip{\apercu...}{#3}}%
+    }%
+    \hyperref[table_todos]{\highLight[#2]{#4}}%
   \fi
 }
 \makeatother
 
-\usetikzlibrary{shadows}
-
-\todostyle{GuillaumeStyle}{shadow}
-\todostyle{MarieStyle}{shadow, author=Marie}
+\todostyle{GuillaumeStyle}{author=Guillaume, shadow}
+\todostyle{MarieStyle}{author=Marie, shadow}
+\todostyle{FloraStyle}{author=Flora, shadow}
+\todostyle{TestStyle}{author=Test}
+\todostyle{BlancStyle}{}
 
 %----------------------------------------------------------------------------------
 %  LOGO EN COUCHE D'ARRIÈRE-PLAN DYNAMIQUE (scrlayer)
@@ -439,7 +515,7 @@
 \AddLayersToPageStyle{scrheadings}{logo.layer}
 \AddLayersToPageStyle{plain.scrheadings}{logo.layer}
 
-% Commande pour activer ou désactiver facilement le logo
+% Commandes pour masquer ou réactiver le logo
 \newcommand{\masquerLogo}{\ModifyLayer[contents={}]{logo.layer}}
 \newcommand{\afficherLogo}{%
   \ModifyLayer[contents={%
@@ -450,14 +526,19 @@
 }
 
 %----------------------------------------------------------------------------------
-%  HYPERLIENS (hyperref) ET RÉFÉRENCES INTELLIGENTES (cleveref)
+%  HYPERLIENS (hyperref), CÉSURE DES URL (xurl) & RÉFÉRENCES (cleveref)
 %----------------------------------------------------------------------------------
+\RequirePackage{xurl} % Césure irréprochable des URL longues dans les notes et le texte
+
 \RequirePackage{hyperref}
 \hypersetup{
   pdftitle = {\thetitle},
   pdfauthor = {\theauthor},
   pdfsubject = {Rapport Universitaire},
-  pdfstartview = {FitV},
+  pdfcreator = {LaTeX via LuaLaTeX},
+  pdflang = {fr-FR},
+  pdfdisplaydoctitle = true,
+  pdfstartview = {FitH},
   pdfpagemode = {UseOutlines},
   bookmarksopen = true,
   bookmarksopenlevel = 1,
@@ -470,6 +551,17 @@
   unicode = true,
   breaklinks = true
 }
+
+% Synchronisation sécurisée des métadonnées au début du document
+\makeatletter
+\AtBeginDocument{
+  \hypersetup{
+    pdftitle = {\thetitle},
+    pdfauthor = {\theauthor}
+  }
+}
+\makeatother
+
 \pdfstringdefDisableCommands{\let\\\space}
 
 % cleveref chargé IMPÉRATIVEMENT après hyperref
@@ -478,4 +570,3 @@
 \Crefname{illustration}{Illustration}{Illustrations}
 
 \endinput
-

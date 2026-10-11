@@ -30,17 +30,19 @@ La \cref{fig:exemple_figures} présente une organisation de sous-figures aligné
   \label{fig:exemple_figures}
 \end{figure}
 
-\subsection{Environnement Illustration personnalisé}
+\subsection{Environnement Illustration personnalisé avec cadre décoratif}
 \label{subsec:illustrations_dediees}
 
-L'environnement \texttt{illustration} permet d'indexer les supports iconographiques dans une table distincte (affichée au début du document).
+L'environnement \texttt{illustration} permet d'indexer les supports iconographiques dans une table distincte.
+Le cadre personnalisé \texttt{cadreFigure} permet d'englober l'image d'un contour soigné aux coins arrondis :
 
 \begin{illustration}[htbp]
   \centering
-  \rule{8cm}{4cm}
+  \begin{cadreFigure}[width=0.7\textwidth]
+    \rule{7cm}{3.5cm}
+  \end{cadreFigure}
   \caption{Représentation anatomique ou graphique d'expérimentation}
   \label{ill:anatomie}
 \end{illustration}
 
 L'\cref{ill:anatomie} apparaît automatiquement dans la \emph{Liste des illustrations}.
-

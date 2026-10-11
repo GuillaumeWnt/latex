@@ -29,18 +29,25 @@
 \frontmatter
 \masquerLogo % Le logo ne s'affiche pas sur la page de garde ni les préliminaires
 
-% Page de garde principale
+% 1. Page de garde principale (en géométrie large)
+\geometrieLarge
 \input{chapters/00_frontmatter/titlepage.tex}
 
-% Résumé bilingue
+% 2. Bascule en géométrie standard ou Word pour les préliminaires
+\geometrieWord
+
+% 3. Suivi des révisions (avec cible de retour cliquable pour \todoH)
+\begin{singlespace}
+\listoftodos[Liste des révisions et tâches en attente]
+\label{table_todos}
+\end{singlespace}
+
+% 4. Résumé bilingue
 \input{chapters/00_frontmatter/abstract.tex}
 
-% Table des matières et listes
+% 5. Table des matières
 \setcounter{tocdepth}{2}
-\listoftodos[Liste des révisions et tâches en attente]
 \tableofcontents
-\listoffigures
-\listofillustrations
 
 %------------------------------------------------------------------------------------
 %  CORPS DU TEXTE (MAINMATTER : Numérotation arabe, activation du logo)
@@ -64,11 +71,31 @@
 \input{chapters/02_chapitre2/sec02_references.tex}
 
 %------------------------------------------------------------------------------------
-%  POST-CONTENU (BACKMATTER : Bibliographie, annexes)
+%  ANNEXES (Numérotation alphabétique avec préfixe "Annexe")
+%------------------------------------------------------------------------------------
+\appendix
+\chapter{Documents Complémentaires et Pièces Jointes}
+\label{annexe:justificatifs}
+
+Cette section démontre l'intégration de documents externes dans le rapport final.
+La commande fournie par le paquet \texttt{pdfpages} permet d'insérer des comptes-rendus, attestations ou fiches administratives au format PDF tout en conservant le style de page :
+
+\begin{singlespace}
+\begin{verbatim}
+% Exemple d'inclusion de document PDF multipage :
+\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{documents/annexe.pdf}
+\end{verbatim}
+\end{singlespace}
+
+%------------------------------------------------------------------------------------
+%  POST-CONTENU (BACKMATTER : Listes de figures, tables et bibliographie)
 %------------------------------------------------------------------------------------
 \backmatter
+
+\listoffigures
+\listofillustrations
+\listoftables
 
 \printbibliography[heading=bibintoc, title={Références Bibliographiques}]
 
 \end{document}
-
