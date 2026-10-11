@@ -37,7 +37,7 @@
 \newcommand{\thedate}{\@date}
 
 % lipsum : texte de remplissage, chargé uniquement en mode brouillon
-\ifdraft{\RequirePackage{lipsum}}{}
+\AtEndPreamble{\@ifclasswith{\baseclass}{draft}{\RequirePackage{lipsum}}{}}
 
 %----------------------------------------------------------------------------------
 %  LANGUES, MATHEMATIQUES & SCIENCES

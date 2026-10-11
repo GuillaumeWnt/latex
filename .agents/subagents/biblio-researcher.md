@@ -57,7 +57,7 @@ This subagent actively interfaces with the `zotero-citations`, `arxiv-latex`, `b
 
 ## Quality Checklist Before Reporting
 - [ ] Are all cited keys present in `bib/references.bib`?
-- [ ] Is `\autocite{...}` preceded by a non-breaking space `~` when following text?
+- [ ] Is `\parencite{...}` or `\cite{...}` preceded by a non-breaking space `~` when following text?
 - [ ] Are DOIs properly formatted without URL prefixes (`doi = {10.1000/182}` rather than `https://doi.org/...`)?
 - [ ] Does Biber run cleanly without `WARN - I didn't find a database entry for ...`?
 

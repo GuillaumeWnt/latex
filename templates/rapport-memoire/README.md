@@ -57,7 +57,7 @@ Le fichier PDF final est généré dans `build/main.pdf`.
 
 ### 1. Notes marginales intelligentes et révisions (`\todoH`)
 La commande `\todoH{style}{couleur}{commentaire}{texte}` intègre un comportement dynamique unique :
-- **Troncature automatique des longs messages :** Si le commentaire dépasse 30 caractères, il est abrégé dans la marge avec `...`. Une info-bulle interactive (\texttt{tooltip}) s'affiche au survol de la souris dans le PDF avec le texte intégral.
+- **Troncature automatique des longs messages :** Si le commentaire dépasse 30 caractères, il est abrégé dans la marge avec `...`. Une info-bulle interactive (`tooltip`) s'affiche au survol de la souris dans le PDF avec le texte intégral.
 - **Préservation des commandes et URL :** Si le commentaire contient une commande LaTeX (ex. `\url{https://...}`), il n'est pas tronqué afin de préserver le lien, et `xurl` assure la coupure propre de la ligne.
 - **Lien hypertexte bidirectionnel :** Le surlignage dans le corps du texte est cliquable et renvoie directement à la table des révisions (`\label{table_todos}`) en début de document.
 - **Surlignage 100 % stable sous LuaLaTeX :** Basé sur `lua-ul` et `luacolor` (évite les bugs de césure et de caractères accentués du package obsolète `soul`).

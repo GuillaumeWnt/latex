@@ -62,5 +62,50 @@ if ($doiUrlMatches.Count -gt 0) {
     Write-Host "[OK] All DOIs are cleanly formatted (no URL prefixes)." -ForegroundColor Green
 }
 
+# Check for missing mandatory fields (author, title)
+$entryBlocks = [regex]::Matches($content, '(?s)@(\w+)\s*\{\s*([^,]+),([^@]*)')
+$missingFields = @()
+foreach ($block in $entryBlocks) {
+    $entryType = $block.Groups[1].Value.ToLower()
+    $entryKey = $block.Groups[2].Value.Trim()
+    $body = $block.Groups[3].Value
+
+    if ($entryType -eq 'comment' -or $entryType -eq 'preamble' -or $entryType -eq 'string') { continue }
+
+    if ($body -notmatch 'author\s*=') {
+        $missingFields += "[MISSING author] in entry '$entryKey'"
+    }
+    if ($body -notmatch 'title\s*=') {
+        $missingFields += "[MISSING title] in entry '$entryKey'"
+    }
+    if ($entryType -eq 'article' -and $body -notmatch '(journal|journaltitle)\s*=') {
+        $missingFields += "[MISSING journal] in @article entry '$entryKey'"
+    }
+}
+
+if ($missingFields.Count -gt 0) {
+    Write-Host "`n[WARN] Missing mandatory fields:" -ForegroundColor Yellow
+    foreach ($mf in $missingFields) {
+        Write-Host "  - $mf" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "[OK] All entries have required fields (author, title)." -ForegroundColor Green
+}
+
+# Check citation key naming convention: [author][year] pattern
+$badKeys = @()
+foreach ($key in $keys.Keys) {
+    if ($key -notmatch '^[a-z]+\d{4}') {
+        $badKeys += $key
+    }
+}
+
+if ($badKeys.Count -gt 0) {
+    Write-Host "`n[INFO] Keys not matching [author][year] convention:" -ForegroundColor Cyan
+    foreach ($bk in $badKeys) {
+        Write-Host "  - $bk ($($keys[$bk]))" -ForegroundColor Cyan
+    }
+}
+
 Write-Host "`nAudit complete." -ForegroundColor Cyan
 

@@ -24,7 +24,9 @@ templates/rapport-memoire/
 └── build/                   # Compilation output directory (gitignored)
 ```
 
-### Layout B: Preamble-Folder Layout (`preamble/`)
+### Layout B: Preamble-Folder Layout (`preamble/`) — *Reference Only*
+> **Note:** This layout is documented as a reference architecture for articles and multi-author papers. It is **not currently implemented** in this workspace. Only Layout A is active.
+
 Recommended for articles and modular multi-author papers without custom `.cls`:
 
 ```text
@@ -91,7 +93,7 @@ A clean master file delegates all styling to the class/preamble and orchestrates
 % --- Annexes ---
 \appendix
 \chapter{Documents Complémentaires}
-\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{documents/annexe.pdf}
+\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{path/to/annexe.pdf}  % adapter le chemin
 
 % --- Backmatter ---
 \backmatter

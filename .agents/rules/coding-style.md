@@ -36,6 +36,7 @@
 
 ## 3. Labels and Cross-Referencing
 - **Prefixed Labels:** Always use standardized prefixes:
+  - `chap:` for chapters (`\label{chap:fondements}`)
   - `sec:` for sections (`\label{sec:introduction}`)
   - `fig:` for figures (`\label{fig:architecture}`)
   - `ill:` for custom illustrations (`\label{ill:schema_conceptuel}`)

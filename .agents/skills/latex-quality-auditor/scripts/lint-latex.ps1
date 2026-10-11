@@ -65,6 +65,32 @@ foreach ($file in $texFiles) {
             Write-Host "[MISSING ~ BEFORE CREF] $relPath : L$lineNum -> Add non-breaking space '~' before reference" -ForegroundColor Yellow
             $issueCount++
         }
+
+        # 6. Legacy \hline in tables (should use \toprule, \midrule, \bottomrule)
+        if ($line -match '\\hline') {
+            Write-Host "[LEGACY \hline] $relPath : L$lineNum -> Replace \hline with \toprule / \midrule / \bottomrule (booktabs)" -ForegroundColor Yellow
+            $issueCount++
+        }
+
+        # 7. \\ used as paragraph break (outside tabular, align, matrix, etc.)
+        if ($line -match '\\\\(\s*$|\s*%)' -and $line -notmatch '\\begin|\\end|toprule|midrule|bottomrule|&|\\caption|\\label|subfigure|minipage|flushleft|flushright') {
+            Write-Host "[PARAGRAPH \\] $relPath : L$lineNum -> Use a blank line for paragraphs, not \\\\" -ForegroundColor Yellow
+            $issueCount++
+        }
+
+        # 8. Manual \ref{} instead of \cref{}
+        if ($line -match '\\ref\{' -and $line -notmatch '\\(cref|Cref|cpageref|pageref|autoref|hyperref|backref)\{') {
+            Write-Host "[MANUAL \ref] $relPath : L$lineNum -> Prefer \cref{} or \Cref{} over \ref{}" -ForegroundColor Yellow
+            $issueCount++
+        }
+    }
+
+    # 9. Check for \caption without a following \label in the same float
+    $fullContent = $lines -join "`n"
+    $captionMatches = [regex]::Matches($fullContent, '\\caption\{[^}]*\}(?!\s*\\label)')
+    foreach ($cm in $captionMatches) {
+        Write-Host "[MISSING \label AFTER \caption] $relPath -> A \caption{} is not followed by \label{}" -ForegroundColor Yellow
+        $issueCount++
     }
 }
 

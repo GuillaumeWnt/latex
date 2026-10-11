@@ -36,9 +36,9 @@ Perform comprehensive audits of LaTeX source files, preambles, and tables to eli
 
 ### 4. Spacing & Cross-Referencing Standards
 - Enforce non-breaking spaces `~` before citations and cross-references:
-  - `~\autocite{...}`, `~\cite{...}`, `~\parencite{...}`.
+  - `~\parencite{...}`, `~\cite{...}`, `~\textcite{...}`.
   - `~\cref{...}`, `~\Cref{...}`.
-  - Non-breaking spaces between numbers and units (handled automatically by `\SI{value}{unit}` or `\qty{value}{unit}`).
+  - Non-breaking spaces between numbers and units (handled automatically by `\qty{value}{unit}`).
 - Ensure math symbols (such as `\rightarrow`, `\approx`, `\times`) are never used in text mode; always enclose in math mode (`$\rightarrow$`).
 
 ### 5. Review Comments & Margin Notes
