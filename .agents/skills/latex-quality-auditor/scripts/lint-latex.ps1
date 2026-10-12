@@ -29,9 +29,16 @@ foreach ($file in $texFiles) {
     $lines = Get-Content -Path $file.FullName
     $relPath = Resolve-Path -Path $file.FullName -Relative
     
+    # Track nesting depth of environments where \\ is legitimate
+    $tabularDepth = 0
+    
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $lineNum = $i + 1
         $line = $lines[$i]
+        
+        # Track tabular/align/minipage/flushleft environment depth for \\ check
+        if ($line -match '\\begin\{(tabular|tabularx|longtable|align|gather|matrix|pmatrix|bmatrix|cases|minipage|flushleft|flushright|titlepage)\b') { $tabularDepth++ }
+        if ($line -match '\\end\{(tabular|tabularx|longtable|align|gather|matrix|pmatrix|bmatrix|cases|minipage|flushleft|flushright|titlepage)\b') { $tabularDepth-- }
         
         # Skip commented lines
         if ($line.Trim().StartsWith("%")) { continue }
@@ -72,8 +79,8 @@ foreach ($file in $texFiles) {
             $issueCount++
         }
 
-        # 7. \\ used as paragraph break (outside tabular, align, matrix, etc.)
-        if ($line -match '\\\\(\s*$|\s*%)' -and $line -notmatch '\\begin|\\end|toprule|midrule|bottomrule|&|\\caption|\\label|subfigure|minipage|flushleft|flushright') {
+        # 7. \\ used as paragraph break (only flag when NOT inside tabular/align/minipage/etc.)
+        if ($tabularDepth -eq 0 -and $line -match '\\\\(\s*$|\s*%)' -and $line -notmatch '\\begin|\\end|\\rule') {
             Write-Host "[PARAGRAPH \\] $relPath : L$lineNum -> Use a blank line for paragraphs, not \\\\" -ForegroundColor Yellow
             $issueCount++
         }
