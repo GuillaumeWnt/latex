@@ -1,19 +1,29 @@
 %====================================================================================
-%  DOCUMENT PRINCIPAL - TEMPLATE RAPPORT & MÉMOIRE UNIVERSITAIRE
+%  DOCUMENT PRINCIPAL - TEMPLATE RAPPORT & MÉMOIRE UNIVERSITAIRE HAUT DE GAMME
+%  Guide Pratique et Démonstration Exhaustive de ClasseGuillaume
+%  Moteur recommandé : LuaLaTeX
 %  Compilation : latexmk -lualatex -outdir=build main.tex
 %====================================================================================
 \documentclass[
   % draft,             % Activer pour masquer les images et accélérer la compilation
   french,              % Langue principale
   english,             % Langue secondaire
-  font=calibri,        % Options de police : calibri, comicsans, standard
+  font=calibri,        % Options de police : calibri, heros, libertinus, comicsans, standard
   todoNote             % Activer l'affichage des notes et révisions
 ]{ClasseGuillaume}
 
+% --- PAQUETS COMPLÉMENTAIRES DIDACTIQUES ---
+\RequirePackage{multicol}      % Mises en page dynamiques en 2 et 3 colonnes
+\RequirePackage{pdflscape}     % Rotation physique des pages en mode paysage
+\RequirePackage{tikz}          % Schémas vectoriels natifs
+
 % --- MÉTADONNÉES DU DOCUMENT ---
-\title{Modèle Universitaire pour Mémoires, Thèses et Rapports d'Ingénierie}
+\title{Le Guide Ultime de la Rédaction Scientifique et Académique avec \LaTeX{}}
 \author{Guillaume \textsc{Winant}}
 \date{\today}
+
+% Robustesse des acronymes de moteurs dans les citations
+\providecommand{\XeLaTeX}{Xe\LaTeX}
 
 % --- BASE BIBLIOGRAPHIQUE ---
 \addbibresource{bib/references.bib}
@@ -24,68 +34,116 @@
 \begin{document}
 
 %------------------------------------------------------------------------------------
-%  PRÉ-CONTENU (FRONTMATTER : Numérotation romaine, sans logo)
+%  PRÉ-CONTENU (FRONTMATTER : Numérotation romaine, sans filigrane)
 %------------------------------------------------------------------------------------
 \frontmatter
-\masquerLogo % Le logo ne s'affiche pas sur la page de garde ni les préliminaires
+\masquerLogo % Le logo ne s'affiche pas sur la couverture ni les préliminaires
 
 % 1. Page de garde principale (en géométrie large)
 \geometrieLarge
 \input{chapters/00_frontmatter/titlepage.tex}
 
-% 2. Bascule en géométrie standard ou Word pour les préliminaires
+% 2. Bascule en géométrie Word pour les préliminaires rédigés
 \geometrieWord
 
-% 3. Suivi des révisions (avec cible de retour cliquable pour \todoH)
+% 3. Tableau de bord des révisions (avec cible cliquable pour \todoH)
 \begin{singlespace}
-\listoftodos[Liste des révisions et tâches en attente]
+\listoftodos[Tableau de Bord des Révisions et Tâches de Rédaction]
 \label{table_todos}
 \end{singlespace}
 
-% 4. Résumé bilingue
+% 4. Résumé et Abstract bilingues avec mots-clés
 \input{chapters/00_frontmatter/abstract.tex}
 
-% 5. Table des matières
+% 5. Avertissement didactique et remerciements
+\input{chapters/00_frontmatter/acknowledgements.tex}
+
+% 6. Table des matières générale
 \setcounter{tocdepth}{2}
 \tableofcontents
 
 %------------------------------------------------------------------------------------
-%  CORPS DU TEXTE (MAINMATTER : Numérotation arabe, activation du logo)
+%  CORPS DU TEXTE (MAINMATTER : Numérotation arabe, activation du filigrane)
 %------------------------------------------------------------------------------------
 \mainmatter
-\afficherLogo % Réactivation du logo pour le corps du document
+\afficherLogo % Activation du filigrane pour l'ensemble du corps de document
 
-% --- CHAPITRE I ---
-\chapter{Cadre Théorique et Fondements}
-\label{chap:fondements}
+%====================================================================================
+%  PARTIE I : FONDATIONS TYPOGRAPHIQUES, ARCHITECTURE & COULEURS
+%====================================================================================
+\part{Fondations Typographiques, Architecture \& Couleurs}
+\label{part:fondations}
 
-\input{chapters/01_chapitre1/sec01_presentation.tex}
-\input{chapters/01_chapitre1/sec02_tableaux.tex}
-\input{chapters/01_chapitre1/sec03_illustrations.tex}
+\chapter{Architecture Modulaire et Moteur Lua\LaTeX{}}
+\label{chap:fondations}
+\input{chapters/01_fondations/sec01_architecture_projet.tex}
+\input{chapters/01_fondations/sec02_lualatex_polices.tex}
+\input{chapters/01_fondations/sec03_interlignes_microtype.tex}
 
-% --- CHAPITRE II ---
-\chapter{Méthodologie et Analyse Pratique}
-\label{chap:methodologie}
+\chapter{Hiérarchie des Titres, Typographie Textuelle \& Charte Chromatique}
+\label{chap:titres_couleurs}
+\input{chapters/02_titres_typo_couleurs/sec01_niveaux_sectionnement.tex}
+\input{chapters/02_titres_typo_couleurs/sec02_typographie_parcimonie.tex}
+\input{chapters/02_titres_typo_couleurs/sec03_charte_chromatique.tex}
 
-\input{chapters/02_chapitre2/sec01_annotations_todos.tex}
-\input{chapters/02_chapitre2/sec02_references.tex}
+%====================================================================================
+%  PARTIE II : SCIENCES, MATHÉMATIQUES & TABLEAUX PROFESSIONNELS
+%====================================================================================
+\part{Sciences, Mathématiques \& Tableaux Professionnels}
+\label{part:sciences_tables}
+
+\chapter{Sciences, Typographie Mathématique et Unités Internationales}
+\label{chap:sciences_maths}
+\input{chapters/03_sciences_maths/sec01_formules_mathematiques.tex}
+\input{chapters/03_sciences_maths/sec02_unites_siunitx.tex}
+
+\chapter{Tableaux Scientifiques et Typographie Tabulaire}
+\label{chap:tableaux}
+\input{chapters/04_tableaux/sec01_regles_booktabs.tex}
+\input{chapters/04_tableaux/sec02_tableaux_avances.tex}
+
+%====================================================================================
+%  PARTIE III : DYNAMIQUE DE PAGE, MISE EN PAGE COMPLEXE & GRAPHISME
+%====================================================================================
+\part{Dynamique de Page, Mise en Page Complexe \& Graphisme}
+\label{part:graphisme_geometries}
+
+\chapter{Figures, Illustrations et Boîtes Décoratives}
+\label{chap:illustrations_boites}
+\input{chapters/05_illustrations_boites/sec01_figures_illustrations.tex}
+\input{chapters/05_illustrations_boites/sec02_boites_tcolorbox_tikz.tex}
+
+\chapter{Géométries Multiples, Styles de Pages, Colonnes \& Logo Dynamique}
+\label{chap:geometries_styles}
+\input{chapters/06_geometries_styles_colonnes/sec01_geometries_multiples.tex}
+\input{chapters/06_geometries_styles_colonnes/sec02_styles_en_tetes_pieds.tex}
+\input{chapters/06_geometries_styles_colonnes/sec03_multi_colonnes.tex}
+\input{chapters/06_geometries_styles_colonnes/sec04_logo_documents_externes.tex}
+
+%====================================================================================
+%  PARTIE IV : COLLABORATION, RÉFÉRENCEMENT & DIFFUSION
+%====================================================================================
+\part{Collaboration, Référencement \& Diffusion}
+\label{part:collaboration_diffusion}
+
+\chapter{Outils Collaboratifs, Système d'Annotation \texttt{\textbackslash todoH} \& Révision}
+\label{chap:collaboration_todos}
+\input{chapters/07_collaboration_todos/sec01_systeme_todoH.tex}
+\input{chapters/07_collaboration_todos/sec02_profils_relecteurs.tex}
+
+\chapter{Référencement Croisé Moderne \& Bibliographie Académique}
+\label{chap:references_biblio}
+\input{chapters/08_references_bibliographie/sec01_references_cleveref.tex}
+\input{chapters/08_references_bibliographie/sec02_bibliographie_vancouver.tex}
 
 %------------------------------------------------------------------------------------
 %  ANNEXES (Numérotation alphabétique avec préfixe "Annexe")
 %------------------------------------------------------------------------------------
 \appendix
-\chapter{Documents Complémentaires et Pièces Jointes}
-\label{annexe:justificatifs}
-
-Cette section démontre l'intégration de documents externes dans le rapport final.
-La commande fournie par le paquet \texttt{pdfpages} permet d'insérer des comptes-rendus, attestations ou fiches administratives au format PDF tout en conservant le style de page :
-
-\begin{singlespace}
-\begin{verbatim}
-% Exemple d'inclusion de document PDF multipage :
-\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{documents/annexe.pdf}
-\end{verbatim}
-\end{singlespace}
+\input{chapters/99_annexes/annexe_a_cheatsheet_macros.tex}
+\input{chapters/99_annexes/annexe_b_guide_palettes_couleurs.tex}
+\input{chapters/99_annexes/annexe_c_guide_outillage_git.tex}
+\input{chapters/99_annexes/annexe_d_specimen_externe.tex}
 
 %------------------------------------------------------------------------------------
 %  POST-CONTENU (BACKMATTER : Listes de figures, tables et bibliographie)

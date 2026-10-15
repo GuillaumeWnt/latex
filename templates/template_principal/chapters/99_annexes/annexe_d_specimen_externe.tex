@@ -1,0 +1,58 @@
+%------------------------------------------------------------------------------------
+%  ANNEXE D : SPÉCIMEN D'INCLUSION DE DOCUMENTS PDF EXTERNES AVEC PDFPAGES
+%------------------------------------------------------------------------------------
+\chapter{Spécimen d'Inclusion de Pièces Jointes avec \textsf{pdfpages}}
+\label{annexe:specimen_externe}
+
+Dans de nombreux livrables académiques, les annexes finales doivent rassembler des documents tiers au format PDF :
+attestations de stage, fiches constructeur, procès-verbaux de comités d'éthique, ou formulaires administratifs officiels.
+
+\section{Paramètres avancés de la commande \texttt{\textbackslash includepdf}}
+\label{sec:parametres_pdfpages}
+
+Le paquet \textsf{pdfpages} (intégré nativement dans \texttt{ClasseGuillaume}) offre une panoplie complète de réglages pour adapter l'insertion sans dénaturer la mise en page :
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Options essentielles de la commande \texttt{\textbackslash includepdf}}
+  \label{tab:options_pdfpages}
+  \begin{tabularx}{\textwidth}{p{2.8cm} p{5.5cm} X}
+    \toprule
+    \textbf{Option} & \textbf{Valeurs types} & \textbf{Effet produit sur le document inséré} \\
+    \midrule
+    \texttt{pages} & \texttt{pages=\{1-3,5\}}, \texttt{pages=-\}} & Sélectionne les pages précises ou l'intégralité du fichier PDF source. \\
+    \addlinespace
+    \texttt{pagecommand} & \texttt{\{\textbackslash thispagestyle\{scrheadings\}\}} & Conserve les en-têtes et le numéro de page séquentiel du mémoire au lieu d'une page vierge. \\
+    \addlinespace
+    \texttt{scale} & \texttt{scale=0.90} & Réduit légèrement le document importé pour laisser respirer les marges et l'en-tête. \\
+    \addlinespace
+    \texttt{offset} & \texttt{offset=10mm -5mm} & Décale l'implantation horizontale et verticale pour corriger un centrage imparfait. \\
+    \addlinespace
+    \texttt{nup} & \texttt{nup=2x1}, \texttt{nup=2x2} & Imprime 2 ou 4 pages du document source sur une seule feuille A4 (format planche de contact). \\
+    \addlinespace
+    \texttt{landscape} & \texttt{landscape=true} & Force l'orientation paysage pour les schémas techniques ou plans d'ingénierie. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Exemple type d'intégration de formulaire officiel}
+\label{sec:exemple_type_pdfpages}
+
+Le bloc de code suivant illustre l'insertion type d'un certificat d'agrément éthique multipage :
+
+\begin{singlespace}
+\begin{verbatim}
+% Exemple d'inclusion complète avec conservation de la numérotation KOMA :
+\includepdf[
+  pages       = {1-2},
+  scale       = 0.92,
+  pagecommand = {\thispagestyle{scrheadings}},
+  link        = true,
+  linkname    = {annexe:certificat_ethique}
+]{documents/certificat_comite_ethique.pdf}
+\end{verbatim}
+\end{singlespace}
+
+Grâce à l'option \texttt{link = true}, le document importé s'inscrit directement dans l'arborescence des signets PDF (\emph{bookmarks}) et peut faire l'objet de renvois interactifs dans le corps de votre thèse.
+

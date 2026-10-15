@@ -1,0 +1,99 @@
+%------------------------------------------------------------------------------------
+%  ANNEXE A : AIDE-MÉMOIRE COMPLET DES COMMANDES DE CLASSEGUILLAUME.CLS
+%------------------------------------------------------------------------------------
+\chapter{Aide-Mémoire Exhaustif des Macros et Environnements}
+\label{annexe:cheatsheet_macros}
+
+Cette annexe récapitule sous forme de tableau de référence synthétique la totalité des commandes, environnements, styles et options introduits par la classe \texttt{ClasseGuillaume.cls}.
+
+\begin{small}
+\setlength{\tabcolsep}{3pt}
+\begin{longtable}{p{3.9cm} p{4.6cm} p{6.8cm}}
+  \caption{Aide-mémoire des fonctionnalités fournies par \texttt{ClasseGuillaume.cls}}
+  \label{tab:cheatsheet_macros} \\
+  \toprule
+  \textbf{Commande / Option} & \textbf{Syntaxe et Arguments} & \textbf{Rôle et Effet Typographique} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Suite de l'aide-mémoire}} \\
+  \toprule
+  \textbf{Commande / Option} & \textbf{Syntaxe et Arguments} & \textbf{Rôle et Effet Typographique} \\
+  \midrule
+  \endhead
+
+  \midrule
+  \multicolumn{3}{r}{\textit{Suite sur la page suivante \dots}} \\
+  \bottomrule
+  \endfoot
+
+  \bottomrule
+  \endlastfoot
+
+  \multicolumn{3}{l}{\textbf{1. Options de Classe (\texttt{\textbackslash documentclass[...]\{ClasseGuillaume\}})}} \\
+  \addlinespace
+  \texttt{todoNote} & Mot-clé dans les options & Active l'affichage des notes marginales, surlignages et de la table des révisions. \\
+  \texttt{font=calibri} & Option de police (par défaut) & Charge Calibri depuis le système Windows ou le dossier local de repli. \\
+  \texttt{font=heros} & Option de police & Charge TeX Gyre Heros (équivalent libre d'Helvetica de \TeX{} Live). \\
+  \texttt{font=libertinus} & Option de police & Charge Libertinus Serif (police académique avec empattements). \\
+  \texttt{font=comicsans} & Option de police & Charge Comic Sans MS pour présentations pédagogiques. \\
+  \texttt{font=standard} & Option de police & Charge la police standard Latin Modern. \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{2. Commandes de Polices et Titrages Spécifiques}} \\
+  \addlinespace
+  \texttt{\textbackslash AsapFont} & \texttt{\{\textbackslash AsapFont Texte\}} & Active la police Asap Condensed (utilisée pour les têtes de chapitres). \\
+  \texttt{\textbackslash CalibriFont} & \texttt{\{\textbackslash CalibriFont Texte\}} & Force localement la police sans-serif Calibri. \\
+  \texttt{\textbackslash ComicSansMSFont} & \texttt{\{\textbackslash ComicSansMSFont Texte\}} & Force localement la police Comic Sans MS. \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{3. Gestion Dynamique des Géométries de Page}} \\
+  \addlinespace
+  \texttt{\textbackslash geometrieWord} & Sans argument & Marges symétriques de \qty{2.5}{\centi\meter} et marge de notes de \qty{2.2}{\centi\meter}. \\
+  \texttt{\textbackslash geometrieLarge} & Sans argument & Marges compactes de \qty{1.2}{\centi\meter} pour couverture, grands tableaux ou posters. \\
+  \texttt{\textbackslash geometrieStandard} & Sans argument & Restaure le calcul de marges canonique KOMA-Script (\texttt{DIV=12}). \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{4. Styles d'En-têtes et Pieds de Page (\textsf{scrlayer-scrpage})}} \\
+  \addlinespace
+  \texttt{scrheadings} & \texttt{\textbackslash pagestyle\{scrheadings\}} & Style par défaut avec filet haut (\qty{0.5}{pt}), section dynamique et pagination. \\
+  \texttt{StyleFocus} & \texttt{\textbackslash pagestyle\{StyleFocus\}} & Style épuré sans filet, marque de section centrée et pagination en bas. \\
+  \texttt{StyleTest} & \texttt{\textbackslash pagestyle\{StyleTest\}} & Style de débogage affichant \texttt{\textbackslash jobname.tex}, \texttt{LastPage} et badge orange. \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{5. Calque de Filigrane Institutionnel / Logo (\textsf{scrlayer})}} \\
+  \addlinespace
+  \texttt{\textbackslash masquerLogo} & Sans argument & Masque le logo d'arrière-plan (sur page de garde et pages préliminaires). \\
+  \texttt{\textbackslash afficherLogo} & Sans argument & Réactive l'affichage du logo dans le coin supérieur droit. \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{6. Boîtes et Encadrés Graphiques (\textsf{tcolorbox})}} \\
+  \addlinespace
+  \texttt{cadreFigure} & \texttt{\textbackslash begin\{cadreFigure\}} & Boîte aux coins arrondis (\qty{10}{pt}) et bordure primaire pour sublimer schémas/TikZ. \\
+  \texttt{boiteSynthese} & \texttt{\textbackslash begin\{boiteSynthese\}} & Boîte teintée (\texttt{primaryColor!6}) avec en-tête pour synthèses et théorèmes. \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{7. Flottants Personnalisés et Listes de Documents}} \\
+  \addlinespace
+  \texttt{illustration} & \texttt{\textbackslash begin\{illustration\}} & Flottant dédié aux supports artistiques et photographiques distinct des figures. \\
+  \texttt{\textbackslash listofillustrations} & Sans argument & Génère la table des illustrations en fin de document (via fichier \texttt{.loi}). \\
+  \addlinespace
+  \midrule
+
+  \multicolumn{3}{l}{\textbf{8. Système Collaboratif Avancé (\textsf{todonotes} + \textsf{lua-ul})}} \\
+  \addlinespace
+  \texttt{\textbackslash todoH} & \texttt{\textbackslash todoH\{style\}\{coul\}\dots} & Surlignage résistant, troncature > 30 car., infobulle PDF et lien retour vers \texttt{\textbackslash listoftodos}. \\
+  \texttt{\textbackslash listoftodos} & \texttt{\textbackslash listoftodos[Titre]} & Tableau récapitulatif de toutes les révisions (associé à \texttt{\textbackslash label\{table\_todos\}}). \\
+  \texttt{\textbackslash missingfigure} & \texttt{\textbackslash missingfigure[opts]} & Réserve un emplacement graphique proportionné en cours de finalisation. \\
+  \texttt{GuillaumeStyle} & Profil d'auteur & Stylise la note avec le nom d'auteur Guillaume et une ombre portée. \\
+  \texttt{MarieStyle} & Profil d'auteur & Stylise la note pour les remarques de direction académique. \\
+  \texttt{FloraStyle} & Profil d'auteur & Stylise la note pour les remarques méthodologiques. \\
+\end{longtable}
+\end{small}
+

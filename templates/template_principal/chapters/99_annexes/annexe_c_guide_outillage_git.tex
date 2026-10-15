@@ -1,0 +1,51 @@
+%------------------------------------------------------------------------------------
+%  ANNEXE C : GUIDE D'OUTILLAGE, COMPILATION ET BONNES PRATIQUES GIT
+%------------------------------------------------------------------------------------
+\chapter{Guide d'Outillage, Compilation et Bonnes Pratiques Git}
+\label{annexe:guide_outillage}
+
+La reproductibilité d'un travail scientifique impose une maîtrise complète des outils d'automatisation et de traçabilité.
+Cette annexe détaille la chaîne de compilation et les conventions de versionnement recommandées pour le présent modèle.
+
+\section{Le script d'automatisation PowerShell : \texttt{compile.ps1}}
+\label{sec:script_compile}
+
+Sous l'environnement Windows, les terminaux PowerShell utilisent historiquement une page de code OEM (CP 850 ou CP 1252) susceptible de dégrader l'affichage des caractères accentués dans les journaux de compilation.
+Le script \texttt{scripts/compile.ps1} sécurise cette étape :
+
+\begin{enumerate}
+  \item Il sauvegarde la page de code d'entrée et de sortie de la console.
+  \item Il bascule temporairement l'environnement en UTF-8 universel (Page de code 65001).
+  \item Il déclenche l'utilitaire \texttt{latexmk} avec le moteur Lua\LaTeX{} et la redirection \texttt{-outdir=build}.
+  \item Dès l'achèvement, il restaure la page de code d'origine de Windows sans altérer le reste de votre session.
+\end{enumerate}
+
+La commande d'exécution à la racine du projet est immédiate :
+\begin{verbatim}
+powershell -ExecutionPolicy Bypass -File scripts/compile.ps1
+\end{verbatim}
+
+\section{Nettoyage des fichiers intermédiaires : \texttt{clean.ps1}}
+\label{sec:script_clean}
+
+Durant les cycles de compilation, des dizaines de fichiers auxiliaires (\texttt{.aux}, \texttt{.bcf}, \texttt{.fls}, \texttt{.run.xml}, \texttt{.tdo}) s'accumulent dans le dossier \texttt{build/}.
+Le script \texttt{scripts/clean.ps1} permet de purger ces résidus pour garantir une compilation vierge à froid sans supprimer vos images sources ni vos fichiers bibliographiques.
+
+\section{Bonnes pratiques de versionnement sous Git}
+\label{sec:bonnes_pratiques_git}
+
+Un dépôt Git professionnel doit respecter des règles strictes de salubrité :
+\begin{itemize}
+  \item \textbf{Fichiers à versionner impérativement :}\\
+  Tous les fichiers sources textuels (\texttt{*.tex}), la classe (\texttt{ClasseGuillaume.cls}),
+  la base bibliographique (\texttt{references.bib}), les graphiques et images sources,
+  les scripts PowerShell (\texttt{*.ps1}), et le fichier \texttt{.latexmkrc}.
+  
+  \item \textbf{Fichiers à ignorer formellement (\texttt{.gitignore}) :}
+  La totalité du dossier \texttt{build/} et les extensions auxiliaires (\texttt{*.aux}, \texttt{*.log}, \texttt{*.toc}, \texttt{*.synctex.gz}, \texttt{*.pdf} intermédiaire).
+  Seuls les fichiers sources doivent être conservés ; le document PDF final est un artefact dérivé qui se reconstruit de façon déterministe par simple compilation.
+
+  \item \textbf{Diffs visuels avec \textsf{latexdiff} :}
+  Grâce aux sauts de ligne sémantiques adoptés par ce modèle, vous pouvez utiliser l'utilitaire \texttt{latexdiff} pour générer automatiquement un document PDF de révision mettant en évidence en rouge les passages supprimés et en bleu les ajouts entre deux versions ou commits Git successifs.
+\end{itemize}
+

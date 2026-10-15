@@ -1,0 +1,51 @@
+%------------------------------------------------------------------------------------
+%  SECTION 1.1 : ARCHITECTURE MODULAIRE D'UN PROJET LATEX PROFESSIONNEL
+%------------------------------------------------------------------------------------
+\section{Architecture Modulaire et Séparation des Préoccupations}
+\label{sec:architecture_projet}
+
+La rédaction d'un document académique de grande envergure (mémoire, thèse de doctorat, monographie technique) ne peut reposer sur un fichier unique monolithique.
+Un projet durable et évolutif obéit au principe cardinal de \textbf{séparation des préoccupations} (\emph{Separation of Concerns}) :
+la structure et la typographie sont encapsulées dans la classe de document ou des feuilles de style, tandis que le contenu textuel réside dans des fichiers autonomes et légers.
+
+\subsection{Arborescence standardisée du projet}
+\label{subsec:arborescence}
+
+L'arborescence recommandée par ce modèle sépare nettement chaque catégorie d'artefact :
+
+\begin{itemize}
+  \item \textbf{\texttt{ClasseGuillaume.cls} :} Le cœur typographique et technique. Il configure les géométries, les en-têtes KOMA-Script, les paquets scientifiques et les environnements exclusifs.
+  \item \textbf{\texttt{main.tex} :} Le chef d'orchestre. Ce fichier ne contient presque aucun texte direct, mais uniquement la déclaration de la classe, les métadonnées globales, le chargement des annexes et la séquence d'inclusion des chapitres via la commande \texttt{\textbackslash input\{...\}}.
+  \item \textbf{\texttt{chapters/} :} Les sources textuelles organisées par répertoires thématiques numérotés (\texttt{00\_frontmatter/}, \texttt{01\_fondations/}, etc.).
+  \item \textbf{\texttt{tables/} :} Les tableaux complexes ou volumineux isolés dans des fichiers autonomes pour maintenir une parfaite lisibilité du texte principal.
+  \item \textbf{\texttt{bib/references.bib} :} Le corpus bibliographique centralisé au format Bib\LaTeX{}.
+  \item \textbf{\texttt{images/} :} Les illustrations vectorielles (PDF/SVG), schémas techniques et photographies matricielles.
+  \item \textbf{\texttt{scripts/} :} Les scripts d'automatisation de compilation (\texttt{compile.ps1}) et de nettoyage des fichiers temporaires (\texttt{clean.ps1}).
+  \item \textbf{\texttt{build/} :} Le répertoire dédié à l'isolation de tous les fichiers auxiliaires générés par le compilateur (\texttt{.aux}, \texttt{.bcf}, \texttt{.log}, \texttt{.toc}).
+\end{itemize}
+
+\subsection{Le paradigme Git-friendly : Semantic Line Breaks}
+\label{subsec:semantic_breaks}
+
+Dans le développement logiciel moderne, la gestion de versions avec Git est indispensable.
+Cependant, un document \LaTeX{} dont les paragraphes sont rédigés en un seul bloc kilométrique rend les comparaisons de versions (\texttt{git diff}) totalement illisibles : la moindre correction d'une virgule marque l'ensemble du paragraphe comme modifié.
+
+Pour remédier à cet écueil, ce modèle applique rigoureusement la convention des \textbf{sauts de ligne sémantiques} (\emph{semantic line breaks}) :
+\begin{boiteSynthese}{Règle d'or de rédaction Git-friendly}
+  Chaque phrase complète ou proposition grammaticale majeure doit débuter sur une nouvelle ligne dans le fichier source \texttt{.tex}.
+  Pour le compilateur \LaTeX{}, un simple retour à la ligne est assimilé à une espace ordinaire entre les mots ; le saut de paragraphe ne s'effectue qu'après une ligne entièrement vierge.
+  Cette pratique assure des revues de code claires, des fusions de branches sans conflit et un suivi historique précis de chaque argument rédigé.
+\end{boiteSynthese}
+
+\subsection{Compilation automatisée et hygiène du répertoire source}
+\label{subsec:compilation_build}
+
+La compilation manuelle enchaînant plusieurs passes (\texttt{lualatex}, puis \texttt{biber}, puis deux nouvelles passes de \texttt{lualatex}) est fastidieuse et source d'erreurs d'incohérence dans les références croisées.
+
+La classe s'appuie sur l'outil de référence \texttt{latexmk}, configuré via le fichier masqué \texttt{.latexmkrc} à la racine du projet :
+\begin{enumerate}
+  \item L'option \texttt{-outdir=build} redirige la totalité des artefacts intermédiaires dans le sous-dossier \texttt{build/}.
+  \item Le répertoire racine reste ainsi vierge de toute pollution par des fichiers parasites (\texttt{.aux}, \texttt{.log}, \texttt{.fls}).
+  \item \texttt{latexmk} détecte automatiquement les modifications apportées aux dépendances (bibliographies, graphiques, fichiers inclus) et calcule exactement le nombre optimal de passes nécessaires pour stabiliser le document.
+\end{enumerate}
+

@@ -1,0 +1,76 @@
+%------------------------------------------------------------------------------------
+%  SECTION 3.1 : FORMULES MATHÉMATIQUES MODERNES AVEC UNICODE-MATH
+%------------------------------------------------------------------------------------
+\section{Typographie Mathématique Moderne et \textsf{unicode-math}}
+\label{sec:formules_mathematiques}
+
+La composition mathématique constitue historiquement le point fort absolu de \LaTeX{}.
+Cependant, de nombreuses pratiques héritées des années 1980 persistent encore à tort dans les documents contemporains.
+\texttt{ClasseGuillaume} intègre nativement le paquet \textsf{unicode-math} couplé à la police vectorielle mathématique de référence \textbf{XITS Math}, assurant un rendu irréprochable des symboles et une harmonisation d'échelle avec le texte environnant (\texttt{Scale=MatchLowercase}).
+
+\subsection{L'interdiction absolue de \texttt{\$\$...\$\$} et les environnements recommandés}
+\label{subsec:interdiction_dollars}
+
+L'une des règles fondamentales de \LaTeXe{} moderne concerne les formules hors-texte :
+\begin{boiteSynthese}{Pourquoi la syntaxe \texttt{\$\$...\$\$} est proscrite}
+  La syntaxe \texttt{\$\$...\$\$} est une relique primitive du moteur \TeX{} originel (1978).
+  En \LaTeX{}, elle perturbe gravement le calcul vertical des marges (\texttt{abovedisplayskip}), court-circuite les options de classes telles que \texttt{fleqn}, et interdit toute numérotation automatique ou référence croisée.
+  
+  \textbf{Règles à appliquer sans exception :}
+  \begin{itemize}
+    \item Pour une équation hors-texte non numérotée : utilisez \texttt{\textbackslash [ ... \textbackslash ]}.
+    \item Pour une équation hors-texte numérotée : utilisez \texttt{\textbackslash begin\{equation\} ... \textbackslash end\{equation\}}.
+    \item Pour des développements multi-lignes alignés : utilisez \texttt{align} ou \texttt{align*}.
+  \end{itemize}
+\end{boiteSynthese}
+
+\subsection{Ponctuation et texte au sein des équations}
+\label{subsec:ponctuation_maths}
+
+Une équation mathématique ne flotte pas dans le vide : elle constitue une phrase grammaticale à part entière ou s'insère dans une proposition existante.
+Par conséquent, elle doit impérativement comporter sa \textbf{ponctuation finale} (virgule ou point), placée à l'intérieur de l'environnement mathématique.
+
+De surcroît, les indices ou mots insérés dans une formule ne doivent jamais être saisis en mode mathématique pur, sous peine d'être interprétés comme le produit de variables juxtaposées ($vitesse$ au lieu de $\text{vitesse}$).
+On utilise systématiquement la commande \texttt{\textbackslash text\{...\}} du paquet \textsf{mathtools} :
+
+\begin{equation}
+  \label{eq:bernoulli_moderne}
+  p_1 + \frac{1}{2} \rho v_1^2 + \rho g z_1 = p_2 + \frac{1}{2} \rho v_2^2 + \rho g z_2 + \Delta p_{\text{pertes}},
+\end{equation}
+où $p$ désigne la pression statique, $\rho$ la masse volumique du fluide, et $\Delta p_{\text{pertes}}$ les pertes de charge singulières et régulières.
+
+\subsection{Démonstration de structures mathématiques complexes}
+\label{subsec:structures_complexes}
+
+L'environnement \texttt{align} permet de coordonner des démonstrations pas à pas grâce au point d'alignement \texttt{\&} :
+\begin{align}
+  \nabla \times \mathbf{E} &= -\frac{\partial \mathbf{B}}{\partial t}, \label{eq:maxwell_faraday} \\
+  \nabla \times \mathbf{B} &= \mu_0 \mathbf{J} + \mu_0 \varepsilon_0 \frac{\partial \mathbf{E}}{\partial t}. \label{eq:maxwell_ampere}
+\end{align}
+Une référence croisée intelligente via \textsf{cleveref} permet d'appeler simultanément les~\cref{eq:maxwell_faraday,eq:maxwell_ampere} sans répétition lourde.
+
+Pour les systèmes différentiels avec conditions aux limites ou fonctions définies par morceaux, l'environnement \texttt{cases} de \textsf{amsmath} garantit un rendu net :
+\begin{equation}
+  \label{eq:fonction_morceaux}
+  f(x, t) = 
+  \begin{cases}
+    \int_0^t \mathrm{e}^{-\lambda \tau} \cos(\omega \tau) \, \mathrm{d}\tau & \text{si } x \ge 0, \\[2mm]
+    \sum_{n=1}^{\infty} \frac{(-1)^n}{n^2 + 1} \sin\left(\frac{n \pi x}{L}\right) & \text{si } x < 0.
+  \end{cases}
+\end{equation}
+Remarquez l'écriture droite du symbole différentiel $\mathrm{d}\tau$ et de la constante d'Euler $\mathrm{e}$, conformément aux normes internationales ISO 80000-2.
+
+Les calculs matriciels s'expriment avec clarté via \texttt{pmatrix} ou \texttt{bmatrix} :
+\begin{equation}
+  \label{eq:matrice_rotation}
+  \mathbf{R}_z(\theta) = 
+  \begin{bmatrix}
+    \cos\theta & -\sin\theta & 0 \\
+    \sin\theta &  \cos\theta & 0 \\
+    0          &  0          & 1
+  \end{bmatrix},
+  \quad
+  \det\left(\mathbf{R}_z(\theta)\right) = 1.
+\end{equation}
+L'\cref{eq:matrice_rotation} illustre la régularité typographique des délimiteurs étirables automatiques.
+

@@ -1,0 +1,48 @@
+%------------------------------------------------------------------------------------
+%  SECTION 4.1 : LES RÈGLES D'OR DE LA TYPOGRAPHIE TABULAIRE AVEC BOOKTABS
+%------------------------------------------------------------------------------------
+\section{Les Règles d'Or de la Typographie Tabulaire et \textsf{booktabs}}
+\label{sec:regles_booktabs}
+
+Un tableau n'est pas une grille de tableur : c'est un dispositif typographique destiné à ordonner des données pour faciliter la comparaison intellectuelle.
+Dans son manuel de référence devenu le standard mondial des revues à comité de lecture~\cite{fear2020booktabs}, Simon Fear énonce deux axiomes incontournables :
+
+\begin{boiteSynthese}{Les deux axiomes de Simon Fear (paquet \textsf{booktabs})}
+  \begin{enumerate}
+    \item \textbf{Ne jamais utiliser de filets verticaux.} Les barres verticales entravent le balayage visuel horizontal de gauche à droite et créent un quadrillage lourd et inutile.
+    \item \textbf{Ne jamais doubler les filets horizontaux.} Une structure claire s'obtient par la modulation de l'épaisseur des traits et l'équilibre des blancs, non par la multiplication de filets parasites.
+  \end{enumerate}
+\end{boiteSynthese}
+
+\subsection{La hiérarchie des trois règles horizontales}
+\label{subsec:trois_regles_horizontales}
+
+Un tableau scientifique standard s'articule autour de trois filets de graisses distinctes :
+\begin{itemize}
+  \item \texttt{\textbackslash toprule} : Filet supérieur d'ouverture, d'une épaisseur marquée (généralement \qty{0.08}{\centi\meter}).
+  \item \texttt{\textbackslash midrule} : Filet intermédiaire plus fin (\qty{0.05}{\centi\meter}), séparant l'en-tête explicatif des données numériques ou textuelles.
+  \item \texttt{\textbackslash bottomrule} : Filet de fermeture d'épaisseur identique à \texttt{\textbackslash toprule}.
+  \item \texttt{\textbackslash cmidrule(lr)\{i-j\}} : Filet sous-colonne partiel reliant les colonnes $i$ à $j$. L'option \texttt{(lr)} raccourcit subtilement les extrémités gauche et droite pour séparer nettement deux sous-groupes adjacents.
+  \item \texttt{\textbackslash addlinespace} : Insère un espace vertical délicat entre deux blocs logiques de données, évitant de surcharger le tableau d'un trait continu.
+\end{itemize}
+
+\subsection{Positionnement normé des légendes}
+\label{subsec:position_legendes_tableaux}
+
+Contrairement aux figures dont la légende est systématiquement placée \textbf{en dessous} du graphique, la norme internationale stipule que \textbf{la légende d'un tableau doit impérativement être placée au-dessus} du tableau.
+En effet, le lecteur doit prendre connaissance du contexte et de la signification des variables avant d'analyser les valeurs de la matrice.
+
+\texttt{ClasseGuillaume} garantit cette convention grâce à l'option KOMA-Script \texttt{captions=tableheading} et au paramétrage du paquet \textsf{caption} :
+\begin{verbatim}
+\captionsetup[table]{position = above, skip = 8pt}
+\end{verbatim}
+
+\subsection{Démonstration comparative : Tableau de synthèse de mesures}
+\label{subsec:demo_synthese_mesures}
+
+Le tableau modulaire ci-dessous illustre l'usage conjugué de \textsf{booktabs}, \textsf{tabularx} et \textsf{siunitx} :
+
+\input{tables/tableau_synthese_mesures.tex}
+
+Comme le met en évidence le~\cref{tab:synthese_mesures}, l'absence de traits verticaux allège considérablement la lecture et confère une élégance immédiate à la présentation des résultats.
+

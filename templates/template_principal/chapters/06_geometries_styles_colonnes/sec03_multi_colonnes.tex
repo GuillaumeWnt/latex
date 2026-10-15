@@ -1,0 +1,69 @@
+%------------------------------------------------------------------------------------
+%  SECTION 6.3 : MISES EN PAGE MULTI-COLONNES (2 ET 3 COLONNES)
+%------------------------------------------------------------------------------------
+\section{Mises en Page Multi-Colonnes et Équilibrage Dynamique}
+\label{sec:multi_colonnes}
+
+Pour les documents techniques denses, les synthèses de laboratoire ou les articles de revue, une disposition en colonne unique (\emph{single-column}) peut engendrer des lignes trop longues (plus de 85 caractères), rendant la lecture fatigante.
+Le passage en colonnes multiples permet de densifier l'information tout en conservant une longueur de ligne idéale (40 à 50 caractères).
+
+\subsection{L'option globale \texttt{twocolumn} vs la flexibilité locale de \textsf{multicol}}
+\label{subsec:comparatif_colonnes}
+
+Il existe deux manières d'aborder le multi-colonnes en \LaTeX{} :
+\begin{enumerate}
+  \item \textbf{L'option globale de classe (\texttt{\textbackslash documentclass[twocolumn]\{ClasseGuillaume\}}) :}
+  Elle scinde l'ensemble du mémoire en deux colonnes du début à la fin.
+  Ce mode convient aux formats d'articles IEEE ou de comptes-rendus de conférences, mais s'avère trop rigide pour un mémoire universitaire dont la page de garde, les résumés et les grands tableaux doivent rester en pleine largeur.
+  
+  \item \textbf{L'approche locale dynamique avec le paquet \textsf{multicol} :}
+  Elle permet de basculer ponctuellement en deux, trois ou quatre colonnes sur une fraction de page, puis de revenir à la colonne pleine de façon parfaitement fluide et sans saut de page forcé.
+\end{enumerate}
+
+\subsection{Démonstration en direct d'un passage en deux colonnes équilibrées}
+\label{subsec:demo_deux_colonnes}
+
+Voici une démonstration concrète d'un texte scindé en deux colonnes avec filet vertical séparateur délicat :
+
+\setlength{\columnsep}{22pt}
+\setlength{\columnseprule}{0.4pt}
+
+\begin{multicols}{2}[\subsubsection*{Étude comparative des fluides caloporteurs en régime forcé}]
+  Dans cette première colonne, nous examinons les propriétés thermophysiques de l'eau glycolée à \qty{30}{\percent}.
+  Sa capacité thermique massique élevée ($c_p = \qty{3.85}{\kilo\joule\per\kilo\gram\per\kelvin}$) en fait un fluide de choix pour les circuits de refroidissement industriels soumis à des températures négatives modérées.
+  
+  Toutefois, sa viscosité dynamique augmente de manière sensible aux basses températures, entraînant une majoration des pertes de charge singulières dans les coudes de canalisations.
+  
+  \columnbreak % Forçage pédagogique de l'équilibrage de colonne
+  
+  Dans cette seconde colonne en regard, nous analysons le comportement d'une huile synthétique de synthèse.
+  Bien que sa conductivité thermique soit inférieure ($\lambda = \qty{0.13}{\watt\per\meter\per\kelvin}$), sa très haute stabilité thermique jusqu'à \qty{320}{\degreeCelsius} autorise un fonctionnement sans pressurisation excessive du circuit primaire.
+  
+  L'équilibrage automatique assuré par le paquet \textsf{multicol} égalise précisément la hauteur des deux colonnes avant de restituer la largeur normale de page.
+\end{multicols}
+
+\setlength{\columnseprule}{0pt} % Rétablissement du séparateur invisible
+
+\subsection{Démonstration d'un lexique technique en trois colonnes}
+\label{subsec:demo_trois_colonnes}
+
+Pour les nomenclatures, index de variables ou listes de constantes, le format en trois colonnes optimise l'occupation de la page :
+
+\setlength{\columnsep}{16pt}
+\begin{multicols}{3}
+  \begin{itemize}[leftmargin=12pt]
+    \item $\alpha$ : Diffusivité thermique
+    \item $\beta$ : Dilatation volumique
+    \item $\gamma$ : Indice adiabatique
+    \item $\delta$ : Épaisseur de couche
+    \item $\epsilon$ : Émissivité radiative
+    \item $\zeta$ : Coefficient d'amortissement
+    \item $\eta$ : Rendement isentropique
+    \item $\theta$ : Température adimensionnelle
+    \item $\kappa$ : Compressibilité isotherme
+    \item $\lambda$ : Conductivité thermique
+    \item $\mu$ : Viscosité dynamique
+    \item $\nu$ : Viscosité cinématique
+  \end{itemize}
+\end{multicols}
+

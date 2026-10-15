@@ -1,48 +1,89 @@
 %------------------------------------------------------------------------------------
-%  PAGE DE GARDE PRINCIPALE
+%  PAGE DE GARDE PRINCIPALE HAUT DE GAMME
+%  Utilise \geometrieLarge et \masquerLogo pour une couverture aérée et équilibrée
 %------------------------------------------------------------------------------------
 \begin{titlepage}
   \begin{singlespace}
   \centering
-  \vspace*{0.04\textheight}
 
-  {\scshape\LARGE \textbf{UCLouvain}\par}
+  % En-tête institutionnel avec logos
+  \begin{minipage}[c]{0.28\textwidth}
+    \IfFileExists{images/UCLouvainLogo.png}{%
+      \includegraphics[height=1.8cm,keepaspectratio]{images/UCLouvainLogo.png}%
+    }{}%
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.40\textwidth}
+    \centering
+    {\scshape\Large \textbf{UCLouvain}}\\[2mm]
+    {\scshape\footnotesize Secteur des Sciences de la Santé}\\[1mm]
+    {\scshape\footnotesize Faculté de Médecine et Médecine Dentaire}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.28\textwidth}
+    \raggedleft
+    \IfFileExists{images/FacMedLogo.jpg}{%
+      \includegraphics[height=1.8cm,keepaspectratio]{images/FacMedLogo.jpg}%
+    }{}%
+  \end{minipage}
+
+  \vspace{1.8cm}
+
+  % Type de livrable
+  {\large\sffamily\bfseries\color{secondaryColor} RAPPORT TECHNIQUE ET GUIDE DE RÉFÉRENCE ACADÉMIQUE\par}
   \vspace{0.4cm}
-  {\textsc{\Large Faculté des Sciences}\par}
+  {\normalsize\scshape Modèle Typographique \& Démonstration Exhaustive de \texttt{ClasseGuillaume}\par}
+
+  \vspace{1.2cm}
+
+  % Cartouche de titre principal
+  \begin{tcolorbox}[
+    colframe=primaryColor,
+    colback=primaryColor!4,
+    boxrule=1.5pt,
+    arc=6pt,
+    left=12pt,
+    right=12pt,
+    top=14pt,
+    bottom=14pt,
+    halign=center
+  ]
+    {\Huge\sffamily\bfseries\color{primaryColor} \thetitle \par}
+    \vspace{0.5cm}
+    {\large\sffamily\color{darkgray} Manuel pratique, vitrine typographique et guide méthodologique complet pour la rédaction scientifique sous Lua\LaTeX{}\par}
+  \end{tcolorbox}
+
   \vspace{1.5cm}
 
-  {\textsc{\Large Mémoire de Fin d'Études / Bachelor Thesis}\par}
-  \vspace{0.8cm}
-
-  \rule{0.9\linewidth}{0.8pt} \\[0.4cm]
-  {\huge\bfseries \thetitle \par} \vspace{0.3cm}
-  \rule{0.9\linewidth}{0.8pt} \\[1.5cm]
-
-  \begin{minipage}[t]{0.48\textwidth}
+  % Cartouche d'auteurs et superviseurs
+  \begin{minipage}[t]{0.46\textwidth}
     \begin{flushleft}\large
-      \emph{Auteur :}\\
+      \textcolor{primaryColor}{\bfseries\sffamily Auteur :}\\
       \textbf{\theauthor}\\
+      \small Ingénieur \& Chercheur\\
       \footnotesize\texttt{guillaume.winant@student.uclouvain.be}
     \end{flushleft}
   \end{minipage}
   \hfill
-  \begin{minipage}[t]{0.48\textwidth}
+  \begin{minipage}[t]{0.46\textwidth}
     \begin{flushright}\large
-      \emph{Superviseur :}\\
-      \textbf{Prof. Dr. Nom Superviseur}\\
+      \textcolor{primaryColor}{\bfseries\sffamily Direction Académique :}\\
+      \textbf{Prof. Dr. Promoteur Principal}\\
+      \small Chaire d'Ingénierie \& Typographie\\
       \footnotesize\texttt{superviseur@uclouvain.be}
     \end{flushright}
   \end{minipage}
 
   \vfill
 
-  {\large \textit{Mémoire présenté en vue de l'obtention du diplôme de Bachelier}\par}
-  \vspace{0.3cm}
-  {\textit{Département des Sciences Médicales et Biomédicales}\par}
+  % Bas de page institutionnel
+  {\small\textit{Document rédigé dans le cadre des travaux de recherche et développement méthodologiques}\par}
+  \vspace{0.2cm}
+  {\footnotesize Département de Recherche en Sciences Appliquées et Médicales\par}
 
-  \vfill
-  \vfill
+  \vspace{0.8cm}
 
-  {\large \thedate\par}
+  {\large\sffamily\bfseries Année Académique 2025--2026 \quad---\quad \thedate\par}
+
   \end{singlespace}
 \end{titlepage}

@@ -1,0 +1,47 @@
+%------------------------------------------------------------------------------------
+%  SECTION 1.3 : GESTION DES INTERLIGNES ET MICROTYPOGRAPHIE
+%------------------------------------------------------------------------------------
+\section{Interlignage Contrôlé et Microtypographie Avancée}
+\label{sec:interlignes_microtype}
+
+La lisibilité d'un document long repose sur une harmonie subtile entre la taille de la police, la longueur de la ligne et l'espacement vertical entre deux lignes consécutives.
+Trop serré, le texte fatigue l'œil lors des retours à la ligne ; trop espacé, la page semble déstructurée et les paragraphes perdent leur cohésion.
+
+\subsection{Le défi classique de l'interligne 1,5 et la réponse de la classe}
+\label{subsec:defi_interligne}
+
+La majorité des universités et jurys de thèse exigent un interligne de 1,5 pour le confort de lecture et l'annotation manuscrite des épreuves.
+Le paquet standard \textsf{setspace} fournit la commande \texttt{\textbackslash onehalfspacing}.
+
+Cependant, en \LaTeX{} standard (\emph{vanilla}), l'activation globale de cet interligne engendre un effet visuel désastreux :
+lorsqu'un titre de section ou de chapitre s'étend sur deux lignes, l'interligne 1,5 lui est également appliqué !
+Le titre apparaît alors artificiellement distendu et déconnecté de son texte.
+
+\begin{boiteSynthese}{Protection automatique des titres dans ClasseGuillaume}
+  Pour pallier cette anomalie, \texttt{ClasseGuillaume} intègre une règle typographique stricte au sein des polices KOMA-Script :
+  \begin{verbatim}
+  \addtokomafont{section}{\setstretch{1}\selectfont}
+  \addtokomafont{subsection}{\setstretch{1}\selectfont}
+  \addtokomafont{subsubsection}{\setstretch{1}\selectfont}
+  \end{verbatim}
+  Ainsi, le corps du mémoire bénéficie de la fluidité de l'interligne 1,5, tandis que l'ensemble des titres longs conservent un interligne simple compact, rigoureux et professionnel.
+\end{boiteSynthese}
+
+\subsection{Microtypographie et élimination des lignes orphelines et veuves}
+\label{subsec:microtypographie}
+
+Un document scientifique soigné ne doit jamais laisser une ligne isolée au bas d'une page (ligne orpheline) ou en haut de la page suivante (ligne veuve).
+De même, une césure coupant un mot à la toute dernière ligne d'une page est considérée comme un manquement aux règles de l'art typographique.
+
+Le paquet \textsf{microtype} associé à la configuration interne de \texttt{ClasseGuillaume} résout ces écueils par un ajustement microscopique de l'espacement inter-mots et par des pénalités strictes :
+
+\begin{itemize}
+  \item \texttt{\textbackslash clubpenalty = 10000} : Interdit formellement la présence d'une ligne orpheline en bas de page.
+  \item \texttt{\textbackslash widowpenalty = 10000} : Interdit le rejet d'une ligne veuve en haut de page.
+  \item \texttt{\textbackslash displaywidowpenalty = 10000} : Protège l'agencement des formules mathématiques détachées.
+  \item \texttt{\textbackslash brokenpenalty = 10000} : Empêche la césure d'un mot à cheval sur deux pages consécutives.
+  \item \texttt{\textbackslash interfootnotelinepenalty = 9999} : Empêche qu'une note de bas de page ne soit scindée arbitrairement sur deux pages.
+\end{itemize}
+
+Grâce à ces paramètres, le compilateur Lua\LaTeX{} recalcule subtilement les blancs typographiques de chaque paragraphe pour produire des pages équilibrées sans rupture visuelle.
+

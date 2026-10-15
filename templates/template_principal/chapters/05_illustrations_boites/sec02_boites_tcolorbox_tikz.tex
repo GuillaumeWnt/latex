@@ -1,0 +1,77 @@
+%------------------------------------------------------------------------------------
+%  SECTION 5.2 : VALORISATION VISUELLE AVEC LES BOÎTES TCOLORBOX ET TIKZ
+%------------------------------------------------------------------------------------
+\section{Encadrés Typographiques Modernes et Schémas Vectoriels TikZ}
+\label{sec:boites_tcolorbox_tikz}
+
+L'aération d'un document passe par l'insertion rythmée d'éléments d'accroche visuelle.
+En \LaTeX{} classique, la création d'encadrés personnalisés imposait des constructions complexes à base de \texttt{\textbackslash fbox} ou \texttt{mdframed}.
+La classe \texttt{ClasseGuillaume} intègre le moteur de référence \textsf{tcolorbox} (avec les extensions \texttt{skins} et \texttt{breakable}), offrant des boîtes insensibles aux sauts de page et dotées d'une finition graphique irréprochable.
+
+\subsection{L'environnement \texttt{cadreFigure} pour sublimer les schémas}
+\label{subsec:cadre_figure}
+
+L'environnement \texttt{cadreFigure} habille son contenu d'un contour raffiné aux coins délicatement arrondis (\texttt{arc = 10pt}) et d'un liseré de couleur primaire assombrie :
+
+\begin{figure}[htbp]
+  \centering
+  \begin{cadreFigure}[width=0.92\textwidth]
+    \begin{tikzpicture}[
+      node distance = 2.1cm,
+      every node/.style = {font=\small\sffamily},
+      block/.style = {draw=primaryColor, thick, fill=primaryColor!8, rounded corners=3pt, minimum width=2.4cm, minimum height=1.1cm, align=center},
+      sum/.style = {draw=secondaryColor, thick, circle, fill=secondaryColor!10, minimum size=0.8cm},
+      arrow/.style = {->, >=stealth, thick, color=darkgray}
+    ]
+      % Noeuds du schéma bloc
+      \node[sum] (sommateur) {$\Sigma$};
+      \node[block, right of=sommateur, xshift=1.2cm] (correcteur) {Correcteur\\Numérique $C(z)$};
+      \node[block, right of=correcteur, xshift=1.6cm] (processus) {Procédé Physique\\Modélisé $G(s)$};
+      \node[coordinate, right of=processus, xshift=1.2cm] (sortie) {};
+      \node[coordinate, below of=correcteur, yshift=0.8cm] (retour) {};
+
+      % Flèches de connexion
+      \draw[arrow] ([xshift=-1.6cm]sommateur.west) -- node[above] {$r(t)$} node[below, pos=0.2] {\footnotesize Consigne} (sommateur.west);
+      \draw[arrow] (sommateur) -- node[above] {$e(t)$} (correcteur);
+      \draw[arrow] (correcteur) -- node[above] {$u(t)$} (processus);
+      \draw[arrow] (processus) -- node[above] {$y(t)$} (sortie);
+      \draw[arrow] ([xshift=0.8cm]processus.east) |- (retour) -| node[pos=0.9, left] {$-$} (sommateur.south);
+    \end{tikzpicture}
+  \end{cadreFigure}
+  \caption{Architecture fonctionnelle d'une boucle d'asservissement en temps réel composée sous TikZ}
+  \label{fig:schema_bloc_tikz}
+\end{figure}
+
+Le schéma vectoriel représenté à la~\cref{fig:schema_bloc_tikz} illustre la symbiose parfaite entre le graphisme vectoriel natif \textsf{TikZ} et le conteneur \texttt{cadreFigure}.
+
+\subsection{L'environnement \texttt{boiteSynthese} pour les messages clés}
+\label{subsec:boite_synthese}
+
+L'environnement \texttt{boiteSynthese\{Titre\}} structure les conclusions d'étapes, définitions ou théorèmes au moyen d'un fond teinté doux (\texttt{primaryColor!6}) et d'un titre en lettres sans-serif grasses :
+
+\begin{boiteSynthese}{Principe Fondamental de l'Équilibre Graphique}
+  Les boîtes décoratives doivent soutenir la transmission intellectuelle et non la distraire :
+  \begin{itemize}
+    \item Une boîte ne doit contenir qu'une seule idée forte ou synthèse transversale.
+    \item L'intensité de la couleur d'arrière-plan ne doit jamais dépasser \qty{8}{\percent} pour garantir un ratio de contraste d'impression optimal et éviter la fatigue oculaire.
+    \item Dans un mémoire volumineux, limitez l'usage à une boîte de synthèse par section majeure.
+  \end{itemize}
+\end{boiteSynthese}
+
+\subsection{Boîtes d'alerte avec bandeau vertical (\emph{Left-bar alert})}
+\label{subsec:boite_alerte}
+
+Pour les mises en garde méthodologiques ou les avertissements de sécurité expérimentale, un style minimaliste avec filet latéral (\emph{leftbar}) s'avère particulièrement sobre et percutant :
+
+\begin{tcolorbox}[
+  enhanced,
+  blanker,
+  borderline west={3pt}{0pt}{Bittersweet},
+  left=12pt,
+  top=4pt,
+  bottom=4pt
+]
+  \textcolor{Bittersweet}{\bfseries\sffamily Règle de Sécurité et Hygiène des Données :}\\
+  \small\itshape Lors de l'acquisition de signaux physiologiques sur sujets humains, assurez-vous impérativement de la conformité avec le Règlement Général sur la Protection des Données (RGPD) et de l'anonymisation irréversible des identifiants patients avant tout traitement statistique.
+\end{tcolorbox}
+

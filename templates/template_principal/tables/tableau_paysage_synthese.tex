@@ -1,0 +1,34 @@
+%------------------------------------------------------------------------------------
+%  TABLEAU PAYSAGE LARGE (pdflscape + booktabs + tabularx)
+%------------------------------------------------------------------------------------
+\begin{landscape}
+\begin{table}[p]
+  \centering
+  \small
+  \caption{Matrice d'évaluation comparative multicritères des architectures logicielles et typographiques}
+  \label{tab:evaluation_paysage}
+  \begin{tabularx}{\linewidth}{p{3.5cm} p{3.5cm} c c c c X}
+    \toprule
+    \textbf{Moteur / Chaîne} & \textbf{Standard de Polices} & \textbf{UTF-8 Natif} & \textbf{Microtypo} & \textbf{Vitesse} & \textbf{Complexité} & \textbf{Conclusion Opérationnelle} \\
+    \midrule
+    pdf\LaTeX{} classique & T1 / Type 1 (8 bits) & Non (inputenc) & Limitée & Rapide & Élevée (bidouilles) & Obsolète pour nouveaux projets académiques. \\
+    \addlinespace
+    Xe\LaTeX{} & OpenType / TrueType & Oui & Basique & Moyenne & Moyenne & Préféré historiquement pour langues non latines. \\
+    \addlinespace
+    \textbf{Lua\LaTeX{} moderne} & \textbf{OpenType / TrueType} & \textbf{Oui (100\,\%)} & \textbf{Complète} & \textbf{Excellente} & \textbf{Épurée} & \textbf{Standard contemporain recommandé par l'UCLouvain.} \\
+    \midrule
+    \multicolumn{7}{l}{\textbf{Bilan comparatif des fonctionnalités de publication :}} \\
+    \addlinespace
+    Classe KOMA \texttt{scrbook} & Système KOMA-Script & Oui & Oui & -- & Modérée & Socle de base solide mais sans encadrements prêts à l'emploi. \\
+    \addlinespace
+    \texttt{ClasseGuillaume} & \textbf{Architecture Modulaire} & \textbf{Oui} & \textbf{Pénalités max} & -- & \textbf{Immédiate} & \textbf{Intègre \texttt{\textbackslash todoH}, 3 géométries, logo scrlayer et booktabs.} \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{4mm}
+  \begin{minipage}{\linewidth}
+    \footnotesize
+    \textit{Note méthodologique :} Ce tableau panoramique démontre l'utilisation conjointe de l'environnement \texttt{landscape} fourni par le paquet \textsf{pdflscape} et de la classe de document. La rotation est physique dans le fichier PDF généré, garantissant une consultation parfaite sans devoir tourner manuellement l'écran.
+  \end{minipage}
+\end{table}
+\end{landscape}
+

@@ -1,0 +1,50 @@
+%------------------------------------------------------------------------------------
+%  SECTION 8.1 : RÉFÉRENCES SÉMANTIQUES AVEC CLEVEREF
+%------------------------------------------------------------------------------------
+\section{Références Sémantiques Intelligentes avec \textsf{cleveref}}
+\label{sec:references_cleveref}
+
+Le renvoi vers des éléments numérotés (équations, figures, tableaux, sections, annexes) est au cœur de la rigueur scientifique.
+En \LaTeX{} traditionnel, l'usage de la macro \texttt{\textbackslash ref\{label\}} est une source inépuisable de coquilles :
+l'auteur doit taper manuellement le mot descriptif (« à la figure \texttt{\textbackslash ref\{...\}} », « dans le tableau \texttt{\textbackslash ref\{...\}} »).
+En cas de remaniement, si un tableau devient une figure ou si le document est traduit, toutes ces mentions manuelles doivent être corrigées une à une.
+
+Le modèle \texttt{ClasseGuillaume} intègre le paquet de référence \textsf{cleveref}, configuré pour la langue française avec les options \texttt{[french, capitalize, noabbrev]}.
+
+\subsection{Les atouts majeurs de \texttt{\textbackslash cref} et \texttt{\textbackslash Cref}}
+\label{subsec:atouts_cleveref}
+
+\begin{itemize}
+  \item \textbf{Détection sémantique automatique du type d'objet :}
+  La commande \texttt{\textbackslash cref\{label\}} identifie automatiquement la nature de la cible et lui associe le mot idoine avec ses accords grammaticaux en français :
+  \begin{itemize}
+    \item Une équation devient automatiquement « \cref{eq:bernoulli_moderne} ».
+    \item Un tableau devient « \cref{tab:synthese_mesures} ».
+    \item Une figure devient « \cref{fig:schema_bloc_tikz} ».
+    \item Une illustration personnalisée devient « \cref{ill:microscopie_nanotubes} ».
+    \item Une section devient « \cref{sec:architecture_projet} ».
+  \end{itemize}
+
+  \item \textbf{Majuscule automatique en début de phrase (\texttt{\textbackslash Cref}) :}
+  En tête de phrase, la macro majuscule \texttt{\textbackslash Cref\{label\}} applique la lettre capitale requise :
+  \Cref{tab:comparatif_classe} récapitule les divergences fondamentales entre les approches.
+
+  \item \textbf{Regroupement automatique des références multiples :}
+  Lorsque plusieurs objets similaires sont appelés simultanément, \textsf{cleveref} les regroupe élégamment au pluriel :
+  Les~\cref{eq:maxwell_faraday,eq:maxwell_ampere} décrivent les lois de l'électromagnétisme classique.
+  Les~\cref{tab:synthese_mesures,tab:comparatif_classe} confrontent les métriques d'analyse.
+
+  \item \textbf{Renvois de pagination sémantiques (\texttt{\textbackslash cpageref}) :}
+  Pour situer physiquement un résultat dans le mémoire, la macro \texttt{\textbackslash cpageref\{label\}} génère le renvoi :
+  le schéma fonctionnel est consultable à la~\cpageref{fig:schema_bloc_tikz}.
+\end{itemize}
+
+\begin{boiteSynthese}{Prise en charge du flottant personnalisé \texttt{illustration}}
+  Pour que le nouveau flottant iconographique soit parfaitement géré, la classe déclare explicitement :
+  \begin{verbatim}
+  \crefname{illustration}{illustration}{illustrations}
+  \Crefname{illustration}{Illustration}{Illustrations}
+  \end{verbatim}
+  Cette harmonisation garantit qu'aucune rustine manuelle n'est requise lors de la rédaction.
+\end{boiteSynthese}
+

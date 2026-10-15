@@ -1,0 +1,33 @@
+%------------------------------------------------------------------------------------
+%  TABLEAU COMPARATIF : LATEX STANDARD VS CLASSEGUILLAUME
+%------------------------------------------------------------------------------------
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Comparatif synthétique des fonctionnalités : \LaTeX{} Standard vs \texttt{ClasseGuillaume}}
+  \label{tab:comparatif_classe}
+  \begin{tabularx}{\textwidth}{p{3.2cm} p{5.5cm} X}
+    \toprule
+    \textbf{Fonctionnalité} & \textbf{En \LaTeX{} Standard (\emph{Vanilla})} & \textbf{Avec \texttt{ClasseGuillaume.cls}} \\
+    \midrule
+    \textbf{Gestion des polices} & Déclarations manuelles \textsf{fontspec} avec fichiers physiques \texttt{.ttf} & Détection intelligente triple : système direct, \TeX{} Live natif ou repli Overleaf. \\
+    \addlinespace
+    \textbf{Interligne des titres} & \texttt{\textbackslash onehalfspacing} étire affreusement les titres multi-lignes & Protection automatique : interligne 1,5 dans le corps, interligne simple strict dans les titres. \\
+    \addlinespace
+    \textbf{Puces de paragraphes} & \texttt{\textbackslash paragraph} renvoie à la ligne ou nécessite un réglage KOMA & Puce colorée en ligne prête à l'emploi (\texttt{\textbackslash textbullet~}) avec poursuite immédiate du texte. \\
+    \addlinespace
+    \textbf{Changement de marges} & Écriture manuelle lourde de \texttt{\textbackslash newgeometry} à chaque bascule & Trois commandes immédiates : \texttt{\textbackslash geometrieWord}, \texttt{\textbackslash geometrieLarge}, \texttt{\textbackslash geometrieStandard}. \\
+    \addlinespace
+    \textbf{Notes de révision} & \textsf{todonotes} déborde des marges, casse en UTF-8 et sans infobulle & \texttt{\textbackslash todoH} : surlignage \textsf{lua-ul}, troncature automatique > 30 car., infobulle PDF et lien retour. \\
+    \addlinespace
+    \textbf{Illustrations dédiées} & Schémas et photos se mélangent aux figures dans la table des figures & Flottant \texttt{illustration} avec sa propre liste indépendante (\texttt{\textbackslash listofillustrations}). \\
+    \addlinespace
+    \textbf{Mise en valeur visuelle} & Environnements bruts ou code \textsf{tcolorbox} complexe à réécrire & Boîtes \texttt{cadreFigure} (coins arrondis) et \texttt{boiteSynthese} (fond teinté) prêtes à l'emploi. \\
+    \addlinespace
+    \textbf{Logo institutionnel} & Montage artisanal de paquets d'en-tête sujet aux décalages & Couche dynamique \textsf{scrlayer} avec bascules \texttt{\textbackslash masquerLogo} et \texttt{\textbackslash afficherLogo}. \\
+    \addlinespace
+    \textbf{Bibliographie FR} & Chaînes en anglais (\emph{visited on}, \emph{available from}) & Localisation soignée : « consulté le », « disponible sur », liens de retour \texttt{backref}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+

@@ -1,0 +1,56 @@
+%------------------------------------------------------------------------------------
+%  SECTION 4.2 : TABLEAUX AVANCÉS EN SITUATION RÉELLE
+%------------------------------------------------------------------------------------
+\section{Tableaux Complexes, Multipage et Orientation Paysage}
+\label{sec:tableaux_avances}
+
+La mise en forme de données expérimentales denses exige des techniques avancées pour s'adapter à la largeur de page sans tronquer le texte et sans générer d'erreurs de dépassement (\texttt{overfull \textbackslash hbox}).
+
+\subsection{Dimensionnement automatique avec \textsf{tabularx}}
+\label{subsec:tabularx_auto}
+
+En \LaTeX{} standard, l'environnement \texttt{tabular} requiert de fixer manuellement la largeur de chaque colonne (ex. \texttt{p\{4cm\}}).
+Si le texte est trop long, il déborde de la marge de la page.
+À l'inverse, l'environnement \texttt{tabularx} introduit le spécificateur de colonne majuscule \textbf{\texttt{X}} :
+\begin{itemize}
+  \item Il calcule automatiquement l'espace résiduel sur la largeur totale prescrite (\texttt{\textbackslash textwidth}).
+  \item Il répartit proportionnellement cet espace entre toutes les colonnes \texttt{X}.
+  \item Il justifie automatiquement le texte à l'intérieur de la cellule avec césure propre.
+\end{itemize}
+
+Le~\cref{tab:comparatif_classe} met en pratique cette flexibilité pour confronter les atouts de \texttt{ClasseGuillaume} face à une installation standard :
+
+\input{tables/tableau_comparatif_classe.tex}
+
+\subsection{Gestion des grands tableaux multipages avec \textsf{longtable}}
+\label{subsec:longtable_multipage}
+
+Lorsqu'un inventaire de composants ou une série temporelle de mesures s'étend sur plusieurs pages consécutives, l'environnement flottant \texttt{table} ne peut pas se scinder.
+Il faut faire appel au paquet \textsf{longtable} :
+
+\begin{boiteSynthese}{Les quatre zones clés d'un tableau \textsf{longtable}}
+  Un tableau multipage professionnel doit répéter ses en-têtes pour que le lecteur ne perde jamais le fil :
+  \begin{itemize}
+    \item \texttt{\textbackslash endfirsthead} : En-tête principal affiché sur la toute première page.
+    \item \texttt{\textbackslash endhead} : En-tête secondaire répété en haut de chaque page suivante avec la mention explicite « \textit{Suite de la page précédente} ».
+    \item \texttt{\textbackslash endfoot} : Pied de tableau affiché au bas des pages intermédiaires (« \textit{Suite sur la page suivante...} »).
+    \item \texttt{\textbackslash endlastfoot} : Pied de clôture définitif arborant la règle \texttt{\textbackslash bottomrule}.
+  \end{itemize}
+\end{boiteSynthese}
+
+Le~\cref{tab:composants_multipage} démontre l'intégration complète de cette structure :
+
+\input{tables/tableau_donnees_multipage.tex}
+
+\subsection{Tableaux panoramiques en mode paysage avec \textsf{pdflscape}}
+\label{subsec:mode_paysage}
+
+Certaines synthèses transversales comportent un nombre trop élevé de paramètres pour être contenues dans la largeur portrait d'une feuille A4 (\qty{21}{\centi\meter}).
+L'utilisation de l'environnement \texttt{landscape} issu du paquet \textsf{pdflscape} résout cette contrainte avec un confort de lecture total :
+contrairement au paquet classique \textsf{lscape} qui laisse la page en portrait tout en tournant le texte de 90 degrés, \textsf{pdflscape} transmet une directive au visualiseur PDF pour effectuer une \textbf{véritable rotation physique de la page}.
+Le document reste ainsi parfaitement lisible à l'écran sans que l'utilisateur n'ait à pivoter son moniteur.
+
+Le~\cref{tab:evaluation_paysage} (page suivante) offre un exemple probant de matrice décisionnelle en mode paysage.
+
+\input{tables/tableau_paysage_synthese.tex}
+

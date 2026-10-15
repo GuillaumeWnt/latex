@@ -1,0 +1,69 @@
+%------------------------------------------------------------------------------------
+%  ANNEXE B : GUIDE DES PALETTES DE COULEURS ET PERSONNALISATION ESTHÉTIQUE
+%------------------------------------------------------------------------------------
+\chapter{Nuanciers et Guide de Personnalisation Chromatique}
+\label{annexe:guide_palettes}
+
+L'identité visuelle d'un mémoire ou d'un rapport technique s'adapte au domaine d'étude ou à la charte institutionnelle de l'établissement d'attache.
+Cette annexe fournit quatre nuanciers professionnels complets accompagnés de leur code source \LaTeX{} prêt à l'emploi.
+
+\section{Code source des palettes thématiques recommandées}
+\label{sec:code_palettes}
+
+Pour appliquer l'une de ces ambiances à votre document, copiez simplement le bloc de redéfinition correspondant dans votre préambule (dans \texttt{main.tex}) juste après le chargement de la classe.
+
+\subsection{Palette 1 : Océan Académique (Configuration par défaut)}
+\begin{boiteSynthese}{Ambiance Océan Académique}
+  \textcolor{NavyBlue}{\rule{12pt}{12pt}} \textbf{Primaire :} \texttt{NavyBlue} (Bleu marine profond)\\
+  \textcolor{TealBlue}{\rule{12pt}{12pt}} \textbf{Secondaire :} \texttt{TealBlue} (Bleu sarcelle équilibré)\\
+  \textcolor{Bittersweet}{\rule{12pt}{12pt}} \textbf{Accent :} \texttt{Bittersweet} (Terre cuite douce)\\
+  \textcolor{red!50!black}{\rule{12pt}{12pt}} \textbf{Liens web :} \texttt{red!50!black} (Bordeaux sombre)
+\end{boiteSynthese}
+
+\subsection{Palette 2 : Prestige Humanités et Sciences Morales}
+Idéale pour les mémoires d'histoire, de philosophie, de littérature ou de droit :
+\begin{verbatim}
+% Palette Prestige Humanités :
+\colorlet{primaryColor}{Maroon}          % Rouge bordeaux universitaire
+\colorlet{secondaryColor}{darkgray}        % Gris anthracite profond
+\colorlet{accentColor}{BurntOrange}       % Ocre doré
+\colorlet{mdtRed}{Maroon!80!black}        % Liens sobres
+\end{verbatim}
+
+\subsection{Palette 3 : Sciences de la Vie, Écologie et Agronomie}
+Idéale pour la biologie végétale, la pharmacologie, la médecine environnementale et les sciences agronomiques :
+\begin{verbatim}
+% Palette Sciences du Vivant :
+\colorlet{primaryColor}{ForestGreen}     % Vert sapin dense
+\colorlet{secondaryColor}{CadetBlue}       % Vert d'eau satiné
+\colorlet{accentColor}{RawSienna}        % Teinte terreuse
+\colorlet{mdtRed}{ForestGreen!70!black}   % Liens vert sombre
+\end{verbatim}
+
+\subsection{Palette 4 : Technologies de l'Information et Aérospatiale}
+Recommandée pour l'informatique théorique, le génie mécanique, les télécommunications et la physique des plasmas :
+\begin{verbatim}
+% Palette Technologies & Ingénierie :
+\colorlet{primaryColor}{RoyalBlue}       % Bleu cobalt électrique
+\colorlet{secondaryColor}{MidnightBlue}   % Bleu nuit rigoureux
+\colorlet{accentColor}{Bittersweet}       % Orange vif d'attention
+\colorlet{mdtRed}{RoyalBlue!80!black}     % Liens bleus soutenus
+\end{verbatim}
+
+\section{Définition de teintes hexadécimales sur-mesure (HTML / RGB)}
+\label{sec:couleurs_hexadecimales}
+
+Si vous devez vous conformer aux codes hexadécimaux précis de la charte graphique de votre université (par exemple la charte officielle UCLouvain ou le code couleur de votre entreprise), le paquet \textsf{xcolor} accepte la syntaxe HTML suivante :
+
+\begin{verbatim}
+% Définition précise par code hexadécimal :
+\definecolor{BleuUCLouvain}{HTML}{002855}
+\definecolor{OrUCLouvain}{HTML}{D4AF37}
+
+% Affectation immédiate à ClasseGuillaume :
+\colorlet{primaryColor}{BleuUCLouvain}
+\colorlet{secondaryColor}{BleuUCLouvain!75!white}
+\colorlet{accentColor}{OrUCLouvain}
+\end{verbatim}
+Cette méthode assure une harmonisation stricte avec les chartes graphiques les plus exigeantes sans aucune modification du fichier de classe.
+

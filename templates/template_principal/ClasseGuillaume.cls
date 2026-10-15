@@ -23,6 +23,8 @@
 % Choix de la police par défaut via option de classe
 \newcommand{\selectedfont}{calibri}
 \DeclareOption{font=calibri}{\renewcommand{\selectedfont}{calibri}}
+\DeclareOption{font=heros}{\renewcommand{\selectedfont}{heros}}
+\DeclareOption{font=libertinus}{\renewcommand{\selectedfont}{libertinus}}
 \DeclareOption{font=comicsans}{\renewcommand{\selectedfont}{comicsans}}
 \DeclareOption{font=standard}{\renewcommand{\selectedfont}{standard}}
 
@@ -81,64 +83,142 @@
 %----------------------------------------------------------------------------------
 \RequirePackage{fontspec}
 
-% Définitions des familles de polices locales fournies dans Fonts/
-\newfontfamily{\AsapFont}{Asap-Condensed-Regular}[
-  Path = ./Fonts/AsapFontFiles/,
-  Extension = .ttf,
-  BoldFont = Asap-Condensed-Bold,
-  ItalicFont = Asap-Condensed-Italic,
-  BoldItalicFont = Asap-Condensed-BoldItalic
-]
+% ---------------------------------------------------------------------------------
+% GESTION MODERNE DES POLICES AVEC LUALATEX :
+% 1. POLICES SYSTÈME (Windows) : Calibri, Comic Sans MS, Segoe UI, etc.
+%    -> Accessibles directement par leur nom via \setmainfont{Calibri}.
+%    -> Aucun fichier .ttf dans le projet n'est nécessaire sur une machine Windows !
+% 2. POLICES TEX LIVE (universelles) : TeX Gyre Heros, Libertinus, Fira Sans, etc.
+%    -> Fournies avec TeX Live, utilisables immédiatement sur n'importe quel OS.
+% 3. FICHIERS LOCAUX (./Fonts/...) :
+%    -> Méthode utilisée sur Overleaf (Linux) où les polices Microsoft ne sont pas
+%       préinstallées, assurant une portabilité totale quel que soit l'environnement.
+% ---------------------------------------------------------------------------------
 
-\newfontfamily{\CalibriFont}{calibri-regular}[
-  Path = ./Fonts/CalibriFontFiles/,
-  Extension = .ttf,
-  BoldFont = calibri-bold,
-  ItalicFont = calibri-italic,
-  BoldItalicFont = calibri-bold-italic
-]
+% Définition de \AsapFont (utilisée pour les titres de chapitres)
+% Recherche en priorité dans le système, repli sur ./Fonts/, puis sur TeX Gyre Heros
+\IfFontExistsTF{Asap Condensed}{%
+  \newfontfamily{\AsapFont}{Asap Condensed}
+}{%
+  \IfFileExists{./Fonts/AsapFontFiles/Asap-Condensed-Regular.ttf}{%
+    \newfontfamily{\AsapFont}{Asap-Condensed-Regular}[
+      Path = ./Fonts/AsapFontFiles/,
+      Extension = .ttf,
+      BoldFont = Asap-Condensed-Bold,
+      ItalicFont = Asap-Condensed-Italic,
+      BoldItalicFont = Asap-Condensed-BoldItalic
+    ]
+  }{%
+    \newfontfamily{\AsapFont}{TeX Gyre Heros}[BoldFont=*, ItalicFont=*, BoldItalicFont=*]
+  }
+}
 
-\newfontfamily{\ComicSansMSFont}{ComicSansMS}[
-  Path = ./Fonts/ComicSansMSFontFiles/,
-  Extension = .ttf,
-  BoldFont = ComicSansMS-Bold,
-  ItalicFont = ComicSansMS-Italic,
-  BoldItalicFont = ComicSansMS-BoldItalic
-]
+% Familles de démonstration ponctuelle (\CalibriFont, \ComicSansMSFont)
+\IfFontExistsTF{Calibri}{%
+  \newfontfamily{\CalibriFont}{Calibri}
+}{%
+  \IfFileExists{./Fonts/CalibriFontFiles/calibri-regular.ttf}{%
+    \newfontfamily{\CalibriFont}{calibri-regular}[
+      Path = ./Fonts/CalibriFontFiles/,
+      Extension = .ttf,
+      BoldFont = calibri-bold,
+      ItalicFont = calibri-italic,
+      BoldItalicFont = calibri-bold-italic
+    ]
+  }{%
+    \newfontfamily{\CalibriFont}{TeX Gyre Heros}
+  }
+}
 
-% Application de la police principale et sans-serif
+\IfFontExistsTF{Comic Sans MS}{%
+  \newfontfamily{\ComicSansMSFont}{Comic Sans MS}
+}{%
+  \IfFileExists{./Fonts/ComicSansMSFontFiles/ComicSansMS.ttf}{%
+    \newfontfamily{\ComicSansMSFont}{ComicSansMS}[
+      Path = ./Fonts/ComicSansMSFontFiles/,
+      Extension = .ttf,
+      BoldFont = ComicSansMS-Bold,
+      ItalicFont = ComicSansMS-Italic,
+      BoldItalicFont = ComicSansMS-BoldItalic
+    ]
+  }{%
+    \newfontfamily{\ComicSansMSFont}{Latin Modern Roman}
+  }
+}
+
+% --- Application de la police principale et sans-serif selon l'option choisie ---
 \ifdefstring{\selectedfont}{calibri}{
-  \setmainfont{calibri-regular}[
-    Path = ./Fonts/CalibriFontFiles/,
-    Extension = .ttf,
-    BoldFont = calibri-bold,
-    ItalicFont = calibri-italic,
-    BoldItalicFont = calibri-bold-italic
-  ]
-  \setsansfont{calibri-regular}[
-    Path = ./Fonts/CalibriFontFiles/,
-    Extension = .ttf,
-    BoldFont = calibri-bold,
-    ItalicFont = calibri-italic,
-    BoldItalicFont = calibri-bold-italic
-  ]
+  % Option par défaut : tente de charger Calibri directement depuis le système Windows.
+  % Si absent (ex. Overleaf / Linux), se replie sur ./Fonts/CalibriFontFiles/
+  \IfFontExistsTF{Calibri}{
+    \setmainfont{Calibri}
+    \setsansfont{Calibri}
+  }{
+    \IfFileExists{./Fonts/CalibriFontFiles/calibri-regular.ttf}{
+      \setmainfont{calibri-regular}[
+        Path = ./Fonts/CalibriFontFiles/,
+        Extension = .ttf,
+        BoldFont = calibri-bold,
+        ItalicFont = calibri-italic,
+        BoldItalicFont = calibri-bold-italic
+      ]
+      \setsansfont{calibri-regular}[
+        Path = ./Fonts/CalibriFontFiles/,
+        Extension = .ttf,
+        BoldFont = calibri-bold,
+        ItalicFont = calibri-italic,
+        BoldItalicFont = calibri-bold-italic
+      ]
+    }{
+      \setmainfont{Latin Modern Roman}
+      \setsansfont{Latin Modern Sans}
+    }
+  }
+}{}
+
+\ifdefstring{\selectedfont}{heros}{
+  % TeX Gyre Heros (équivalent libre moderne d'Helvetica) : inclus nativement dans TeX Live
+  % Ne nécessite aucun fichier local et fonctionne à 100% sur Windows, Mac, Linux et Overleaf.
+  \setmainfont{TeX Gyre Heros}
+  \setsansfont{TeX Gyre Heros}
+}{}
+
+\ifdefstring{\selectedfont}{libertinus}{
+  % Libertinus Serif (police avec empattements moderne et élégante) : incluse dans TeX Live
+  \setmainfont{Libertinus Serif}
+  \setsansfont{Libertinus Sans}
 }{}
 
 \ifdefstring{\selectedfont}{comicsans}{
-  \setmainfont{ComicSansMS}[
-    Path = ./Fonts/ComicSansMSFontFiles/,
-    Extension = .ttf,
-    BoldFont = ComicSansMS-Bold,
-    ItalicFont = ComicSansMS-Italic,
-    BoldItalicFont = ComicSansMS-BoldItalic
-  ]
-  \setsansfont{ComicSansMS}[
-    Path = ./Fonts/ComicSansMSFontFiles/,
-    Extension = .ttf,
-    BoldFont = ComicSansMS-Bold,
-    ItalicFont = ComicSansMS-Italic,
-    BoldItalicFont = ComicSansMS-BoldItalic
-  ]
+  \IfFontExistsTF{Comic Sans MS}{
+    \setmainfont{Comic Sans MS}
+    \setsansfont{Comic Sans MS}
+  }{
+    \IfFileExists{./Fonts/ComicSansMSFontFiles/ComicSansMS.ttf}{
+      \setmainfont{ComicSansMS}[
+        Path = ./Fonts/ComicSansMSFontFiles/,
+        Extension = .ttf,
+        BoldFont = ComicSansMS-Bold,
+        ItalicFont = ComicSansMS-Italic,
+        BoldItalicFont = ComicSansMS-BoldItalic
+      ]
+      \setsansfont{ComicSansMS}[
+        Path = ./Fonts/ComicSansMSFontFiles/,
+        Extension = .ttf,
+        BoldFont = ComicSansMS-Bold,
+        ItalicFont = ComicSansMS-Italic,
+        BoldItalicFont = ComicSansMS-BoldItalic
+      ]
+    }{
+      \setmainfont{Latin Modern Roman}
+    }
+  }
+}{}
+
+\ifdefstring{\selectedfont}{standard}{
+  % Latin Modern standard fourni avec TeX Live
+  \setmainfont{Latin Modern Roman}
+  \setsansfont{Latin Modern Sans}
 }{}
 
 % Polices mathématiques modernes

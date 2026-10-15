@@ -1,0 +1,48 @@
+%------------------------------------------------------------------------------------
+%  SECTION 2.2 : TYPOGRAPHIE TEXTUELLE ET RÈGLE DE PARCIMONIE
+%------------------------------------------------------------------------------------
+\section{Typographie Textuelle et Règle d'Or de la Parcimonie}
+\label{sec:typographie_parcimonie}
+
+L'une des erreurs les plus fréquentes dans la rédaction technique consiste à abuser des variations de graisse (gras) et de style (italique, soulignement, surlignage).
+Comme le rappelait Robert Bringhurst dans \emph{The Elements of Typographic Style}~\cite{bringhurst2004elements}, \textbf{« quand tout est accentué, plus rien n'est visible »}.
+La crédibilité d'un document académique repose sur une sobriété rigoureuse et une sémantique précise.
+
+\subsection{L'usage raisonné du gras, de l'italique et des petites capitales}
+\label{subsec:usages_styles}
+
+Chaque modification typographique doit répondre à un rôle sémantique précis :
+
+\begin{itemize}
+  \item \textbf{Le gras (\texttt{\textbackslash textbf\{...\}}) :}
+  Il doit être réservé exclusivement aux \textbf{mots-clés fondamentaux} et aux concepts pivots lors de leur première introduction.
+  Une phrase entière ne doit jamais être mise en gras, sous peine de détruire le gris typographique de la page.
+  
+  \item \textbf{L'emphase sémantique (\texttt{\textbackslash emph\{...\}}) :}
+  Elle signale une inflexion de la pensée dans le discours.
+  L'avantage majeur de \texttt{\textbackslash emph} est qu'elle s'inverse automatiquement : dans un passage déjà en italique, un mot englobé dans \texttt{\textbackslash emph} repasse en droit (romain), préservant le contraste.
+
+  \item \textbf{L'italique factuel (\texttt{\textbackslash textit\{...\}}) :}
+  Il s'applique aux locutions latines d'usage scientifique (\textit{a priori}, \textit{a posteriori}, \textit{in situ}, \textit{in vivo}, \textit{de facto}), aux termes empruntés à une langue étrangère non francisée, ainsi qu'aux titres d'ouvrages cités dans le texte.
+
+  \item \textbf{La chasse fixe (\texttt{\textbackslash texttt\{...\}}) :}
+  Réservée aux commandes \LaTeX{}, noms de packages (\texttt{biblatex}, \texttt{siunitx}), chemins de fichiers et variables de code.
+
+  \item \textbf{Les petites capitales (\texttt{\textbackslash textsc\{...\}}) :}
+  Idéales pour les patronymes d'auteurs (ex. Guillaume \textsc{Winant}) ou certains sigles académiques, évitant que des majuscules massives n'alourdissent le paragraphe.
+\end{itemize}
+
+\subsection{Le surlignage sécurisé sous Lua\LaTeX{} avec \textsf{lua-ul}}
+\label{subsec:surlignage_luaul}
+
+En \LaTeX{} classique, le soulignement et le surlignage reposaient sur des paquets comme \texttt{soul} ou \texttt{ulem}.
+Ces paquets sont tristement célèbres pour leurs plantages systématiques dès qu'un mot contient un caractère accentué UTF-8, une césure ou une référence croisée.
+
+\texttt{ClasseGuillaume} résout définitivement ce problème en intégrant le paquet moderne \textsf{lua-ul} couplé à \textsf{luacolor} :
+\begin{boiteSynthese}{Surlignage non destructif avec \texttt{\textbackslash highLight}}
+  La commande \texttt{\textbackslash highLight[couleur]\{texte\}} permet de surligner délicatement un passage clé.
+  Elle gère parfaitement les sauts de ligne, les césures de mots et tous les caractères Unicode :
+  Par exemple, voici un passage \highLight[yellow!35]{surligné en jaune pastel avec césure automatique}, ou encore \highLight[secondaryColor!20]{un surlignage teinté aux couleurs de la charte graphique}.
+\end{boiteSynthese}
+Ce mécanisme forme la fondation technique de la commande collaborative \texttt{\textbackslash todoH} présentée au Chapitre~\ref{chap:collaboration_todos}.
+

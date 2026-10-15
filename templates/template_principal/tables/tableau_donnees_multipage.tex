@@ -1,0 +1,43 @@
+%------------------------------------------------------------------------------------
+%  TABLEAU MULTIPAGE AVEC LONGTABLE ET BOOKTABS
+%------------------------------------------------------------------------------------
+\begin{small}
+\begin{longtable}{p{2.5cm} p{3.2cm} p{4.5cm} p{3.5cm}}
+  \caption{Inventaire exhaustif des composants expérimentaux (Tableau multipage)}
+  \label{tab:composants_multipage} \\
+  \toprule
+  \textbf{Référence} & \textbf{Désignation} & \textbf{Spécifications Techniques} & \textbf{Statut Métrologique} \\
+  \midrule
+  \endfirsthead
+
+  \multicolumn{4}{c}{\tablename\ \thetable\ -- \textit{Suite de la page précédente}} \\
+  \toprule
+  \textbf{Référence} & \textbf{Désignation} & \textbf{Spécifications Techniques} & \textbf{Statut Métrologique} \\
+  \midrule
+  \endhead
+
+  \midrule
+  \multicolumn{4}{r}{\textit{Suite sur la page suivante \dots}} \\
+  \bottomrule
+  \endfoot
+
+  \bottomrule
+  \endlastfoot
+
+  CMP-101 & Capteur piézoélectrique & Plage \qtyrange{0}{50}{\kilo\pascal}, précision \qty{0.1}{\percent} & Étalonné ISO 17025 \\
+  CMP-102 & Sonde thermocouple K & Plage \qtyrange{-50}{400}{\degreeCelsius}, temps de réponse \qty{20}{\milli\second} & Certifié d'usine \\
+  CMP-103 & Débitmètre vortex & Diamètre intérieur \qty{25}{\milli\meter}, sortie \qtyrange{4}{20}{\milli\ampere} & Vérification annuelle \\
+  CMP-104 & Manomètre différentiel & Échelle \qtyrange{0}{5}{\bar}, membrane inox 316L & En attente d'ajustage \\
+  \addlinespace
+  CMP-201 & Pompe volumétrique & Cylindrée \qty{12.5}{\centi\meter\cubed}, moteur brushless & Validé banc d'essai \\
+  CMP-202 & Vanne proportionnelle & Régulation PID intégrée, alimentation \qty{24}{\volt} DC & Zéro dérive mesuré \\
+  CMP-203 & Échangeur à plaques & Surface d'échange \qty{1.8}{\meter\squared}, flux contre-courant & Test hydrostatique OK \\
+  CMP-204 & Séparateur cyclonique & Efficacité \qty{99.2}{\percent} sur particules $> \qty{5}{\micro\meter}$ & Conforme norme ATEX \\
+  \addlinespace
+  CMP-301 & Module d'acquisition & 16 canaux analogiques, conversion 24 bits à \qty{100}{\kilo\hertz} & Horloge synchronisée \\
+  CMP-302 & Convertisseur USB-CAN & Isolation galvanique \qty{2.5}{\kilo\volt}, débit \qty{1}{\mega\bit\per\second} & Pilote validé Linux \\
+  CMP-303 & Alimentation stabilisée & Tension \qtyrange{0}{30}{\volt}, courant maxi \qty{10}{\ampere} & Ondulation $< \qty{1}{\milli\volt} $ \\
+  CMP-304 & Blindage électromagnétique & Atténuation \qty{65}{\decibel} entre \qty{10}{\mega\hertz} et \qty{1}{\giga\hertz} & Cage de Faraday testée \\
+\end{longtable}
+\end{small}
+

@@ -1,0 +1,62 @@
+%------------------------------------------------------------------------------------
+%  SECTION 6.2 : EN-TÊTES ET PIEDS DE PAGE MODULAIRES AVEC SCRLAYER-SCRPAGE
+%------------------------------------------------------------------------------------
+\section{Styles d'En-têtes et Pieds de Page Modulaires}
+\label{sec:styles_en_tetes_pieds}
+
+La gestion des hauts et bas de page en \LaTeX{} a longtemps été confiée au paquet obsolète \texttt{fancyhdr}.
+Dans un document moderne basé sur KOMA-Script, \texttt{fancyhdr} provoque des conflits majeurs avec la géométrie et le placement des notes de marge.
+\texttt{ClasseGuillaume} s'appuie sur le système de calques haute fidélité \textsf{scrlayer-scrpage}, offrant une modularité sans précédent.
+
+\subsection{Le style par défaut : \texttt{scrheadings}}
+\label{subsec:style_scrheadings}
+
+Le style actif par défaut dans l'ensemble du mémoire est \texttt{scrheadings} :
+\begin{itemize}
+  \item Un filet horizontal fin (\qty{0.5}{pt}) sépare l'en-tête du texte courant.
+  \item L'en-tête intérieur affiche dynamiquement le titre du chapitre ou de la section courante via la macro \texttt{\textbackslash headmark}.
+  \item L'en-tête extérieur affiche le numéro de page en chiffres gras (\texttt{\textbackslash pagemark}).
+  \item Le pied de page reste volontairement épuré pour ne pas alourdir la composition.
+\end{itemize}
+
+\subsection{Démonstration en direct du style épuré : \texttt{StyleFocus}}
+\label{subsec:style_focus}
+
+Pour les lectures concentrées, les synthèses de fin de partie ou les rapports managériaux, la classe fournit le style \texttt{StyleFocus}.
+Ce style supprime le filet d'en-tête, centre le rappel de section entre tirets (\texttt{-- \textbackslash headmark{} --}) et positionne le numéro de page au centre du pied de page.
+
+\begingroup
+% Bascule locale en StyleFocus
+\pagestyle{StyleFocus}
+
+Nous activons immédiatement \texttt{StyleFocus} sur cette portion de texte.
+Observez l'en-tête et le pied de cette page :
+la ligne supérieure a disparu, laissant place à une respiration minimale, tandis que la pagination est descendue au centre du pied de page.
+Cette disposition est particulièrement prisée pour les sections de réflexion ou les déclarations éthiques.
+
+\subsection{Démonstration en direct du style de diagnostic : \texttt{StyleTest}}
+\label{subsec:style_test}
+
+Durant la phase de développement et de révision technique, l'auteur a besoin d'informations de débogage précises : quel est le nom du fichier compilé ? Combien de pages totales compte le document ?
+
+La classe intègre à cet effet le style technique \texttt{StyleTest} :
+\begin{itemize}
+  \item Un badge orange centré \texttt{\tiny [DEBUG VIEW]} dans l'en-tête.
+  \item Des filets supérieur (\qty{0.8}{pt}) et inférieur (\qty{0.4}{pt}).
+  \item L'indication explicite du fichier racine (\texttt{\textbackslash jobname.tex}) dans le pied de page.
+  \item Le décompte complet des pages via le paquet \textsf{lastpage} : \texttt{p.~\textbackslash thepage/\textbackslash pageref\{LastPage\}}.
+\end{itemize}
+
+% Bascule locale en StyleTest
+\pagestyle{StyleTest}
+
+Cette nouvelle bascule active instantanément la vue de diagnostic sur les pages courantes.
+Elle permet aux équipes de relecture de vérifier en un coup d'œil l'horodatage et la pagination relative sans devoir inspecter les métadonnées internes du fichier PDF.
+
+\endgroup
+% Rétablissement automatique de scrheadings à la sortie du groupe
+\pagestyle{scrheadings}
+
+La sortie du bloc rétablit automatiquement le style standard \texttt{scrheadings} pour la suite du mémoire.
+Ces bascules illustrent la flexibilité extrême offerte par la classe pour rythmer la lecture selon la nature des contenus.
+

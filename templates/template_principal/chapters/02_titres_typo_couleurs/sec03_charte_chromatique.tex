@@ -1,0 +1,68 @@
+%------------------------------------------------------------------------------------
+%  SECTION 2.3 : CHARTE GRAPHIQUE ET THÉORIE DES COULEURS
+%------------------------------------------------------------------------------------
+\section{Charte Graphique, Théorie des Couleurs et Personnalisation}
+\label{sec:charte_chromatique}
+
+Une publication scientifique contemporaine ne se contente plus du noir et blanc austère.
+Une utilisation ciblée de la couleur renforce la hiérarchie visuelle, guide la navigation du lecteur et met en valeur les résultats majeurs.
+Toutefois, la palette doit être rigoureusement structurée pour éviter tout effet « sapin de Noël » incompatible avec le sérieux universitaire.
+
+\subsection{La palette chromatique par défaut de \texttt{ClasseGuillaume}}
+\label{subsec:palette_defaut}
+
+La classe s'appuie sur le paquet \textsf{xcolor} (avec les modèles de noms \texttt{dvipsnames}) et définit quatre couleurs maîtresses :
+
+\begin{itemize}
+  \item \textbf{\texttt{primaryColor} (\textcolor{NavyBlue}{\rule{8pt}{8pt}} \texttt{NavyBlue}) :}
+  Couleur dominante du document. Elle habille les grands titres de chapitres, les encadrements de boîtes principales, la puce des paragraphes et les liens de navigation interne.
+  
+  \item \textbf{\texttt{secondaryColor} (\textcolor{TealBlue}{\rule{8pt}{8pt}} \texttt{TealBlue}) :}
+  Couleur secondaire complémentaire. Elle structure les titres de sections et sous-titres, apportant une respiration visuelle plus douce.
+
+  \item \textbf{\texttt{accentColor} (\textcolor{Bittersweet}{\rule{8pt}{8pt}} \texttt{Bittersweet}) :}
+  Couleur d'accentuation chaude. Utilisée avec modération pour signaler des alertes méthodologiques ou des points de vigilance.
+
+  \item \textbf{\texttt{mdtRed} (\textcolor{red!50!black}{\rule{8pt}{8pt}} \texttt{red!50!black}) :}
+  Rouge bordeaux assombri, réservé exclusivement aux liens URL externes dans le texte et la bibliographie, évitant le rouge vif agressif par défaut d'\textsf{hyperref}.
+\end{itemize}
+
+\subsection{Comment personnaliser l'ambiance du document en 4 lignes}
+\label{subsec:personnalisation_couleurs}
+
+Grâce à l'usage de la macro \texttt{\textbackslash colorlet}, vous n'avez jamais besoin de modifier le code interne de la classe pour adapter le mémoire à la charte de votre université ou entreprise.
+Il vous suffit d'insérer dans votre préambule (dans \texttt{main.tex}) :
+
+\begin{verbatim}
+% Exemple : Bascule vers une palette 'Bordeaux & Ardoise'
+\colorlet{primaryColor}{Maroon}
+\colorlet{secondaryColor}{SlateGrey}
+\colorlet{accentColor}{BurntOrange}
+\colorlet{mdtRed}{Maroon!80!black}
+\end{verbatim}
+
+\subsection{Démonstration visuelle de palettes académiques harmonieuses}
+\label{subsec:nuanciers_harmonieux}
+
+Voici un aperçu comparatif de combinaisons chromatiques professionnelles testées et recommandées :
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Palettes recommandées selon le domaine scientifique}
+  \label{tab:palettes_recommandees}
+  \begin{tabularx}{\textwidth}{l p{3.5cm} p{4cm} X}
+    \toprule
+    \textbf{Nom de la Palette} & \textbf{Couleur Primaire} & \textbf{Couleur Secondaire} & \textbf{Domaine Idéal} \\
+    \midrule
+    \textbf{Océan Académique} (Défaut) & \textcolor{NavyBlue}{\rule{6pt}{6pt}} Bleu Marine (\texttt{NavyBlue}) & \textcolor{TealBlue}{\rule{6pt}{6pt}} Sarcelle (\texttt{TealBlue}) & Médecine, Droit, Économie \\
+    \textbf{Prestige Humanités} & \textcolor{Maroon}{\rule{6pt}{6pt}} Bordeaux (\texttt{Maroon}) & \textcolor{darkgray}{\rule{6pt}{6pt}} Anthracite (\texttt{darkgray}) & Histoire, Philosophie, Lettres \\
+    \textbf{Sciences Vivant} & \textcolor{ForestGreen}{\rule{6pt}{6pt}} Vert Forêt (\texttt{ForestGreen}) & \textcolor{CadetBlue}{\rule{6pt}{6pt}} Bleu Cadre (\texttt{CadetBlue}) & Biologie, Agronomie, Écologie \\
+    \textbf{Tech \& Ingénierie} & \textcolor{RoyalBlue}{\rule{6pt}{6pt}} Bleu Roi (\texttt{RoyalBlue}) & \textcolor{Bittersweet}{\rule{6pt}{6pt}} Ambre (\texttt{Bittersweet}) & Informatique, Physique, Aéro \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Chacune de ces palettes garantit un ratio de contraste supérieur aux normes d'accessibilité visuelle WCAG AA, que ce soit pour une lecture sur écran haute résolution ou lors d'une impression sur papier couché.
+Un guide complet de personnalisation avec code source est fourni en Annexe~\ref{annexe:guide_palettes}.
+

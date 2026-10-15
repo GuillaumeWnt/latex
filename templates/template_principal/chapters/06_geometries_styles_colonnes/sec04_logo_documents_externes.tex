@@ -1,0 +1,59 @@
+%------------------------------------------------------------------------------------
+%  SECTION 6.4 : LOGO DYNAMIQUE SCRLAYER ET DOCUMENTS PDF EXTERNES
+%------------------------------------------------------------------------------------
+\section{Logo en Calque Dynamique et Insertion de Documents Externes}
+\label{sec:logo_documents_externes}
+
+Deux défis récurrents dans la formalisation d'un livrable officiel concernent la présence d'un filigrane institutionnel discret et la fusion de pièces jointes administratives ou techniques fournies par des tiers.
+
+\subsection{Le filigrane dynamique en arrière-plan (\textsf{scrlayer})}
+\label{subsec:calque_logo}
+
+L'insertion manuelle d'un logo dans les en-têtes (\texttt{\textbackslash ihead} ou \texttt{\textbackslash ohead}) modifie l'encombrement vertical (\texttt{headheight}) et crée des décalages de texte selon que la page est paire ou impaire.
+
+\texttt{ClasseGuillaume} s'affranchit de cette contrainte en utilisant le concept de **couche d'arrière-plan** (\emph{background layer}) du moteur \textsf{scrlayer} :
+
+\begin{verbatim}
+\DeclareNewLayer[
+  background,
+  topmargin,
+  align = tr,
+  hoffset = \paperwidth - 1.8cm, % Calibré dynamiquement sur le bord droit
+  voffset = 1.2cm,
+  width = 3cm,
+  height = 3cm,
+  contents = {%
+    \IfFileExists{images/logo_test.png}{%
+      \includegraphics[width=2.2cm]{images/logo_test.png}%
+    }{}%
+  }
+]{logo.layer}
+\end{verbatim}
+
+\begin{boiteSynthese}{Commandes de pilotage du logo institutionnel}
+  Le calque flotte au-dessus de la mise en page sans jamais interférer avec le texte du corps. Deux commandes permettent d'en moduler l'affichage selon les chapitres :
+  \begin{itemize}
+    \item \texttt{\textbackslash masquerLogo} : Désactive instantanément le calque (utilisé dans le Frontmatter pour préserver la virginité de la page de titre et du résumé).
+    \item \texttt{\textbackslash afficherLogo} : Réactive le calque en tête du corps de texte (\texttt{\textbackslash mainmatter}) ou dans les sections spécialisées.
+  \end{itemize}
+\end{boiteSynthese}
+
+\subsection{Intégration transparente de documents PDF externes avec \textsf{pdfpages}}
+\label{subsec:pdfpages_externes}
+
+Dans une thèse ou un rapport d'ingénierie, il est fréquent de devoir intégrer des documents tiers au format PDF :
+attestations administratives, comptes-rendus de laboratoires accrédités, fiches techniques de constructeurs, ou articles scientifiques complets déjà publiés.
+Réinsérer ces documents sous forme d'images capturées dégrade fortement la résolution et perd la numérotation séquentielle des pages.
+
+La classe intègre le paquet de référence \textsf{pdfpages} :
+\begin{verbatim}
+% Exemple d'inclusion d'un document multipage en annexe :
+\includepdf[
+  pages = {1-3},                  % Pages à importer
+  scale = 0.92,                   % Échelle réservant la marge KOMA
+  pagecommand = {\thispagestyle{scrheadings}} % En-têtes conservés
+]{documents/rapport_mesures.pdf}
+\end{verbatim}
+Cette méthode vectorielle conserve la netteté parfaite des textes et graphiques d'origine tout en assurant une continuité sans faille de la pagination générale de votre mémoire.
+Une démonstration concrète est proposée en Annexe~\ref{annexe:specimen_externe}.
+

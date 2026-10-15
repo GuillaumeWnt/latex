@@ -1,0 +1,54 @@
+%------------------------------------------------------------------------------------
+%  SECTION 8.2 : GESTION BIBLIOGRAPHIQUE AVEC BIBLATEX ET STYLE VANCOUVER
+%------------------------------------------------------------------------------------
+\section{Gestion Bibliographique Moderne et Style Vancouver}
+\label{sec:bibliographie_vancouver}
+
+La qualité des sources et leur référencement rigoureux constituent le socle de toute démarche scientifique.
+L'ancien moteur \textsf{Bib\TeX{}} (1985), limité aux caractères ASCII 7 bits et dépendant de fichiers de style rigides (\texttt{.bst}), est aujourd'hui totalement dépassé.
+\texttt{ClasseGuillaume} s'appuie sur le couple de référence contemporain : le paquet \textsf{biblatex} propulsé par le moteur de tri Unicode \textbf{Biber}.
+
+\subsection{Pourquoi le style Vancouver médical et technique ?}
+\label{subsec:pourquoi_vancouver}
+
+Dans les disciplines biomédicales, les sciences appliquées et l'ingénierie, le style de citation séquentiel numéroté dit \textbf{Style Vancouver} est la norme internationale préconisée par l'\emph{International Committee of Medical Journal Editors} (ICMJE).
+Contrairement aux styles auteur-date (type APA ou Harvard) qui alourdissent les phrases par de longues parenthèses, le style Vancouver insère un numéro de référence sobre et compact entre crochets, sans interrompre la lecture.
+
+\subsection{Diversité des modes de citation en contexte}
+\label{subsec:modes_citations_contexte}
+
+Selon la tournure syntaxique de la phrase, plusieurs macros de citation sont mises en œuvre :
+
+\begin{itemize}
+  \item \textbf{Citation narrative en position de sujet (\texttt{\textbackslash textcite}) :}
+  Comme l'a démontré \textcite{knuth1984texbook} dans ses traités fondateurs, la précision typographique relève d'une exigence algorithmique.
+  De même, \textcite{lamport1994latex} puis \textcite{mittelbach2004companion} ont démocratisé la séparation entre forme et contenu.
+  
+  \item \textbf{Citation factuelle globale (\texttt{\textbackslash cite} ou \texttt{\textbackslash parencite}) :}
+  L'agencement des proportions de la page découle des règles de l'art typographique classique~\cite{bringhurst2004elements}.
+  La suite KOMA-Script apporte une flexibilité inégalée pour les ouvrages complexes~\cite{kohm2024koma},
+  tandis que \textsf{fontspec} régit le choix des polices OpenType sous Lua\LaTeX{}~\cite{robertson2020fontspec}.
+  
+  \item \textbf{Études médicales et essais cliniques :}
+  Dans le domaine de la santé, le diagnostic des pathologies gynécologiques s'appuie sur des méta-analyses rigoureuses~\cite{kanti2024ultrasound} et l'évaluation prospective de biomarqueurs sanguins~\cite{burghaus2024}.
+  Par ailleurs, l'impact des directives cliniques sur les cohortes observationnelles a été modélisé récemment~\cite{nieva2024impact}.
+
+  \item \textbf{Thèses de doctorat et manuels de référence :}
+  Les problématiques d'optimisation documentaire sous Lua\LaTeX{} sont approfondies dans la thèse de doctorat de \textcite{winant2026thesis}.
+  Le manuel officiel de référence Lua\TeX{} détaille quant à lui l'ensemble des primitives de bas niveau~\cite{luatex2024manual}.
+\end{itemize}
+
+\subsection{Francisation soignée et liens de retour \texttt{backref}}
+\label{subsec:francisation_backref}
+
+La classe personnalise le moteur \textsf{biblatex} pour une intégration francophone sans faille :
+\begin{itemize}
+  \item Les dates de consultation des ressources numériques affichent automatiquement « [consulté le \dots] » à partir du champ \texttt{urldate}.
+  \item Les adresses web affichent la mention « disponible sur : » suivie du lien cliquable césuré proprement par \textsf{xurl}.
+  \item \textbf{La fonctionnalité majeure \texttt{backref = true} :}
+  Dans la section bibliographique en fin de document, chaque référence comporte automatiquement \textbf{la liste cliquable des numéros de pages} où elle a été citée dans le corps de l'ouvrage !
+  Cette fonctionnalité permet aux membres du jury de vérifier instantanément dans quel contexte précis chaque source a été mobilisée.
+\end{itemize}
+
+Les citations de texte s'appuient sur le paquet \textsf{csquotes} avec la commande \texttt{\textbackslash enquote\{...\}}, produisant automatiquement des guillemets français dits en chevrons («~\dots~») avec espaces insécables normées.
+

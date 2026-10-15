@@ -1,0 +1,78 @@
+%------------------------------------------------------------------------------------
+%  SECTION 2.1 : DÉMONSTRATION DE TOUS LES NIVEAUX DE SECTIONNEMENT
+%------------------------------------------------------------------------------------
+\section{Hiérarchie Intégrale des Titres et Divisions Structurelles}
+\label{sec:niveaux_sectionnement}
+
+Un document scientifique clair et pédagogique doit s'appuyer sur une structure hiérarchique sans ambiguïté.
+La classe \texttt{ClasseGuillaume}, construite sur le socle KOMA-Script (\texttt{scrbook}), personnalise l'ensemble des niveaux de sectionnement du document, depuis la grande division générale jusqu'au paragraphe en ligne.
+
+\subsection{Le niveau macroscopique : Les Parties (\texttt{\textbackslash part})}
+\label{subsec:parties}
+
+La commande \texttt{\textbackslash part\{Titre de la Partie\}} regroupe plusieurs chapitres au sein d'une unité thématique majeure.
+Dans ce modèle, chaque partie génère une page de garde majestueuse, centrée et aérée, portant un numéro romain.
+Les parties permettent d'architecturer les documents de plus de 60 pages sans saturer la numérotation des chapitres.
+
+\subsection{Le niveau capitulaire : Les Chapitres numérotés et non numérotés}
+\label{subsec:chapitres}
+
+Les chapitres constituent le cœur du découpage :
+\begin{itemize}
+  \item \textbf{Chapitre numéroté (\texttt{\textbackslash chapter\{...\}}) :}
+  La classe personnalise le titre en adoptant la police {\AsapFont Asap Condensed}, la couleur primaire du document, et une numérotation en chiffres romains (\textsc{Chapitre I}, \textsc{Chapitre II}).
+  Le titre est harmonieusement centré et séparé du texte par des espacements verticaux soigneusement calibrés (\texttt{beforeskip = -10pt}, \texttt{afterskip = 20pt}).
+  \item \textbf{Chapitre non numéroté KOMA-Script (\texttt{\textbackslash addchap\{...\}}) :}
+  En \LaTeX{} standard, la commande \texttt{\textbackslash chapter*\{...\}} présente un défaut majeur : elle n'insère pas le chapitre dans la table des matières et ne met pas à jour les en-têtes de page.
+  La commande KOMA-Script \texttt{\textbackslash addchap\{...\}} résout parfaitement ce problème : elle produit un chapitre sans numéro, mais l'enregistre automatiquement dans la table des matières et actualise les en-têtes (tel que réalisé pour le Résumé et les Remerciements).
+\end{itemize}
+
+\subsection{Les divisions intermédiaires : Sections et Sous-sections}
+\label{subsec:sections_subsections}
+
+La numérotation des sections adopte une convention hiérarchique arabe préfixée par le numéro du chapitre courant :
+\begin{itemize}
+  \item \textbf{Section (\texttt{\textbackslash section\{...\}}) :}
+  Numérotée par exemple \textbf{II.1}, mise en valeur par la couleur secondaire (\texttt{secondaryColor}) et un corps de texte large en gras.
+  \item \textbf{Section non numérotée dans la TOC (\texttt{\textbackslash addsec\{...\}}) :}
+  À l'instar de \texttt{\textbackslash addchap}, elle insère un en-tête de section sans numéro tout en figurant dans la table des matières.
+  \item \textbf{Sous-section (\texttt{\textbackslash subsection\{...\}}) :}
+  Numérotée par exemple \textbf{II.1.1}, typographiée en gris foncé soutenu (\texttt{darkgray}) pour créer un contraste hiérarchique doux.
+  \item \textbf{Sous-sous-section (\texttt{\textbackslash subsubsection\{...\}}) :}
+  Offre un niveau de granularité supplémentaire pour les démonstrations techniques pointues ou les descriptions expérimentales détaillées.
+\end{itemize}
+
+Voici ci-dessous une démonstration immédiate d'une sous-sous-section :
+
+\subsubsection{Exemple pratique de sous-sous-section technique}
+Cette sous-sous-section permet de délimiter un point précis d'analyse sans surcharger la numérotation globale.
+Elle s'intègre harmonieusement dans le flux de lecture sans créer de rupture visuelle excessive.
+
+\subsection{Les divisions terminales : Paragraphes avec puce en ligne}
+\label{subsec:paragraphes_lignes}
+
+En \LaTeX{} standard, l'environnement \texttt{\textbackslash paragraph\{...\}} engendre fréquemment une mise en page gauche : soit il renvoie maladroitement à la ligne, soit il s'accole de manière peu esthétique.
+
+\begin{boiteSynthese}{L'innovation de ClasseGuillaume pour \texttt{\textbackslash paragraph}}
+  La classe redéfinit entièrement la commande \texttt{\textbackslash paragraph} :
+  \begin{verbatim}
+  \RedeclareSectionCommand[
+    indent = 5mm,
+    afterskip = -1em,
+    font = {\color{primaryColor}\bfseries\textbullet~}
+  ]{paragraph}
+  \end{verbatim}
+  Le titre du paragraphe est automatiquement précédé d'une \textbf{puce discrète colorée} (\texttt{\textbullet}), indenté de \qty{5}{\milli\meter}, et le texte du corps s'enchaîne \textbf{directement sur la même ligne} après une espace fine.
+\end{boiteSynthese}
+
+Démonstration en situation réelle :
+
+\paragraph{Critère de modularité}
+Le code source est segmenté en unités logiques autonomes pour autoriser une maintenance aisée et des révisions collaboratives sans friction.
+
+\paragraph{Critère d'accessibilité typographique}
+Les contrastes de couleurs, la lisibilité des polices et l'aération spatiale garantissent un confort de lecture optimal pour les jurys et relecteurs.
+
+\subparagraph{Niveau sub-paragraph}
+Pour les nomenclatures ou sous-critères nécessitant une hiérarchisation ultime, la commande \texttt{\textbackslash subparagraph} offre une indentation spécifique tout en conservant une discrétion absolue.
+

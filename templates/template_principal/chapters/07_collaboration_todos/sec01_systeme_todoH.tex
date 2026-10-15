@@ -1,0 +1,48 @@
+%------------------------------------------------------------------------------------
+%  SECTION 7.1 : LE SYSTÈME EXCLUSIF D'ANNOTATIONS COLLABORATIVES TODOH
+%------------------------------------------------------------------------------------
+\section{Le Système Exclusif d'Annotations Collaboratives \texttt{\textbackslash todoH}}
+\label{sec:systeme_todoh}
+
+La phase de relecture entre étudiants, directeurs de thèse et pairs académiques est une étape cruciale.
+Le paquet standard \textsf{todonotes} est souvent employé, mais il souffre de trois limitations majeures :
+les messages longs débordent verticalement du bas de page, les caractères accentués UTF-8 génèrent des erreurs de compilation avec les paquets de soulignement traditionnels, et le texte surligné dans le corps n'offre aucun lien interactif vers le tableau de bord des tâches.
+
+La classe \texttt{ClasseGuillaume} résout l'ensemble de ces verrous technologiques grâce à sa commande exclusive \texttt{\textbackslash todoH}.
+
+\subsection{Les cinq innovations majeures de la macro \texttt{\textbackslash todoH}}
+\label{subsec:cinq_innovations_todoh}
+
+La syntaxe générale de la commande se décompose en quatre arguments :
+\begin{center}
+  \texttt{\textbackslash todoH\{options\_style\}\{couleur\}\{message\_marge\}\{texte\_surligné\}}
+\end{center}
+
+\begin{enumerate}
+  \item \textbf{Surlignage robuste via \textsf{lua-ul} et \textsf{luacolor} :}
+  Le texte cible est surligné dans la couleur du relecteur. Contrairement aux paquets obsolètes (\textsf{soul}), le moteur Lua gère les césures de mots, les accents français et les équations sans aucun bogue de compilation.
+  
+  \item \textbf{Troncature automatique des messages longs ($> 30$ caractères) :}
+  Pour éviter qu'un commentaire volumineux ne vienne chevaucher la note suivante ou déborder de la marge, la classe mesure la longueur de la chaîne avec \textsf{xstring} et abrège la note à 30 caractères suivis de points de suspension.
+
+  \item \textbf{Infobulle interactive (\textsf{pdfcomment}) :}
+  Grâce à la commande \texttt{\textbackslash pdftooltip}, l'intégralité du message reste disponible : dans votre lecteur PDF (Adobe Acrobat, PDF-XChange, navigateurs modernes), \textbf{un simple survol de la souris sur la note dans la marge fait apparaître une bulle contextuelle} dévoilant le texte complet !
+
+  \item \textbf{Détection intelligente des commandes et URL (\textsf{xurl}) :}
+  Si le commentaire contient une balise \LaTeX{} (comme un lien hypertexte \texttt{\textbackslash url\{...\}}), la classe détecte la présence de la barre oblique inversée (\texttt{\textbackslash}) et suspend la troncature pour préserver l'intégrité du lien cliquable.
+
+  \item \textbf{Lien hypertexte de retour vers la table des tâches :}
+  Un clic direct sur le texte surligné dans le paragraphe téléporte instantanément le lecteur vers la liste récapitulative des révisions (\texttt{\textbackslash listoftodos}) située au début du mémoire.
+\end{enumerate}
+
+\subsection{Démonstrations concrètes en situation de révision}
+\label{subsec:demos_todoh}
+
+Voici deux exemples concrets illustrant le comportement adaptatif de la commande :
+
+Dans ce premier passage, nous simulons une remarque de fond \todoH{FloraStyle}{red!30}{Cette démonstration théorique requiert une justification expérimentale plus détaillée avec des données chiffrées issues du banc d'essai.}{un raisonnement nécessitant un approfondissement méthodologique}.
+Observez dans la marge de droite : la note est abrégée pour ne pas saturer l'espace, mais un survol à la souris révèle l'ensemble de la directive de relecture.
+
+Dans ce second cas, nous transmettons à l'auteur une ressource bibliographique en ligne sans risque d'altération du lien : \todoH{GuillaumeStyle}{NavyBlue!30}{Vérifier les spécifications normatives sur \url{https://www.iso.org/standard/30669.html}}{la conformité avec les recommandations internationales ISO}.
+Le lien URL est protégé et césuré proprement grâce au paquet \textsf{xurl}.
+

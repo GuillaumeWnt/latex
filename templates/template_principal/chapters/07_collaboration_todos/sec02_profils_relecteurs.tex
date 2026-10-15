@@ -1,0 +1,57 @@
+%------------------------------------------------------------------------------------
+%  SECTION 7.2 : PROFILS DE RELECTEURS ET GESTION DES FIGURES PROVISOIRES
+%------------------------------------------------------------------------------------
+\section{Profils d'Auteurs Multiples et Emplacements Réservés}
+\label{sec:profils_relecteurs}
+
+La relecture d'un travail de recherche implique souvent plusieurs intervenants (promoteur, co-promoteur, expert externe, relecteur grammatical).
+Chacun doit pouvoir être identifié immédiatement par sa couleur et son cartouche d'auteur.
+
+\subsection{Les styles de relecteurs préconfigurés}
+\label{subsec:styles_relecteurs_preconfig}
+
+La classe intègre plusieurs styles de relecteurs prêts à l'emploi :
+\begin{itemize}
+  \item \texttt{GuillaumeStyle} : Attribué au rédacteur principal (\texttt{author=Guillaume}), agrémenté d'une ombre portée subtile.
+  \item \texttt{MarieStyle} : Style dédié pour les remarques de direction académique (\texttt{author=Marie}).
+  \item \texttt{FloraStyle} : Style dédié pour les corrections de forme ou méthodologiques (\texttt{author=Flora}).
+  \item \texttt{TestStyle} : Style neutre pour les auto-vérifications techniques.
+\end{itemize}
+
+Démonstration croisée : ici, Marie note que \todoH{MarieStyle}{Emerald!30}{Penser à insérer le protocole de calibration des capteurs avant soutenance finale.}{cette étape de mesure devra être corrélée} avec les résultats théoriques obtenus au Chapitre~\ref{chap:sciences_maths}.
+
+\subsection{Réservation de figures provisoires avec \texttt{\textbackslash missingfigure}}
+\label{subsec:missing_figures_demo}
+
+Durant la rédaction active, il est fréquent que certains graphiques expérimentaux soient encore en cours de calcul ou que des photographies de laboratoire ne soient pas finalisées.
+Stopper la rédaction en attendant le fichier image briserait l'élan de travail.
+
+La commande \texttt{\textbackslash missingfigure} réserve l'espace dans la mise en page sans bloquer la chaîne de compilation :
+
+\begin{figure}[htbp]
+  \centering
+  \missingfigure[
+    figwidth = 0.88\textwidth,
+    figheight = 3.5cm,
+    figcolor = RoyalBlue!15
+  ]{Schéma vectoriel du banc de test thermodynamique en cours de finalisation}
+  \caption{Schéma de principe du dispositif de mesure (support réservé)}
+  \label{fig:emplacement_reserve}
+\end{figure}
+
+L'emplacement réservé à la~\cref{fig:emplacement_reserve} apparaît automatiquement avec un code couleur doux et s'enregistre dans le tableau récapitulatif des tâches.
+
+\subsection{Bascule instantanée vers le mode publication finale}
+\label{subsec:bascule_publication_finale}
+
+Le cauchemar traditionnel de l'auteur sous \LaTeX{} est de devoir supprimer manuellement des dizaines de notes de relecture avant d'imprimer ou de soumettre le PDF définitif au jury.
+
+\begin{boiteSynthese}{Passage en version finale en une seule manipulation}
+  Dans \texttt{ClasseGuillaume}, le mode révision est entièrement piloté par une seule option de classe dans \texttt{main.tex} :
+  \begin{itemize}
+    \item \textbf{Phase de rédaction / relecture :} \texttt{\textbackslash documentclass[..., todoNote]\{ClasseGuillaume\}}
+    \item \textbf{Version finale pour impression :} Il suffit de \textbf{retirer le mot-clé \texttt{todoNote}} de l'en-tête \texttt{\textbackslash documentclass}.
+  \end{itemize}
+  Instantanément, toutes les notes dans la marge s'évaporent, les surlignages colorés redeviennent du texte ordinaire rigoureusement immaculé, et le tableau des révisions disparaît du début du document. Aucune modification du texte source n'est requise !
+\end{boiteSynthese}
+

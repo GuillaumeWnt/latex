@@ -1,0 +1,78 @@
+%------------------------------------------------------------------------------------
+%  SECTION 5.1 : FLOTTANTS CLASSIQUES VS TYPE D'ILLUSTRATION DÉDIÉ
+%------------------------------------------------------------------------------------
+\section{Flottants Standards et Environnement Dédié aux Illustrations}
+\label{sec:figures_illustrations}
+
+La restitution graphique d'expériences ou d'analyses conceptuelles s'articule autour de deux types de supports visuels :
+les figures techniques (graphiques vectoriels, courbes, schémas de principe) d'une part, et les illustrations iconographiques (clichés photographiques, reproductions anatomiques, œuvres artistiques) d'autre part.
+Mélanger ces deux catégories au sein d'une unique « table des figures » nuit à la clarté du document.
+
+\subsection{Figure standard avec sous-figures coordonnées (\textsf{subcaption})}
+\label{subsec:sous_figures}
+
+Pour juxtaposer deux résultats comparatifs, le paquet moderne \textsf{subcaption} remplace avantageusement le paquet obsolète \texttt{subfig}.
+Chaque sous-figure est isolée dans un environnement \texttt{subfigure} avec sa propre sous-légende indicée \texttt{(a)}, \texttt{(b)} :
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.46\textwidth}
+    \centering
+    \begin{tcolorbox}[colframe=secondaryColor, colback=white, boxrule=1pt, arc=4pt, width=\linewidth, halign=center]
+      \vspace{0.8cm}
+      {\large\sffamily\bfseries\color{secondaryColor} [ Schéma Technique A ]}\\[2mm]
+      {\footnotesize Flux d'injection sous pression \qty{150}{\kilo\pascal}}
+      \vspace{0.8cm}
+    \end{tcolorbox}
+    \caption{Régime d'injection stationnaire}
+    \label{subfig:injection_stationnaire}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.46\textwidth}
+    \centering
+    \begin{tcolorbox}[colframe=secondaryColor, colback=white, boxrule=1pt, arc=4pt, width=\linewidth, halign=center]
+      \vspace{0.8cm}
+      {\large\sffamily\bfseries\color{secondaryColor} [ Schéma Technique B ]}\\[2mm]
+      {\footnotesize Propagation d'ondes à \qty{4.2}{\meter\per\second}}
+      \vspace{0.8cm}
+    \end{tcolorbox}
+    \caption{Régime transitoire perturbé}
+    \label{subfig:injection_transitoire}
+  \end{subfigure}
+  \caption{Comparaison des dynamiques d'écoulement sous deux régimes de fonctionnement}
+  \label{fig:comparaison_regimes}
+\end{figure}
+
+Comme le démontre la~\cref{fig:comparaison_regimes}, et plus spécifiquement la~\cref{subfig:injection_stationnaire}, chaque sous-figure peut être référencée indépendamment dans le corps du texte grâce à \textsf{cleveref}.
+
+\subsection{L'innovation de \texttt{ClasseGuillaume} : Le flottant \texttt{illustration}}
+\label{subsec:flottant_illustration}
+
+Pour répondre aux standards des grandes monographies et thèses universitaires, la classe déclare un nouveau type de flottant officiel via le moteur \textsf{tocbasic} de KOMA-Script :
+
+\begin{verbatim}
+\DeclareNewTOC[%
+  type = illustration,
+  float,
+  name = Illustration,
+  listname = {Liste des illustrations},
+]{loi}
+\end{verbatim}
+
+Cet environnement s'utilise exactement comme une figure ordinaire, mais bénéficie d'une numérotation propre et alimente une \textbf{table des illustrations indépendante} (\texttt{\textbackslash listofillustrations}) située en fin d'ouvrage :
+
+\begin{illustration}[htbp]
+  \centering
+  \begin{cadreFigure}[width=0.82\textwidth]
+    \vspace{0.6cm}
+    {\Large\sffamily\bfseries\color{primaryColor} Cliché Iconographique de Microscopie Électronique}\\[3mm]
+    {\normalsize Grossissement $\times \num{25000}$ -- Structure cristalline des nanotubes de carbone}
+    \vspace{0.6cm}
+  \end{cadreFigure}
+  \caption{Observation nanoscopique d'échantillons en champ sombre}
+  \label{ill:microscopie_nanotubes}
+\end{illustration}
+
+L'\cref{ill:microscopie_nanotubes} est reconnue de manière transparente par \textsf{cleveref}, qui lui attribue automatiquement le préfixe « illustration » en minuscules ou « Illustration » en majuscules en début de phrase.
+L'ensemble de ces supports est répertorié dans la \emph{Liste des illustrations} du Post-Contenu.
+

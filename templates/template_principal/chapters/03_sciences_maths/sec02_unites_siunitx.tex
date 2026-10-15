@@ -1,0 +1,65 @@
+%------------------------------------------------------------------------------------
+%  SECTION 3.2 : GESTION DES UNITÉS ET GRANDEURS PHYSIQUES AVEC SIUNITX
+%------------------------------------------------------------------------------------
+\section{Réglementation Internationale des Unités et \textsf{siunitx}}
+\label{sec:unites_siunitx}
+
+L'écriture des grandeurs physiques et des unités de mesure est régie au niveau mondial par le Bureau International des Poids et Mesures (BIPM) et la norme ISO 80000-1.
+Dans un rapport universitaire d'ingénierie ou de médecine, saisir manuellement les unités (ex. \texttt{25 kg}) constitue une faute technique majeure :
+\begin{itemize}
+  \item Une coupure de ligne accidentelle peut séparer la valeur numérique de son symbole (ex. « 25 » au bout de la ligne et « kg » sur la ligne suivante).
+  \item En mode mathématique (\texttt{\$25 km/h\$}), les lettres sont composées en italique mathématique ($km/h$), symbolisant le produit $k \times m / h$ et non l'unité kilomètre par heure.
+  \item La séparation des milliers et la virgule décimale varient selon la langue du document.
+\end{itemize}
+
+Le paquet \textsf{siunitx} résout l'intégralité de ces problématiques en automatisant le respect strict des conventions typographiques.
+
+\subsection{Configuration francophone native de \texttt{ClasseGuillaume}}
+\label{subsec:config_siunitx}
+
+La classe intègre une configuration francophone rigoureuse dans son préambule :
+\begin{verbatim}
+\sisetup{
+  locale = FR,                % Virgule décimale et espace fin entre milliers
+  mode = match,               % Harmonise la police avec le texte environnant
+  per-mode = symbol,          % Affiche m/s plutôt que m.s^-1
+  range-phrase = { à },       % Plage lisible : 10 à 20 km
+  range-units = single        % Évite la répétition lourde : 10 à 20 km
+}
+\end{verbatim}
+
+\subsection{Les commandes indispensables en situation réelle}
+\label{subsec:commandes_siunitx}
+
+Le tableau synthétique suivant récapitule les quatre commandes maîtresses du paquet :
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Commandes fondamentales du paquet \textsf{siunitx}}
+  \label{tab:commandes_siunitx}
+  \begin{tabularx}{\textwidth}{p{2.6cm} p{6.2cm} X}
+    \toprule
+    \textbf{Commande \LaTeX{}} & \textbf{Code source type} & \textbf{Rendu typographique obtenu} \\
+    \midrule
+    \texttt{\textbackslash qty} & \texttt{\textbackslash qty\{250.5\}\{\textbackslash kilo\textbackslash pascal\}} & Une pression de \qty{250.5}{\kilo\pascal} \\
+    \texttt{\textbackslash qty} & \texttt{\textbackslash qty\{37.2\}\{\textbackslash degreeCelsius\}} & Une température de \qty{37.2}{\degreeCelsius} \\
+    \texttt{\textbackslash qty} & \texttt{\textbackslash qty\{4.7\}\{\textbackslash kilo\textbackslash ohm\}} & Une résistance de \qty{4.7}{\kilo\ohm} \\
+    \texttt{\textbackslash qtyrange} & \texttt{\textbackslash qtyrange\{10\}\{25\}\{\textbackslash milli\textbackslash meter\}} & Un diamètre variant de \qtyrange{10}{25}{\milli\meter} \\
+    \texttt{\textbackslash unit} & \texttt{\textbackslash unit\{\textbackslash joule\textbackslash per\textbackslash mole\textbackslash per\textbackslash kelvin\}} & L'entropie molaire en \unit{\joule\per\mole\per\kelvin} \\
+    \texttt{\textbackslash num} & \texttt{\textbackslash num\{1234567.89\}} & Le nombre formaté \num{1234567.89} \\
+    \texttt{\textbackslash num} & \texttt{\textbackslash num\{6.02214076e23\}} & La constante d'Avogadro $N_A = \num{6.02214076e23}$ \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Gestion des angles et pourcentages}
+\label{subsec:angles_pourcentages}
+
+La mesure des angles géométriques et des proportions s'effectue avec la même rigueur :
+\begin{itemize}
+  \item Un angle de déclinaison : \texttt{\textbackslash ang\{45;30;15\}} produit un angle de \ang{45;30;15}.
+  \item Un pourcentage sans ambiguïté : \texttt{\textbackslash qty\{98.5\}\{\textbackslash percent\}} donne \qty{98.5}{\percent}, assurant l'espace fine insécable obligatoire en typographie française entre le nombre et le symbole pour cent.
+\end{itemize}
+Ces mécanismes évitent tout risque d'incohérence entre les différents chapitres d'un projet rédigé en équipe.
+

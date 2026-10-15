@@ -1,0 +1,33 @@
+%------------------------------------------------------------------------------------
+%  SECTION 6.1 : GÉOMÉTRIES MULTIPLES À LA VOLÉE
+%------------------------------------------------------------------------------------
+\section{Alternance Dynamique des Géométries de Page}
+\label{sec:geometries_multiples}
+
+Dans un mémoire ou un rapport d'ingénierie, une taille de marge unique pour l'ensemble du volume est inadaptée :
+la page de couverture et les grands tableaux requièrent des marges étroites pour maximiser l'espace utile, le corps du texte nécessite une largeur de colonne ergonomique (65 à 75 caractères par ligne pour un confort visuel optimal), tandis que la phase de relecture collaborative exige une marge latérale généreuse pour accueillir les annotations.
+
+En \LaTeX{} standard, changer de géométrie en cours de document provoque souvent des décalages imprévisibles dans les en-têtes ou rompt l'alignement recto-verso.
+\texttt{ClasseGuillaume} résout cette difficulté en encapsulant la gestion du paquet \textsf{geometry} et du moteur \textsf{typearea} de KOMA-Script au sein de trois commandes directes et sécurisées.
+
+\subsection{Les trois commandes de géométrie de la classe}
+\label{subsec:trois_commandes_geometrie}
+
+\begin{itemize}
+  \item \textbf{\texttt{\textbackslash geometrieWord} :}
+  Fixe des marges symétriques de \qty{2.5}{\centi\meter} sur les quatre bords et alloue une marge latérale dédiée de \qty{2.2}{\centi\meter} (\texttt{marginparwidth}) avec un séparateur de \qty{3}{\milli\meter} (\texttt{marginparsep}).
+  C'est la géométrie par excellence pour le corps de texte rédigé et la phase de relecture collaborative avec les notes \texttt{\textbackslash todoH}.
+  
+  \item \textbf{\texttt{\textbackslash geometrieLarge} (ou \texttt{\textbackslash geometrieExemple}) :}
+  Applique des marges compactes de \qty{1.2}{\centi\meter} à gauche et à droite, et \qty{1.6}{\centi\meter} en haut et en bas.
+  Elle annule l'espace marginal pour offrir une largeur utile maximale de \qty{18.6}{\centi\meter}, idéale pour la page de garde, les posters de synthèse, ou les grands tableaux récapitulatifs.
+
+  \item \textbf{\texttt{\textbackslash geometrieStandard} :}
+  Restaure instantanément la mise en page canonique calculée par l'algorithme typographique de KOMA-Script (\texttt{DIV = 12}), garantissant des proportions harmonieuses selon les canons du livre d'art.
+\end{itemize}
+
+\begin{boiteSynthese}{Règle de bascule propre}
+  Chacune de ces commandes intègre automatiquement une directive \texttt{\textbackslash cleardoublepage} avant d'appliquer les nouvelles marges.
+  Cette précaution fondamentale garantit qu'une nouvelle géométrie commence toujours sur une page neuve et prévient tout débordement de texte entre deux pages consécutives aux proportions divergentes.
+\end{boiteSynthese}
+

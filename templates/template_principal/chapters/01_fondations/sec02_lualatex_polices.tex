@@ -1,0 +1,80 @@
+%------------------------------------------------------------------------------------
+%  SECTION 1.2 : LE MOTEUR LUALATEX ET LA GESTION MODERNE DES POLICES
+%------------------------------------------------------------------------------------
+\section{Moteur Lua\LaTeX{} et Gestion Dynamique des Polices}
+\label{sec:lualatex_polices}
+
+Pendant plusieurs décennies, le compilateur historique \textsf{pdf\LaTeX{}} a dominé le paysage éditorial.
+Cependant, ses limitations intrinsèques liées à l'encodage sur 8 bits nécessitaient une armada de paquets intermédiaires (\texttt{inputenc}, \texttt{fontenc}, \texttt{textcomp}) et rendaient l'utilisation des polices vectorielles modernes OpenType particulièrement laborieuse.
+
+Le modèle \texttt{ClasseGuillaume} s'appuie résolument et exclusivement sur \textbf{Lua\LaTeX{}}, successeur moderne alliant un moteur \TeX{} natif Unicode à la puissance du langage de script embarqué Lua.
+
+\subsection{L'abandon des paquets d'encodage obsolètes}
+\label{subsec:unicode_natif}
+
+Sous Lua\LaTeX{}, le code source \LaTeX{} est traité nativement en \textbf{UTF-8}.
+Les instructions suivantes, jadis ubiquitaires, sont devenues \textbf{strictement obsolètes} et ne doivent jamais figurer dans votre document :
+\begin{itemize}
+  \item \texttt{\textbackslash usepackage[utf8]\{inputenc\}} : Inutile et néfaste, Lua\LaTeX{} gère l'Unicode dès sa première ligne.
+  \item \texttt{\textbackslash usepackage[T1]\{fontenc\}} : Obsolète, le système de polices \textsf{fontspec} régit directement le rendu glyphe par glyphe.
+\end{itemize}
+
+Grâce à ce traitement natif, tous les caractères accentués français (é, è, à, ç, œ, « ») ainsi que les symboles scientifiques et alphabets internationaux sont insérés sans aucune macro d'échappement.
+
+\subsection{Les trois modes de chargement des polices typographiques}
+\label{subsec:trois_modes_polices}
+
+Une question cruciale lors de la transition entre une plateforme cloud comme Overleaf et une installation locale (TeX Live) concerne l'accessibilité des polices de caractères :
+
+\begin{enumerate}
+  \item \textbf{Mode 1 : Les polices système OS (la méthode la plus directe) :}
+  Sur une machine équipée de Windows ou macOS, le sous-système \textsf{luaotfload} indexe automatiquement le dossier des polices système (\texttt{C:\textbackslash Windows\textbackslash Fonts\textbackslash}).
+  N'importe quelle police installée sur votre ordinateur (telle que \textsf{Calibri}, \textsf{Segoe UI}, \textsf{Arial}, \textsf{Consolas}) peut être appelée directement par son nom usuel :
+  \begin{verbatim}
+  \setmainfont{Calibri}
+  \setsansfont{Calibri}
+  \end{verbatim}
+  Le compilateur associe automatiquement les variantes grasses (\texttt{calibrib.ttf}), italiques (\texttt{calibrii.ttf}) et grasses-italiques sans aucune intervention manuelle.
+  Aucun fichier de police n'a besoin d'être copié dans le projet !
+
+  \item \textbf{Mode 2 : Les polices OpenType natives de \TeX{} Live (universelles et libres) :}
+  La distribution complète \TeX{} Live installe sur votre machine des centaines de familles de polices professionnelles prêtes à l'emploi.
+  Par exemple, la suite \textsf{\TeX{} Gyre} fournit des équivalents modernes et fidèles des plus grands classiques :
+  \begin{itemize}
+    \item \textsf{TeX Gyre Heros} (équivalent moderne d'Helvetica),
+    \item \textsf{TeX Gyre Termes} (équivalent de Times),
+    \item \textsf{TeX Gyre Pagella} (équivalent de Palatino),
+    \item \textsf{Libertinus Serif} et \textsf{Fira Sans}.
+  \end{itemize}
+  Ces polices fonctionnent de manière identique et immédiate sur Windows, Linux, macOS et Overleaf, sans aucun fichier physique dans le répertoire du projet.
+
+  \item \textbf{Mode 3 : Le repli local dans le projet (\texttt{./Fonts/...}) (méthode Overleaf) :}
+  Sur les serveurs cloud comme Overleaf (qui tournent sous des conteneurs Linux), les polices propriétaires Microsoft ne sont pas préinstallées sous licence libre.
+  Pour pallier cette absence sans faire échouer la compilation, \texttt{ClasseGuillaume} embarque un dossier local de secours \texttt{./Fonts/}.
+  Grâce à la commande conditionnelle intelligente \texttt{\textbackslash IfFontExistsTF}, la classe interroge d'abord le système de votre PC ; si la police y est absente (ex. sur Overleaf), elle active automatiquement le fichier de repli local.
+\end{enumerate}
+
+\subsection{Options de classe disponibles pour le choix de la police}
+\label{subsec:options_polices}
+
+Dans l'en-tête de votre document principal \texttt{main.tex}, vous pouvez sélectionner votre famille de polices en un mot-clé au sein de la commande \texttt{\textbackslash documentclass} :
+
+\begin{itemize}
+  \item \texttt{font=calibri} *(option par défaut)* : Active \textsf{Calibri} pour un style sobre, fluide et moderne, hautement lisible sur écran comme à l'impression.
+  \item \texttt{font=heros} : Active \textsf{TeX Gyre Heros}, conférant un rendu suisse net et contemporain.
+  \item \texttt{font=libertinus} : Active \textsf{Libertinus Serif}, idéale pour les mémoires littéraires ou les thèses académiques traditionnelles à fort contenu textuel.
+  \item \texttt{font=comicsans} : Active \textsf{Comic Sans MS} (utile à des fins pédagogiques ou pour des présentations informelles).
+  \item \texttt{font=standard} : Active la police standard \textsf{Latin Modern}.
+\end{itemize}
+
+\subsection{Démonstration des commandes de polices locales}
+\label{subsec:commandes_polices_locales}
+
+Outre la police générale du document, la classe met à votre disposition des commandes spécifiques pour des encarts, titres ou spécimens ponctuels :
+
+\begin{itemize}
+  \item \textbf{Police de titre de chapitre :} La commande \texttt{\textbackslash AsapFont} applique la police {\AsapFont Asap Condensed}, conférant un impact visuel fort aux intitulés de chapitres.
+  \item \textbf{Spécimen Calibri :} Accessible ponctuellement via {\CalibriFont \textbackslash CalibriFont pour forcer le style sans-serif}.
+  \item \textbf{Spécimen fantaisie :} Accessible via {\ComicSansMSFont \textbackslash ComicSansMSFont pour des démonstrations ciblées}.
+\end{itemize}
+
