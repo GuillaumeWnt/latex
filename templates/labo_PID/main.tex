@@ -1,66 +1,153 @@
 \documentclass[11pt,a4paper]{article}
 
-% --- Préambule (Conservé de votre modèle) ---
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+% --- Moteur LuaLaTeX & Typographie moderne ---
+\usepackage{fontspec}
+\usepackage{microtype}
 \usepackage[french]{babel}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{amsmath, amssymb}
+\frenchsetup{StandardLists=true}
+\usepackage{csquotes}
+
+% --- Géométrie & Espacements ---
+\usepackage[margin=2.5cm, headheight=22pt]{geometry}
+\usepackage{parskip}
+
+% --- Mathématiques de précision ---
+\usepackage{mathtools, amssymb}
+
+% --- Graphiques, Couleurs & Tracés ---
 \usepackage{graphicx}
 \usepackage{xcolor}
-\usepackage{parskip}
-\usepackage{titlesec}
-\usepackage{siunitx}
 \usepackage{booktabs}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{float}
-\usepackage{hyperref}
 
-% Configuration des liens et couleurs
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue!70!black,
-    urlcolor=blue!70!black,
-    pdftitle={Rapport de Laboratoire - Analyse et Régulation d'un Système du Second Ordre}
+% --- Unités Physiques (siunitx v3) ---
+\usepackage{siunitx}
+\sisetup{
+  output-decimal-marker = {,},
+  exponent-product = \cdot,
+  inter-unit-product = \cdot,
+  per-mode = symbol
 }
-\definecolor{MarineBlue}{HTML}{1A446C}
 
-% Personnalisation des titres de sections
-\titleformat{\section}{\Large\bfseries\color{blue!60!black}}{\thesection.}{1em}{}
-\titleformat{\subsection}{\large\bfseries\color{black!80}}{\thesubsection.}{1em}{}
+% --- Typographie des titres & Listes ---
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0.3em}
+
+% --- Palette de Couleurs ---
+\definecolor{MarineBlue}{HTML}{1A446C}
+\definecolor{TealAccent}{HTML}{2E7D8A}
+\definecolor{DarkText}{HTML}{2C3E50}
+\definecolor{BoxBg}{HTML}{F8FAFC}
+\definecolor{CodeGreen}{HTML}{2E7D32}
+\definecolor{CodeGray}{HTML}{6B7280}
+\definecolor{CodePurple}{HTML}{7C3AED}
+
+% --- En-têtes et Pieds de page ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\textcolor{MarineBlue}{\textbf{Laboratoire d'Automatique} \textbar\ Régulation PID}}
+\rhead{\small\textcolor{gray}{\nouppercase{\leftmark}}}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{MarineBlue!40}\leaders\hrule height \headrulewidth\hfill}}
+
+% --- Listings de Code (Annexe Python) ---
+\usepackage{listings}
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  backgroundcolor=\color{BoxBg},
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{MarineBlue},
+  commentstyle=\itshape\color{CodeGreen},
+  stringstyle=\color{CodePurple},
+  numberstyle=\tiny\color{CodeGray},
+  numbers=left,
+  numbersep=8pt,
+  stepnumber=1,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{MarineBlue!30},
+  tabsize=4,
+  captionpos=b,
+  keepspaces=true
+}
+\lstset{style=pythonstyle}
+
+% --- Macro standardisée pour figures encadrées ---
+\newcommand{\cadreImage}[2][0.8\linewidth]{%
+  \begingroup
+  \setlength{\fboxrule}{1.2pt}%
+  \setlength{\fboxsep}{2pt}%
+  \fcolorbox{MarineBlue}{white}{\includegraphics[width=#1]{#2}}%
+  \endgroup
+}
+
+% --- Personnalisation des titres ---
+\titleformat{\section}{\Large\bfseries\color{MarineBlue}}{\thesection.}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{TealAccent}}{\thesubsection.}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{DarkText}}{\thesubsubsection.}{1em}{}
+
+% --- Hyperliens & Références croisées intelligentes (cleveref en dernier) ---
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=MarineBlue,
+  urlcolor=TealAccent,
+  citecolor=TealAccent,
+  pdftitle={Rapport de Laboratoire - Analyse et Régulation d'un Système du Second Ordre},
+  pdfauthor={Guillaume Winant},
+  pdfsubject={Automatique et Robotique - Régulation PID par placement de pôles}
+}
+\usepackage{bookmark}
+\usepackage[french,noabbrev,capitalize]{cleveref}
 
 \begin{document}
 
 % --- Page de garde personnalisée ---
+\hypersetup{pageanchor=false}
 \begin{titlepage}
-    \centering
-    \vspace*{3cm}
-    
-    {\Large \textsc{Cours d'Automatique et Robotique}\par}
-    \vspace{2cm}
-    
-    \rule{\linewidth}{0.5mm} \\[0.4cm]
-    {\huge\bfseries Rapport de Laboratoire\\[0.4cm]
-    \Large Fonction de transfert}
-    \rule{\linewidth}{0.5mm} \\[2.5cm]
-    
-    {\Large \textbf{Enseignant :} Beco Thomas\par}
-    \vspace{3cm}
-    
-    {\large \textbf{Réalisé par :}\par}
-    \vspace{0.5cm}
-    {\Large Winant Guilaume\par}
-    
-    \vfill
-    {\large le 27 mai 2026}
+  \thispagestyle{empty}
+  \centering
+  \vspace*{2cm}
+  
+  {\Large\bfseries\color{TealAccent}COURS D'AUTOMATIQUE ET ROBOTIQUE\par}
+  \vspace{1.5cm}
+  
+  {\color{MarineBlue}\rule{\linewidth}{1.2mm}}\\[0.5cm]
+  {\huge\bfseries\color{MarineBlue} Rapport de Laboratoire\\[0.3cm]
+  \Large\color{DarkText} Analyse et Régulation d'une Fonction de Transfert}\\[0.4cm]
+  {\color{MarineBlue}\rule{\linewidth}{0.5mm}}\\[2.5cm]
+  
+  \begin{minipage}{0.45\textwidth}
+    \flushleft
+    \textbf{\color{MarineBlue}Enseignant~:}\\[0.2cm]
+    Thomas \textsc{Beco}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.45\textwidth}
+    \flushright
+    \textbf{\color{MarineBlue}Réalisé par~:}\\[0.2cm]
+    Guillaume \textsc{Winant}
+  \end{minipage}
+  
+  \vfill
+  {\large\color{gray} Année académique 2025--2026 \par}
+  \vspace{0.2cm}
+  {\large 27 mai 2026}
 \end{titlepage}
-
-\setcounter{page}{1}
+\hypersetup{pageanchor=true}
 
 % --- Table des matières ---
+\pagenumbering{roman}
 \tableofcontents
 \newpage
+\pagenumbering{arabic}
 
 % --- Section 1 : Introduction ---
 \section{Introduction}
@@ -100,9 +187,9 @@ La forme standard d'un système du second ordre est définie par l'équation sui
 \begin{equation}
     H(s) = \frac{K_{stat}}{\frac{1}{\omega_n^2}s^2 + \frac{2\zeta}{\omega_n}s + 1}
 \end{equation}
-Par identification directe avec l'équation \eqref{eq:FT_initiale}, nous établissons le système d'équations permettant d'extraire de manière générique le gain statique $K_{stat}$, la pulsation propre non amortie $\omega_n$, et le coefficient d'amortissement $\zeta$ :
+Par identification directe avec l'\cref{eq:FT_initiale}, nous établissons le système d'équations permettant d'extraire de manière générique le gain statique $K_{\mathrm{stat}}$, la pulsation propre non amortie $\omega_n$, et le coefficient d'amortissement $\zeta$ :
 \begin{equation}
-    K_{stat} = 2, \quad \omega_n = \sqrt{\frac{1}{3}} \approx \SI{0.5774}{\text{rad/s}}, \quad \zeta = \frac{1}{2\sqrt{3}} \approx 0.2887
+    K_{\mathrm{stat}} = 2, \quad \omega_n = \sqrt{\frac{1}{3}} \approx \qty{0.5774}{\radian\per\second}, \quad \zeta = \frac{1}{2\sqrt{3}} \approx 0.2887
 \end{equation}
 
 \subsection{Analyse fréquentielle analytique}
@@ -112,7 +199,7 @@ La réponse harmonique est obtenue en substituant la variable de Laplace par l'o
 \end{equation}
 L'amplitude absolue $|H(j\omega)|$ (exprimée ensuite en décibels par $20\log_{10}|H(j\omega)|$) et la phase $\theta(\omega)$ sont déterminées analytiquement par :
 \begin{equation}
-    |H(j\omega)| = \frac{2}{\sqrt{(1 - 3\omega^2)^2 + \omega^2}}, \quad \theta(\omega) = -\arctan2(\omega, 1 - 3\omega^2)
+    |H(j\omega)| = \frac{2}{\sqrt{(1 - 3\omega^2)^2 + \omega^2}}, \quad \theta(\omega) = -\operatorname{atan2}(\omega, 1 - 3\omega^2)
 \end{equation}
 
 \subsection{Étude de stabilité sous régulation proportionnelle (P)}
@@ -143,8 +230,8 @@ Le terme $b_1$ se calcule à l'aide du déterminant croisé des deux lignes sup�
 
 Le théorème de Routh stipule que le système est stable si et seulement si tous les coefficients de la première colonne du tableau sont de même signe (ici, strictement positifs, puisque le premier terme est 3). Nous posons donc nos conditions de stabilité :
 \begin{itemize}
-    \item Ligne $s^2$ : $3 > 0$ (Condition toujours vérifiée)
-    \item Ligne $s^1$ : $1 > 0$ (Condition toujours vérifiée)
+    \item Ligne $s^2$ : $3 > 0$ (condition toujours vérifiée)
+    \item Ligne $s^1$ : $1 > 0$ (condition toujours vérifiée)
     \item Ligne $s^0$ : $1 + 2K > 0$
 \end{itemize}
 
@@ -160,7 +247,7 @@ Le régulateur proportionnel seul a montré ses limites. Pour obtenir un systèm
     C(s) = \frac{K_d s^2 + K_p s + K_i}{s}
 \end{equation}
 
-\textbf{1. L'équation du système avec PID :} \\
+\paragraph{1. Équation du système en boucle fermée}
 Si l'on place ce correcteur en boucle fermée avec notre système $H(s)$, la nouvelle équation caractéristique (le dénominateur global de la boucle fermée, donné par $1 + C(s)H(s) = 0$) devient :
 \begin{equation}
     s(3s^2 + s + 1) + 2(K_d s^2 + K_p s + K_i) = 0
@@ -171,30 +258,30 @@ En développant et en regroupant les termes de même puissance de $s$, nous obte
     \label{eq:pid_reel}
 \end{equation}
 
-\textbf{2. Le comportement désiré (Polynôme cible) :} \\
-Notre cahier des charges exige que le système final se comporte "bien" : on souhaite un bon amortissement pour éviter les dépassements brusques ($\zeta_d = 0.7$) et une bonne rapidité ($\omega_{nd} = \SI{2}{\text{rad/s}}$). La dynamique principale d'un tel comportement correspond à un dénominateur classique :
+\paragraph{2. Comportement cible et pôle dominant}
+Notre cahier des charges exige que le système final se comporte \enquote{bien} : on souhaite un bon amortissement pour éviter les dépassements brusques ($\zeta_d = 0.7$) et une bonne rapidité ($\omega_{nd} = \qty{2}{\radian\per\second}$). La dynamique principale d'un tel comportement correspond à un dénominateur classique :
 \begin{equation}
     s^2 + 2\zeta_d\omega_{nd}s + \omega_{nd}^2 \implies s^2 + 2.8s + 4
 \end{equation}
-Cependant, notre système régulé \eqref{eq:pid_reel} est du troisième ordre ($s^3$). Pour pouvoir comparer les équations, nous devons rajouter un pôle (une racine) à notre comportement cible. Pour que ce troisième pôle ne ralentisse pas notre système, on le choisit artificiellement très rapide, loin sur la gauche du plan complexe (la règle empirique est de le placer à $10 \times \zeta_d \omega_{nd}$, soit $p_3 = -14$). L'équation de notre polynôme cible parfait est donc :
+Cependant, notre système régulé \cref{eq:pid_reel} est du troisième ordre ($s^3$). Pour pouvoir comparer les équations, nous devons rajouter un pôle (une racine) à notre comportement cible. Pour que ce troisième pôle ne ralentisse pas notre système, on le choisit artificiellement très rapide, loin sur la gauche du plan complexe (la règle empirique est de le placer à $10 \times \zeta_d \omega_{nd}$, soit $p_3 = -14$). L'équation de notre polynôme cible parfait est donc :
 \begin{equation}
     (s^2 + 2.8s + 4)(s + 14) = s^3 + 16.8s^2 + 43.2s + 56 = 0
 \end{equation}
-Afin de pouvoir comparer cette équation cible avec notre vraie équation \eqref{eq:pid_reel} qui commence par $3s^3$, nous multiplions tout le polynôme cible par 3 :
+Afin de pouvoir comparer cette équation cible avec notre vraie équation \cref{eq:pid_reel} qui commence par $3s^3$, nous multiplions tout le polynôme cible par 3 :
 \begin{equation}
     3s^3 + 50.4s^2 + 129.6s + 168 = 0
     \label{eq:pid_cible}
 \end{equation}
 
-\textbf{3. Identification des paramètres :} \\
-Il ne reste plus qu'à forcer notre système réel \eqref{eq:pid_reel} à correspondre parfaitement au comportement idéal \eqref{eq:pid_cible}. Par simple identification membre à membre (coefficient par coefficient), nous déduisons les valeurs de notre PID :
+\paragraph{3. Identification des paramètres du régulateur}
+Il ne reste plus qu'à forcer notre système réel \cref{eq:pid_reel} à correspondre parfaitement au comportement idéal \cref{eq:pid_cible}. Par simple identification membre à membre (coefficient par coefficient), nous déduisons les valeurs de notre PID :
 \begin{itemize}
     \item Pour $s^2$ : $1 + 2K_d = 50.4 \implies K_d = 24.7$
     \item Pour $s^1$ : $1 + 2K_p = 129.6 \implies K_p = 64.3$
     \item Pour $s^0$ : $2K_i = 168 \implies K_i = 84$
 \end{itemize}
-\vspace{0.2cm}
-Cette méthode théorique, appelée "placement de pôles", garantit de manière mathématique que le système régulé adoptera la dynamique exacte que nous avons choisie.
+
+Cette méthode théorique, appelée \enquote{placement de pôles}, garantit de manière mathématique que le système régulé adoptera la dynamique exacte que nous avons choisie.
 
 \newpage
 
@@ -204,73 +291,62 @@ Cette méthode théorique, appelée "placement de pôles", garantit de manière 
 \subsection{Comportement temporel du système non régulé}
 Puisque le coefficient d'amortissement calculé est compris entre 0 et 1 ($\zeta = 0.2887$), le système est qualifié de sous-amorti. Les réponses obtenues sous Python valident parfaitement ce comportement.
 
-\begin{figure}[H]
-    \centering
-    % Réglage de l'épaisseur du trait et de l'espace (padding)
-    \setlength{\fboxrule}{3pt} 
-    \setlength{\fboxsep}{3pt} 
-    % Création du cadre (Bordure bleue, fond blanc)
-    \fcolorbox{MarineBlue}{white}{\includegraphics[width=0.8\textwidth]{Figure_1.png}}
-    \caption{Évolution temporelle du système du second ordre en boucle ouverte.}
-    \label{fig:temporel}
+\begin{figure}[htbp]
+  \centering
+  \cadreImage[0.8\linewidth]{Figure_1.png}
+  \caption{Évolution temporelle du système du second ordre en boucle ouverte.}
+  \label{fig:temporel}
 \end{figure}
 
-\textit{Commentaire :} La réponse indicielle confirme un gain statique égal à 2.0. Le faible amortissement engendre un dépassement initial prononcé (proche de 40\%) suivi d'oscillations transitoires avant stabilisation complète en environ \SI{8}{\second}.
+\textit{Commentaire :} La réponse indicielle confirme un gain statique égal à 2.0. Le faible amortissement engendre un dépassement initial prononcé (proche de 40\,\%) suivi d'oscillations transitoires avant stabilisation complète en environ \qty{8}{\second}.
 
 \subsection{Validation de l'analyse fréquentielle}
-Le diagramme de Bode généré illustre l'atténuation classique de \SI{-40}{\text{dB/décade}} en haute fréquence et un déphasage asymptotique glissant vers \SI{-180}{\degree}.
+Le diagramme de Bode généré illustre l'atténuation classique de \qty{-40}{\decibel\per\text{décade}} en haute fréquence et un déphasage asymptotique glissant vers \qty{-180}{\degree}.
 
-\begin{figure}[H]
-    \centering
-    \setlength{\fboxrule}{3pt} 
-    \setlength{\fboxsep}{3pt} 
-    \fcolorbox{MarineBlue}{white}{\includegraphics[width=0.7\textwidth]{Figure_2.png}}
-    \caption{Diagramme de Bode du système en boucle ouverte.}
-    \label{fig:bode}
+\begin{figure}[htbp]
+  \centering
+  \cadreImage[0.7\linewidth]{Figure_2.png}
+  \caption{Diagramme de Bode du système en boucle ouverte.}
+  \label{fig:bode}
 \end{figure}
 
-Le tableau \ref{tab:frequentiel} met en évidence la stricte concordance entre les points évalués automatiquement via Python et les formulations analytiques développées à la section précédente.
+Le \cref{tab:frequentiel} met en évidence la stricte concordance entre les points évalués automatiquement via Python et les formulations analytiques développées à la section précédente.
 
-\begin{table}[H]
-\centering
-\caption{Comparaison des données fréquentielles graphiques et analytiques.}
-\label{tab:frequentiel}
-\begin{tabular}{lcccc}
-\toprule
-& \multicolumn{2}{c}{\textbf{Méthode Automatique (Python)}} & \multicolumn{2}{c}{\textbf{Calcul Analytique}} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5}
-\textbf{Pulsation} $\omega$ & \textbf{Gain (dB)} & \textbf{Phase (°)} & \textbf{Gain (dB)} & \textbf{Phase (°)} \\
-\midrule
-\SI{0.1}{rad/s} & 6.24 & -5.89 & 6.24 & -5.89 \\
-\SI{1.0}{rad/s} & -0.97 & -153.43 & -0.97 & -153.43 \\
-\SI{10.0}{rad/s} & -43.50 & -178.08 & -43.50 & -178.08 \\
-\bottomrule
-\end{tabular}
+\begin{table}[htbp]
+  \centering
+  \caption{Comparaison des données fréquentielles graphiques et analytiques.}
+  \label{tab:frequentiel}
+  \begin{tabular}{lcccc}
+    \toprule
+    & \multicolumn{2}{c}{\textbf{Méthode Automatique (Python)}} & \multicolumn{2}{c}{\textbf{Calcul Analytique}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    \textbf{Pulsation} $\omega$ & \textbf{Gain (dB)} & \textbf{Phase (°)} & \textbf{Gain (dB)} & \textbf{Phase (°)} \\
+    \midrule
+    \qty{0.1}{\radian\per\second} & 6.24 & -5.89 & 6.24 & -5.89 \\
+    \qty{1.0}{\radian\per\second} & -0.97 & -153.43 & -0.97 & -153.43 \\
+    \qty{10.0}{\radian\per\second} & -43.50 & -178.08 & -43.50 & -178.08 \\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
 \subsection{Stabilité sous contrôle proportionnel}
 Le tracé sur-mesure du critère graphique de Nyquist permet d'observer le comportement du contour vis-à-vis du point critique $(-1, 0)$ pour trois valeurs distinctes de gain $K$.
 
-\begin{figure}[H]
-    \centering
-    \setlength{\fboxrule}{3pt} 
-    \setlength{\fboxsep}{3pt} 
-    % On met width=0.95 ou \textwidth car cette image contient 3 graphiques côte à côte
-    \fcolorbox{MarineBlue}{white}{\includegraphics[width=0.8\textwidth]{Figure_3.png}}
-    \caption{Lieux de Nyquist et étude du point critique de stabilité.}
-    \label{fig:nyquist}
+\begin{figure}[htbp]
+  \centering
+  \cadreImage[0.85\linewidth]{Figure_3.png}
+  \caption{Lieux de Nyquist et étude du point critique de stabilité.}
+  \label{fig:nyquist}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \setlength{\fboxrule}{3pt} 
-    \setlength{\fboxsep}{3pt} 
-    \fcolorbox{MarineBlue}{white}{\includegraphics[width=0.8\textwidth]{Figure_4.png}}
-    \caption{Lieu des racines du système sous gain variable.}
-    \label{fig:root_locus}
+\begin{figure}[htbp]
+  \centering
+  \cadreImage[0.8\linewidth]{Figure_4.png}
+  \caption{Lieu des racines du système sous gain variable.}
+  \label{fig:root_locus}
 \end{figure}
 
-\textit{Analyse de stabilité :} Le graphique de Nyquist pour $K=1$ n'encercle pas le point $(-1,0)$, garantissant la stabilité. À la valeur limite $K = -0.5$, le contour croise précisément l'intersection $(-1,0)$, provoquant l'apparition d'oscillations entretenues non amorties. Pour $K=-1$, le point critique se retrouve encerclé, le système devient instable. Cette transition est parfaitement corrélée par le lieu des racines (Figure \ref{fig:root_locus}) où l'on observe les trajectoires des pôles basculer vers le demi-plan complexe droit lorsque $K < -0.5$.
+\textit{Analyse de stabilité :} Le graphique de Nyquist pour $K=1$ n'encercle pas le point $(-1,0)$, garantissant la stabilité. À la valeur limite $K = -0.5$, le contour croise précisément l'intersection $(-1,0)$, provoquant l'apparition d'oscillations entretenues non amorties. Pour $K=-1$, le point critique se retrouve encerclé, le système devient instable. Cette transition est parfaitement corrélée par le lieu des racines (\cref{fig:root_locus}) où l'on observe les trajectoires des pôles basculer vers le demi-plan complexe droit lorsque $K < -0.5$.
 
 \subsection{Performances de la régulation PID}
 L'identification des termes du polynôme caractéristique fournit les paramètres de réglage optimaux du correcteur PID : 
@@ -282,13 +358,11 @@ La fonction de transfert globale en boucle fermée résultante calculée par Pyt
     T_{BF}(s) = \frac{49.4s^2 + 128.6s + 168}{3s^3 + 50.4s^2 + 129.6s + 168}
 \end{equation}
 
-\begin{figure}[H]
-    \centering
-    \setlength{\fboxrule}{3pt} 
-    \setlength{\fboxsep}{3pt} 
-    \fcolorbox{MarineBlue}{white}{\includegraphics[width=0.9\textwidth]{Figure_5.png}}
-    \caption{Réponse indicielle en boucle fermée avec le correcteur PID dimensionné.}
-    \label{fig:pid_step}
+\begin{figure}[htbp]
+  \centering
+  \cadreImage[0.85\linewidth]{Figure_5.png}
+  \caption{Réponse indicielle en boucle fermée avec le correcteur PID dimensionné.}
+  \label{fig:pid_step}
 \end{figure}
 
 \textit{Commentaire :} L'action intégrale élimine complètement l'erreur statique en régime permanent (la valeur converge rigoureusement vers 1.0). De plus, l'ajustement du pôle dominant permet d'obtenir un compromis idéal : le système est devenu extrêmement rapide tout en limitant les oscillations transitoires conformément à l'amortissement cible fixé ($\zeta_d = 0.7$).
@@ -321,7 +395,7 @@ La réalisation de ce laboratoire et la structuration de ce rapport se sont appu
 
 Le script générique utilisé pour générer l'ensemble des résultats numériques et des figures de ce rapport est reproduit ci-dessous :
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 import numpy as np
 import matplotlib.pyplot as plt
 import control as ct
@@ -541,7 +615,6 @@ plt.ylabel("Amplitude")
 plt.legend()
 plt.grid(True)
 plt.show()
-
-\end{verbatim}
+\end{lstlisting}
 
 \end{document}
