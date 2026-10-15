@@ -1,0 +1,1021 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage[parfill]{parskip} 
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{booktabs} 
+\usepackage{tcolorbox} 
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{pgfplots}
+\usepackage{multirow}
+\pgfplotsset{compat=1.15}
+
+\hypersetup{%
+    hidelinks,
+    colorlinks = false                  % colore le texte des liens.
+}
+
+% ==============================================================================
+% DÉFINITION DE LA CHARTE GRAPHIQUE
+% ==============================================================================
+\definecolor{MarineBlue}{HTML}{1A446C}
+\definecolor{TealAccent}{HTML}{2E7D8A}
+\definecolor{DarkText}{HTML}{2C3E50}
+\definecolor{BoxBg}{HTML}{F4F7F9}
+\definecolor{UnknownVar}{HTML}{C0392B}
+
+\color{DarkText}
+
+% ==============================================================================
+% CONFIGURATION DES EN-TÊTES ET PIEDS DE PAGE
+% ==============================================================================
+\pagestyle{fancy}
+\fancyhf{} 
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\lhead{\small\textcolor{MarineBlue}{Bureau d'étude de génie mécanique | Note de Calcul}} 
+\rhead{\small\textcolor{gray}{\leftmark}} 
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{MarineBlue}\leaders\hrule height \headrulewidth\hfill}}
+
+% ==============================================================================
+% FORMATAGE DES TITRES DE SECTIONS ET SOUS-SECTIONS
+% ==============================================================================
+\titleformat{\section}{\large\bfseries\color{MarineBlue}}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{TealAccent}}{\thesubsection}{1em}{}
+
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=4pt, topsep=4pt}
+
+\begin{document}
+
+% ==============================================================================
+% PAGE DE GARDE / EN-TÊTE PRINCIPAL DE DOCUMENT
+% ==============================================================================
+\begin{center}
+    \vspace*{0.5cm}
+    {\Huge \color{MarineBlue} Note de Calcul} \\[0.3cm]
+    {\Large \color{TealAccent} Système de Transmission de Puissance} \\[0.2cm]
+    {\large Hydrolienne} \\[0.6cm]
+    {\normalsize \textit{Réalisé par : Clément Fortain, Lélio Robbens, Guillaume Winant}} \\[0.6cm]
+    \textcolor{MarineBlue}{\rule{6cm}{1.5pt}}
+    \vspace*{1cm}
+\end{center}
+
+% ==============================================================================
+% SECTION 1 : CONTEXTE ET HYPOTHÈSES DE BASE
+% ==============================================================================
+\section{Contexte}
+
+\subsection{Problématique et Objectif du Bureau d'Études}
+L'objectif de cette étude est de concevoir et dimensionner le système de transmission de puissance d'une hydrolienne. Le défi principal réside dans l'intégration d'un multiplicateur de vitesse mécanique dans une nacelle sous-marine étanche, tout en garantissant un fonctionnement continu de 5 ans sans aucune maintenance dans un environnement marin très contraignant. 
+
+\subsection{Hypothèses de base et Bilan de Puissance}
+Le dimensionnement est réalisé pour le cas de fonctionnement le plus défavorable :
+\begin{itemize}
+    \item Vitesse du courant : $v_{\text{eau}} = 2 \text{ m/s}$ (vitesse maximale envisagée).
+    \item Puissance hydrocinétique disponible : $P_{\text{eau}} = \frac{1}{2} \cdot \rho \cdot Q \cdot v_{\text{eau}}^2 = 28,3 \text{ kW}$.
+    \item Puissance mécanique d'entrée (Rotor) : $P_e = P_{\text{eau}} \cdot C_p = 11 \text{ kW}$.\\
+    \textit{Avec $C_p = C_{\text{Betz}} \cdot \eta_{\text{rotor}} = \frac{16}{27} \cdot 0,675 \approx 0,4$.}
+    \item Rendement de la transmission : $\eta = 1$. Le rendement théorique de 100\,\% est retenu pour maximiser les efforts ($P_s = P_e$) et sécuriser le dimensionnement mécanique.
+\end{itemize}
+
+\subsection{Cinématique et Ratio de Vitesse}
+L'adaptation de la vitesse lente des pales vers la génératrice standard ($50\text{Hz}$) impose :
+\begin{itemize}
+    \item Vitesse rotor (Entrée) : $N_e = 45 \text{ tr/min}$ ($\omega_e = 4,71 \text{ rad/s}$).
+    \item Vitesse génératrice (Sortie) : $N_s = 1500 \text{ tr/min}$ ($\omega_s = 157,08 \text{ rad/s}$).
+\end{itemize}
+Le rapport global de multiplication cible est donc : $k = \frac{N_s}{N_e} = 33,33 \pm 10\,\%$.
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Vérification du Tip Speed Ratio ($\lambda$)}]
+Le choix de $N_e = 45 \text{ tr/min}$ (rayon $r = 1,5\text{m}$) donne $\lambda = \frac{\omega_e \cdot r}{v_{\text{eau}}} = 3,5$. \\
+Ce ratio se situe dans la plage optimale [3 - 5] : il est suffisamment élevé pour fournir les $11\text{kW}$ sans exiger un couple démesuré, mais assez faible pour éviter tout risque de cavitation en bout de pale.
+\end{tcolorbox}
+
+\subsection{Bilan des Efforts sur l'Arbre Primaire}
+Les sollicitations transmises par l'ensemble tournant au multiplicateur sont :
+
+\begin{center}
+\small
+\begin{tabular}{ll}
+    \toprule
+    Type de sollicitation & Valeur calculée \\
+    \midrule
+    Couple utile d'entrée ($C_e = P_e / \omega_e$) & $2335 \text{ Nm}$ \\
+    Poussée axiale ($F_a = \frac{1}{2} \cdot \rho \cdot C_T \cdot S_{\text{pale}} \cdot v_{\text{eau}}^2$) & $8480 \text{ N}$ \\
+    Effort tangentiel ($F_t = 2C_e / d_1$) & $1555 \text{ N}$ \\
+    Charge radiale de gravité ($G = m \cdot g$ pour $m=400\text{kg}$) & $3924 \text{ N}$ \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\textit{Remarque : Le ratio important $F_a/F_t = 5,45$ souligne la prédominance de la poussée axiale, critère déterminant pour le choix du palier d'entrée. Cependant, le fait que le rotor soit symétrique annule $F_t$\footnote{Il est sous entendu que la force radiale résultante n'est pas tournante mais uniquement dirigée vers le bas due au poids} pour laisser place à un couple pur. Il est donné uniquement à titre indicatif.}
+
+\begin{figure}[H]
+    \centering
+    % Réglage de l'épaisseur du trait et de l'espace (padding)
+    \setlength{\fboxrule}{3pt} 
+    \setlength{\fboxsep}{3pt} % Mettez 3pt si vous voulez un petit liseré blanc
+    
+    % Création du cadre (Bordure bleue, fond blanc)
+    \fcolorbox{MarineBlue}{white}{\includegraphics[width=0.9\textwidth]{G8fao0wl.jpg}}
+    
+    \caption{Schéma global reprenant les informations du contexte}
+    \label{fig:schema1}
+\end{figure}
+
+% ==============================================================================
+% SECTION 2 : TYPE DE TRANSMISSION
+% ============================================================================== 
+\section{Type de transmission}
+
+\subsection{Choix de l'Architecture Cinématique}
+
+L'intégration dans la nacelle impose une \textbf{architecture coaxiale} : l'arbre d'entrée (rotor) et l'arbre de sortie (génératrice) doivent être alignés, avec une tolérance de désaxement maximale de 10\,\% par rapport au diamètre de l'arbre d'entrée.
+
+Le choix s'est porté sur un multiplicateur à \textbf{trains d'engrenages à axes parallèles à denture droite}.
+\vspace{0.2cm}\\
+\textbf{Justification :} Contrairement au train épicycloïdal (naturellement coaxial mais complexe et coûteux), les axes parallèles garantissent une haute fiabilité, un coût d'usinage réduit et une maintenance aisée. La denture droite évite de générer des efforts axiaux internes supplémentaires, allégeant la conception des roulements. Le bruit induit n'est par ailleurs pas un critère critique en milieu immergé.
+
+\subsection{Répartition du Rapport de Transmission}
+
+Le rapport global de multiplication cible est de $k = 33,33 \pm 10\,\%$. Pour des engrenages cylindriques classiques, on limite généralement le rapport par étage pour éviter des roues de dimensions extrêmes. Il ne faut pas non plus trop d'étages afin de ne pas alourdir et encombrer le dispositif pour rien.
+
+Une architecture à \textbf{quatre étages de multiplication} a été retenue et optimisée pour atteindre le rapport de manière parfaite :
+\begin{itemize}
+    \item Étage 1 : $k_1 = \frac{51}{18} \approx 2,83$
+    \item Étage 2 : $k_2 = \frac{34}{17} = 2$
+    \item Étage 3 : $k_3 = \frac{40}{20} = 2$
+    \item Étage 4 : $k_4 = \frac{50}{17} \approx 2,94$
+\end{itemize}
+
+Le rapport global obtenu via ces 4 étages est parfaitement ajusté : $k = k_1 \times k_2 \times k_3 \times k_4 = 33,333$.
+
+\subsection{Problématique d'Alignement Coaxial}
+
+L'utilisation de trains à axes parallèles décale géométriquement l'arbre de sortie par rapport à l'arbre d'entrée. Pour respecter la coaxialité requise, un système de réalignement a été ajouté en sortie.
+
+Ce système utilise une \textbf{roue dentée intermédiaire} placée entre la dernière roue dentée du multiplicateur et la roue dentée de l'arbre de sortie. 
+Ces deux roues dentées extrêmes sont identiques, garantissant que la vitesse finale reste inchangée. La roue dentée intermédiaire agit uniquement comme un "pont" spatial : sa taille n'affecte pas le rapport cinématique global, mais son diamètre est choisi spécifiquement pour combler l'entraxe manquant et réaligner au mieux la génératrice avec le rotor.
+
+% ==============================================================================
+% SECTION 3 : DIMENSIONNEMENT DES ENGRENAGES
+% ==============================================================================
+\section{Dimensionnement des engrenages}
+
+\subsection{Choix des paramètres de conception}
+
+Pour mener à bien le dimensionnement et l'optimisation des roues dentées, les paramètres intrinsèques ont été fixés comme suit :
+\begin{itemize}
+    \item \textbf{Matériau (42CrMo4) :} Cet acier fortement allié présente une excellente résistance à la fatigue et aux chocs, idéale pour les engrenages très sollicités. Sa limite élastique est de $R_e = 850 \text{ MPa}$.
+    \item \textbf{Coefficient de sécurité ($s=2$) :} Vu l'impossibilité d'effectuer de la maintenance sur 5 ans en milieu sous-marin, un coefficient de sécurité de 2 est appliqué, donnant une résistance pratique élastique $R_{pe} = 425 \text{ MPa}$.
+    \item \textbf{Coefficient de denture ($b=10$) :} La largeur de la dent $L$ est fixée à 10 fois le module ($L = b \cdot m = 10 \cdot m$). C'est un compromis optimal pour garantir une bonne répartition des efforts sur la dent sans la rendre trop sensible aux défauts d'alignement ou à la flexion des arbres.
+\end{itemize}
+
+\subsection{Démarche d'optimisation géométrique des roues dentées}
+
+Le dimensionnement repose sur la recherche du meilleur compromis entre l'encombrement radial de la nacelle et la résistance mécanique. L'approche retenue s'appuie sur une formule simplifiée de la résistance à la flexion en pied de dent.
+
+\textbf{1. Modélisation de base}\\
+Le calcul s'articule autour de trois relations fondamentales :
+\begin{itemize}
+    \item La relation géométrique : $d = m \cdot Z$
+    \item L'effort tangentiel transmis : $F_t = \frac{2 \cdot C}{d}$
+    \item La condition de résistance à la flexion : $m \ge 2,34 \sqrt{\frac{F_t}{b \cdot m \cdot R_{pe}}}$
+\end{itemize}
+
+\textbf{2. Détermination du nombre de dents optimal ($Z$)}\\
+En combinant ces équations pour exprimer la résistance en fonction des paramètres de conception, on isole le nombre de dents $Z$ :
+\[ Z \ge \frac{2,34^2 \cdot 2 \cdot C}{m^3 \cdot b \cdot R_{pe}} \]
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Condition de non-interférence}]
+Mathématiquement, un grand module $m$ pourrait donner un très petit nombre de dents $Z$. Or, la géométrie de taillage impose une limite physique : \textbf{$Z \ge 17$}. En deçà de 17 dents, il se produit un phénomène d'interférence qui fragilise gravement la roue dentée.
+\end{tcolorbox}
+
+Le nombre de dents admissible doit donc satisfaire simultanément aux deux critères (flexion et interférence) :
+\[ Z \ge \max\left(17 \; , \; \frac{2,34^2 \cdot 2 \cdot C}{m^3 \cdot b \cdot R_{pe}}\right) \]
+
+\textbf{3. Minimisation du diamètre d'encombrement ($d$)}\\
+L'objectif est de minimiser la taille du mécanisme. À partir des conditions précédentes ($Z = \frac{d}{m}$), le diamètre primitif $d$ doit vérifier :
+\[ d \ge \frac{2,34^2 \cdot 2 \cdot C}{m^2 \cdot b \cdot R_{pe}} \quad \text{et} \quad d \ge 17 \cdot m \]
+
+Le module optimal $m_{\text{opt}}$ qui minimise le diamètre $d$ est obtenu à l'intersection de ces deux contraintes, c'est-à-dire lorsque la limite de flexion rejoint exactement la limite d'interférence :
+\[ \frac{2,34^2 \cdot 2 \cdot C}{b \cdot R_{pe} \cdot m^3} = 17 \]
+
+\vspace{0.5cm}
+\textbf{Illustration Graphique du Dimensionnement}
+
+Les figures ci-dessous représentent l'évolution du nombre de dents $Z$ et du diamètre primitif $d$ en fonction du module $m$ (pour un couple constant). La conception valide se situe au-dessus des courbes. Le diamètre minimal (point noir) se trouve à l'intersection exacte.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=\textwidth,
+                xlabel={Module $m$ (mm)},
+                ylabel={Nombre de dents $Z$},
+                domain=1.5:5,
+                samples=50,
+                axis lines=left,
+                ymin=0, ymax=100,
+                legend pos=north east,
+                legend style={font=\footnotesize}
+            ]
+            \addplot [MarineBlue, thick] {400/(x^3)};
+            \addlegendentry{Limite flexion : $Z \ge \frac{K}{m^3}$\footnote{$K$ symbolise tous les autres termes de la formule complète écrite ci-dessus}}
+            \addplot [red, thick] {17};
+            \addlegendentry{Interférence : $Z \ge 17$}
+            
+            \addplot[mark=*, black] coordinates {(2.865, 17)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=\textwidth,
+                xlabel={Module $m$ (mm)},
+                ylabel={Diamètre $d$ (mm)},
+                domain=1.5:5,
+                samples=50,
+                axis lines=left,
+                ymin=0, ymax=100,
+                legend pos=north east,
+                legend style={font=\footnotesize}
+            ]
+            \addplot [MarineBlue, thick] {400/(x^2)};
+            \addlegendentry{Limite flexion : $d \ge \frac{K}{m^2}$}
+            \addplot [red, thick] {17*x};
+            \addlegendentry{Interférence : $d \ge 17m$}
+            
+            \addplot[mark=*, black] coordinates {(2.865, 48.7)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{minipage}
+\end{figure}
+
+\subsection{Stratégie de sélection du module pratique}
+
+Le point d'intersection identifié fournit un module optimal théorique ($m_{\text{opt}}$). Cependant, pour des raisons de coût et d'outillage, il faut choisir un module normalisé. Deux stratégies s'offrent alors :
+
+\begin{enumerate}
+    \item \textbf{Ajustement par le nombre de dents (Denture droite) :} On sélectionne le module normalisé le plus proche du $m_{\text{opt}}$ théorique, qu'il soit supérieur ou inférieur. \textbf{Attention : prendre systématiquement le module supérieur n'est pas toujours optimal.} Si le module inférieur est très proche du $m_{\text{opt}}$, il peut être plus avantageux de le sélectionner et d'augmenter le nombre de dents $Z$ (pour repasser au-dessus de la courbe de limite de flexion). Le produit $m_{\text{norm}} \times Z$ résultant peut s'avérer plus petit que si l'on avait simplement arrondi le module au chiffre supérieur.
+    \item \textbf{Ajustement par l'angle d'hélice (Denture hélicoïdale) :} On choisit un module normalisé strictement inférieur au $m_{\text{opt}}$, et on compense en utilisant une denture hélicoïdale. En inclinant les dents d'un angle $\beta$ (compris entre $15^\circ$ et $30^\circ$ pour un taillage optimal), on augmente le module apparent ($m_t = m_n / \cos\beta$), ce qui permet de retomber sur les caractéristiques optimales.
+\end{enumerate}
+
+\subsection{Arbitrage et architecture finale retenue}
+
+\textbf{Optimisation par étage vs. Module constant :}
+L'utilisation d'un même module pour tous les étages aurait grandement simplifié la conception. Néanmoins, en effectuant l'optimisation ci-dessus de manière indépendante pour \textit{chaque} étage, nous avons pu \textbf{réduire de 50\,\% le poids total des roues dentées} par rapport à une solution à module constant. Cette approche par étage a donc été retenue pour minimiser la masse en nacelle.
+
+\textbf{Denture Droite vs. Hélicoïdale :}
+La denture hélicoïdale (Stratégie 2) permettait de gagner encore quelques pourcents de masse supplémentaires (5\,\%). Cependant, elle engendre inévitablement des efforts axiaux internes. L'hydrolienne devant déjà encaisser une poussée axiale massive ($F_a = 8480 \text{ N}$) due au courant marin, l'ajout de contraintes axiales internes aurait nécessité un surdimensionnement des roulements, annulant le bénéfice de poids sur les roues dentées. 
+
+\textbf{Conclusion :} L'architecture finale opte pour des \textbf{roues à denture droite, optimisées spécifiquement pour chaque étage} (Stratégie 1).
+
+\textit{Note sur le choix des matériaux :} Dans une logique de module constant pour toute la boîte de vitesse, il aurait été théoriquement possible de conserver des dimensions compactes en adaptant le $R_{pe}$ (et donc le matériau) pour chaque roue dentée (acier très performant sur les premiers étages, et plus basique ensuite). Bien que séduisante économiquement, cette idée est fortement déconseillée pour une hydrolienne sous-marine (risques d'usure différentielle sévère). L'approche retenue ici (optimisation des géométries avec un acier de qualité unique 42CrMo4) reste la plus pertinente.
+
+\subsection{Application Numérique et Bilan du Dimensionnement}
+
+L'optimisation géométrique a été appliquée de manière indépendante à chacun des quatre étages de réduction.
+
+\textbf{1. Rappel des équations fondamentales}\\
+Le couple d'entrée transmis au multiplicateur décroît à chaque étage en fonction du rapport de réduction $k_i$ de l'étage précédent :
+\[ C_{\text{suivant}} = \frac{C_{\text{précédent}}}{k_i} \]
+
+Le module optimal théorique $m_{\text{opt}}$ (exprimé en mètres) est calculé à l'intersection exacte entre la limite de résistance à la flexion en pied de dent et la contrainte de non-interférence géométrique ($Z = 17$) :
+\[ m_{\text{opt}} = \left( \frac{2,34^2 \cdot 2 \cdot C}{b \cdot R_{pe} \cdot 17} \right)^{\frac{1}{3}} \]
+
+\textbf{2. Exemple de développement pour la roue dentée d'entrée (Roue 1)}\\
+Pour le premier étage, le couple à transmettre est le couple nominal maximal de l'hydrolienne, soit $C_1 = 2334 \text{ Nm}$. Les caractéristiques du matériau (42CrMo4) et les choix de conception fixent $R_{pe} = 425 \cdot 10^6 \text{ Pa}$ et $b = 10$.
+
+En remplaçant les symboles par les valeurs numériques dans le système international, le développement est le suivant :
+\[ m_{\text{opt}} = \left( \frac{2,34^2 \cdot 2 \cdot 2334}{10 \cdot 425 \cdot 10^6 \cdot 17} \right)^{\frac{1}{3}} \]
+\[ m_{\text{opt}} = \left( \frac{5,4756 \cdot 4668}{72\,250 \cdot 10^6} \right)^{\frac{1}{3}} \]
+\[ m_{\text{opt}} = \left( \frac{25\,560,1}{72\,250 \cdot 10^6} \right)^{\frac{1}{3}} = \left( 3,5377 \cdot 10^{-7} \right)^{\frac{1}{3}} \approx 0,00707 \text{ m} \]
+
+On obtient un module théorique parfait de \textbf{7,07 mm}. 
+
+Le module standardisé disponible le plus proche est $m = 7 \text{ mm}$. Comme ce module choisi est légèrement inférieur au module optimal théorique ($7 \text{ mm} < 7,07 \text{ mm}$), la contrainte de flexion impose d'augmenter le nombre de dents minimal au-dessus de la limite physique d'interférence. On retient donc un nombre de dents minimum de \textbf{18} (au lieu de 17).
+
+\textbf{3. Logique de répartition entre pignons et grandes roues}\\
+Le calcul du module optimal est systématiquement basé sur les petites roues dentées (les pignons), car ce sont elles qui possèdent le moins de dents et s'approchent de la limite critique d'interférence. Leur module réel choisi doit donc rester très proche du module théorique calculé.
+
+À l'inverse, les grandes roues dentées associées possèdent un nombre de dents beaucoup plus élevé que le minimum requis. Mathématiquement, leur grand nombre de dents permettrait au module de diminuer drastiquement pour transmettre le même couple. Cependant, pour qu'un étage puisse engrener, la roue menante et la roue menée doivent impérativement partager le même module. La grande roue doit donc "s'adapter" et adopter le module requis par son pignon.
+
+\textit{Note de conception :} Dans certains projets, il peut arriver que le module dicté par le pignon devienne trop faible pour assurer la tenue de la grande roue malgré son grand nombre de dents, obligeant à augmenter le module du pignon. Dans le cadre de cette étude, les vérifications montrent que ce cas de figure ne se présente pas ; le module du pignon est suffisant pour l'ensemble de chaque étage.
+
+\textbf{3. Synthèse des résultats d'optimisation}
+
+En appliquant cette formule en cascade, on détermine les modules optimaux puis les nombres de dents minimaux ($Z_{\text{min}}$) associés aux modules pratiques choisis pour les 8 roues dentées :
+
+\begin{center}
+\small
+\begin{tabular}{lcccccccc}
+    \toprule
+    \textbf{Paramètres} & \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} & \textbf{R5} & \textbf{R6} & \textbf{R7} & \textbf{R8} \\
+    \midrule
+    \textbf{$m_{\text{opt}}$ théoriques [mm]} & 7,07 & 5,0003 & 5,00003 & 3,97 & 3,97 & 3,15 & 3,15 & 2,20 \\
+    \textbf{$m$ pratiques minimaux [mm]} & 7 & 5 & 5 & 4 & 4 & 3 & 3 & 2,5 \\
+    \textbf{$Z_{\text{min}}$ correspondants [-]} & 18 & 18 & 18 & 17 & 17 & 20 & 20 & 17 \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{4. Dimensions finales des engrenages}\\
+Après intégration des ratios d'engrenage imposés par la cinématique globale ($k = 33,33$), les modules de chaque paire sont unifiés et les nombres de dents finaux sont ajustés. Le diamètre primitif de chaque roue est alors calculé directement par la relation $d = m \times Z$.
+
+Le tableau ci-dessous récapitule ces dimensions finales, incluant le choix des modules définitifs pour l'ensemble du multiplicateur.
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+    \toprule
+    \textbf{Étage} & \textbf{Module ($m_{choisi}$)} & \multicolumn{2}{c}{\textbf{Roues menantes}} & \multicolumn{2}{c}{\textbf{Roues menées}} \\
+    \cmidrule(lr){3-4} \cmidrule(lr){5-6}
+    & \textbf{[mm]} & $Z_1$ & $d_1$ [mm] & $Z_2$ & $d_2$ [mm] \\
+    \midrule
+    \textbf{Étage 1} & \textbf{5} & 51 & 255 & 18 & 90 \\
+    \textbf{Étage 2} & \textbf{4} & 34 & 136 & 17 & 68 \\
+    \textbf{Étage 3} & \textbf{3} & 40 & 120 & 20 & 60 \\
+    \textbf{Étage 4} & \textbf{2,5} & 50 & 125 & 17 & 42,5 \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\textit{Note : Les largeurs de dentures sont déduites directement des modules retenus ($L = 10 \cdot m$), soit respectivement 50 mm, 40 mm, 30 mm et 25 mm pour les étages 1 à 4.}
+
+\vspace{0.3cm}
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=2pt, boxrule=0.8pt, title=\textbf{Bilan de masse et d'encombrement global}]
+Afin de quantifier de manière chiffrée l'intérêt de cette optimisation par rapport à une approche standard à module constant (ex: $m=5$ partout), nous avons calculé l'encombrement spatial et la masse totale d'acier (Densité $\rho = 7850 \text{ kg/m}^3$) du train d'engrenages pour les deux scénarios. La masse d'une roue est assimilée à un cylindre plein : $M = \rho \cdot \pi \cdot \frac{d^2}{4} \cdot L$.
+
+\begin{center}
+\small
+\begin{tabular}{p{4cm} p{6cm} c}
+    \toprule
+    \textbf{Scénario de conception} & \textbf{Surface frontale d'encombrement\footnote{Représente la surface de la boite de vitesse vue de la face avant. (donc en regardant dans le même sens que l'axe du rotor)}} & \textbf{Masse totale des roues} \\
+    \midrule
+    \textbf{Module Constant} ($m=5$) & $425 \times 255 = \mathbf{108\,375 \text{ mm}^2}$ & $\approx$ \textbf{66,3 kg} \\
+    \textbf{Module Optimisé} & $368 \times 255 = \mathbf{93\,840 \text{ mm}^2}$ & $\approx$ \textbf{34,3 kg} \\
+    \midrule
+    \textbf{Gain de l'optimisation} & \textbf{$-$ 13,4\,\%} & \textbf{$-$ 48,2\,\%} \\
+    \bottomrule \\
+\end{tabular}
+\end{center}
+
+\textbf{Conclusion :} L'optimisation itérative par étage a permis de réduire l'encombrement frontal de près de 15\,\%, améliorant donc l'aérodynamisme de l'ensemble. Mieux encore, \textbf{la masse embarquée a été réduite de 50\,\%}, validant pleinement l'effort de conception mené lors de cette étude.
+\end{tcolorbox}
+
+\subsection{Vérification à la Pression de Hertz (Fatigue de surface)}
+
+\subsubsection*{1. Critère de validation principal}
+
+Pour prémunir les flancs de dents contre l'usure par fatigue de surface (écaillage), la pression de contact dynamique réelle ($\sigma_H$) en fonctionnement doit impérativement respecter :
+\[ \mathbf{\sigma_H \le \sigma_{HP}} \]
+
+\subsubsection*{2. Pression limite admissible ($\sigma_{HP}$)}
+
+La résistance maximale tolérée par le matériau dépend de ses propriétés et des conditions de service :
+\[ \sigma_{HP} = \frac{\sigma_{H \lim}}{S_{H \min}} \cdot Z_N \cdot Z_V Z_L Z_R Z_W \]
+
+Pour l'étage 1 en acier 42CrMo4, les paramètres de calcul sont :
+\begin{itemize}
+    \item $\sigma_{H\lim} = 770 \text{ MPa}$ (Tableau LXV du cours, catégorie aciers d'amélioration) et sécurité $S_{H\min} = 1,25$.
+    \item $Z_N = 0,9$ (Facteur de durée de vie pénalisant la fatigue au-delà de $10^8$ cycles sur 5 ans).
+    \item $Z_V = Z_L = Z_R = Z_W = 1$ (Hypothèse standard de lubrification optimale et surfaces rectifiées).
+\end{itemize}
+\textbf{Calcul de la limite :} $\sigma_{HP} = \frac{770}{1,25} \cdot 0,9 \cdot 1 = \mathbf{554,4 \text{ MPa}}$.
+
+\subsubsection*{3. Pression dynamique réelle ($\sigma_H$)}
+
+La contrainte réelle en fonctionnement inclut les surcharges et les déformations de la structure :
+\[ \sigma_H = \sigma_{H0} \cdot \sqrt{K_A \cdot K_V \cdot K_{H\beta} \cdot K_{H\alpha}} \]
+Avec les coefficients dynamiques suivants : $K_A = 1,25$ (chocs modérés du courant) ; $K_V = 1,1$ (vibrations de taillage) ; $K_{H\beta} = 1,2$ et $K_{H\alpha} = 1,1$ (mauvaise répartition due à la déformation des arbres sous charge). \\
+\textbf{Calcul de la pression dynamique :} $\sigma_H = \sigma_{H0} \cdot \sqrt{1,25 \cdot 1,1 \cdot 1,2 \cdot 1,1} = \sigma_{H0} \cdot \sqrt{1,815} \approx \mathbf{1,347 \cdot \sigma_{H0}}$.
+
+\subsubsection*{4. Pression statique de base ($\sigma_{H0}$)}
+
+La pression statique dépend de la géométrie des profils et de l'effort tangentiel transmis ($F_{t12}$) :
+\[ \sigma_{H0} = Z_H \cdot Z_E \cdot Z_\epsilon \cdot Z_\beta \sqrt{ \frac{F_{t12}}{b \cdot d_{\text{pignon}}} \cdot \frac{k_{12} + 1}{k_{12}} } \]
+
+Les coefficients statiques de contact sont définis et condensés comme suit :
+\[ Z_H = \sqrt{\frac{2}{\sin(20^\circ)\cos(20^\circ)}} \approx 2,49 \text{ (Géométrie)} \quad ; \quad Z_E = 193 \, \text{MPa}^{1/2} \text{ (Élasticité)} \]
+\[ Z_\epsilon = 0,75 \text{ (Conduite max)} \quad ; \quad Z_\beta = 1 \text{ (Denture droite)} \]
+
+\subsubsection*{5. Application Numérique Complète (Étage 1)}
+
+\begin{enumerate}
+    \item \textbf{Effort tangentiel :} Pour un couple $C_e = 2335 \text{ Nm}$ et un diamètre de roue $d_1 = 255 \text{ mm}$, $F_{t12} = \frac{2 \cdot 2335}{0,255} = \mathbf{18\,314 \text{ N}}$.
+    \item \textbf{Pression statique :} Avec $b = 50 \text{ mm}$, $d_{\text{pignon}} = 90 \text{ mm}$ et $k_{12} = 2,833$ :
+    \[ \sigma_{H0} = 2,49 \cdot 193 \cdot 0,75 \cdot 1 \cdot \sqrt{ \frac{18\,314}{50 \cdot 90} \cdot \frac{2,833 + 1}{2,833} } = 360,4 \cdot \sqrt{4,07 \cdot 1,353} = \mathbf{845,6 \text{ MPa}} \]
+    \item \textbf{Pression dynamique finale :} $\sigma_H = 845,6 \cdot 1,347 = \mathbf{1139 \text{ MPa}}$.
+\end{enumerate}
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Bilan et Décision de Conception}]
+\textbf{Comparaison :} Nous mesurons que $\sigma_H > \sigma_{HP}$ ($\mathbf{1139 \text{ MPa} > 554,4 \text{ MPa}}$). Le critère de tenue à l'écaillage n'est pas respecté pour un acier brut usiné dans la masse.
+\vspace{3mm}
+
+\textbf{Action corrective :} Pour encaisser les $1139 \text{ MPa}$ réels sans modifier l'encombrement du multiplicateur, nous prescrivons une \textbf{trempe superficielle} de la denture. D'après le Tableau LXV du cours, ce traitement thermique élève $P_{H\lim}$ à $1700 \text{ MPa}$, ce qui monte notre limite admissible $\sigma_{HP}$ à $\mathbf{1224 \text{ MPa}}$. La condition $\sigma_H \le \sigma_{HP}$ devient alors vérifiée.
+\vspace{3mm}
+
+\textit{Remarque :} Il convient de rappeler que ce dimensionnement s'appuie sur une méthode analytique approchée. Bien que les valeurs réelles de contraintes au sein de la nacelle puissent légèrement différer de cette modélisation idéalisée en raison des incertitudes dynamiques, l'écart critique constaté entre la contrainte subie et la limite du matériau brut nous permet de conclure avec une quasi-certitude que ce traitement de surface sera indispensable pour garantir la survie de l'hydrolienne sur 5 ans.
+\end{tcolorbox}
+
+% ==============================================================================
+% SECTION 4 : DIMENSIONNEMENT DES ARBRES
+% ==============================================================================
+\section{Dimensionnement des arbres}
+
+\begin{figure}[H]
+    \centering
+    % Réglage de l'épaisseur du trait et de l'espace (padding)
+    \setlength{\fboxrule}{3pt} 
+    \setlength{\fboxsep}{3pt} % Mettez 3pt si vous voulez un petit liseré blanc
+    
+    % Création du cadre (Bordure bleue, fond blanc)
+    \fcolorbox{MarineBlue}{white}{\includegraphics[width=\textwidth]{pBOpClu3.jpg}}
+    
+    \caption{Schéma des forces appliquées à l'ensemble du système}
+    \label{fig:schema2}
+\end{figure}
+
+Les développements et calculs détaillés dans les sous-sections suivantes sont appliqués spécifiquement au \textbf{premier arbre} (arbre d'entrée lié au rotor) à titre de démonstration. Il est important de noter que cette démarche analytique est strictement identique et sera répliquée pour l'ensemble des arbres composant le multiplicateur.
+
+% ------------------------------------------------------------------------------
+\subsection{Détermination des actions mécaniques et équilibre statique}
+
+\begin{figure}[H]
+    \centering
+    % Réglage de l'épaisseur du trait et de l'espace (padding)
+    \setlength{\fboxrule}{3pt} 
+    \setlength{\fboxsep}{3pt} % Mettez 3pt si vous voulez un petit liseré blanc
+    
+    % Création du cadre (Bordure bleue, fond blanc)
+    \fcolorbox{MarineBlue}{white}{\includegraphics[width=\textwidth]{Iw1CtA8O.jpg}}
+    
+    \caption{Schéma des forces appliquées à l'arbre d'entrée du sytème}
+    \label{fig:schema3}
+\end{figure}
+
+\subsubsection*{1. Détermination des efforts sur la denture}
+
+Pour chaque point de contact des roues dentées, les efforts transmis sont déduits du couple nominal ($C$) et du diamètre primitif ($d$) de la roue. L'effort tangentiel ($F_t$) est la force motrice principale :
+\[ F_t = \frac{2 \cdot C}{d} \]
+
+Cet effort génère des composantes induites par la géométrie de la dent (avec $\alpha = 20^\circ$ l'angle de pression et $\beta$ l'angle d'hélice) :
+\[ F_r = F_t \cdot \tan(\alpha) \quad \text{et} \quad F_a = F_t \cdot \tan(\beta) \]
+\textit{Remarque : Dans notre cas (denture droite, $\beta = 0^\circ$), l'effort axial est nul ($F_a = 0$). Le poids propre des roues dentées est néanmoins intégré dans la composante radiale ($F_r$) pour être exhaustif, bien qu'il reste négligeable face aux efforts de transmission.}
+
+\subsubsection*{2. Équilibre Statique}
+
+L'équilibre statique de l'arbre en régime stationnaire au point $O$ permet de déterminer les \textcolor{UnknownVar}{\textbf{inconnues de liaison}} (réactions aux roulements). 
+
+\textbf{Équilibre des forces :}
+\[
+    \begin{cases}
+        -F_{11r} + \textcolor{UnknownVar}{\mathbf{F_{12r}}} - \textcolor{UnknownVar}{\mathbf{F_{13r}}} + F_{14r} = 0 \quad &\text{(Axe radial } r\text{)} \\
+        \textcolor{UnknownVar}{\mathbf{F_{12t}}} + \textcolor{UnknownVar}{\mathbf{F_{13t}}} - F_{14t} = 0 \quad &\text{(Axe tangentiel } t\text{)} \\
+        F_{11a} - \textcolor{UnknownVar}{\mathbf{F_{1a}}} - F_{14a} = 0 \quad &\text{(Axe axial } a\text{)}
+    \end{cases}
+\]
+
+\textbf{Équilibre des moments en $O$ :}
+\[
+    \begin{cases}
+        -x_{11} \textcolor{UnknownVar}{\mathbf{F_{12t}}} - (x_{11} + x_{12} + x_{13}) \textcolor{UnknownVar}{\mathbf{F_{13t}}} + (x_{11} + x_{12}) F_{14t} = 0 \quad &\text{(Autour de } r\text{)} \\
+        x_{11} \textcolor{UnknownVar}{\mathbf{F_{12r}}} - (x_{11} + x_{12} + x_{13}) \textcolor{UnknownVar}{\mathbf{F_{13r}}} + (x_{11} + x_{12}) F_{14r} - \frac{d_1}{2} F_{14a} = 0 \quad &\text{(Autour de } t\text{)} \\
+        \textcolor{gray}{\left( -C_1 + \frac{d_1}{2} F_{14t} = 0 \right)} \quad &\textcolor{gray}{\text{(Autour de } a\text{)}}
+    \end{cases}
+\]
+\textit{\small Note : La dernière équation (autour de l'axe $a$) est grisée car elle lie des paramètres déjà connus et valide simplement la transmission du couple, sans intervenir dans la recherche des réactions aux appuis.}
+
+\subsubsection*{3. Résolution Matricielle et Application Numérique}
+
+Les équations sont extraites pour former le système linéaire $[A] \cdot \{X\} = \{B\}$ :
+\[
+\begin{pmatrix}
+    1 & -1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 1 & 0 \\
+    0 & 0 & 0 & 0 & -1 \\
+    x_{11} & -(x_{11}+x_{12}+x_{13}) & 0 & 0 & 0 \\
+    0 & 0 & -x_{11} & -(x_{11}+x_{12}+x_{13}) & 0
+\end{pmatrix}
+\begin{pmatrix}
+    \textcolor{UnknownVar}{\mathbf{F_{12r}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{13r}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{12t}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{13t}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{1a}}}
+\end{pmatrix}
+=
+\begin{pmatrix}
+    F_{11r} - F_{14r} \\
+    F_{14t} \\
+    -F_{11a} + F_{14a} \\
+    -(x_{11}+x_{12}) F_{14r} + \frac{d_1}{2} F_{14a} \\
+    -(x_{11}+x_{12}) F_{14t}
+\end{pmatrix}
+\]
+
+Nous injectons les données dimensionnelles ($x_{11} = 0,0115 \text{ m}$, $x_{12} = x_{13} = 0,0365 \text{ m}$, $d_1 = 0,255 \text{ m}$) ainsi que les efforts calculés (Poussée rotor $F_{11a} = 8480 \text{ N}$, Poids rotor $F_{11r} = 3924 \text{ N}$, Engrenage $F_{14t} = 18\,314 \text{ N}$ et $F_{14r} = 6665,7 \text{ N}$) :
+
+\[
+\begin{pmatrix}
+    1 & -1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 1 & 0 \\
+    0 & 0 & 0 & 0 & -1 \\
+    0,0115 & -0,0845 & 0 & 0 & 0 \\
+    0 & 0 & -0,0115 & -0,0845 & 0
+\end{pmatrix}
+\begin{pmatrix}
+    \textcolor{UnknownVar}{\mathbf{F_{12r}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{13r}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{12t}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{13t}}} \\
+    \textcolor{UnknownVar}{\mathbf{F_{1a}}}
+\end{pmatrix}
+=
+\begin{pmatrix}
+    -2741,7 \\
+    18\,314 \\
+    -8480 \\
+    -319,95 \\
+    -879,07
+\end{pmatrix}
+\]
+
+L'inversion de la matrice nous donne directement les composantes de réaction aux appuis :
+
+\begin{tcolorbox}[colback=white, colframe=UnknownVar, arc=2pt, boxrule=0.8pt, title=\small \textbf{Résultats des inconnues de liaison}]
+\begin{itemize}
+    \item \textbf{Réaction axiale (Roulement 1) :} $\textcolor{UnknownVar}{\mathbf{F_{1a}}} = 8480 \text{ N}$
+    \item \textbf{Réactions tangentielles :} $\textcolor{UnknownVar}{\mathbf{F_{12t}}} = 9157 \text{ N}$ \quad et \quad $\textcolor{UnknownVar}{\mathbf{F_{13t}}} = 9157 \text{ N}$
+    \item \textbf{Réactions radiales :} $\textcolor{UnknownVar}{\mathbf{F_{12r}}} = 1209 \text{ N}$ \quad et \quad $\textcolor{UnknownVar}{\mathbf{F_{13r}}} = 3951 \text{ N}$
+\end{itemize}
+\end{tcolorbox}
+
+% ------------------------------------------------------------------------------
+\subsection{Modélisation RDM : Diagrammes des sollicitations}
+
+L'analyse de la résistance de l'arbre est menée par la construction des diagrammes d'efforts intérieurs. Pour conserver une approche généralisable, les équations analytiques sont définies pour une direction de projection donnée ($t$, $r$ ou $a$). La numérotation des points d'application suit l'axe de l'arbre : 1 (Rotor), 2 (Roulement 1), 4 (Roue dentée) et 3 (Roulement 2).
+
+\textit{Convention :} Pour l'axe $a$, l'effort tranchant ($T_a$) correspond physiquement à l'Effort Normal ($N$), et le moment fléchissant ($Mf_a$) au Moment de Torsion ($M_t$). Afin de faciliter la lecture, les efforts sont exprimés en \textbf{kN} et les moments en \textbf{N.m}.
+
+\definecolor{PlotOrange}{HTML}{E67E22}
+\definecolor{PlotRed}{HTML}{C0392B}
+
+% ================= GRAPHIQUE 1 : FORCES =================
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=0.9, transform shape]
+        % Etage 1 : Tangentiel (t)
+        \begin{axis}[
+            name=ax1, width=0.9\textwidth, height=5.5cm,
+            title={\textbf{1. Diagramme des Forces Appliquées ($F$)}},
+            ylabel={$F_t$ (kN)}, grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-25, ymax=25,
+            xtick=\empty, legend pos=south east, legend style={font=\footnotesize}
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[PlotOrange, very thick, ycomb, mark=*] coordinates {(0,0) (11.5,9.16) (48,-18.31) (84.5,9.16)};
+        \node[anchor=south, font=\footnotesize, color=PlotOrange] at (axis cs:11.5, 9.16) {9,16};
+        \node[anchor=north, font=\footnotesize, color=PlotOrange] at (axis cs:48, -18.31) {-18,31};
+        \node[anchor=south, font=\footnotesize, color=PlotOrange] at (axis cs:84.5, 9.16) {9,16};
+        \end{axis}
+        
+        % Etage 2 : Radial (r)
+        \begin{axis}[
+            name=ax2, at={(ax1.below south west)}, anchor=north west, yshift=-0.8cm, width=0.9\textwidth, height=5.5cm,
+            ylabel={$F_r$ (kN)}, grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-25, ymax=25, % Même échelle que Ft
+            xtick=\empty
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[MarineBlue, very thick, ycomb, mark=*] coordinates {(0,-3.92) (11.5,1.21) (48,6.67) (84.5,-3.95)};
+        % Anchor ajusté pour ne pas couper sur l'axe gauche
+        \node[anchor=north west, xshift=1mm, font=\footnotesize, color=MarineBlue] at (axis cs:0, -3.92) {-3,92};
+        \node[anchor=south, font=\footnotesize, color=MarineBlue] at (axis cs:11.5, 1.21) {1,21};
+        \node[anchor=south, font=\footnotesize, color=MarineBlue] at (axis cs:48, 6.67) {6,67};
+        \node[anchor=north, font=\footnotesize, color=MarineBlue] at (axis cs:84.5, -3.95) {-3,95};
+        \end{axis}
+        
+        % Etage 3 : Axial (a)
+        \begin{axis}[
+            name=ax3, at={(ax2.below south west)}, anchor=north west, yshift=-0.8cm, width=0.9\textwidth, height=5.5cm,
+            xlabel={Position $x$ sur l'arbre}, ylabel={$F_a$ (kN)},
+            grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-12, ymax=12,
+            xtick={0, 11.5, 48, 84.5},
+            xticklabels={0 (Pt 1), $x_{11}$ (Pt 2), $x_{11}\!+\!x_{12}$ (Pt 4), $x_{11}\!+\!x_{12}\!+\!x_{13}$ (Pt 3)},
+            x tick label style={rotate=25, anchor=east, font=\footnotesize}
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[PlotRed, very thick, ycomb, mark=*] coordinates {(0,8.48) (11.5,-8.48) (48,0) (84.5,0)};
+        % Anchor ajusté pour ne pas couper sur l'axe gauche
+        \node[anchor=south west, xshift=1mm, font=\footnotesize, color=PlotRed] at (axis cs:0, 8.48) {8,48};
+        \node[anchor=north, font=\footnotesize, color=PlotRed] at (axis cs:11.5, -8.48) {-8,48};
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
+
+% ================= GRAPHIQUE 2 : TRANCHANTS =================
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Etage 1 : Tangentiel
+        \begin{axis}[
+            name=ax1, width=0.9\textwidth, height=5.5cm,
+            title={\textbf{2. Diagramme des Efforts Tranchants ($T$) et Normaux ($N$)}},
+            ylabel={$T_t$ (kN)}, grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-15, ymax=15, xtick=\empty
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[PlotOrange, thick] coordinates {(0,0) (11.5,0) (11.5,9.16) (48,9.16) (48,-9.16) (84.5,-9.16) (84.5,0)};
+        \node[anchor=south, font=\footnotesize, color=PlotOrange] at (axis cs:29.75, 9.16) {9,16};
+        \node[anchor=north, font=\footnotesize, color=PlotOrange] at (axis cs:66.25, -9.16) {-9,16};
+        \end{axis}
+        
+        % Etage 2 : Radial
+        \begin{axis}[
+            name=ax2, at={(ax1.below south west)}, anchor=north west, yshift=-0.8cm, width=0.9\textwidth, height=5.5cm,
+            ylabel={$T_r$ (kN)}, grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-15, ymax=15, xtick=\empty
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[MarineBlue, thick] coordinates {(0,-3.92) (11.5,-3.92) (11.5,-2.71) (48,-2.71) (48,3.95) (84.5,3.95) (84.5,0)};
+        % Anchor ajusté
+        \node[anchor=north west, xshift=1mm, font=\footnotesize, color=MarineBlue] at (axis cs:0, -3.92) {-3,92};
+        \node[anchor=north, font=\footnotesize, color=MarineBlue] at (axis cs:29.75, -2.71) {-2,71};
+        \node[anchor=south, font=\footnotesize, color=MarineBlue] at (axis cs:66.25, 3.95) {3,95};
+        \end{axis}
+        
+        % Etage 3 : Axial
+        \begin{axis}[
+            name=ax3, at={(ax2.below south west)}, anchor=north west, yshift=-0.8cm, width=0.9\textwidth, height=5.5cm,
+            xlabel={Position $x$ sur l'arbre}, ylabel={$N$ (kN)},
+            grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-12, ymax=12,
+            xtick={0, 11.5, 48, 84.5},
+            xticklabels={0 (Pt 1), $x_{11}$ (Pt 2), $x_{11}\!+\!x_{12}$ (Pt 4), $x_{11}\!+\!x_{12}\!+\!x_{13}$ (Pt 3)},
+            x tick label style={rotate=25, anchor=east, font=\footnotesize}
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[PlotRed, thick] coordinates {(0,-8.48) (11.5,-8.48) (11.5,0) (84.5,0)};
+        % Anchor ajusté
+        \node[anchor=north west, xshift=1mm, font=\footnotesize, color=PlotRed] at (axis cs:0, -8.48) {-8,48};
+        \end{axis}
+    \end{tikzpicture}
+    
+    \vspace{0.3cm}
+    \begin{tcolorbox}[colback=BoxBg, colframe=gray!50, arc=2pt, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
+    \small \centering
+    Intégration des efforts par tronçons (Convention gauche).\\
+    \begin{tabular}{p{4cm} p{4.5cm} p{4.5cm}}
+        \textbf{Tronçon 1 :} $x \in [0, x_{11}[$ & \textbf{Tronçon 2 :} $x \in [x_{11}, x_{11}+x_{12}[$ & \textbf{Tronçon 3 :} $x \in [x_{11}+x_{12}, x_{\text{tot}}]$ \\
+        \centering $T_1 = F_1$ & \centering $T_2 = T_1 + F_2$ & \centering $T_3 = T_2 + F_4$
+    \end{tabular}
+    \\[0.1cm] \textit{Vérification de l'équilibre au point final (Pt 3) :} $T_3 + F_3 = 0$
+    \end{tcolorbox}
+\end{figure}
+
+% ================= GRAPHIQUE 3 : MOMENTS =================
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Etage 1 : Tangentiel
+        \begin{axis}[
+            name=ax1, width=0.9\textwidth, height=5.5cm,
+            title={\textbf{3. Diagramme des Moments Fléchissants ($Mf$) et de Torsion ($M_t$)}},
+            ylabel={$Mf_t$ (N.m)}, grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-400, ymax=400, xtick=\empty
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[PlotOrange, thick, mark=*] coordinates {(0,0) (11.5,0) (48,334.2) (84.5,0)};
+        \node[anchor=north, yshift=-1mm, font=\footnotesize, color=PlotOrange] at (axis cs:48, 334.2) {334,2};
+        \end{axis}
+        
+        % Etage 2 : Radial
+        \begin{axis}[
+            name=ax2, at={(ax1.below south west)}, anchor=north west, yshift=-0.8cm, width=0.9\textwidth, height=5.5cm,
+            ylabel={$Mf_r$ (N.m)}, grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-400, ymax=400, % Même échelle que Mft
+            xtick=\empty
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[MarineBlue, thick, mark=*] coordinates {(0,0) (11.5,-45.1) (48,-144.2) (84.5,0)};
+        \node[anchor=north west, font=\footnotesize, color=MarineBlue] at (axis cs:11.5, -45.1) {-45,1};
+        \node[anchor=north east, font=\footnotesize, color=MarineBlue] at (axis cs:48, -144.2) {-144,2};
+        \end{axis}
+        
+        % Etage 3 : Axial (Torsion)
+        \begin{axis}[
+            name=ax3, at={(ax2.below south west)}, anchor=north west, yshift=-0.8cm, width=0.9\textwidth, height=5.5cm,
+            xlabel={Position $x$ sur l'arbre}, ylabel={$M_t$ (N.m)},
+            grid=both, grid style={dashed, gray!30},
+            xmin=0, xmax=90, ymin=-500, ymax=3000,
+            xtick={0, 11.5, 48, 84.5},
+            xticklabels={0 (Pt 1), $x_{11}$ (Pt 2), $x_{11}\!+\!x_{12}$ (Pt 4), $x_{11}\!+\!x_{12}\!+\!x_{13}$ (Pt 3)},
+            x tick label style={rotate=25, anchor=east, font=\footnotesize}
+        ]
+        \addplot[black, thick] coordinates {(0,0) (90,0)};
+        \addplot[PlotRed, thick] coordinates {(0,2335) (48,2335) (48,0) (84.5,0)};
+        \node[anchor=south, font=\footnotesize, color=PlotRed] at (axis cs:24, 2335) {2335};
+        \end{axis}
+    \end{tikzpicture}
+    
+    \vspace{0.3cm}
+    \begin{tcolorbox}[colback=BoxBg, colframe=gray!50, arc=2pt, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
+    \small \centering
+    Calcul des moments par intégration des efforts tranchants ($M_1$ et $M_2$ étant les moments à la fin du tronçon précédent).\\
+    \begin{tabular}{p{4.5cm} p{4.5cm} p{5.5cm}}
+        \textbf{Tronçon 1 :} & \textbf{Tronçon 2 :} & \textbf{Tronçon 3 :} \\
+        \centering $Mf_1(x) = T_1 \cdot x$ & \centering $Mf_2(x) = M_1 + T_2 \cdot (x - x_{11})$ & \centering $Mf_3(x) = M_2 + T_3 \cdot (x - x_{11} - x_{12})$
+    \end{tabular}
+    \end{tcolorbox}
+\end{figure}
+
+\subsubsection*{Conclusion de l'analyse RDM}
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Synthèse de l'analyse RDM et identification de la section critique}]
+L'analyse croisée des diagrammes de sollicitations permet de tirer trois conclusions fondamentales pour la conception de l'arbre :
+\begin{itemize}
+    \item \textbf{Section la plus sollicitée :} Le point critique se situe de manière univoque au niveau de la roue dentée (\textbf{Point 4}, à $x = 48 \text{ mm}$), à l'intersection exacte des moments de flexion maximaux.
+    \item \textbf{État de contrainte combiné :} En cette section, l'arbre subit une superposition maximale de \textbf{flexion déviée} ($Mf_r = -144,2 \text{ N.m}$ et $Mf_t = 334,2 \text{ N.m}$) et de \textbf{torsion pure} ($M_t = 2335 \text{ N.m}$). 
+    \item \textbf{Moment fléchissant résultant :} L'action combinée des deux plans donne un moment fléchissant quadratique maximal de :
+    \[ Mf_{\max} = \sqrt{Mf_r^2 + Mf_t^2} = \sqrt{(-144,2)^2 + (334,2)^2} = \mathbf{364 \text{ N.m}} \]
+\end{itemize}
+Ces valeurs d'efforts ($Mf_{\max} = 364 \text{ N.m}$ et $M_t = 2335 \text{ N.m}$) constituent les données d'entrée directes pour l'évaluation de la résistance selon le critère de Von Mises.
+\end{tcolorbox}
+
+% ------------------------------------------------------------------------------
+\subsection{Calcul du diamètre minimal (Critère de Von Mises)}
+
+\subsubsection*{1. Choix du critère et du matériau}
+
+Pour dimensionner l'arbre sous sollicitations combinées (flexion et torsion), le critère de \textbf{Von Mises} (énergie de distorsion) est privilégié par rapport à Tresca. Moins conservateur, il modélise avec une plus grande fidélité le comportement à la limite d'élasticité des aciers ductiles, ce qui permet d'optimiser le diamètre (et donc la masse embarquée) au plus juste.
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Matériau retenu : Acier C45}]
+Le matériau sélectionné pour les arbres est un acier au carbone standard \textbf{C45}. Ce choix offre un compromis industriel optimal : excellente usinabilité (pour usiner précisément les portées de roulement et rainures de clavettes), bonne résilience aux chocs, et un coût matière largement inférieur aux aciers alliés. 
+
+La limite élastique de cet acier est de $R_e \approx 340 \text{ MPa}$. Afin de garantir une résistance infinie en fatigue face aux variations de charge du courant marin, nous lui appliquons un coefficient de sécurité rigoureux de \textbf{$s = 3,4$}. Cela fixe nos contraintes admissibles pour le dimensionnement à $\mathbf{\sigma_{\max} = 100 \text{ MPa}}$ en traction/flexion, et par conséquent à $\tau_{\max} = 50 \text{ MPa}$ en cisaillement pur.
+\end{tcolorbox}
+
+\subsubsection*{2. Modélisation mathématique et Application Numérique}
+
+Pour un arbre cylindrique plein de diamètre $d$, la contrainte équivalente de Von Mises combine le moment fléchissant ($Mf$) et le moment de torsion ($M_t$). La condition de non-plasticité $\sigma_{\text{VM}} \le \sigma_{\max}$ permet de condenser le calcul et d'isoler directement le diamètre minimal requis :
+\[ \sigma_{\text{VM}} = \frac{32}{\pi \cdot d^3} \sqrt{Mf^2 + \frac{3}{4} M_t^2} \le \sigma_{\max} \quad \implies \quad \mathbf{d \ge \left( \frac{32 \cdot \sqrt{Mf^2 + \frac{3}{4} M_t^2}}{\pi \cdot \sigma_{\max}} \right)^{\frac{1}{3}}} \]
+
+D'après les diagrammes de l'arbre d'entrée, les sollicitations maximales sont $Mf = 364 \text{ N.m}$ et $M_t = 2335 \text{ N.m}$. Le calcul du moment équivalent donne :
+\[ M_{\text{équivalent}} = \sqrt{364^2 + \frac{3}{4} \cdot (2335)^2} = \sqrt{132\,496 + 4\,089\,168,75} \approx \mathbf{2054,66 \text{ N.m}} \]
+
+En injectant cette valeur et la contrainte limite ($\sigma_{\max} = 100 \cdot 10^6 \text{ Pa}$) dans l'équation d'isolation du diamètre :
+\[ d \ge \left( \frac{32 \cdot 2054,66}{\pi \cdot 100 \cdot 10^6} \right)^{\frac{1}{3}} = \left( 2,09286 \cdot 10^{-4} \right)^{\frac{1}{3}} \approx \mathbf{0,0593 \text{ m}} \]
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Conclusion du dimensionnement de l'Arbre 1}]
+Le diamètre minimal théorique requis pour l'arbre d'entrée est de \textbf{59,3 mm} (que l'on arrondira à un diamètre standard supérieur de 60 mm pour les portées de roulement).
+\vspace{3mm}
+
+\textit{Analyse des sollicitations :} Sur ce premier arbre, on remarque que le moment fléchissant maximal ($Mf = 364 \text{ N.m}$) est finalement négligeable face au couple de torsion massif directement transmis par le rotor ($M_t = 2335 \text{ N.m}$). Le dimensionnement de cet arbre spécifique est donc largement piloté par la torsion. 
+\vspace{3mm}
+
+Néanmoins, la rigueur de cette modélisation combinée prendra tout son sens sur les arbres suivants du multiplicateur : à chaque étage, la vitesse de rotation augmente et le couple s'effondre, rendant la flexion induite par l'engrènement importante par rapport à la torsion de l'arbre.
+\end{tcolorbox}
+
+% ------------------------------------------------------------------------------
+\subsection{Généralisation et synthèse pour l'ensemble des arbres}
+
+En appliquant cette même démarche de dimensionnement aux autres arbres du multiplicateur, nous obtenons les sollicitations et les diamètres théoriques minimaux pour chaque étage. 
+
+Afin de quantifier l'optimisation massique de la ligne d'arbres, une estimation de la masse est réalisée en considérant une longueur moyenne de corps d'arbre de $L = 200 \text{ mm}$ et une masse volumique pour l'acier de $\rho = 7870 \text{ kg/m}^3$. Le pourcentage de gain illustre l'allégement progressif d'un arbre par rapport à l'étage qui le précède.
+
+\begin{table}[H]
+    \centering
+    \caption{Synthèse des sollicitations, diamètres et bilan massique des arbres}
+    \vspace{0.2cm}
+    \small
+    \begin{tabular}{l c c c c c c c}
+        \hline
+        \textbf{Désignation} & \textbf{$M_t$} & \textbf{$Mf$} & \textbf{$M_{\text{eq}}$} & \textbf{$d_{\min}$} & \textbf{$d_{\text{std}}$} & \textbf{Masse} & \textbf{Gain Poids} \\
+         & \scriptsize (N.m) & \scriptsize (N.m) & \scriptsize (N.m) & \scriptsize (mm) & \scriptsize (mm) & \scriptsize (kg) & \scriptsize (vs Arbre précédent) \\
+        \hline
+        Arbre 1 & 2335 & 364 & 2055 & 59,3 & \textbf{60} & 4,45 & \textbf{--} \\
+        Arbre 2 & 824  & 536 & 893  & 45,0 & \textbf{45} & 2,50 & \textbf{- 43,8 \%} \\
+        Arbre 3 & 412  & 327 & 484  & 36,7 & \textbf{38} & 1,79 & \textbf{- 28,4 \%} \\
+        Arbre 4 & 206  & 165 & 243  & 29,1 & \textbf{30} & 1,11 & \textbf{- 38,0 \%} \\
+        \hline
+    \end{tabular}
+    \label{tab:synthese_arbres}
+\end{table}
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Analyse globale de la ligne de transmission}]
+Le tableau de synthèse valide l'évolution mécanique au sein du multiplicateur :
+\begin{itemize}
+    \item \textbf{Arbre 1 :} Le diamètre est dicté presque exclusivement par la torsion ($M_t = 2335 \text{ N.m}$). La flexion y est très secondaire (à peine 15\% de la valeur du couple), imposant la section la plus massive ($60 \text{ mm}$).
+    \item \textbf{Arbres 2 et 3 :} Bien que le couple de torsion reste la sollicitation la plus forte, le ratio de chargement s'équilibre considérablement. Sous l'effet des forces d'engrènement, la part de la flexion devient prépondérante dans le calcul du moment équivalent.
+    \item \textbf{Arbre 4 :} En sortie, les sollicitations combinées sont au plus bas, permettant d'adopter un diamètre standardisé minimal de $30 \text{ mm}$.
+\end{itemize}
+Cette diminution progressive des sections permet un allégement étagé important, garantissant une minimisation des coûts de matière.
+\end{tcolorbox}
+
+% ==============================================================================
+% SECTION 5 : DIMENSIONNEMENT DES ROULEMENTS
+% ==============================================================================
+\section{Dimensionnement des roulements}
+
+\subsection{Méthodologie générale de dimensionnement}
+
+La validation s'effectue en déterminant la capacité de charge dynamique minimale ($C_{\min}$) et la capacité de charge statique minimale ($C_{0\min}$) requises pour chaque roulement. Le composant sélectionné sur catalogue devra posséder des capacités supérieures ($C \ge C_{\min}$ et $C_0 \ge C_{0\min}$).
+
+\subsubsection*{Durée de vie combinée du système ($L_{10h}$)}
+Le multiplicateur étant un système en série de $z = 14$ roulements fonctionnant en continu, la défaillance d'un seul élément entraîne l'arrêt de la machine. D'après les lois de fiabilité de Weibull, pour garantir 5 ans de service continu ($L_{\text{sys}} = 43\,800 \text{ h}$) à l'ensemble, la durée de vie nominale individuelle exigée est :
+\[ L_{10h} = L_{\text{sys}} \cdot z^{\frac{1}{1,5}} = 43\,800 \cdot 14^{0,667} \approx \mathbf{254\,450 \text{ heures}} \quad (\approx \mathbf{29 \text{ ans}}) \]
+
+\subsubsection*{Capacité de charge dynamique minimale ($C_{\min}$)}
+La relation de fatigue normalisée permet d'isoler la capacité dynamique minimale requise :
+\[ C_{\min} = P \cdot \left( \frac{L_{10h} \cdot 60 \cdot N}{10^6} \right)^{\frac{1}{n}} \]
+Où $N$ est la vitesse de rotation de l'arbre (tr/min). \textbf{Choix technologique :} Pour maximiser la capacité de charge, l'arbre primaire sera monté sur des rouleaux coniques (pour encaisser la poussée), tandis que les arbres internes utiliseront des rouleaux cylindriques (optimisés pour les charges radiales pures). Dans les deux cas, le contact linéaire impose un exposant de fatigue $n = 10/3$ (puissance $0,3$).
+
+\subsubsection*{Capacité de charge statique minimale ($C_{0\min}$)}
+Pour se prémunir contre le poinçonnement des chemins de roulement lors de pics de charge, la capacité statique de base doit vérifier :
+\[ C_{0\min} = P_0 \cdot S_0 \]
+Où $S_0$ désigne le coefficient de sécurité statique.
+
+\subsection{Détermination des charges équivalentes ($P$ et $P_0$)}
+
+\subsubsection*{Charge dynamique équivalente ($P$)}
+Pour les roulements à rouleaux coniques (Arbre 1), elle dépend du ratio entre l'effort axial ($F_a$) et la résultante radiale ($F_r$) face à la limite $e$. Le premier roulement subit la poussée du rotor ($F_a = 8480 \text{ N}$) pour $F_r \approx 9236 \text{ N}$. Avec $\alpha = 40^\circ \implies e \approx 1,26$. Le ratio valant $0,91 \le 1,26$, le critère est validé ($P=F_r$).
+Pour les roulements à rouleaux cylindriques (Arbres 2, 3 et 4), l'effort axial est nul grâce aux dentures droites. La charge dynamique est donc naturellement la résultante radiale :
+\[ \mathbf{P = F_r = \sqrt{F_{\text{radiale}}^2 + F_{\text{tangentielle}}^2}} \]
+
+\subsubsection*{Charge statique équivalente ($P_0$)}
+Pour le roulement soumis à la poussée axiale, on applique $P_0 = 0,5 \cdot F_r + 0,26 \cdot F_a$. Pour tous les autres roulements exempts de force axiale, $P_0 = F_r$.
+
+\subsection{Applications numériques et synthèse des roulements}
+
+En exploitant les réactions d'appuis issues du bilan RDM, nous développons les calculs pour les roulements critiques.
+
+\subsubsection*{Arbre 1 - Roulement 1 (Rouleaux coniques, poussée axiale, $N_1 = 45 \text{ tr/min}$)}
+Subissant la poussée du rotor, on lui associe un coefficient statique robuste $S_0 = 1,5$ :
+\begin{align*}
+    P_1 &= \sqrt{1209^2 + 9157^2} \approx 9236 \text{ N} \\
+    C_{\min,1} &= 9236 \cdot \left( \frac{254\,450 \cdot 60 \cdot 45}{10^6} \right)^{0,3} \approx \mathbf{66,1 \text{ kN}} \\
+    P_{0,1} &= 0,5 \cdot 9236 + 0,26 \cdot 8480 \approx 6823 \text{ N} \\
+    C_{0\min,1} &= 6823 \cdot 1,5 \approx \mathbf{10,2 \text{ kN}}
+\end{align*}
+
+\subsubsection*{Arbre 2 - Roulement 1 (Rouleaux cylindriques, charge radiale pure, $N_2 = 127,5 \text{ tr/min}$)}
+Exempt d'effort axial direct, on adopte $S_0 = 1$ :
+\begin{align*}
+    P_3 &= F_r = 13\,081 \text{ N} \\
+    C_{\min,3} &= 13\,081 \cdot \left( \frac{254\,450 \cdot 60 \cdot 127,5}{10^6} \right)^{0,3} \approx \mathbf{127,8 \text{ kN}} \\
+    P_{0,3} &= F_r = 13\,081 \text{ N} \\
+    C_{0\min,3} &= 13\,081 \cdot 1 = \mathbf{13,1 \text{ kN}}
+\end{align*}
+
+\subsubsection*{Tableau de synthèse et confrontation aux catalogues}
+Le tableau rassemble les exigences face aux capacités maximales SKF (Rouleaux cylindriques pour les Arbres 2, 3 et 4).
+
+\begin{table}[H]
+    \centering
+    \caption{Spécifications requises vs Capacités maximales SKF}
+    \vspace{0.2cm}
+    \small
+    \begin{tabular}{l c c c c c c}
+        \hline
+        \textbf{Roulement} & \textbf{$N$} & \textbf{$d_{\text{mini}}$} & \textbf{$C_{\min}$} & \textbf{$C_{\text{SKF}}$ max} & \textbf{$C_{0\min}$} & \textbf{$C_{0\text{SKF}}$ max} \\
+         & (tr/min) & (mm) & (kN) & (kN) & (kN) & (kN) \\
+        \hline
+        Arbre 1 - Roul. 1 (Conique) & 45 & 60 & 66,1 & 229,0 & 10,2 & 290,0 \\
+        Arbre 1 - Roul. 2 (Conique) & 45 & 60 & 71,3 & 229,0 & 10,0 & 290,0 \\
+        \hline
+        Arbre 2 - Roul. 1 (Cylindrique) & 127,5 & 45 & 127,8 & 160,0 & 13,1 & 153,0 \\
+        Arbre 2 - Roul. 2 (Cylindrique) & 127,5 & 45 & 72,7 & 160,0 & 7,4 & 153,0 \\
+        \hline
+        Arbre 3 - Roul. 1 (Cylindrique) & 255 & 38 & \textbf{109,5} & 93,0 & 9,1 & 78,0 \\
+        Arbre 3 - Roul. 2 (Cylindrique) & 255 & 38 & 50,4 & 93,0 & 4,2 & 78,0 \\
+        \hline
+        Arbre 4 - Roul. 1 (Cylindrique) & 510 & 30 & \textbf{79,0} & 60,5 & 5,3 & 53,0 \\
+        Arbre 4 - Roul. 2 (Cylindrique) & 510 & 30 & 29,2 & 60,5 & 2,0 & 53,0 \\
+        \hline
+    \end{tabular}
+    \label{tab:synthese_roulements}
+\end{table}
+
+\subsection{Conclusion critique et perspectives d'optimisation}
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Conclusion critique et solutions de conception}]
+Le recours à des roulements à rouleaux cylindriques pour les arbres intermédiaires est une décision technologique majeure. Le contact linéaire offre un exposant de fatigue très favorable ($n=10/3$), couplé à une capacité radiale catalogue bien supérieure à celle des billes. 
+
+Cette architecture valide instantanément les arbres les plus lourdement chargés : \textbf{les roulements de l'Arbre 1 et de l'Arbre 2 respectent largement le catalogue SKF} ($127,8 \text{ kN} < 160 \text{ kN}$). Les besoins statiques ($C_{0\min}$) sont quant à eux validés sans aucune difficulté.
+
+Il subsiste néanmoins un léger dépassement pour le premier roulement des arbres rapides :
+\begin{itemize}
+    \item Arbre 3 : Besoin de $109,5 \text{ kN}$ pour un catalogue max à $93 \text{ kN}$.
+    \item Arbre 4 : Besoin de $79,0 \text{ kN}$ pour un catalogue max à $60,5 \text{ kN}$.
+\end{itemize}
+
+\textbf{Solution de conception finale :} L'écart étant resserré, une légère augmentation locale du diamètre des arbres résoudra cette ultime impasse. Il suffira de créer un \textbf{épaulement de quelques millimètres} (ex: rehausser les portées de l'Arbre 4 de 30 mm à 35 mm) pour accéder à la classe de roulements cylindriques supérieure et garantir les 5 ans de service en continu de toute la ligne d'arbres.
+\end{tcolorbox}
+
+\subsection{Disposition technologique : Montage en O et gestion du porte-à-faux}
+
+La configuration de l'implantation des liaisons pivot joue un rôle majeur dans la rigidité de la ligne :
+\begin{itemize}
+    \item \textbf{Montage en O pour l'Arbre 1 :} La paire de roulements à rouleaux coniques est montée « en O » (lignes de charge divergentes vers l'extérieur). Cette disposition éloigne les centres de poussée effectifs, offrant la rigidité angulaire indispensable pour s'opposer au moment de basculement généré par le rotor.
+    \item \textbf{Gestion du porte-à-faux :} L'Arbre 1 supportant le rotor à son extrémité, le phénomène de porte-à-faux y est techniquement inévitable. En revanche, pour les arbres suivants (2, 3 et 4), tous les engrenages sont positionnés rigoureusement \textbf{entre les appuis}. Ce montage supprime le porte-à-faux, minimisant ainsi les moments de flexion induits sur les roulements cylindriques internes.
+\end{itemize}
+
+% ==============================================================================
+% SECTION 6 : DIMENSIONNEMENT DES LIAISONS ARBRES/MOYEUX (CLAVETTES)
+% ==============================================================================
+\section{Dimensionnement des liaisons par clavettes}
+
+La transmission intégrale du couple ($M_t$) entre les arbres et les roues dentées est assurée par des liaisons par obstacles (clavettes parallèles). Le dimensionnement consiste à déterminer la longueur utile minimale ($L_{\min}$) de la clavette, puis à valider son intégration dans l'encombrement axial et radial du moyeu.
+
+\subsection{Méthodologie et modélisation des efforts (Clavette unique)}
+
+Pour une liaison standard, l'intégralité de l'effort tangentiel ($F$) induit par le couple de torsion ($M_t$) à la périphérie de l'arbre ($d$) est supportée par une seule clavette :
+\[ F = \frac{2 \cdot M_t}{d} \]
+
+Le dimensionnement s'effectue en vérifiant la résistance au matage (pression de contact sur la demi-hauteur $b/2$) et au cisaillement (section médiane $a \times L$) :
+
+\subsubsection*{1. Condition de non-matage (Critère dimensionnant)}
+La pression de contact répartie sur les flancs ne doit pas dépasser la résistance pratique à la pression admissible ($R_{pe}$) du matériau :
+\[ p = \frac{F}{S_{\text{matage}}} = \frac{2 \cdot M_t}{d \cdot \frac{b}{2} \cdot L} \le R_{pe} \quad \implies \quad \mathbf{L \ge \frac{4 \cdot M_t}{d \cdot b \cdot R_{pe}}} \]
+
+\subsubsection*{2. Condition de non-cisaillement}
+La contrainte tangentielle subie par la section cisaillée doit rester inférieure à la limite admissible ($\tau_{\text{adm}}$) :
+\[ \tau = \frac{F}{S_{\text{cisaillement}}} = \frac{2 \cdot M_t}{d \cdot a \cdot L} \le \tau_{\text{adm}} \quad \implies \quad \mathbf{L \ge \frac{2 \cdot M_t}{d \cdot a \cdot \tau_{\text{adm}}}} \]
+
+\subsection{Hypothèses de calcul et règles d'intégration géométrique}
+
+\begin{itemize}
+    \item \textbf{Contraintes admissibles :} Pour un montage de type fixe dans de bonnes conditions, nous imposons une pression admissible au matage de $\mathbf{R_{pe} = 100 \text{ MPa}}$. La limite de cisaillement est fixée à $\mathbf{\tau_{\text{adm}} = 50 \text{ MPa}}$.
+    \item \textbf{Encombrement axial (Largeur) :} La largeur disponible du moyeu d'engrenage ($b_{\text{denture}}$) est dictée par le module ($m$) et le coefficient de largeur $k = 10$ ($b_{\text{denture}} = 10 \cdot m$).
+    \item \textbf{Épaisseur résiduelle sous denture (Solidité radiale) :} Pour éviter la rupture du moyeu de la roue dentée par effet d'entaille, la distance radiale entre le sommet de la rainure de clavette et le fond de la dent (diamètre de pied $d_f$) doit être d'\textbf{au minimum $5 \text{ mm}$}. La clavette pénétrant dans le moyeu d'environ $b/2$, cela impose au diamètre de pied de l'engrenage de respecter la condition stricte : 
+    \[ \frac{d_f - (d + b)}{2} \ge 5 \text{ mm} \quad \implies \quad \mathbf{d_f \ge d + b + 10 \text{ mm}} = d_{f\min} \]
+\end{itemize}
+
+\subsection{Applications numériques et conflit d'encombrement}
+
+\subsubsection*{Détail du calcul : Arbre 1 (Module $m = 5$)}
+Cet arbre est le plus critique car il transmet le couple maximal du système.
+\begin{align*}
+    \text{Données} & : M_t = 2335 \text{ N.m} = 2\,335\,000 \text{ N.mm}, \quad d = 60 \text{ mm}, \quad b_{\text{denture}} = 50 \text{ mm} \\
+    \text{Section ISO 773} & : a = 18 \text{ mm}, \quad b = 11 \text{ mm} \\
+    \text{Matage (Critique)} & : L \ge \frac{4 \cdot 2\,335\,000}{60 \cdot 11 \cdot 100} \approx \mathbf{141,5 \text{ mm}} \\
+    \text{Cisaillement} & : L \ge \frac{2 \cdot 2\,335\,000}{60 \cdot 18 \cdot 50} \approx \mathbf{86,5 \text{ mm}} \\
+    \text{Diamètre minimal} & : d_{f\min} = 60 + 11 + 10 = \mathbf{81 \text{ mm}} \quad \text{(Diamètre de pied minimal exigé)}
+\end{align*}
+
+\subsubsection*{Tableau de synthèse : Confrontation Denture vs Clavette simple}
+Le tableau met en évidence le conflit géométrique entre la longueur requise et la place axiale disponible dans les roues, tout en vérifiant le critère d'épaisseur radiale basé sur les diamètres de pied calculés ($d_f = d_{\text{nominal}} - 2,5 \cdot m$).
+
+\begin{table}[H]
+    \centering
+    \caption{Analyse d'encombrement pour une clavette unique ($R_{pe} = 100 \text{ MPa}$)}
+    \vspace{0.2cm}
+    \small
+    \begin{tabular}{l c c c c c c c}
+        \hline
+        \textbf{Arbre} & \textbf{Clavette} & \textbf{$b_{\text{denture}}$} & \textbf{$L_{\min}$ Mat.} & \textbf{Bilan Axial} & \textbf{$d_{f\min}$} & \textbf{$d_f$ réel} & \textbf{Validation} \\
+         & ($a \times b$) & (mm) & (mm) & ($L \le b_{\text{denture}}$) & (mm) & (mm) & ($d_f \ge d_{f\min}$) \\
+        \hline
+        Arbre 1 & 18 $\times$ 11 & 50 & \textbf{141,5} & Impossible ($141 \gg 50$) & 81 & 242,5 & Validé \\
+        Arbre 2 & 14 $\times$ 9  & 40 & \textbf{81,4}  & Impossible ($81 \gg 40$)  & 64 & 77,5  & Validé \\
+        Arbre 3 & 10 $\times$ 8  & 30 & \textbf{54,2}  & Impossible ($54 \gg 30$)  & 56 & 72,5  & Validé \\
+        Arbre 4 & 8 $\times$ 7   & 25 & \textbf{39,2}  & Impossible ($39 \gg 25$)  & 47 & 72,5  & Validé \\
+        \hline
+    \end{tabular}
+    \label{tab:synthese_clavettes_simple}
+\end{table}
+
+\subsection{Conclusion critique et solution technologique (Double Clavetage)}
+
+\begin{tcolorbox}[colback=BoxBg, colframe=TealAccent, arc=4pt, boxrule=1pt, title=\textbf{Analyse du conflit et optimisation de la conception}]
+L'analyse radiale valide la résistance structurelle des moyeux ($d_f \gg d_{f\min}$, évitant tout effet d'entaille). Cependant, l'encombrement axial d'une clavette unique est bloquant : les longueurs exigées au matage ($39 \text{ à } 141 \text{ mm}$) font quasiment le double de l'épaisseur des engrenages ($25 \text{ à } 50 \text{ mm}$).
+
+\textbf{Solution technologique retenue :} Pour résoudre ce conflit sans altérer les modules, nous adoptons un \textbf{double clavetage en opposition (à 180°)}. Ce montage divise l'effort tangentiel et les longueurs par deux :
+\begin{itemize}
+    \item \textbf{Arbres 3 et 4 :} Longueurs réduites à $\mathbf{27,1 \text{ mm}}$ et $\mathbf{19,6 \text{ mm}}$, s'intégrant parfaitement dans la largeur de taille.
+    \item \textbf{Arbre 2 :} Longueur abaissée à $\mathbf{40,7 \text{ mm}}$, validant le montage quasi-exactement sur la largeur de dent ($40 \text{ mm}$).
+    \item \textbf{Arbre 1 :} Besoin ramené à $\mathbf{70,8 \text{ mm}}$. Un simple débord asymétrique du moyeu permet d'absorber l'excédent de $20 \text{ mm}$ sans complexifier le carter.
+\end{itemize}
+
+\textbf{Avantage industriel :} Outre l'excellent équilibrage dynamique, l'usinage de deux rainures reste beaucoup moins coûteux que le taillage de cannelures internes. De plus, cette solution facilite grandement le montage et démontage de la ligne d'arbres lors de la maintenance de l'hydrolienne.
+\end{tcolorbox}
+
+\end{document}
