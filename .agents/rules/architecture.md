@@ -4,25 +4,30 @@
 
 This workspace supports two clean, modular architectures for LaTeX authoring:
 
-### Layout A: Class-Based Template (`templates/rapport-memoire/`)
-Recommended for theses, dissertations, portfolios, and comprehensive university reports:
+### Layout A: Modèle de Référence (`templates/template_principal/`)
+Le dossier `templates/` héberge plusieurs modèles de documents afin de couvrir différents besoins. Parmi eux, **`templates/template_principal/` est le template principal et pérenne de référence** sur lequel s'appuyer en priorité :
 
 ```text
-templates/rapport-memoire/
-├── README.md                 # Complete documentation and cheatsheet
-├── main.tex                 # Master file (calls chapters, frontmatter, backmatter)
-├── ClasseGuillaume.cls      # Modular KOMA-Script custom class (styling, packages, fonts)
-├── Fonts/                   # Local TrueType / OpenType font families (Asap, Calibri, ComicSans)
-├── images/                  # Institutional and graphic assets (logos, diagrams)
-├── chapters/                # Modular document chapters
-│   ├── 00_frontmatter/      # Title page, abstract, todolist
-│   ├── 01_chapitre1/        # Chapter I modular sections
-│   └── 02_chapitre2/        # Chapter II modular sections
-├── tables/                  # Externalized booktabs/tabularx tables
-├── bib/                     # BibLaTeX database (references.bib)
-├── scripts/                 # Compilation and maintenance scripts (compile.ps1, clean.ps1)
-└── build/                   # Compilation output directory (gitignored)
+templates/template_principal/
+├── README.md                 # Documentation complète et aide-mémoire
+├── main.tex                 # Fichier maître (ordonnance chapitres, frontmatter, backmatter)
+├── ClasseGuillaume.cls      # Classe personnalisée modulaire (KOMA-Script, polices, styles)
+├── Fonts/                   # Polices OpenType / TrueType locales (Asap, Calibri, ComicSans)
+├── images/                  # Ressources graphiques et logos institutionnels
+├── chapters/                # Modules de chapitres
+│   ├── 00_frontmatter/      # Page de titre, résumé, todos
+│   ├── 01_chapitre1/        # Sections modulaires du chapitre 1
+│   └── 02_chapitre2/        # Sections modulaires du chapitre 2
+├── tables/                  # Tableaux booktabs / tabularx externalisés
+├── bib/                     # Base bibliographique BibLaTeX (references.bib)
+├── scripts/                 # Scripts de compilation et nettoyage (compile.ps1, clean.ps1)
+└── build/                   # Dossier de compilation (gitignored)
 ```
+
+### Écosystème des templates (`templates/`) & directives d'évolution
+- **Multiplicité et modularité :** Le répertoire `templates/` contient plusieurs templates adaptés à divers types de documents (rapports, notes de calcul, mémoires, etc.). L'utilisateur peut en ajouter de nouveaux au fil du temps sans avoir à modifier la documentation. Les agents doivent explorer dynamiquement le dossier `templates/` pour découvrir les modèles disponibles selon le contexte.
+- **Rôle pivot de `template_principal` :** `templates/template_principal/` reste le socle de référence structurel et typographique immuable du dépôt.
+- **Liberté d'optimisation et modernisation :** Les templates présents dans `templates/` ne sont pas tous parfaits ou optimaux à ce jour. Si un modèle comporte des mauvaises pratiques (packages obsolètes, formatage rigide, commandes dépréciées, etc.), **l'IA a pleine autorisation de s'en écarter, de moderniser le code et d'ajouter tout package ou macro moderne pertinent** pour garantir un résultat de qualité supérieure.
 
 ### Layout B: Preamble-Folder Layout (`preamble/`) — *Reference Only*
 > **Note:** This layout is documented as a reference architecture for articles and multi-author papers. It is **not currently implemented** in this workspace. Only Layout A is active.

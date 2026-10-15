@@ -6,6 +6,7 @@
   - Content files (`chapters/` or `content/`) must focus on semantic text, sections, and mathematics.
   - Formatting macros, geometry, font definitions, and package configurations belong in dedicated `.cls` classes or `preamble/`.
 - **Reproducibility:** A clean clone of this repository should build deterministically using standard TeX distributions (TeX Live, MiKTeX) via `latexmk`.
+- **Templates Ecosystem & Evolution:** The primary reference template is `templates/template_principal/`. Other templates are located in `templates/` (and new ones may be added dynamically). Because existing templates may not all be optimal yet, agents are explicitly empowered to deviate from suboptimal practices found within them and introduce additional modern packages or refactorings whenever beneficial.
 
 ---
 

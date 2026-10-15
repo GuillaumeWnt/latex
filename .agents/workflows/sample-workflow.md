@@ -23,7 +23,7 @@ Run `latexmk` targeting the master document with LuaLaTeX:
 ```powershell
 latexmk -lualatex -outdir=build -interaction=nonstopmode -synctex=1 main.tex
 ```
-*(Or run `.\scripts\compile.ps1` if using `templates/rapport-memoire/`)*.
+*(Or run `.\scripts\compile.ps1` if using `templates/template_principal/`)*.
 
 ### Step 3: Check Return Status & Log
 - If compilation exits with code 0:

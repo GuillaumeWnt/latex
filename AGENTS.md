@@ -34,6 +34,11 @@
      - **Escalate the issue to the user immediately:** explain clearly why the rule is problematic or ill-adapted in the current context, and suggest modifying or removing it.
      - **Update/remove the rule upon agreement:** with the user's validation, edit the relevant rule file in `.agents/rules/` or `AGENTS.md` so that the documentation stays living, pragmatic, and aligned with real project needs.
 
+6. **Templates Ecosystem (`templates/`) & Evolution Freedom:**
+   - **`template_principal` as Foundation:** Le répertoire `templates/template_principal/` constitue le modèle de référence principal et pérenne sur lequel s'appuyer en priorité (architecture modulaire, `ClasseGuillaume.cls`, compilation LuaLaTeX).
+   - **Modularité et extensibilité :** Le répertoire `templates/` contient plusieurs templates adaptés à divers types de livrables. L'utilisateur peut en ajouter de nouveaux librement. Les agents doivent explorer dynamiquement le dossier `templates/` pour trouver des modèles adaptés au besoin sans dépendre d'une liste fixe de noms.
+   - **Liberté d'optimisation & ajout de packages :** Ces templates ne sont pas tous parvenus à un stade optimal. Les agents ont pleine autorisation de s'écarter de pratiques obsolètes ou sous-optimales présentes dans certains modèles, de moderniser la syntaxe et d'ajouter de nouveaux packages pertinents selon les exigences du projet.
+
 ## 2. Directory Navigation for Agents
 
 Refer to the following `.agents/` resources when working on this repository:

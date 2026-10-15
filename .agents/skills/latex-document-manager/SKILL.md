@@ -14,15 +14,17 @@ This skill provides operational workflows, templates, and scripts for managing L
 ## 1. Fast Scripts & Utilities
 
 Helper scripts are available in the [`scripts/`](./scripts/) directory and directly in templates:
-- **[Compile Document](../../../templates/rapport-memoire/scripts/compile.ps1):** Runs `latexmk -lualatex` targeting `main.tex` and outputs to `build/`.
-- **[Clean Build](../../../templates/rapport-memoire/scripts/clean.ps1):** Cleans auxiliary compilation files.
+- **[Compile Document](../../../templates/template_principal/scripts/compile.ps1):** Runs `latexmk -lualatex` targeting `main.tex` and outputs to `build/`.
+- **[Clean Build](../../../templates/template_principal/scripts/clean.ps1):** Cleans auxiliary compilation files.
 
 ---
 
-## 2. Reusable Templates
+## 2. Reusable Templates & Modular Ecosystem
 
 Ready-to-use document templates are located in [`templates/`](../../../templates/):
-- **[Rapport & Mémoire Universitaire Complet](../../../templates/rapport-memoire/README.md):** Complete academic thesis, portfolio, and report template based on `ClasseGuillaume.cls`, with full LuaLaTeX font support, intelligent todonotes, multiple geometries, and booktabs tables.
+- **[Template Principal (`templates/template_principal/`)](../../../templates/template_principal/README.md):** Complete academic thesis, portfolio, and report template based on `ClasseGuillaume.cls`, with full LuaLaTeX font support, intelligent todonotes, multiple geometries, and booktabs tables. **This is the primary reference template on which to base projects.**
+- **Écosystème modulaire de templates :** Le dossier `templates/` contient plusieurs autres modèles (notes de calcul, rapports techniques, etc.) et l'utilisateur est libre d'en ajouter d'autres à tout moment. L'agent doit explorer dynamiquement le dossier `templates/` pour découvrir les structures pertinentes sans dépendre d'une liste figée.
+- **Liberté d'optimisation :** Ces templates ne sont pas tous parvenus à un état optimal. L'agent est explicitement encouragé à s'écarter de pratiques obsolètes ou déconseillées rencontrées dans certains templates, à moderniser la structure et à introduire tout package moderne nécessaire.
 - **[Article Template](./resources/templates/article-template.tex):** Clean, standard article template with modular preambles.
 
 ---

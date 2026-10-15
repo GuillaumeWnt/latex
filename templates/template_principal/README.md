@@ -9,7 +9,7 @@ Ce modèle est conçu pour produire des mémoires de fin d'études, thèses et r
 Le dossier est organisé selon le principe de **séparation stricte du contenu et du style** :
 
 ```text
-templates/rapport-memoire/
+templates/template_principal/
 ├── README.md                      # Guide d'utilisation et aide-mémoire (ce fichier)
 ├── main.tex                       # Fichier maître (ordonnancement des chapitres)
 ├── ClasseGuillaume.cls            # Classe KOMA-Script enrichie, corrigée et interactive
