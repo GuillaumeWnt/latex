@@ -286,6 +286,7 @@ Les figures ci-dessous représentent l'évolution du nombre de dents $Z$ et du d
             \addplot [red, thick] {17};
             \addlegendentry{Interférence : $Z \ge 17$}
             \addplot[mark=*, black] coordinates {(2.865, 17)};
+            \node[anchor=south west, font=\scriptsize\itshape, fill=BoxBg, draw=TealAccent!50, rounded corners=2pt, inner sep=2.5pt] at (rel axis cs:0.04, 0.04) {* $K$ : termes constants de flexion};
             \end{axis}
         \end{tikzpicture}
     \end{minipage}\hfill
@@ -419,7 +420,7 @@ Afin de quantifier de manière chiffrée l'intérêt de cette optimisation par r
 \small
 \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{3.8cm} X >{\centering\arraybackslash}p{2.6cm}}
     \toprule
-    \textbf{Scénario de conception} & \textbf{Surface frontale d'encombrement} & \textbf{Masse totale des roues} \\
+    \textbf{Scénario de conception} & \textbf{Surface frontale d'encombrement}\textsuperscript{(*)} & \textbf{Masse totale des roues} \\
     \midrule
     \textbf{Module Constant} ($m=5$) & $425 \times 255 = \mathbf{\qty{108375}{\square\milli\meter}}$ & $\approx \mathbf{\qty{66,3}{\kilogram}}$ \\
     \textbf{Module Optimisé}        & $368 \times 255 = \mathbf{\qty{93840}{\square\milli\meter}}$  & $\approx \mathbf{\qty{34,3}{\kilogram}}$ \\
@@ -427,6 +428,8 @@ Afin de quantifier de manière chiffrée l'intérêt de cette optimisation par r
     \textbf{Gain de l'optimisation}  & \textbf{$-$ 13{,}4\,\%}                                       & \textbf{$-$ 48{,}2\,\%} \\
     \bottomrule
 \end{tabularx}
+\vspace{1.5mm}
+{\raggedright \footnotesize \textit{\textsuperscript{(*)} Représente la surface frontale de la boîte de vitesses vue de face avant (selon l'axe du rotor).}\par}
 \end{center}
 
 \textbf{Conclusion :} L'optimisation itérative par étage a permis de réduire l'encombrement frontal de près de \qty{15}{\percent}, améliorant donc l'aérodynamisme de l'ensemble. Mieux encore, \textbf{la masse embarquée a été réduite de \qty{50}{\percent}}, validant pleinement l'effort de conception mené lors de cette étude.
