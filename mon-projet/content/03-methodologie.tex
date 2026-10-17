@@ -171,3 +171,59 @@ Dans le document \LaTeX{}, le code est inséré sans aucune duplication grâce a
 Comme illustré dans le \cref{lst:pipeline-python},
 la mise en page hérite automatiquement de la typographie,
 de la numérotation des lignes et de la palette chromatique (\code{ThesisPrimary}, \code{ThesisAccent}) définies dans \code{config/macros.sty}.
+
+\section{Insertion Propre de Documents et Schémas PDF Externes}
+\label{sec:insertion-pdf}
+
+L'intégration de fichiers au format PDF dans une thèse répond à deux besoins fondamentalement distincts :
+l'inclusion d'illustrations vectorielles d'une part,
+et l'annexion de documents administratifs ou d'articles scientifiques complets d'autre part.
+
+\subsection{Figures vectorielles : résolution infinie et rognage optique}
+Pour les graphiques et schémas issus d'outils externes (Inkscape, Adobe Illustrator, Python ou MATLAB),
+le format vectoriel PDF est la règle absolue :
+contrairement aux images matricielles (\code{.png}, \code{.jpg}),
+il ne pixellise jamais à l'agrandissement et garantit une impression d'une netteté parfaite.
+
+Deux bonnes pratiques indispensables assurent une intégration professionnelle :
+\begin{enumerate}
+  \item \textbf{Omission de l'extension :} ne précisez jamais l'extension \code{.pdf} dans l'instruction :
+  \begin{center}
+    \code{\textbackslash includegraphics[width=0.8\textbackslash textwidth]\{figures/mon-schema\}}
+  \end{center}
+  \LaTeX{} choisira automatiquement le format vectoriel optimal.
+  \item \textbf{Élimination des marges blanches parasites :} les logiciels de dessin exportent souvent une page A4 entière autour d'un petit schéma. Deux méthodes permettent d'isoler la boîte englobante exacte :
+  \begin{itemize}
+    \item \textbf{En amont (recommandé) :} exécuter l'outil en ligne de commande \code{pdfcrop} :
+    \begin{center}
+      \code{pdfcrop --margins 2 figures/mon-schema.pdf figures/mon-schema.pdf}
+    \end{center}
+    \item \textbf{Dans \LaTeX{} :} utiliser les clés de rognage \code{trim} et \code{clip} :
+    \begin{center}
+      \code{\textbackslash includegraphics[trim=10 20 10 20, clip, width=0.7\textbackslash textwidth]\{figures/mon-schema\}}
+    \end{center}
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Documents multipages et publications en annexe : le paquet \code{pdfpages}}
+Pour intégrer des pièces jointes officielles (conventions de recherche, attestations de jury, tirés-à-part d'articles publiés),
+l'emploi de \code{\textbackslash includegraphics} est inadapté car il ne capture que la première page et tronque le document.
+
+Le paquet \code{pdfpages} (\cref{sec:packages-detail}) répond à ce besoin via la commande \code{\textbackslash includepdf}.
+Cependant, son usage direct présente un piège majeur :
+par défaut, le style de page appliqué est \code{empty},
+ce qui supprime les en-têtes et le numéro de page,
+créant une rupture inacceptable dans la pagination continue.
+
+Notre configuration dans \code{macros.sty} propose la commande dédiée :
+\begin{center}
+  \code{\textbackslash includepdfpaper[pages=\{1-3\}]\{figures/sample-annex-doc.pdf\}}
+\end{center}
+
+Cette commande applique deux réglages indispensables :
+\begin{itemize}
+  \item \code{pagecommand=\{\textbackslash thispagestyle\{scrheadings\}\}} :
+  maintient le bandeau supérieur de chapitre et le folio (numéro de page) KOMA-Script au-dessus du document externe.
+  \item \code{scale=0.82} :
+  applique une réduction d'échelle subtile afin que le document annexé ne chevauche pas les en-têtes et respecte la grille typographique de votre ouvrage.
+\end{itemize}

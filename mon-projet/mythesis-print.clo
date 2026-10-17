@@ -13,6 +13,7 @@
   DIV=12
 }
 \recalctypearea
+\raggedbottom
 
 % --- Palette chromatique pour impression (Économie de toner & Contraste) ---
 \definecolor{ThesisPrimary}{RGB}{20, 20, 25}      % Noir chaud / graphite très profond

@@ -99,17 +99,28 @@ Le PDF compilé pour la lecture ou l'impression est généré dans le dossier \c
 Pour faire le ménage et supprimer les fichiers temporaires, utilisez \code{latexmk -c} (nettoyage intermédiaire)
 ou \code{latexmk -C} (nettoyage complet incluant le PDF).
 
-\section{Données Brutes et Graphiques Reproductibles : le Dossier \code{data/}}
-\label{sec:data-pgfplots}
+\section{Traitement de Données et Visualisation avec Python (\code{uv})}
+\label{sec:python-pipeline}
 
-De la même manière que pour le code source,
-les données numériques brutes (mesures expérimentales, métriques de convergence, journaux de calcul)
-ne doivent pas être confondues avec les figures finales dans \code{figures/}.
-Le dossier \code{data/} isole ces fichiers au format standard \code{.csv} ou \code{.tsv}.
+L'exploitation des données scientifiques en thèse repose sur une coopération étroite
+entre les bibliothèques de calcul Python et le moteur de composition \LaTeX{}.
+Pour garantir une reproductibilité stricte et éliminer les conflits de dépendances,
+le projet s'appuie sur le gestionnaire moderne \code{uv} et son environnement virtuel dédié (\code{pyproject.toml}).
 
-Grâce au paquet \code{pgfplots}, \LaTeX{} génère les courbes directement à partir des données sources brutes,
-sans passer par un export PNG ou PDF intermédiaire.
-Le \cref{fig:courbe-csv} est produit en temps réel à partir de \code{data/benchmark-results.csv} :
+Le script d'orchestration \code{scripts/generate\_plots.py} s'exécute en une commande :
+\begin{center}
+  \code{uv run python scripts/generate\_plots.py}
+\end{center}
+
+Il matérialise deux flux d'ingénierie distincts selon la densité et la nature de vos représentations graphiques :
+
+\subsection[Cas 1 : Données tabulaires compactes vers Tracé vectoriel natif]{Cas 1 : Données tabulaires compactes \texorpdfstring{$\to$}{vers} Tracé vectoriel natif \texorpdfstring{\code{pgfplots}}{pgfplots}}
+\label{subsec:cas1-pgfplots}
+
+Pour des courbes 2D (quelques dizaines à quelques centaines de points),
+la méthode d'excellence consiste à exporter un fichier CSV compact dans \code{data/benchmark-results.csv}.
+Le tracé est ensuite entièrement composé par le paquet \code{pgfplots} dans le manuscrit,
+comme illustré sur le \cref{fig:courbe-csv} :
 
 \begin{figure}[htbp]
   \centering
@@ -124,37 +135,118 @@ Le \cref{fig:courbe-csv} est produit en temps réel à partir de \code{data/benc
       xmin=1, xmax=20,
       ymin=50, ymax=102,
       legend pos=south east,
-      legend style={font=\footnotesize\sffamily, fill=white, fill opacity=0.85}
+      legend cell align={left},
+      legend style={
+        draw=ThesisSecondary!35,
+        line width=0.6pt,
+        fill=white,
+        fill opacity=0.92,
+        text opacity=1,
+        rounded corners=2pt,
+        font=\footnotesize\sffamily,
+        inner sep=4.5pt
+      }
     ]
       \addplot[
         color=ThesisPrimary,
         line width=1.3pt,
         mark=*,
         mark size=1.8pt
-      ] table[x=Iteration, y=Accuracy, col sep=comma] {data/benchmark-results.csv};
+      ] table[x=Iteration, y=AccuracyProposed, col sep=comma] {data/benchmark-results.csv};
       \addlegendentry{Architecture modulaire proposée}
 
       \addplot[
-        color=ThesisSecondary,
+        color=ThesisAccent,
         line width=1.1pt,
         dashed,
         mark=square*,
         mark size=1.6pt
-      ] table[x=Iteration, y=LossBaseline, col sep=comma] {data/benchmark-results.csv};
+      ] table[x=Iteration, y=AccuracyBaseline, col sep=comma] {data/benchmark-results.csv};
       \addlegendentry{Modèle standard de référence}
     \end{axis}
   \end{tikzpicture}
-  \caption[Courbes de performance issues des données brutes CSV]{Courbes de performance générées en temps réel depuis le fichier brut \code{data/benchmark-results.csv}}
+  \caption[Courbes comparatives de précision générées depuis un CSV]{Convergence comparée de la précision (\%) générée en temps réel par \code{pgfplots} depuis \code{data/benchmark-results.csv}}
   \label{fig:courbe-csv}
 \end{figure}
 
-Cette approche offre deux garanties capitales pour une thèse :
+Comme visible sur le \cref{fig:courbe-csv}, les deux dynamiques partagent la même échelle verticale :
+l'architecture proposée franchit le seuil des \SI{98}{\percent} dès la douzième itération,
+tandis que le modèle de référence plafonne à \SI{83}{\percent}.
+L'harmonie typographique est totale : les fontes, graisses et espacements sont rigoureusement identiques à ceux du corps de texte.
+
+\subsection[Cas 2 : Visualisation 3D complexe vers Export vectoriel direct]{Cas 2 : Visualisation 3D complexe \texorpdfstring{$\to$}{vers} Export vectoriel direct via Python}
+\label{subsec:cas2-python3d}
+
+À l'inverse, dès qu'une figure met en jeu des représentations denses (surfaces tridimensionnelles,
+cartes thermiques à forte résolution ou nuages de plus de \num{10000} points),
+demander à \LaTeX{} d'en calculer le maillage provoque une saturation immédiate de la mémoire TeX
+et multiplie le temps de compilation par dix.
+
+Pour ces cas exigeants, le script Python pré-calcule la projection géométrique
+et exporte directement une figure vectorielle dans \code{figures/python-3d-surface.pdf}.
+Le document \LaTeX{} se contente de l'inclure instantanément via \code{\textbackslash includegraphics} (\cref{fig:surface-3d}) :
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.84\textwidth]{figures/python-3d-surface}
+  \caption[Paysage d'optimisation 3D généré par Python et \code{uv}]{Paysage de coût tridimensionnel non-convexe et trajectoire de descente générés par Matplotlib via l'environnement \code{uv} (\code{scripts/generate\_plots.py})}
+  \label{fig:surface-3d}
+\end{figure}
+
+Pour garantir une harmonisation visuelle sans faille, le script Python respecte deux consignes strictes :
 \begin{enumerate}
-  \item \textbf{La reproductibilité scientifique :} si vos simulations sont ré-exécutées,
-  il vous suffit d'écraser le fichier \code{.csv} pour que les courbes du mémoire se mettent à jour automatiquement.
-  \item \textbf{L'harmonie typographique absolue :} les axes, graduations et légendes
-  utilisent exactement la même police et les mêmes corps de texte que le reste de votre manuscrit.
+  \item \textbf{Échelle d'empagement calibrée :} les dimensions sont fixées par \code{figsize=(5.6, 3.8)} pouces,
+  évitant tout redimensionnement qui altérerait la taille des étiquettes d'axes.
+  \item \textbf{Palette chromatique coordonnée :} le dégradé de surface s'appuie sur les couleurs du document
+  (\code{ThesisPrimary}, \code{ThesisSecondary} et \code{ThesisAccent}).
 \end{enumerate}
+
+\section{Interactivité PDF Avancée : les Calques OCG}
+\label{sec:interactivite-ocg}
+
+\subsection{Démystifier l'interactivité et compatibilité des visionneuses}
+L'ajout de calques interactifs (\textit{Optional Content Groups} ou OCG, norme ISO 32000-1)
+via le paquet \code{ocgx2} permet d'alléger un manuscrit en proposant des lectures à plusieurs niveaux.
+Toutefois, son comportement dépend de la visionneuse PDF employée :
+
+\begin{itemize}
+  \item \textbf{Visionneuse intégrée VS Code / Navigateurs web (\code{pdf.js}) :}
+  ces lecteurs légers n'implémentent pas les actions interactives sur les liens (\code{/SetOCGState}).
+  Cliquer sur un bouton y reste inopérant par limitation du lecteur web.
+  \item \textbf{Lecteurs PDF complets (Adobe Acrobat Reader, Foxit, PDF-XChange) :}
+  les boutons de bascule fonctionnent immédiatement et permettent d'afficher ou masquer les couches en un clic.
+  Les calques sont également pilotables depuis le panneau latéral « Calques » de l'application.
+  \item \textbf{Version papier (\code{[print]}) :}
+  les boutons sont automatiquement omis sur le support imprimé (\code{printflg=never}).
+\end{itemize}
+
+\subsection[Cas d'usage : Encadré à bascule interactive]{Cas d'usage : Encadré à bascule interactive (Synthèse \texorpdfstring{$\longleftrightarrow$}{vs} Détails)}
+L'encadré ci-dessous illustre une application professionnelle et sobre de cette technologie :
+un bouton permet d'alterner entre une synthèse textuelle concise et le relevé exhaustif des données :
+
+\begin{callout}[Encadré Interactif : Vue Synthétique vs Détails Métriques]
+  \noindent
+  \ocgbutton{ocg_box_syn ocg_box_det}{%
+    Basculer la vue : Synthèse $\longleftrightarrow$ Métriques détaillées%
+  }
+  \par\vspace{8pt}
+  \begin{ocg}{Vue Synthétique}{ocg_box_syn}{1}
+    \textbf{Comportement asymptotique de l'optimiseur :}\par
+    La convergence exponentielle observée sur l'architecture modulaire démontre que la décroissance de la perte suit la loi $\mathcal{L}(t) = \mathcal{L}_\infty + \alpha \mathrm{e}^{-\beta t}$.
+    Le découplage structurel élimine les interférences de gradient et stabilise le conditionnement du système.
+  \end{ocg}%
+  \begin{ocg}{Tableau Détaillé}{ocg_box_det}{0}
+    \textbf{Relevé comparatif des performances à convergence :}\par\vspace{4pt}
+    \begin{tabularx}{\linewidth}{@{} >{\raggedright\arraybackslash}X r r r @{}}
+      \toprule
+      \textbf{Configuration} & \textbf{Précision finale} & \textbf{Perte résiduelle} & \textbf{Gain mesuré} \\
+      \midrule
+      Modèle de référence    & \SI{82.4}{\percent}       & 0.305                     & Référence \\
+      Architecture proposée  & \SI{98.9}{\percent}       & 0.084                     & $+$\SI{16.5}{\percent} \\
+      \bottomrule
+    \end{tabularx}
+  \end{ocg}
+\end{callout}
 
 \section{Outillage de Qualité Logicielle : \code{.editorconfig} et \code{.chktexrc}}
 \label{sec:qualite-outils}

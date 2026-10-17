@@ -135,5 +135,36 @@
 \crefname{lstlisting}{listing}{listings}
 \Crefname{lstlisting}{Listing}{Listings}
 
+% --- Macros d'interactivité PDF légère et utile (paquet ocgx2) ---
+% Bouton interactif discret pour basculer un ou plusieurs calques vectoriels
+\newcommand{\ocgbutton}[2]{%
+  \switchocg{#1}{%
+    \setlength{\fboxsep}{3.5pt}%
+    \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
+      \small\sffamily\bfseries\textcolor{ThesisPrimary}{#2}%
+    }%
+  }%
+}
+
+% Bouton de sélection exclusive : active le calque #1 et masque le calque #2
+\newcommand{\ocgselectbutton}[3]{%
+  \actionsocg{}{#1}{#2}{%
+    \setlength{\fboxsep}{3.5pt}%
+    \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
+      \small\sffamily\bfseries\textcolor{ThesisPrimary}{#3}%
+    }%
+  }%
+}
+
+% --- Inclusion propre de documents PDF externes (paquet pdfpages) ---
+% Préserve le folio et les en-têtes de la thèse avec facteur d'échelle sécurisé
+\newcommand{\includepdfpaper}[2][pages=-]{%
+  \includepdf[%
+    #1,%
+    scale=0.82,%
+    pagecommand={\thispagestyle{scrheadings}}%
+  ]{#2}%
+}
+
 \endinput
 
