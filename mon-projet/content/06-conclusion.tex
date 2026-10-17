@@ -1,6 +1,6 @@
 %% ==============================================================================
-%% content/05-conclusion.tex
-%% Chapitre 5 : Conclusion Générale et Perspectives
+%% content/06-conclusion.tex
+%% Chapitre 6 : Conclusion Générale et Perspectives
 %% Encadre la thèse symétriquement à l'Introduction Générale
 %% ==============================================================================
 \chapter{Conclusion Générale et Perspectives}
@@ -16,16 +16,16 @@ la conclusion générale prend de la hauteur pour dresser le bilan critique des 
 évaluer la portée des résultats obtenus et tracer les lignes de fuite pour les recherches futures.
 
 Noyer la conclusion à la fin du dernier chapitre de résultats constitue un écueil fréquent.
-En isolant la conclusion générale dans son propre module (\code{content/05-conclusion.tex} ou \code{content/conclusion.tex}),
+En isolant la conclusion générale dans son propre module (\code{content/06-conclusion.tex} ou \code{content/conclusion.tex}),
 vous offrez au jury et aux lecteurs une vision d'ensemble claire et détendue des résultats.
 
 \begin{callout}[Numérotation : \code{\textbackslash chapter} ou \code{\textbackslash addchap} ?]
 Selon les traditions doctorales de votre établissement, deux conventions sont possibles :
 \begin{enumerate}
-  \item \textbf{Chapitre numéroté classique (\code{\textbackslash chapter\{Conclusion Générale\}}) :}
+  \item \textbf{Chapitre numéroté classique (\code{\textbackslash chapter}) :}
   s'intègre dans le décompte séquentiel des chapitres (ex. Chapitre~5).
-  \item \textbf{Chapitre d'ouverture/fermeture non numéroté (\code{\textbackslash addchap\{Conclusion Générale\}}) :}
-  KOMA-Script propose la commande dédiée \code{\textbackslash addchap}.
+  \item \textbf{Chapitre non numéroté (\code{\textbackslash addchap}) :}
+  KOMA-Script propose la commande dédiée \code{\textbackslash addchap\{Conclusion Générale\}}.
   Elle compose le titre avec la même majesté typographique qu'un chapitre numéroté,
   l'insère dans la table des matières (\code{TOC})
   et met à jour les en-têtes de page courants, tout en omettant le préfixe numérique.
@@ -56,11 +56,11 @@ des projets \LaTeX{} volumineux en formalisant six piliers méthodologiques :
   \item \textbf{La reproductibilité typographique multi-plateforme :}
   le stockage des polices OpenType dans le répertoire \code{fonts/}
   immunise le projet contre les variations d'OS (Windows, Linux, macOS, Overleaf ou CI/CD).
-  \item \textbf{Citations et bibliographie :}
-  découplage net entre sources (\code{references.bib}),
-  mise en page finale (\code{custom-style.bbx})
-  et citations cliquables (\code{custom-style.cbx})
-  offre une grande liberté sans la complexité des anciens fichiers BST.
+  \item \textbf{Bibliographie modulaire :}
+  l'isolation des notices sources (\code{references.bib}),
+  de la feuille de style (\code{custom-style.bbx})
+  et des formats de citation (\code{custom-style.cbx})
+  garantit une personnalisation sans faille.
   \item \textbf{L'outillage qualité automatisé :}
   la présence conjointe de \code{latexmkrc} (confinement de la compilation dans \code{build/}),
   de \code{.editorconfig} (uniformisation de l'indentation à deux espaces)

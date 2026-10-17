@@ -6,6 +6,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{mythesis}[2026/10/17 v1.0 Modern Modular Academic Book Class]
 
+% --- Correction préventive des avertissements de packages tiers avec KOMA-Script ---
+\RequirePackage{scrhack}
+
 % --- Gestion des options de classe ---
 \newif\ifmythesis@print
 \mythesis@printfalse
@@ -18,6 +21,19 @@
   \mythesis@printfalse
   \@expandtwoargs\@removeelement{screen}\@classoptionslist\@classoptionslist
 }
+
+% Option pour activer les notes marginales et la collaboration (todonotes)
+\newif\ifmythesis@todos
+\mythesis@todosfalse
+\DeclareOption{todos}{%
+  \mythesis@todostrue
+  \@expandtwoargs\@removeelement{todos}\@classoptionslist\@classoptionslist
+}
+\DeclareOption{todoNote}{%
+  \mythesis@todostrue
+  \@expandtwoargs\@removeelement{todoNote}\@classoptionslist\@classoptionslist
+}
+
 % Transmettre toute autre option à la classe de base scrbook
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
 
@@ -32,9 +48,10 @@
   numbers=noenddot,
   chapterprefix=false
 ]{scrbook}
+\KOMAoptions{usegeometry=true}
 
 % --- Chargement précoce de la gestion des couleurs ---
-\RequirePackage{xcolor}
+\RequirePackage[dvipsnames]{xcolor}
 
 % --- Chargement du fichier d'options spécifique (.clo) ---
 \ifmythesis@print
@@ -54,6 +71,22 @@
 \NewDocumentCommand{\ifprint}{m m}{\ifprintversion#1\else#2\fi}
 \NewDocumentCommand{\screenonly}{+m}{\ifprintversion\else#1\fi}
 \NewDocumentCommand{\printonly}{+m}{\ifprintversion#1\fi}
+
+% Conditionnel public pour les notes de révision et tâches collaboratives
+\newif\ifusetodos
+\ifmythesis@todos
+  \usetodostrue
+\else
+  \usetodosfalse
+\fi
+
+% --- Pénalités typographiques strictes (élimination des lignes veuves et orphelines) ---
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\doublehyphendemerits=10000
+\brokenpenalty=10000
+\interfootnotelinepenalty=9999
 
 % --- Définition des métadonnées du document ---
 \newcommand{\institution}[1]{\def\mythesis@institution{#1}}
@@ -119,8 +152,81 @@
   \ohead{\pagemark}
 \fi
 
-% Configuration du style plain (pages de titre de chapitre, etc.)
-\pagestyle{scrheadings}
+% --- Logo institutionnel en calque d'arrière-plan dynamique (scrlayer) ---
+\newcommand{\thesislogo}[1]{\def\mythesis@logo{#1}}
+\thesislogo{figures/logo.pdf}
+
+\DeclareNewLayer[
+  background,
+  topmargin,
+  align=tr,
+  hoffset=\paperwidth-2.3cm,
+  voffset=1.0cm,
+  width=2cm,
+  height=2cm,
+  contents={%
+    \ifx\mythesis@logo\empty\else
+      \IfFileExists{\mythesis@logo}{%
+        \includegraphics[width=1.4cm]{\mythesis@logo}%
+      }{}%
+    \fi
+  }
+]{thesis.logo.layer}
+
+\AddLayersToPageStyle{scrheadings}{thesis.logo.layer}
+
+\newcommand{\masquerLogo}{\ModifyLayer[contents={}]{thesis.logo.layer}}
+\newcommand{\afficherLogo}{%
+  \ModifyLayer[contents={%
+    \ifx\mythesis@logo\empty\else
+      \IfFileExists{\mythesis@logo}{%
+        \includegraphics[width=1.4cm]{\mythesis@logo}%
+      }{}%
+    \fi
+  }]{thesis.logo.layer}%
+}
+
+% --- Style de page de débogage / diagnostic d'édition ---
+\newpairofpagestyles{ThesisDebug}{
+  \clearpairofpagestyles
+  \automark[section]{chapter}
+  \ihead{\normalfont\ttfamily\footnotesize\textcolor{ThesisPrimary}{[\jobname.tex]}}
+  \chead{\normalfont\sffamily\tiny\bfseries\textcolor{ThesisAccent}{[DEBUG / REVISION]}}
+  \ohead{\normalfont\sffamily\small\bfseries\headmark}
+  \ifmythesis@print
+    \lefoot{\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}}
+    \rofoot{\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}}
+  \else
+    \cfoot{\normalfont\ttfamily\footnotesize Page \thepage{} sur \pageref{LastPage}}
+  \fi
+}
+
+% --- Style de page épuré "Focus" (pour grands tableaux et schémas pleine page) ---
+\newpairofpagestyles{StyleFocus}{
+  \clearpairofpagestyles
+  \cfoot{\normalfont\sffamily\footnotesize\textcolor{ThesisMuted}{---\,\pagemark\,---}}
+}
+
+% Commandes explicites d'activation des styles avec synchronisation des filets de séparation
+\newcommand{\activerStyleDebug}{%
+  \cleardoublepage%
+  \KOMAoptions{headsepline=0.8pt, footsepline=0.4pt}%
+  \pagestyle{ThesisDebug}%
+}
+
+\newcommand{\activerStyleFocus}{%
+  \cleardoublepage%
+  \KOMAoptions{headsepline=false, footsepline=false}%
+  \pagestyle{StyleFocus}%
+}
+
+\newcommand{\activerStyleStandard}{%
+  \cleardoublepage%
+  \KOMAoptions{headsepline=0.5pt, footsepline=false}%
+  \pagestyle{scrheadings}%
+}
+
+\activerStyleStandard
 
 % --- Injection automatique des métadonnées dans le PDF via hyperref ---
 \AtBeginDocument{
@@ -131,6 +237,14 @@
     pdfkeywords={\mythesis@keywords},
     pdfcreator={LuaLaTeX with KOMA-Script scrbook and mythesis class}
   }
+}
+
+% Protection contre les caractères et sauts de ligne dans les signets PDF
+\pdfstringdefDisableCommands{%
+  \let\\\space
+  \let\code\texttt
+  \let\term\@firstofone
+  \let\textbullet\space
 }
 
 \endinput

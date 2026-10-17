@@ -43,6 +43,29 @@
 % Micro-typographie (crénage optique, saillie des marges)
 \RequirePackage{microtype}
 
+% --- Géométrie de page dynamique et assouplie (compatible KOMA usegeometry) ---
+\RequirePackage{geometry}
+\geometry{headheight=26pt, footskip=30pt}
+
+% Totalisation des pages (pour styles de débogage et folios X sur Y)
+\RequirePackage{lastpage}
+
+% --- Rotation dynamique de pages en mode paysage avec orientation PDF ---
+\RequirePackage{pdflscape}
+
+% --- Composition multi-colonnes dynamique et équilibrée ---
+\RequirePackage{multicol}
+
+% Outils d'analyse de chaînes (troncature dynamique des notes)
+\RequirePackage{xstring}
+
+% Surlignage haute fidélité compatible césure et UTF-8 sous LuaLaTeX
+\ifluatex
+  \RequirePackage{luacolor}
+  \RequirePackage{lua-ul}
+\fi
+\providecommand{\highLight}[2][yellow!30]{#2}
+
 % --- Langues et typographie internationale ---
 % Le français est déclaré en dernier pour être la langue par défaut
 \RequirePackage[english, french]{babel}
@@ -98,7 +121,8 @@
   calc,
   fit,
   backgrounds,
-  shapes.geometric
+  shapes.geometric,
+  shadows
 }
 
 % --- Option B (Alternative) : Externalisation automatique TikZ avec dossier build/ ---
@@ -117,6 +141,21 @@
 % Boîtes d'enrichissement visuel (callouts, encadrés)
 \RequirePackage[skins, breakable]{tcolorbox}
 
+% --- Collaboration, révisions et notes marginales (todonotes) ---
+\ifusetodos
+  \setlength{\marginparwidth}{2.2cm}
+  \RequirePackage[colorinlistoftodos, loadshadowlibrary, shadow]{todonotes}
+  \setuptodonotes{size=\tiny, color=ThesisPrimary!20}
+  % Chargement sécurisé de soul & pdfcomment sans avertissement de package obsolète
+  \RequirePackage{soul}
+  \makeatletter
+  \@namedef{ver@soulutf8.sty}{3000/01/01}
+  \makeatother
+  \RequirePackage{pdfcomment}
+\else
+  \RequirePackage[colorinlistoftodos, disable]{todonotes}
+\fi
+
 % --- Courbes scientifiques de données brutes (data/*.csv) ---
 \RequirePackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -134,6 +173,9 @@
   backend=biber,
   style=biblio/custom-style
 ]{biblatex}
+
+% Césure irréprochable de toutes les URL (notes de marge, bibliographie)
+\RequirePackage{xurl}
 
 % --- Navigation hypertexte et métadonnées PDF ---
 \RequirePackage{hyperref}

@@ -227,3 +227,113 @@ Cette commande applique deux réglages indispensables :
   \item \code{scale=0.82} :
   applique une réduction d'échelle subtile afin que le document annexé ne chevauche pas les en-têtes et respecte la grille typographique de votre ouvrage.
 \end{itemize}
+
+\section{Flexibilité de Mise en Page : Géométries Multiples et Logo Dynamique}
+\label{sec:geometries-logo}
+
+\subsection{Assouplir KOMA-Script sans casser la maquette : l'alliance avec \code{geometry}}
+Par défaut, le moteur \code{typearea} de KOMA-Script applique une règle d'empagement stricte (\code{DIV=12}),
+calculée selon les proportions canoniques de l'imprimerie pour offrir une ligne de 65 à 75 caractères.
+Si cette rigueur garantit un confort de lecture optimal pour le corps du texte,
+elle devient pénalisante pour trois situations typiques d'une thèse :
+la page de garde (qui exige des marges réduites pour aérer les blocs institutionnels),
+les grands tableaux récapitulatifs ou paysagers,
+et la phase de révision collaborative qui requiert une marge latérale généreuse pour accueillir les annotations.
+
+Grâce à l'activation conjointe de la directive \code{usegeometry=true} dans \code{mythesis.cls}
+et du paquet \code{geometry}, notre architecture fournit trois commandes directes et sécurisées :
+
+\begin{itemize}
+  \item \code{\textbackslash geometrieLarge} : applique des marges compactes de \SI{1.5}{\centi\meter} à gauche et droite,
+  et \SI{1.8}{\centi\meter} en haut et bas. Elle maximise la surface utile (\SI{18}{\centi\meter} de largeur)
+  sans modifier le style des en-têtes.
+  \item \code{\textbackslash geometrieWord} (ou \code{\textbackslash geometrieAnnotation}) :
+  instaure des marges symétriques de \SI{2.5}{\centi\meter} tout en allouant une marge marginale dédiée
+  de \SI{2.5}{\centi\meter} (\code{marginparwidth}) avec un séparateur de \SI{3}{\milli\meter}.
+  C'est le profil idéal lors des phases de relecture active avec \code{\textbackslash todoH}.
+  \item \code{\textbackslash geometrieStandard} : restaure immédiatement la géométrie canonique KOMA-Script (\code{DIV=12}).
+\end{itemize}
+
+\begin{boiteSynthese}{Sécurité de transition entre géométries}
+Chacune de ces commandes intègre un appel automatique à \code{\textbackslash cleardoublepage} avant d'appliquer les nouvelles marges.
+Cette précaution empêche tout chevauchement de paragraphe entre deux pages de proportions distinctes.
+\end{boiteSynthese}
+
+\subsection{Le logo institutionnel en calque d'arrière-plan dynamique (\code{scrlayer})}
+L'approche naïve consistant à insérer un logo dans l'en-tête via \code{\textbackslash ohead}
+présente un défaut majeur : elle oblige à agrandir \code{headheight},
+ce qui compresse l'espace de texte vertical sur l'ensemble du volume.
+
+Notre classe exploite la puissance du moteur de couches \code{scrlayer} de KOMA-Script.
+Le logo est déclaré comme un calque flottant indépendant (\code{thesis.logo.layer}) :
+il est positionné de manière dynamique en coordonnées absolues par rapport au bord supérieur droit de la feuille,
+sans jamais impacter la boîte de texte ni modifier la hauteur des en-têtes.
+
+Le pilotage est immédiat grâce à deux commandes :
+\begin{itemize}
+  \item \code{\textbackslash masquerLogo} : désactive le calque (automatique dans le \code{\textbackslash frontmatter}).
+  \item \code{\textbackslash afficherLogo} : réactive le calque à l'ouverture du \code{\textbackslash mainmatter}.
+\end{itemize}
+Vous pouvez personnaliser l'image cible via \code{\textbackslash thesislogo\{chemin/vers/logo.pdf\}}.
+
+\section{Système d'Annotations Collaboratives \texttt{\textbackslash todoH} et Mode Publication}
+\label{sec:collaboration-todoh}
+
+La relecture entre doctorant, directeurs de thèse et rapporteurs est un moment décisif.
+Si le paquet standard \code{todonotes} est répandu, il souffre de trois limitations majeures :
+les commentaires longs débordent sous la page,
+les caractères accentués sous les paquets de soulignement traditionnels provoquent des erreurs,
+et le texte surligné dans le corps n'offre aucun lien direct vers la liste récapitulative.
+
+Notre classe surmonte l'ensemble de ces verrous grâce à la macro exclusive \code{\textbackslash todoH}.
+
+\subsection{Les atouts de la commande \texttt{\textbackslash todoH}}
+La syntaxe générale s'articule autour de quatre arguments :
+\begin{center}
+  \code{\textbackslash todoH[style][couleur]\{commentaire\_marge\}\{texte\_surligné\}}
+\end{center}
+
+\begin{enumerate}
+  \item \textbf{Surlignage robuste sous Lua\LaTeX{} (\code{lua-ul} et \code{luacolor}) :}
+  le surlignage s'adapte sans effort aux césures, aux ligatures et aux caractères accentués UTF-8 sans corrompre la compilation.
+  \item \textbf{Troncature automatique des messages ($> 30$ caractères) :}
+  pour éviter la saturation visuelle de la marge, la longueur de la chaîne est analysée par \code{xstring} et tronquée à 30 caractères.
+  \item \textbf{Infobulle contextuelle interactive (\code{pdfcomment}) :}
+  dans votre visionneuse PDF (Acrobat Reader, Foxit, PDF-XChange),
+  \textbf{un simple survol de la souris sur la note dans la marge affiche une bulle dépliant l'intégralité du message !}
+  \item \textbf{Protection des commandes \LaTeX{} et liens Web (\code{xurl}) :}
+  si le commentaire contient une commande (ex. \code{\textbackslash url\{...\}}), la troncature est suspendue pour préserver l'intégrité du lien cliquable.
+  \item \textbf{Lien retour vers le tableau de bord :}
+  un clic sur le texte surligné téléporte directement le lecteur vers le \code{\textbackslash thesistodolist} situé au début du manuscrit.
+\end{enumerate}
+
+\subsection{Démonstration en cours de rédaction}
+Voici deux exemples illustrant ce mécanisme en action :
+
+Dans ce paragraphe, nous simulons une directive méthodologique : \todoH[DirectorStyle][ThesisSecondary!30]{Préciser les conditions initiales de température et de pression du banc de test}{le protocole expérimental appliqué ici} garantit une reproductibilité complète.
+Survolez la note dans la marge pour lire la directive complète, ou cliquez sur le passage surligné pour rejoindre le tableau de bord des révisions.
+
+Dans ce second cas, nous incluons une ressource normative : \todoH[AuthorStyle][ThesisAccent!30]{Vérifier les critères sur \url{https://ctan.org/pkg/todonotes}}{la conformité avec les spécifications du système}.
+
+\subsection{Réservation de figures provisoires avec \texttt{\textbackslash missingfigure}}
+Lorsqu'un schéma expérimental ou une photographie de microscope est encore en cours d'acquisition,
+inutile de bloquer la rédaction : la commande \code{\textbackslash missingfigure} réserve l'espace dans la grille :
+
+\begin{figure}[htbp]
+  \centering
+  \missingfigure[figwidth=0.82\textwidth, figcolor=ThesisSecondary!20]{Banc expérimental optomécanique en cours d'étalonnage}
+  \caption{Dispositif de métrologie interférométrique (figure provisoire réservée)}
+  \label{fig:emplacement-reserve}
+\end{figure}
+
+Cette figure provisoire (\cref{fig:emplacement-reserve}) s'inscrit automatiquement dans le tableau récapitulatif des tâches.
+
+\subsection{Bascule instantanée vers la publication finale}
+Pour produire le manuscrit final à remettre au jury ou à l'imprimeur,
+il n'est nullement nécessaire de traquer et supprimer manuellement les dizaines de notes disséminées :
+il suffit de retirer l'option \code{todos} dans \code{main.tex} :
+\begin{center}
+  \code{\textbackslash documentclass[screen]\{mythesis\}} \quad ou \quad \code{\textbackslash documentclass[print]\{mythesis\}}
+\end{center}
+Instantanément, toutes les notes de marge, infobulles, surlignages et le tableau récapitulatif
+sont neutralisés sans laisser la moindre trace dans le PDF publié.

@@ -1,6 +1,6 @@
 %% ==============================================================================
-%% content/04-resultats.tex
-%% Chapitre 4 : Bibliographie Programmable et Compilation Automatisée (biblio/ & latexmkrc)
+%% content/05-resultats.tex
+%% Chapitre 5 : Bibliographie Programmable et Compilation Automatisée (biblio/ & latexmkrc)
 %% ==============================================================================
 \chapter{Bibliographie Programmable et Compilation Automatisée}
 \label{chap:biblio-compilation}
@@ -64,7 +64,8 @@ Dans le corps de texte, le fichier \code{custom-style.cbx} gouverne la façon do
   \item \textbf{Gestion des co-auteurs :}
   le réglage \code{maxcitenames=2} assure que les articles ayant jusqu'à deux auteurs
   affichent les deux noms (ex. \textcite{mittelbach2023latex}),
-  tandis qu'au-delà de deux auteurs, la mention « et al. » est automatiquement insérée (ex. \textcite{lehman2024biblatex}).
+  tandis qu'au-delà de deux auteurs,
+  la formule « et al. » est insérée (ex. \textcite{lehman2024biblatex}).
   \item \textbf{Lien hypertexte intégral :}
   l'auteur et l'année sont cliquables, téléportant le lecteur directement sur la notice correspondante.
 \end{itemize}
@@ -262,7 +263,7 @@ Le traitement des calques et des boutons interactifs met en lumière la puissanc
   le bouton interactif s'affiche et permet d'alterner dynamiquement entre la synthèse et le tableau, grâce à la superposition géométrique parfaite \code{\textbackslash ocgstack} pilotée par TikZ.
   \item \textbf{En profil imprimé (\code{\textbackslash documentclass[print]\{mythesis\}})} :
   \begin{enumerate}
-    \item Les boutons interactifs (\code{\textbackslash ocgbutton}) sont **strictement omis** via \code{\textbackslash screenonly} : aucun bouton orphelin ou inopérant n'apparaît sur la feuille de papier.
+    \item Les boutons interactifs (\code{\textbackslash ocgbutton}) sont \textbf{strictement omis} via \code{\textbackslash screenonly} : aucun bouton orphelin ou inopérant n'apparaît sur la feuille de papier.
     \item Les calques PDF (\code{ocg}) sont neutralisés pour supprimer tout objet OCG risquant de perturber les imprimantes professionnelles ou les RIP offset.
     \item La macro \code{\textbackslash ocgstack[both]\{...\}\{...\}} aplatit les deux contenus de manière séquentielle et aérée : le lecteur papier bénéficie ainsi à la fois du paragraphe de synthèse ET du tableau de données sans perte d'information.
     (Il est possible de ne conserver qu'une seule vue sur papier en spécifiant l'option \code{\textbackslash ocgstack[first]} ou \code{\textbackslash ocgstack[second]}).

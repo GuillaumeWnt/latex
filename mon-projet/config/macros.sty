@@ -8,7 +8,7 @@
 % --- Notations mathématiques sémantiques ---
 % Vecteurs et matrices en gras droit / italique
 \newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
-\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\mat}[1]{\boldsymbol{\mathbf{#1}}}
 
 % Ensembles usuels
 \newcommand{\setR}{\mathbb{R}}
@@ -103,11 +103,126 @@
   after skip=12pt
 }
 
+% Boîte de synthèse mise en valeur (inspirée de ClasseGuillaume)
+\newtcolorbox{boiteSynthese}[2][]{%
+  enhanced,
+  breakable,
+  colback=ThesisPrimary!5,
+  colframe=ThesisPrimary,
+  coltitle=white,
+  colbacktitle=ThesisPrimary,
+  fonttitle=\bfseries\sffamily\small,
+  title={#2},
+  arc=3pt,
+  boxrule=0.9pt,
+  before skip=12pt,
+  after skip=12pt,
+  #1
+}
+
+% Cadre pour figure / schéma vectoriel centré
+\newtcolorbox{cadreFigure}[1][]{%
+  enhanced,
+  colframe=ThesisPrimary!70,
+  colback=white,
+  boxrule=1pt,
+  arc=6pt,
+  halign=center,
+  before skip=10pt,
+  after skip=10pt,
+  #1
+}
+
 % Déclaration des alias cleveref pour nos compteurs personnalisés
 \crefname{hypocounter}{hypothèse}{hypothèses}
 \Crefname{hypocounter}{Hypothèse}{Hypothèses}
 \crefname{deficounter}{définition}{définitions}
 \Crefname{deficounter}{Définition}{Définitions}
+
+% --- Alternance dynamique des géométries de page (geometry + KOMA) ---
+% 1. Restauration de la géométrie canonique KOMA (DIV=12)
+\newcommand{\geometrieStandard}{%
+  \cleardoublepage%
+  \restoregeometry%
+}
+
+% 2. Géométrie large / pleine page (1.5cm bords, 1.8cm haut/bas) pour grands tableaux, posters ou annexes
+\newcommand{\geometrieLarge}{%
+  \cleardoublepage%
+  \newgeometry{
+    left=1.5cm, right=1.5cm,
+    top=1.8cm, bottom=1.8cm,
+    headheight=26pt, headsep=10pt,
+    footskip=26pt, footnotesep=8pt,
+    marginparwidth=0mm, marginparsep=0mm
+  }%
+}
+
+% 3. Géométrie symétrique de rédaction / relecture avec marge latérale dédiée de 2.5cm pour \todoH
+\newcommand{\geometrieWord}{%
+  \cleardoublepage%
+  \newgeometry{
+    left=2.5cm, right=2.5cm,
+    top=2.5cm, bottom=2.5cm,
+    headheight=26pt, headsep=10pt,
+    footskip=26pt, footnotesep=10pt,
+    marginparwidth=2.5cm, marginparsep=3mm
+  }%
+}
+\newcommand{\geometrieAnnotation}{\geometrieWord}
+
+% 4. Environnements autonomes avec restauration automatique en fin de bloc
+\newenvironment{WideGeometry}{%
+  \geometrieLarge%
+}{%
+  \geometrieStandard%
+}
+
+\newenvironment{AnnotationGeometry}{%
+  \geometrieAnnotation%
+}{%
+  \geometrieStandard%
+}
+
+% --- Système d'annotations collaboratives \todoH ---
+\ifusetodos
+  % Profils de relecteurs préconfigurés avec signature et couleur
+  \todostyle{AuthorStyle}{author=Auteur, color=ThesisPrimary!20, shadow}
+  \todostyle{DirectorStyle}{author=Directeur, color=ThesisSecondary!30, shadow}
+  \todostyle{ReviewerStyle}{author=Rapporteur, color=ThesisAccent!30, shadow}
+
+  \makeatletter
+  \NewDocumentCommand{\todoH}{O{} O{ThesisAccent!30} m +m}{%
+    \if@todonotes@disabled
+      #4%
+    \else
+      \IfSubStr{\detokenize{#3}}{\@backslashchar}{%
+        % Commande LaTeX détectée (ex: \url) : pas de troncature, caption propre pour .tdo
+        \todo[#1, color=#2, caption={\detokenize{#3}}]{#3}%
+      }{%
+        % Texte simple : troncature à 30 caractères + infobulle interactive au survol
+        \StrLeft{#3}{30}[\apercu]%
+        \todo[#1, color=#2, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
+      }%
+      \hyperref[table_todos]{\highLight[#2]{#4}}%
+    \fi
+  }
+  \makeatother
+
+  % Tableau de bord des révisions sécurisé
+  \NewDocumentCommand{\thesistodolist}{O{Tableau de Bord des Révisions et Tâches de Rédaction}}{%
+    \cleardoublepage
+    \phantomsection
+    \label{table_todos}%
+    \begingroup
+      \listoftodos[#1]%
+    \endgroup
+  }
+\else
+  % En mode publication finale ou print sans l'option todos : neutralisation totale
+  \NewDocumentCommand{\todoH}{O{} O{} m +m}{#4}
+  \NewDocumentCommand{\thesistodolist}{O{}}{\relax}
+\fi
 
 % --- Configuration du style de code source externe (listings/) ---
 \lstdefinestyle{mythesiscode}{

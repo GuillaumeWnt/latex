@@ -1,0 +1,436 @@
+%% ==============================================================================
+%% content/04-dynamique-page.tex
+%% Chapitre 4 : Maîtrise Dynamique de l'Empagement : KOMA-Script, Géométries,
+%% En-têtes Avancés et Multi-Colonnes
+%% ==============================================================================
+\chapter{Maîtrise Dynamique de l'Empagement : KOMA-Script, Géométries et Multi-Colonnes}
+\label{chap:dynamique-empagement}
+
+\section{Fondements Typographiques et Empagement KOMA-Script}
+\label{sec:fondements-typographiques}
+
+La mise en page d'un document long (thèse doctorale, traité scientifique ou manuel d'ingénierie)
+ne résulte jamais d'un choix esthétique arbitraire.
+Elle obéit à des lois de physiologie visuelle et d'ergonomie cognitive théorisées par \textcite{tschichold1991form}
+et rappelées avec force par \textcite{bringhurst2004elements}.
+
+\subsection{Le canon de division typographique et la valeur \code{DIV}}
+Le confort de lecture dépend étroitement de la longueur des lignes de texte :
+l'\oe{}il humain fatigue rapidement si une ligne excède 65 à 75 caractères (soit 10 à 12 mots par ligne).
+Pour respecter cette contrainte sans gaspiller le papier,
+la classe KOMA-Script \code{scrbook} intègre l'algorithme de calcul \term{typearea} :
+
+\begin{enumerate}
+  \item La surface de la feuille est subdivisée en une grille de $N \times N$ rectangles identiques,
+  déterminée par le coefficient \code{DIV} (dans notre classe, \code{DIV=12}).
+  \item La zone de composition textuelle (\textit{Satzspiegel}) occupe $10 \times 10$ rectangles,
+  tandis que les marges absorbent les subdivisions périphériques selon des proportions savantes.
+  \item En reliure classique recto-verso (\code{print}), la marge intérieure (petit fond)
+  mesure exactement la moitié de la marge extérieure (grand fond),
+  car les deux pages ouvertes en regard fusionnent visuellement leurs petits fonds en une bande d'égale largeur.
+\end{enumerate}
+
+\subsection{Le défi des livrables modernes : au-delà de la géométrie unique}
+Bien que cette rigueur typographique soit idéale pour la prose continue,
+les travaux d'ingénierie contemporains se heurtent à une rigidité historique :
+comment insérer une matrice comparative de 12 colonnes,
+un tableau synoptique de synthèse de 180\,mm de large,
+ou aménager des marges généreuses pour les révisions collaboratives,
+sans rompre la cohérence globale du volume ?
+
+La réponse conventionnelle consiste souvent à bricoler des valeurs globales dans \code{geometry},
+au détriment de l'harmonie des 250 autres pages.
+Dans notre architecture, nous combinons la puissance sémantique de KOMA-Script
+avec le pilote géométrique de \code{geometry} grâce à l'option \code{\textbackslash KOMAoptions\{usegeometry=true\}}.
+Cette symbiose permet de métamorphoser la géométrie d'une page à l'autre
+avec une fluidité absolue.
+
+\begin{boiteSynthese}{Les Trois Géométries Dynamiques de l'Architecture}
+Notre infrastructure propose trois géométries spécialisées activables à la demande :
+\begin{itemize}
+  \item \textbf{\code{\textbackslash geometrieStandard} :}
+  la géométrie canonique KOMA (\code{DIV=12}) préservant le ratio de lecture optimal.
+  \item \textbf{\code{\textbackslash geometrieLarge} (ou environnement \code{WideGeometry}) :}
+  déploie une zone utile élargie (marges de 15\,mm) pour les données denses.
+  \item \textbf{\code{\textbackslash geometrieWord} / \code{\textbackslash geometrieAnnotation} :}
+  aménage une marge latérale de révision de 25\,mm dédiée aux notes \code{\textbackslash todoH}.
+\end{itemize}
+\end{boiteSynthese}
+
+% ==============================================================================
+% 4.2 Démonstration en Direct de la Géométrie Large (WideGeometry)
+% ==============================================================================
+\section{Démonstration en Direct : Géométrie Pleine Page (\code{WideGeometry})}
+\label{sec:demo-geometrie-large}
+
+Pour illustrer cette plasticité, nous ouvrons ici même un bloc de géométrie large
+à l'aide de l'environnement \code{WideGeometry}.
+Remarquez le comportement sur les pages suivantes :
+les marges latérales se réduisent instantanément à 15\,mm,
+libérant une largeur d'empagement de plus de 180\,mm.
+Simultanément, nous activons le style d'en-tête épuré \code{\textbackslash activerStyleFocus}
+pour supprimer tout filet parasite et maximiser la concentration du lecteur.
+
+\begin{WideGeometry}
+\activerStyleFocus
+
+\subsection{Espace élargi et style d'en-tête minimaliste \code{StyleFocus}}
+Nous sommes actuellement dans l'environnement \code{WideGeometry}.
+Observez l'en-tête supérieur : la ligne de séparation habituelle a disparu,
+le titre courant de chapitre est masqué,
+et seul un folio centré (\code{---\,\thepage\,---}) subsiste en bas de page.
+Cette disposition est particulièrement recommandée lors de la présentation
+de grands tableaux de bord de données ou de comparaisons exhaustives d'architectures.
+
+Le \cref{tab:comparatif-architectures-large} exploite l'intégralité des 180\,mm disponibles
+sans provoquer le moindre débordement (\textit{overfull hbox})
+et sans devoir réduire la taille de police en corps microscopique.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption[Matrice comparative d'architectures documentaires en géométrie élargie]{Matrice comparative exhaustive des architectures documentaires (largeur utile : 180\,mm, environnement \code{WideGeometry})}
+  \label{tab:comparatif-architectures-large}
+  \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X c}
+    \toprule
+    \textbf{Approche} & \textbf{Avantages majeurs} & \textbf{Inconvénients \& Risques} & \textbf{Cas d'usage privilégiés} & \textbf{Maturité} \\
+    \midrule
+    \textbf{Monolithique} &
+    Fichier unique simple à appréhender pour les débutants. &
+    Conflits Git constants, temps de compilation explosif, aucune réutilisabilité. &
+    Articles courts (moins de 5 pages), devoirs ponctuels. &
+    Obsolète \\
+    \addlinespace
+    \textbf{Modulaire Simple} &
+    Découpage en chapitres via \code{\textbackslash input} ou \code{\textbackslash include}. &
+    Frontière floue entre styles et données ; dépendances globales non contrôlées. &
+    Mémoires de master, rapports techniques intermédiaires. &
+    Courante \\
+    \addlinespace
+    \textbf{Découplée \code{mythesis}} &
+    Isolation stricte (\code{.clo}, \code{config/}, \code{biblio/}, \code{listings/}). Profils écran/print instantanés. &
+    Nécessite une rigueur initiale et l'utilisation de \code{latexmkrc}. &
+    Thèses de doctorat, monographies, spécifications industrielles. &
+    Optimale \\
+    \addlinespace
+    \textbf{Dynamique Hybride} &
+    Alternance de géométries (\code{WideGeometry}, \code{AnnotationGeometry}) et calques interactifs. &
+    Exige la maîtrise de KOMA-Script et de \code{scrlayer-scrpage}. &
+    Ouvrages d'art, manuels de référence, revues à fort impact. &
+    Avancée \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{boiteSynthese}{Synthèse Stratégique Pleine Page (Largeur Utile : 180\,mm)}
+L'utilisation de la géométrie large permet de concevoir des blocs récapitulatifs d'une clarté exemplaire :
+\begin{itemize}
+  \item Les tableaux multi-colonnes disposent de l'amplitude nécessaire pour afficher des phrases complètes
+  sans césures disgracieuses ni écrasement typographique.
+  \item La transition d'entrée et de sortie s'effectue automatiquement via \code{\textbackslash cleardoublepage},
+  garantissant qu'aucune page bâtarde ne présente des marges asymétriques au milieu d'un feuillet.
+  \item Le moteur de calcul \LaTeX{} réévalue \code{\textbackslash linewidth} et \code{\textbackslash textwidth}
+  à l'intérieur du bloc, assurant la compatibilité totale avec les boîtes \code{tcolorbox}.
+\end{itemize}
+\end{boiteSynthese}
+
+\end{WideGeometry}
+\activerStyleStandard
+
+% ==============================================================================
+% 4.3 Démonstration de la Géométrie de Révision (AnnotationGeometry) et ThesisDebug
+% ==============================================================================
+\section{Démonstration en Direct : Géométrie de Révision et En-Têtes de Débogage}
+\label{sec:demo-geometrie-annotation}
+
+Dès la fermeture du bloc \code{WideGeometry},
+la commande \code{\textbackslash restoregeometry} rétablit les proportions canoniques de la classe.
+Les en-têtes réguliers avec logo sont quant à eux réactivés par la commande
+\code{\textbackslash activerStyleStandard}.
+
+Examinons maintenant le scénario inverse : la phase de relecture collaborative,
+où l'auteur et les encadrants doivent annoter le manuscrit en vis-à-vis du texte.
+en activant le style de diagnostic éditorial \code{\textbackslash activerStyleDebug}.
+
+\begin{AnnotationGeometry}
+\activerStyleDebug
+
+\subsection{Marge latérale dédiée de 25~mm et métadonnées d'édition \code{ThesisDebug}}
+Observez attentivement la métamorphose de la présente page :
+\begin{enumerate}
+  \item \textbf{En-tête de contrôle :}
+  la mention \code{[\jobname.tex]} apparaît en rouge/primaire à gauche,
+  le macaron \textbf{\textcolor{ThesisAccent}{[DEBUG / RÉVISION]}} est mis en exergue au centre,
+  et le titre de la section courante s'affiche à droite.
+  \item \textbf{Pied de page de traçabilité :}
+  le folio affiche désormais la pagination absolue sous la forme \code{Page \thepage{} sur \pageref{LastPage}}.
+  \item \textbf{Marge d'annotation :}
+  la marge droite (ou extérieure) est configurée à 25\,mm
+  via l'assignation \code{marginparwidth=2.5cm},
+  offrant l'espace indispensable pour déposer des notes marginales sans empiéter sur le texte.
+\end{enumerate}
+
+Voici un exemple de passage soumis à une relecture croisée tripartite :
+
+Dans les architectures documentaires classiques et les chaînes de publication patrimoniales,
+\todoH[AuthorStyle]{Préciser la norme ISO relative à la structure des documents XML/PDF}{la rigidité des formats}
+constitue souvent le principal obstacle technique au déploiement en entreprise.
+Chaque révision éditoriale engendre des régressions de mise en page imprévisibles
+qui consomment un temps précieux lors des phases de relecture collégiale.
+
+Face à ces contraintes récurrentes, les équipes hésitent fréquemment entre les traitements de texte WYSIWYG
+et les langages de balisage légers incapables de composer des équations différentielles ou des tableaux conformes aux canons des revues scientifiques.
+La tentation de recourir à des outils propriétaires génère une dépendance technologique coûteuse
+et empêche l'automatisation des tests d'intégrité documentaire au sein d'une forge collaborative.
+
+L'approche modulaire incarnée par notre classe réconcilie ces impératifs contradictoires
+\todoH[ReviewerStyle]{Ajouter une référence vers le chapitre 5 pour le pipeline latexmk}{en garantissant une compilation reproductible}
+et un découplage total entre le fond, la forme et le profil de diffusion.
+Toutes les notes marginales ci-contre comportent une infobulle interactive au survol
+et sont automatiquement téléportées vers le \term{Tableau de Bord des Révisions}
+accessible en tête de document.
+
+\begin{callout}[Comportement en mode publication (\code{print} ou sans option \code{todos})]
+Lorsque l'option de classe \code{todos} est désactivée pour la publication finale,
+toutes les boîtes jaunes de marge et les surlignages disparaissent instantanément du texte,
+sans laisser la moindre trace ni altérer la justification des lignes.
+\end{callout}
+
+\end{AnnotationGeometry}
+\activerStyleStandard
+
+% ==============================================================================
+% 4.4 Composition Multi-Colonnes Dynamique (multicol)
+% ==============================================================================
+\section{Composition Multi-Colonnes Dynamique sans Rupture de Page}
+\label{sec:demo-multicol}
+
+Dans le standard \LaTeX{}, le passage en deux colonnes s'effectue traditionnellement
+par l'instruction primitive \code{\textbackslash twocolumn}.
+Cette commande présente toutefois un défaut rédhibitoire en milieu de chapitre :
+elle force un saut de page immédiat (\code{\textbackslash clearpage}),
+éjecte tous les flottants en attente,
+et s'avère incapable d'équilibrer la hauteur des colonnes en bas de section.
+
+Pour surmonter ces écueils, notre configuration intègre le paquet de référence \code{multicol}.
+L'environnement \code{multicols} offre trois propriétés exceptionnelles :
+\begin{itemize}
+  \item Il s'initialise et se clôture n'importe où sur une page en cours sans forcer de saut de page.
+  \item Il équilibre automatiquement la hauteur des colonnes sur la dernière page.
+  \item Il permet de tracer des filets verticaux séparateurs personnalisables et colorés.
+\end{itemize}
+
+\subsection{Démonstration en deux colonnes avec filet vertical séparateur}
+
+Voici une démonstration concrète en deux colonnes avec un filet séparateur
+de 0.4\,pt teinté dans la palette secondaire du document :
+
+\setlength{\columnseprule}{0.4pt}
+\renewcommand{\columnseprulecolor}{\color{ThesisSecondary!40}}
+\setlength{\columnsep}{20pt}
+
+\begin{callout}[Chapeau introductif transversal sur deux colonnes]
+Ce bloc d'introduction s'étend sur toute la largeur de la page (\code{\textbackslash textwidth}),
+tandis que les paragraphes ci-dessous se distribuent harmonieusement de part et d'autre du filet séparateur.
+\end{callout}
+
+\begin{multicols}{2}
+
+\subsubsection{Colonne A : Fondements théoriques}
+La distribution du texte sur deux colonnes étroites réduit la longueur de chaque ligne
+à environ 35 à 45 caractères.
+Cette configuration est universellement adoptée par les revues IEEE, ACM et Elsevier
+pour les publications à forte densité de contenu.
+
+Dans ce format, l'algorithme de saut de ligne de Knuth ajuste les espacements inter-mots
+avec une sensibilité accrue.
+L'activation conjointe du paquet \code{microtype} devient indispensable
+pour éviter les lignes lâches (\textit{underfull hbox}) grâce à la saillie optique des marges.
+
+Le passage d'une colonne à l'autre peut être laissé à l'équilibrage automatique,
+ou provoqué explicitement à un endroit stratégique grâce à la commande \code{\textbackslash columnbreak}.
+
+\columnbreak
+
+\subsubsection{Colonne B : Implémentation pratique}
+Nous forçons ici le passage en colonne B via \code{\textbackslash columnbreak}.
+Les équations mathématiques en ligne ou de taille modérée
+s'intègrent avec une élégance naturelle :
+
+\begin{equation}
+  \label{eq:densite-energie}
+  \mathcal{E}_c = \frac{1}{2} \int_{\Omega} \norm{\nabla \vect{u}(\vect{x})}^2 \diff \vect{x}
+\end{equation}
+
+Les listes de contrôle et énumérations techniques
+demeurent particulièrement compactes et digestes :
+\begin{itemize}
+  \item filet vertical via \code{\textbackslash columnseprule},
+  \item espacement réglé par \code{\textbackslash columnsep},
+  \item équilibrage dynamique automatique en bas de page.
+\end{itemize}
+
+\end{multicols}
+
+\setlength{\columnseprule}{0pt} % Rétablissement du filet par défaut
+
+\subsection{Démonstration en trois colonnes pour nomenclature technique}
+
+L'environnement \code{multicols} s'étend avec une flexibilité identique à trois colonnes ou plus.
+Cette mise en page est idéale pour les dictionnaires de variables,
+les tables de nomenclature ou les inventaires de paramètres expérimentaux :
+
+\begin{multicols}{3}
+\raggedcolumns
+\raggedright
+\small
+
+\noindent{\bfseries\sffamily\textcolor{ThesisPrimary}{Paramètres d'état :}}\par\vspace{2pt}
+$\vect{x} \in \setR^n$ : Position d'état.\par
+$\vect{v} \in \setR^n$ : Vitesse instantanée.\par
+$\vect{a} \in \setR^n$ : Accélération.\par
+$t \in [0, T]$ : Horizon temporel.\par
+$m \in \setR^+$ : Masse effective.
+
+\columnbreak
+
+\noindent{\bfseries\sffamily\textcolor{ThesisPrimary}{Opérateurs tensoriels :}}\par\vspace{2pt}
+$\mat{M}$ : Matrice d'inertie.\par
+$\mat{C}$ : Forces centrifuges.\par
+$\mat{K}$ : Matrice de raideur.\par
+$\mat{\Lambda}$ : Tenseur de diffusion.\par
+$\mat{I}_n$ : Matrice identité.
+
+\columnbreak
+
+\noindent{\bfseries\sffamily\textcolor{ThesisPrimary}{Critères et Métriques :}}\par\vspace{2pt}
+$\mathcal{L}_2$ : Norme quadratique.\par
+$\mathrm{SNR}$ : Rapport signal/bruit.\par
+$\Delta t$ : Pas d'intégration.\par
+$\varepsilon_{\mathrm{tol}}$ : Tolérance de résidu.\par
+$\eta$ : Taux de convergence.
+
+\end{multicols}
+
+% ==============================================================================
+% 4.5 Rotation Dynamique en Mode Paysage (pdflscape)
+% ==============================================================================
+\section{Pages Tournées en Mode Paysage avec Orientation PDF (\code{pdflscape})}
+\label{sec:demo-landscape}
+
+L'insertion de panoramas expérimentaux, de chronogrammes Gantt
+ou de matrices comparatives dépassant 8 à 10 colonnes impose parfois d'orienter le feuillet à 90 degrés.
+L'usage historique du paquet standard \code{lscape} pose un problème majeur :
+le texte est tourné sur la feuille, mais le lecteur de PDF (Adobe Acrobat, SumatraPDF, aperçu de navigateur)
+continue d'afficher la page verticalement, obligeant le lecteur à se contorsionner la tête !
+
+Dans notre atelier, nous utilisons le paquet moderne \code{pdflscape}.
+Lors de la compilation avec Lua\LaTeX{}, \code{pdflscape} insère l'attribut PDF interne \code{/Rotate 90} :
+la page pivote automatiquement dans le lecteur numérique pour une lecture horizontale immédiate,
+tout en préservant le sens d'impression naturel pour le relieur papier.
+
+\begin{landscape}
+\activerStyleFocus
+
+\subsection{Matrice synoptique multiparamétrique en orientation paysage}
+Observez l'orientation de cette page dans votre visionneuse PDF :
+le format A4 est basculé automatiquement en orientation paysage ($297 \times 210$\,mm).
+Nous pouvons déployer un tableau synoptique de grande envergure comparant sept moteurs et technologies de composition :
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption[Benchmarking technique comparatif des moteurs de composition scientifique]{Benchmarking technique comparatif des technologies de composition scientifique (page paysage dynamique \code{pdflscape})}
+  \label{tab:benchmark-paysage}
+  \begin{tabularx}{\linewidth}{l c c c c c >{\raggedright\arraybackslash}X}
+    \toprule
+    \textbf{Technologie} & \textbf{Moteur} & \textbf{Unicode/UTF-8} & \textbf{Microtype} & \textbf{Polices OTF} & \textbf{Vitesse} & \textbf{Verdict en Thèse Doctorale \& Ingénierie} \\
+    \midrule
+    \textbf{\LaTeXe{} Historique} & pdf\TeX{} & Partiel & Oui & Non (Type 1) & Très rapide & Obsolète pour nouveaux projets ; encodage fragile. \\
+    \addlinespace
+    \textbf{Xe\LaTeX{}} & Xe\TeX{} & Natif & Partiel & Oui (système) & Rapide & Bon support des fontes, mais microtypographie limitée. \\
+    \addlinespace
+    \textbf{Lua\LaTeX{}} & Lua\TeX{} & Natif & Complet & Oui (direct/relatif) & Modérée & \textbf{Standard d'excellence recommandé} : programmabilité totale, polices locales figées, UTF-8 robuste. \\
+    \addlinespace
+    \textbf{Typst} & Rust & Natif & En cours & Oui (système) & Ultra-rapide & Écosystème émergent prometteur, mais support biblio et éditeurs encore jeune pour une thèse d'État. \\
+    \addlinespace
+    \textbf{MS Word / LibreOffice} & Propriétaire & Natif & Non & Oui & Temps réel & Réprouvé : rupture de reproductibilité, gestion catastrophique des équations et des références croisées. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{boiteSynthese}{Règles d'Or pour les Pages en Mode Paysage}
+Trois principes garantissent une intégration sans bavure des pages tournées :
+\begin{enumerate}
+  \item \textbf{Encapsulation stricte :} l'environnement \code{landscape} doit toujours être ouvert
+  immédiatement après un saut de page propre et refermé avant de poursuivre la prose courante.
+  \item \textbf{Adaptation des en-têtes :} combiner \code{landscape} avec \code{\textbackslash activerStyleFocus}
+  permet de masquer les en-têtes horizontaux qui viendraient encombrer inutilement le bord long.
+  \item \textbf{Largeur universelle :} utilisez toujours \code{\textbackslash linewidth} dans les environnements \code{tabularx}
+  pour occuper exactement la largeur disponible sans calcul manuel hasardeux.
+\end{enumerate}
+\end{boiteSynthese}
+
+\end{landscape}
+\activerStyleStandard
+
+% ==============================================================================
+% 4.6 Bonnes Pratiques et Synthèse Opérationnelle
+% ==============================================================================
+\section{Checklist de l'Architecte : Gestion des Géométries et des En-têtes}
+\label{sec:checklist-geometrie}
+
+Pour clore cette démonstration de puissance, le \cref{tab:checklist-geometries} synthétise
+les commandes, les contextes d'application et les précautions associées
+à chaque modification d'empagement dans notre architecture modulaire.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption[Synthèse opérationnelle des commandes de géométrie et d'en-tête]{Synthèse opérationnelle des commandes de modification d'empagement et d'en-tête}
+  \label{tab:checklist-geometries}
+  \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.7cm}}
+    \toprule
+    \textbf{Commande / Bloc} & \textbf{Effet produit sur le document} & \textbf{Précautions obligatoires} & \textbf{Paquet requis} \\
+    \midrule
+    \code{\textbackslash geometrieStandard} &
+    Restaure la géométrie KOMA-Script (\code{DIV=12}). &
+    Exécute automatiquement \code{\textbackslash cleardoublepage}. &
+    \code{geometry} \\
+    \addlinespace
+    \code{WideGeometry} &
+    Marges réduites à 15\,mm pour données horizontales denses. &
+    Associer à \code{\textbackslash activerStyleFocus} pour éviter les surcharges. &
+    \code{config/macros} \\
+    \addlinespace
+    \code{AnnotationGeometry} &
+    Marge latérale élargie à 25\,mm pour les notes de relecture. &
+    Idéal en phase de travail avec \code{\textbackslash activerStyleDebug}. &
+    \code{config/macros} \\
+    \addlinespace
+    \code{\textbackslash activerStyle}\allowbreak\code{Focus} &
+    En-tête épuré sans filet, folio centré discret. &
+    À rétablir via \code{\textbackslash activerStyle}\allowbreak\code{Standard} en fin de bloc. &
+    \code{scrlayer-scrpage} \\
+    \addlinespace
+    \code{\textbackslash activerStyle}\allowbreak\code{Debug} &
+    Affiche le fichier source, le statut révision et le folio X/Y. &
+    Utilise la référence \code{LastPage} (nécessite deux passes). &
+    \code{scrlayer-scrpage} \\
+    \addlinespace
+    \code{multicols\{N\}} &
+    Composition fluide sur $N$ colonnes sans saut de page. &
+    Les flottants \code{figure} standards ne sont pas autorisés dans le bloc. &
+    \code{multicol} \\
+    \addlinespace
+    \code{landscape} &
+    Rotation physique de la page avec balise PDF \code{/Rotate 90}. &
+    Isoler entièrement le tableau entre l'ouverture et la fermeture. &
+    \code{pdflscape} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Grâce à cette boîte à outils cohérente et modulaire,
+l'auteur conserve une liberté éditoriale totale
+tout en offrant à son lecteur un manuscrit d'une rigueur typographique sans faille.

@@ -8,16 +8,16 @@
 \section{Récapitulatif des Commandes Métier et Macros}
 \label{sec:recap-macros}
 
-Le \cref{tab:recap-commandes} rassemble les raccourcis sémantiques et les environnements
-prédéfinis dans le fichier \code{config/macros.sty}.
+Les \cref{tab:recap-math,tab:recap-env-outils} rassemblent les raccourcis sémantiques,
+les boîtes visuelles et les commandes d'orchestration définis dans \code{config/macros.sty}.
 
 \begin{table}[htbp]
   \centering
-  \caption{Aide-mémoire des macros sémantiques et environnements du projet}
-  \label{tab:recap-commandes}
+  \caption{Aide-mémoire des notations mathématiques et balisage sémantique textuel}
+  \label{tab:recap-math}
   \begin{tabularx}{\textwidth}{@{} l l >{\raggedright\arraybackslash}X @{}}
     \toprule
-    \textbf{Commande / Environnement} & \textbf{Rendu visuel} & \textbf{Usage et signification} \\
+    \textbf{Commande} & \textbf{Rendu visuel} & \textbf{Usage et signification} \\
     \midrule
     \code{\textbackslash vect\{x\}} & $\vect{x}$ & Vecteur en gras droit/italique \\
     \code{\textbackslash mat\{M\}} & $\mat{M}$ & Matrice formelle en gras droit \\
@@ -27,14 +27,38 @@ prédéfinis dans le fichier \code{config/macros.sty}.
     \code{\textbackslash diff} & $\diff x$ & Symbole différentiel droit pour intégrales \\
     \code{\textbackslash term\{mot\}} & \term{mot} & Terme technique introduit pour la première fois \\
     \code{\textbackslash code\{snippet\}} & \code{snippet} & Fragment de code ou nom de fichier en ligne \\
-    \code{callout} & Boîte cadrée & Remarque, conseil ou note méthodologique \\
-    \code{hypothesis} & Boîte numérotée & Hypothèse scientifique (compatible \code{cleveref}) \\
-    \code{definitionbox} & Boîte d'en-tête & Définition formelle avec bandeau coloré \\
-    \code{\textbackslash ocgbutton\{id\}\{txt\}} & Bouton cliquable & Bascule interactive d'un calque vectoriel OCG \\
-    \code{\textbackslash includepdfpaper\{doc\}} & Pages PDF externes & Insertion propre multipage avec en-têtes préservés \\
     \bottomrule
   \end{tabularx}
 \end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Aide-mémoire des boîtes graphiques, interactivité et orchestration}
+  \label{tab:recap-env-outils}
+  \begin{tabularx}{\textwidth}{@{} l l >{\raggedright\arraybackslash}X @{}}
+    \toprule
+    \textbf{Environnement / Commande} & \textbf{Type} & \textbf{Usage et comportement} \\
+    \midrule
+    \code{callout} & Boîte cadrée & Remarque, conseil ou note méthodologique \\
+    \code{hypothesis} & Boîte numérotée & Hypothèse scientifique (compatible \code{cleveref}) \\
+    \code{definitionbox} & Boîte d'en-tête & Définition formelle avec bandeau coloré \\
+    \code{boiteSynthese} & Boîte synthèse & Synthèse didactique avec cartouche coloré \\
+    \code{cadreFigure}   & Cadre arrondi & Encadrement soigné pour figures et schémas \\
+    \code{\textbackslash ocgbutton\{id\}\{txt\}} & Bouton cliquable & Bascule interactive d'un calque vectoriel OCG \\
+    \code{\textbackslash ocgstack\{vue1\}\{vue2\}} & Double vue & Superposition écran ou linéarisation sur papier \\
+    \code{\textbackslash includepdfpaper\{doc\}} & Pages PDF & Insertion multipage avec en-têtes préservés \\
+    \code{\textbackslash geometrieLarge} & Marges 1,5 cm & Pleine page pour grands tableaux ou couverture \\
+    \code{\textbackslash geometrieWord}  & Marges 2,5 cm & Profil de révision avec marge latérale pour notes \\
+    \code{\textbackslash geometrieStandard} & DIV=12 & Restauration de la géométrie canonique KOMA \\
+    \code{\textbackslash afficherLogo}, \code{\textbackslash masquerLogo} & Logo scrlayer & Contrôle du calque flottant institutionnel \\
+    \code{\textbackslash todoH[st][col]\{n\}\{txt\}} & Note marge & Troncature, infobulle et lien vers la table \\
+    \code{\textbackslash missingfigure[opts]\{txt\}} & Réservation & Espace réservé sans bloquer la chaîne \\
+    \code{\textbackslash thesistodolist} & Sommaire & Tableau de bord dynamique des tâches de révision \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\clearpage
 
 \section{Guide des Clés Typographiques KOMA-Script}
 \label{sec:koma-font-keys}
@@ -62,6 +86,8 @@ via la macro \code{\textbackslash setkomafont\{élément\}\{spécification\}} :
     \bottomrule
   \end{tabularx}
 \end{table}
+
+\clearpage
 
 \section{Commandes Terminal Utiles pour la Compilation}
 \label{sec:commandes-terminal}

@@ -12,16 +12,20 @@ $lualatex = 'lualatex --interaction=nonstopmode --synctex=0 %O %S';
 
 # Moteur bibliographique Biber pour BibLaTeX
 $bibtex_use = 1;
-$biber = 'biber %O %S';
+$biber = 'biber --input-directory build --output-directory build %R';
 
 # Répertoire de sortie pour isoler les fichiers auxiliaires de compilation
 $out_dir = 'build';
+
+# Création des sous-répertoires pour \include
+use File::Path qw(make_path);
+make_path("$out_dir/content", "$out_dir/backmatter", "$out_dir/frontmatter");
 
 # Fichiers générés par les extensions (évite les boucles de relance logreq / biblatex)
 push @generated_exts, 'run.xml';
 
 # Nettoyage automatique des extensions auxiliaires avec `latexmk -c` ou `-C`
-$clean_ext = 'aux bbl bcf blg run.xml toc lof lot out synctex.gz fdb_latexmk fls log tdo idx ilg ind';
+$clean_ext = 'aux bbl bcf blg run.xml toc lof lot out synctex.gz fdb_latexmk fls log tdo idx ilg ind upa upb';
 
 # --- Optionnel : Support de l'externalisation TikZ avec build/ (Option B) ---
 # Si vous souhaitez activer \usetikzlibrary{external} au lieu du paquet standalone :

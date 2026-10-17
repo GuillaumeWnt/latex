@@ -7,7 +7,9 @@
 % Bascule instantanée de profil de document :
 %   - screen : version lecture numérique (marges symétriques, palette interactive)
 %   - print  : version impression papier reliée (recto-verso, décalage BCOR, liens neutres)
-\documentclass[screen]{mythesis}
+% Options complémentaires :
+%   - todos (ou todoNote) : active les annotations collaboratives (\todoH, profils de relecteurs, \missingfigure)
+\documentclass[screen, todos]{mythesis}
 
 % --- Métadonnées du document tutoriel ---
 \title{Guide d'Architecture \texorpdfstring{\LaTeX{}}{LaTeX} Modulaire}
@@ -38,9 +40,13 @@
 % 1. Frontmatter : Préliminaires et tables des matières
 % ------------------------------------------------------------------------------
 \frontmatter
+\masquerLogo % Le logo institutionnel ne s'affiche pas sur la couverture ni les préliminaires
 
 % Page de titre institutionnelle
 \input{frontmatter/titlepage.tex}
+
+% Tableau de bord des révisions et tâches collaboratives (si l'option todos est active)
+\thesistodolist
 
 % Remerciements et résumé didactique bilingue
 \input{frontmatter/acknowledgements.tex}
@@ -55,12 +61,14 @@
 % 2. Mainmatter : Tutoriel découpé par chapitres thématiques
 % ------------------------------------------------------------------------------
 \mainmatter
+\afficherLogo % Activation du filigrane / logo pour l'ensemble du corps de document
 
 \include{content/01-introduction}
 \include{content/02-etat-de-l-art}
 \include{content/03-methodologie}
-\include{content/04-resultats}
-\include{content/05-conclusion}
+\include{content/04-dynamique-page}
+\include{content/05-resultats}
+\include{content/06-conclusion}
 
 % ------------------------------------------------------------------------------
 % 3. Annexes
