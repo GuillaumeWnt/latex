@@ -56,6 +56,9 @@
 % --- Composition multi-colonnes dynamique et équilibrée ---
 \RequirePackage{multicol}
 
+% Troncature sécurisée des en-têtes et textes longs
+\RequirePackage[breakall]{truncate}
+
 % Outils d'analyse de chaînes (troncature dynamique des notes)
 \RequirePackage{xstring}
 
@@ -154,6 +157,9 @@
   \RequirePackage{pdfcomment}
 \else
   \RequirePackage[colorinlistoftodos, disable]{todonotes}
+  \makeatletter
+  \providecommand{\ulp@afterend}{}
+  \makeatother
 \fi
 
 % --- Courbes scientifiques de données brutes (data/*.csv) ---

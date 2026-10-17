@@ -189,10 +189,10 @@
 % --- Style de page de débogage / diagnostic d'édition ---
 \newpairofpagestyles{ThesisDebug}{
   \clearpairofpagestyles
-  \automark[section]{chapter}
+  \automark[section]{section}
   \ihead{\normalfont\ttfamily\footnotesize\textcolor{ThesisPrimary}{[\jobname.tex]}}
-  \chead{\normalfont\sffamily\tiny\bfseries\textcolor{ThesisAccent}{[DEBUG / REVISION]}}
-  \ohead{\normalfont\sffamily\small\bfseries\headmark}
+  \chead{\normalfont\sffamily\scriptsize\bfseries\textcolor{ThesisAccent}{[DEBUG / RÉVISION]}}
+  \ohead{\parbox[b]{0.38\linewidth}{\raggedleft\normalfont\sffamily\footnotesize\textcolor{ThesisSecondary}{\truncate{\linewidth}{\rightmark}}}}
   \ifmythesis@print
     \lefoot{\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}}
     \rofoot{\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}}
@@ -226,7 +226,8 @@
   \pagestyle{scrheadings}%
 }
 
-\activerStyleStandard
+\pagestyle{scrheadings}
+\KOMAoptions{headsepline=0.5pt, footsepline=false}
 
 % --- Injection automatique des métadonnées dans le PDF via hyperref ---
 \AtBeginDocument{

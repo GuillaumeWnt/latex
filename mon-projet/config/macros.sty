@@ -139,14 +139,14 @@
 \crefname{deficounter}{définition}{définitions}
 \Crefname{deficounter}{Définition}{Définitions}
 
-% --- Alternance dynamique des géométries de page (geometry + KOMA) ---
-% 1. Restauration de la géométrie canonique KOMA (DIV=12)
+% --- Alternance dynamique des géométries de page (KOMA natif + geometry) ---
+% 1. Restauration de la géométrie canonique KOMA par défaut (DIV=12)
 \newcommand{\geometrieStandard}{%
   \cleardoublepage%
   \restoregeometry%
 }
 
-% 2. Géométrie large / pleine page (1.5cm bords, 1.8cm haut/bas) pour grands tableaux, posters ou annexes
+% 2. Géométrie Large / Pleine Page (Style B - geometry) : marges réduites à 1.5 cm pour grands tableaux
 \newcommand{\geometrieLarge}{%
   \cleardoublepage%
   \newgeometry{
@@ -158,7 +158,8 @@
   }%
 }
 
-% 3. Géométrie symétrique de rédaction / relecture avec marge latérale dédiée de 2.5cm pour \todoH
+% 3. Géométrie Traitement de Texte / Word (Style C - geometry) : marges symétriques de 2.5 cm partout
+%    Conforme aux instructions universitaires et aux grilles de relecture académiques.
 \newcommand{\geometrieWord}{%
   \cleardoublepage%
   \newgeometry{
@@ -166,14 +167,31 @@
     top=2.5cm, bottom=2.5cm,
     headheight=26pt, headsep=10pt,
     footskip=26pt, footnotesep=10pt,
-    marginparwidth=2.5cm, marginparsep=3mm
+    marginparwidth=2.0cm, marginparsep=3mm
   }%
 }
 \newcommand{\geometrieAnnotation}{\geometrieWord}
 
-% 4. Environnements autonomes avec restauration automatique en fin de bloc
+% 4. Géométrie spécifique pour couverture ou page de garde sans en-tête
+\newcommand{\geometrieCouverture}{%
+  \cleardoublepage%
+  \newgeometry{
+    left=2.0cm, right=2.0cm,
+    top=2.0cm, bottom=2.0cm,
+    headheight=0pt, headsep=0pt,
+    footskip=0pt
+  }%
+}
+
+% 5. Environnements autonomes avec restauration automatique en fin de bloc
 \newenvironment{WideGeometry}{%
   \geometrieLarge%
+}{%
+  \geometrieStandard%
+}
+
+\newenvironment{WordGeometry}{%
+  \geometrieWord%
 }{%
   \geometrieStandard%
 }
