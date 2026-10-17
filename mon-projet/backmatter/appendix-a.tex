@@ -1,61 +1,75 @@
 %% ==============================================================================
 %% backmatter/appendix-a.tex
-%% Annexe A : Compléments mathématiques et paramètres de configuration
+%% Annexe A : Aide-Mémoire & Guide Pratique des Commandes (Cheat Sheet)
 %% ==============================================================================
-\chapter{Compléments Mathématiques et Paramètres}
-\label{anx:complements}
+\chapter{Aide-Mémoire et Guide des Commandes}
+\label{anx:aide-memoire}
 
-\section{Démonstration de la Convexité de la Fonctionnelle Pénalisée}
-\label{sec:preuve-convexite}
+\section{Récapitulatif des Commandes Métier et Macros}
+\label{sec:recap-macros}
 
-Nous explicitons ici la démonstration relative à la régularité du critère d'optimisation
-introduit dans l'\cref{eq:optimisation-globale} du \cref{chap:methodologie}.
-
-Soit la fonctionnelle régularisée définie pour tout $\vect{\theta} \in \setR^d$ par :
-\begin{equation}
-  \mathcal{J}(\vect{\theta}) = \frac{1}{N} \sum_{i=1}^N \mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \frac{\lambda}{2} \norm{\vect{\theta}}_2^2
-\end{equation}
-
-Calculons la matrice hessienne $\nabla^2 \mathcal{J}(\vect{\theta})$.
-Par linéarité de l'opérateur de dérivation, nous obtenons :
-\begin{equation}
-  \nabla^2 \mathcal{J}(\vect{\theta}) = \frac{1}{N} \sum_{i=1}^N \nabla^2_{\vect{\theta}}\mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \lambda \mat{I}_d
-\end{equation}
-où $\mat{I}_d$ désigne la matrice identité de dimension $d \times d$.
-
-Puisque la perte $\mathcal{L}$ est convexe par hypothèse, sa hessienne est semi-définie positive, soit :
-\begin{equation}
-  \forall \vect{v} \in \setR^d \setminus \{\vect{0}\}, \quad \vect{v}^\top \nabla^2_{\vect{\theta}}\mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) \vect{v} \ge 0
-\end{equation}
-
-Par conséquent, pour tout vecteur non nul $\vect{v} \in \setR^d$ :
-\begin{equation}
-  \vect{v}^\top \nabla^2 \mathcal{J}(\vect{\theta}) \vect{v} \ge \lambda \norm{\vect{v}}_2^2 > 0 \quad (\text{car } \lambda > 0)
-\end{equation}
-La matrice hessienne est donc strictement définie positive sur l'ensemble de l'espace $\setR^d$.
-La fonctionnelle $\mathcal{J}$ est par conséquent strictement convexe,
-ce qui garantit l'existence et l'unicité du minimum global $\vect{\theta}^*$.
-
-\section{Tableau des Paramètres Typographiques et Numériques}
-\label{sec:parametres-table}
-
-Le \cref{tab:parametres-defaut} consigne les constantes numériques et typographiques
-retenues pour les deux profils de compilation.
+Le \cref{tab:recap-commandes} rassemble les raccourcis sémantiques et les environnements
+prédéfinis dans le fichier \code{config/macros.sty}.
 
 \begin{table}[htbp]
   \centering
-  \caption{Spécifications détaillées des réglages d'options de classe}
-  \label{tab:parametres-defaut}
-  \begin{tabularx}{\textwidth}{@{} l l l X @{}}
+  \caption{Aide-mémoire des macros sémantiques et environnements du projet}
+  \label{tab:recap-commandes}
+  \begin{tabularx}{\textwidth}{@{} l l X @{}}
     \toprule
-    \textbf{Paramètre} & \textbf{Profil Écran (\code{.clo})} & \textbf{Profil Papier (\code{.clo})} & \textbf{Justification typographique} \\
+    \textbf{Commande / Environnement} & \textbf{Rendu visuel} & \textbf{Usage et signification} \\
     \midrule
-    \code{twoside}    & \code{false} (recto seul) & \code{true} (recto-verso) & Confort de défilement vs pagination d'ouvrage \\
-    \code{open}       & \code{any}                & \code{right}              & Les chapitres débutent impérativement sur belle page \\
-    \code{BCOR}       & \qty{0}{\milli\meter}     & \qty{10}{\milli\meter}    & Compensation physique de la pliure à la reliure \\
-    \code{DIV}        & \num{12}                  & \num{12}                  & Rapport d'empagement harmonieux selon KOMA-Script \\
-    Couleur liens     & Palette interactive      & Monochrome (\code{black}) & Clarté numérique vs sobriété et netteté papier \\
+    \code{\textbackslash vect\{x\}} & $\vect{x}$ & Vecteur en gras droit/italique \\
+    \code{\textbackslash mat\{M\}} & $\mat{M}$ & Matrice formelle en gras droit \\
+    \code{\textbackslash setR}, \code{\textbackslash setC} & $\setR$, $\setC$ & Ensembles des réels et complexes \\
+    \code{\textbackslash norm\{x\}} & $\norm{x}$ & Norme mathématique délimitée \\
+    \code{\textbackslash scal\{u\}\{v\}} & $\scal{u}{v}$ & Produit scalaire délimité \\
+    \code{\textbackslash diff} & $\diff x$ & Symbole différentiel droit pour intégrales \\
+    \code{\textbackslash term\{mot\}} & \term{mot} & Terme technique introduit pour la première fois \\
+    \code{\textbackslash code\{snippet\}} & \code{snippet} & Fragment de code ou nom de fichier en ligne \\
+    \code{callout} & Boîte cadrée & Remarque, conseil ou note méthodologique \\
+    \code{hypothesis} & Boîte numérotée & Hypothèse scientifique (compatible \code{cleveref}) \\
+    \code{definitionbox} & Boîte d'en-tête & Définition formelle avec bandeau coloré \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
+\section{Guide des Clés Typographiques KOMA-Script}
+\label{sec:koma-font-keys}
+
+Pour adapter l'esthétique générale de votre ouvrage sans toucher au code des chapitres,
+vous pouvez modifier les polices attribuées aux éléments KOMA-Script dans \code{mythesis.cls}
+via la macro \code{\textbackslash setkomafont\{élément\}\{spécification\}} :
+
+\begin{table}[htbp]
+  \centering
+  \caption{Principaux éléments typographiques configurables dans \code{mythesis.cls}}
+  \label{tab:koma-elements}
+  \begin{tabularx}{\textwidth}{@{} l l X @{}}
+    \toprule
+    \textbf{Élément KOMA} & \textbf{Réglage par défaut} & \textbf{Partie du document affectée} \\
+    \midrule
+    \code{disposition}      & \code{\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisPrimary\}} & Tous les titres (chapitres, sections) \\
+    \code{chapter}          & \code{\textbackslash Huge\textbackslash bfseries\textbackslash sffamily}                   & Titre principal de chapitre \\
+    \code{section}          & \code{\textbackslash Large\textbackslash bfseries\textbackslash sffamily}                  & Titre de section de niveau 1 \\
+    \code{subsection}       & \code{\textbackslash large\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisSecondary\}} & Titre de sous-section \\
+    \code{pageheadfoot}     & \code{\textbackslash small\textbackslash sffamily\textbackslash color\{ThesisMuted\}}     & Texte des en-têtes et pieds de page \\
+    \code{pagination}       & \code{\textbackslash small\textbackslash sffamily\textbackslash bfseries}                 & Numéro de page (folio) \\
+    \code{captionlabel}     & \code{\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisPrimary\}} & Libellé des légendes (« Figure 1 ») \\
+    \code{descriptionlabel} & \code{\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisPrimary\}} & Entrées des listes de description \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Commandes Terminal Utiles pour la Compilation}
+\label{sec:commandes-terminal}
+
+Depuis la racine du dossier \code{mon-projet/} :
+\begin{description}
+  \item[\code{latexmk}] Compile l'intégralité du document (passes multiples de Lua\LaTeX{} et Biber).
+  Le PDF final est placé dans \code{build/main.pdf}.
+  \item[\code{latexmk -pvc}] Mode interactif en direct (*continuous preview*) :
+  recompile automatiquement le document à chaque sauvegarde de fichier.
+  \item[\code{latexmk -c}] Supprime les fichiers auxiliaires de compilation temporaires.
+  \item[\code{latexmk -C}] Supprime la totalité des fichiers générés, y compris le PDF produit dans \code{build/}.
+\end{description}

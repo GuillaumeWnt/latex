@@ -1,17 +1,19 @@
-# Architecture Modulaire LaTeX (`scrbook`)
+# Manuel et Tutoriel d'Architecture LaTeX Modulaire (`scrbook`)
 
-Ce projet propose une architecture \LaTeX{} professionnelle, modulaire et hautement pérenne, conçue sur une base vierge de la classe **KOMA-Script** (`scrbook`).
+Ce projet constitue à la fois un **canevas de référence de niveau publication** et un **tutoriel auto-documenté complet** pour maîtriser la conception de documents scientifiques et académiques volumineux (thèses de doctorat, mémoires d'ingénierie, monographies, rapports techniques).
 
-Il applique rigoureusement le principe de **séparation des préoccupations** (*Separation of Concerns*) : le style, les profils de diffusion, les macros métier, la bibliographie et les chapitres rédactionnels sont totalement découplés.
+Bâti sur une base vierge de la classe **KOMA-Script** (`scrbook`), il applique rigoureusement le principe de **séparation des préoccupations** (*Separation of Concerns*) : le style, les profils de diffusion (écran vs impression papier reliée), les macros métier, les données brutes, le code externe, la bibliographie programmable et les chapitres rédactionnels sont totalement découplés.
 
 ---
 
-## 1. Arborescence Détaillée du Projet
+## 1. Arborescence Complète du Projet
 
 ```text
 mon-projet/
 ├── main.tex                 # Point d'entrée unique (le chef d'orchestre du document)
 ├── latexmkrc                # Automatisation de compilation (LuaLaTeX + Biber + outdir=build)
+├── .editorconfig            # Standardisation de l'indentation (2 espaces) et UTF-8
+├── .chktexrc                # Linter typographique (contrôle des espaces insécables ~)
 ├── .gitignore               # Exclusion des fichiers temporaires de compilation
 ├── README.md                # Documentation architecturale et guide d'utilisation
 │
@@ -21,7 +23,20 @@ mon-projet/
 │
 ├── config/
 │   ├── packages.sty         # STYLE : appel et configuration fine des paquets tiers
-│   └── macros.sty           # STYLE : commandes mathématiques, raccourcis et boîtes tcolorbox
+│   └── macros.sty           # STYLE : commandes mathématiques, raccourcis et styles listings/tcolorbox
+│
+├── fonts/                   # POLICES : polices OpenType/TrueType locales (fontspec Path=fonts/)
+│   ├── README.md            # Guide de sanctuarisation des polices pour CI/CD et Overleaf
+│   ├── Asap-Condensed-Regular.ttf
+│   ├── Asap-Condensed-Bold.ttf
+│   ├── Asap-Condensed-Italic.ttf
+│   └── Asap-Condensed-BoldItalic.ttf
+│
+├── data/                    # DONNÉES : jeux de données bruts (.csv, .tsv) tracés par pgfplots
+│   └── benchmark-results.csv
+│
+├── listings/                # CODE EXTERNE : fichiers sources testables (.py, .c, .rs)
+│   └── algorithm-pipeline.py
 │
 ├── biblio/
 │   ├── references.bib       # BASE DE DONNÉES : notices bibliographiques BibLaTeX
@@ -30,18 +45,19 @@ mon-projet/
 │
 ├── frontmatter/             # Pages liminaires (numérotation romaine)
 │   ├── titlepage.tex        # Page de titre institutionnelle moderne avec jury
-│   ├── acknowledgements.tex # Remerciements (\addchap)
+│   ├── acknowledgements.tex # Remerciements et avant-propos (\addchap)
 │   └── abstract.tex         # Résumés bilingues français / anglais et mots-clés
 │
-├── content/                 # Corps de l'ouvrage découpé en chapitres autonomes
-│   ├── 01-introduction.tex  # Chapitre 1 : Contexte, verrous et organisation
-│   ├── 02-etat-de-l-art.tex # Chapitre 2 : Revue bibliographique et tableau comparatif
-│   ├── 03-methodologie.tex  # Chapitre 3 : Modélisation mathématique et schéma TikZ
-│   └── 04-resultats.tex     # Chapitre 4 : Validation expérimentale et métrologie SI
+├── content/                 # Tutoriel thématique découpé en chapitres autonomes
+│   ├── 01-introduction.tex  # Chapitre 1 : Philosophie et cartographie de l'arborescence
+│   ├── 02-etat-de-l-art.tex # Chapitre 2 : La classe racine et les profils d'options (.cls & .clo)
+│   ├── 03-methodologie.tex  # Chapitre 3 : Styles, macros métier et schémas vectoriels TikZ
+│   ├── 04-resultats.tex     # Chapitre 4 : Bibliographie, données brutes (data/) et linters
+│   └── 05-conclusion.tex    # Chapitre 5 : Conclusion générale et perspectives (isolée)
 │
 ├── backmatter/              # Documents de clôture
-│   ├── appendix-a.tex       # Annexe A : Preuves mathématiques et tables de paramètres
-│   └── glossary.tex         # Table des sigles / acronymes et glossaire technique
+│   ├── appendix-a.tex       # Annexe A : Aide-mémoire & Cheat Sheet des commandes
+│   └── glossary.tex         # Table des sigles / acronymes et glossaire typographique
 │
 └── figures/                 # Médias graphiques et dessins vectoriels
     ├── logo.pdf             # Logo institutionnel vectoriel (utilisé en page de titre)
@@ -50,45 +66,27 @@ mon-projet/
 
 ---
 
-## 2. Principes Fondateurs et Fonctionnement
+## 2. Nouveautés et Bonnes Pratiques Intégrées
 
-### A. Le rôle pivot de `main.tex`
-Le fichier `main.tex` ne contient **aucune instruction de style** ni aucun paramétrage de géométrie. Il agit comme un chef d'orchestre :
-1. Déclaration de la classe et de son profil : `\documentclass[screen]{mythesis}` ou `\documentclass[print]{mythesis}`.
-2. Définition des métadonnées (`\title`, `\author`, `\institution`, `\supervisor`, etc.).
-3. Découpage standardisé de l'ouvrage :
-   - `\frontmatter` : préliminaires en chiffres romains (`titlepage`, `acknowledgements`, `abstract`, `\tableofcontents`, `\listoffigures`, `\listoftables`).
-   - `\mainmatter` : développement scientifique avec `\include{content/...}`.
-   - `\appendix` : annexes avec `\include{backmatter/appendix-a}`.
-   - `\backmatter` : glossaire et `\printbibliography`.
-
-### B. Le mécanisme des fichiers d'options (`.clo`)
-Plutôt que d'insérer des conditions `\if...` complexes et dispersées dans le texte, le projet utilise le mécanisme natif des fichiers **`.clo`** (*Class Option*) :
-- **`mythesis-screen.clo`** :
-  - Marges symétriques (`twoside=false`, `BCOR=0mm`) adaptées au défilement continu sur écran et tablette.
-  - Palette chromatique riche et accessible (`ThesisPrimary`, `ThesisSecondary`, `ThesisAccent`).
-  - Configuration `hyperref` avec liens colorés et signets PDF interactifs ouverts.
-- **`mythesis-print.clo`** :
-  - Mise en page recto-verso rigoureuse (`twoside=true`, `open=right`) assurant que les chapitres démarrent sur belle page (page impaire).
-  - Compensation de reliure physique `BCOR=10mm` (la marge intérieure est élargie pour compenser l'encollage ou la couture).
-  - Neutralisation chromatique des hyperliens (`hidelinks=true`) pour un rendu net et contrasté sur papier sans trame de gris.
-
-### C. La personnalisation BibLaTeX (`.bbx` / `.cbx`)
-La bibliographie est confiée au moteur moderne **Biber + BibLaTeX** :
-- **`custom-style.bbx`** : définit la structure des références dans la liste finale (noms d'auteurs en petites capitales, titres en italique ou entre guillemets, formatage compact des liens DOI).
-- **`custom-style.cbx`** : configure les citations dans le texte (`\autocite`, `\textcite`, `\parencite`) en rendant le bloc auteur-année entièrement cliquable vers la bibliographie.
-
-### D. Règle d'inclusion : `\input{}` vs `\include{}`
-- `\include{chemin/fichier}` (sans extension `.tex`) est **exclusivement réservé aux chapitres majeurs** dans le corps principal. Il insère un saut de page propre (`\clearpage` ou `\cleardoublepage`) et permet l'usage éventuel de `\includeonly{}` pour accélérer la compilation.
-- `\input{chemin/fichier.tex}` est utilisé pour les préambules, les pages de garde, les sous-sections et les schémas vectoriels (`figures/*.tikz`).
+1. **Isolation des données brutes (`data/`) :**
+   Les données expérimentales (`.csv`) sont isolées des médias graphiques (`figures/`). Le paquet `pgfplots` trace les courbes directement depuis `data/benchmark-results.csv`, assurant une reproductibilité scientifique totale.
+2. **Sanctuarisation du code externe (`listings/`) :**
+   Les codes sources (`listings/algorithm-pipeline.py`) conservent leur extension native et peuvent être testés ou exécutés indépendamment. L'insertion via `\lstinputlisting` élimine tout copier-coller dans le document LaTeX.
+3. **Figeage des polices locales (`fonts/`) :**
+   Les polices TrueType/OpenType sont stockées dans `fonts/`. Grâce à la directive `Path = fonts/` de `fontspec`, le document produit un rendu visuel 100 % identique quel que soit le poste (Windows, macOS, Linux), sur Overleaf ou dans un conteneur CI/CD.
+4. **Conclusion générale dédiée (`content/05-conclusion.tex`) :**
+   La conclusion générale n'est plus noyée dans les résultats. Elle encadre symétriquement le manuscrit aux côtés de l'introduction générale (avec support natif de `\chapter` numéroté ou `\addchap` non numéroté).
+5. **Standardisation et Linter qualité (`.editorconfig` & `.chktexrc`) :**
+   - `.editorconfig` impose l'indentation à 2 espaces et l'encodage UTF-8/LF.
+   - `.chktexrc` contrôle les espaces insécables obligatoires (`~`) avant `\ref`, `\cref` et `\cite`.
 
 ---
 
-## 3. Guide de Compilation
+## 3. Compilation en Une Touche (`latexmk`)
 
 Le projet est configuré pour être compilé de manière entièrement automatisée grâce au fichier `latexmkrc` fourni.
 
-### Commande recommandée (terminal)
+### Compiler le document
 Depuis la racine du dossier `mon-projet/` :
 ```bash
 latexmk
@@ -96,29 +94,27 @@ latexmk
 Cette commande unique :
 1. Lance le moteur moderne **LuaLaTeX**.
 2. Exécute **Biber** pour mettre à jour la base bibliographique.
-3. Répète les passes nécessaires pour stabiliser les références croisées et la table des matières.
-4. Isole tous les fichiers auxiliaires dans le sous-dossier `build/` pour préserver un répertoire de travail parfaitement propre.
+3. Répète automatiquement les passes nécessaires pour stabiliser les références croisées et la table des matières.
+4. Isole tous les fichiers auxiliaires dans le sous-dossier `build/` pour préserver une racine parfaitement propre.
 
 Le fichier PDF final est produit dans : `build/main.pdf`.
 
 ### Nettoyage des fichiers temporaires
 ```bash
-latexmk -c    # Supprime les fichiers auxiliaires courants
+latexmk -c    # Supprime les fichiers auxiliaires courants (.aux, .log, .toc, etc.)
 latexmk -C    # Supprime également le fichier PDF produit dans build/
 ```
 
 ---
 
-## 4. Comment Adapter ce Canevas à Votre Projet
+## 4. Basculer entre Écran et Impression Papier
 
-1. **Changer le profil de sortie :**
-   Dans `main.tex`, modifiez la première ligne :
-   - Pour la lecture numérique : `\documentclass[screen]{mythesis}`
-   - Pour l'imprimeur / la reliure : `\documentclass[print]{mythesis}`
-2. **Renseigner vos métadonnées :**
-   Mettez à jour les champs institutionnels dans `main.tex` (`\institution`, `\degree`, `\supervisor`, `\keywords`, etc.).
-3. **Ajouter un nouveau chapitre :**
-   Créez un fichier `content/05-discussion.tex` et ajoutez simplement `\include{content/05-discussion}` dans `main.tex`.
-4. **Enrichir les macros mathématiques ou graphiques :**
-   Définissez vos notations dans `config/macros.sty` pour qu'elles soient disponibles dans l'ensemble de vos chapitres.
-
+Dans `main.tex`, modifiez simplement la première ligne :
+- **Pour la lecture numérique interactive :**
+  ```latex
+  \documentclass[screen]{mythesis}  % Marges symétriques, palette contrastée, hyperliens colorés
+  ```
+- **Pour l'impression papier reliée :**
+  ```latex
+  \documentclass[print]{mythesis}   % Recto-verso, décalage BCOR=10mm, liens monochromes
+  ```

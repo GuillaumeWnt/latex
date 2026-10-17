@@ -1,73 +1,203 @@
 %% ==============================================================================
 %% content/04-resultats.tex
-%% Chapitre 4 : Résultats expérimentaux et validation
+%% Chapitre 4 : Bibliographie Programmable et Compilation Automatisée (biblio/ & latexmkrc)
 %% ==============================================================================
-\chapter{Résultats Expérimentaux et Validation}
-\label{chap:resultats}
+\chapter{Bibliographie Programmable et Compilation Automatisée}
+\label{chap:biblio-compilation}
 
-\section{Protocole Expérimental et Métriques}
-\label{sec:resultats-protocole}
+\section{La Révolution Bib\LaTeX{} et Biber}
+\label{sec:biblatex-biber}
 
-Pour valider l'efficience et la robustesse de notre architecture,
-nous avons conduit une campagne de bancs d'essai sur plusieurs jeux de données représentatifs.
-Les grandeurs physiques et les métriques de performance sont systématiquement formulées
-à l'aide du paquet \code{siunitx}, assurant le respect des normes métrologiques internationales.
-À titre d'exemple, la puissance crête mesurée est de \qty{142.8}{\kilo\watt},
-tandis que la vitesse de convergence moyenne s'établit à \qty{1.45e-3}{\second\per\iter}.
-
-\begin{definitionbox}[Indice d'efficience typographique ($\eta_T$)]
-\label{def:efficience}
-Soit $N_p$ le nombre total de pages d'un document et $T_c$ le temps de compilation complet avec Biber.
-L'indice d'efficience typographique est défini par le ratio :
-\begin{equation}
-  \eta_T = \frac{N_p}{T_c} \quad \left[\text{pages}\cdot\unit{\second^{-1}}\right]
-\end{equation}
-Un ratio élevé témoigne d'une compilation optimisée sans goulets d'étranglement dans le préambule.
-\end{definitionbox}
-
-\section{Analyse Comparative des Performances}
-\label{sec:resultats-analyse}
-
-Les données quantitatives obtenues lors des campagnes de test
-sont récapitulées dans le \cref{tab:resultats-synthese}.
-Comme préconisé par les bonnes pratiques typographiques,
-ce tableau utilise exclusivement les filets horizontaux du paquet \code{booktabs}
-(\code{\textbackslash toprule}, \code{\textbackslash midrule}, \code{\textbackslash bottomrule})
-et proscrit tout filet vertical afin de favoriser le balayage visuel continu de la donnée.
-
-\begin{table}[htbp]
-  \centering
-  \caption{Synthèse comparative des performances selon la configuration de compilation}
-  \label{tab:resultats-synthese}
-  \begin{tabularx}{\textwidth}{@{} l r r r X @{}}
-    \toprule
-    \textbf{Configuration} & \textbf{Mémoire (\unit{\mega\byte})} & \textbf{Temps (\unit{\second})} & \textbf{Score $\eta_T$} & \textbf{Observations} \\
-    \midrule
-    Modèle Monolithique   & \num{248.5} & \num{8.42} & \num{12.4} & Avertissements de fontes et collision de paquets \\
-    Extensions disparates & \num{310.2} & \num{9.15} & \num{11.5} & Redondance des inclusions de macros \\
-    \textbf{Notre classe (Écran)}   & \num{182.4} & \num{4.18} & \num{25.1} & Navigation fluide, hyperliens dynamiques \\
-    \textbf{Notre classe (Papier)}  & \num{185.0} & \num{4.22} & \num{24.9} & Géométrie BCOR compensée, contraste maximal \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
-Ces résultats corroborent les observations de \textcite{dupont2024methodologie} :
-la rationalisation des couches d'importation permet de diviser par deux le temps de compilation
-tout en garantissant une totale immunité face aux régressions visuelles.
-Comme le démontrent également les travaux de \textcite{goodfellow2016deep} et \textcite{vaswani2017attention},
-la rigueur dans la structuration des composants logiciels et des pipelines de traitement
-constitue un facteur déterminant pour la reproductibilité expérimentale.
-
-\section{Discussion et Synthèse}
-\label{sec:resultats-discussion}
-
-L'évaluation qualitative met en lumière trois bénéfices majeurs pour l'utilisateur :
+Pendant plusieurs décennies, la gestion des références bibliographiques reposait sur le moteur historique \code{BibTeX}.
+Bien qu'extrêmement robuste, \code{BibTeX} présentait des limites rédhibitoires pour les auteurs contemporains :
 \begin{itemize}
-  \item \textbf{Lisibilité du code source :} un nouvel intervenant identifie instantanément
-  où ajouter un chapitre, une macro ou une entrée bibliographique sans risque d'effets de bord.
-  \item \textbf{Polyvalence du livrable :} générer la version finale prête pour l'imprimeur
-  ou la version numérique pour le jury ne nécessite qu'un seul basculement d'option.
-  \item \textbf{Stabilité pérenne :} l'absence d'extensions obsolètes
-  garantit une compatibilité totale avec les distributions \TeX{} Live contemporaines et futures.
+  \item les styles étaient programmés dans un langage obscur de type Forth (les fichiers \code{.bst}),
+  \item la prise en charge des caractères accentués et de l'encodage UTF-8 était défaillante,
+  \item et toute modification de ponctuation ou d'ordre des auteurs nécessitait un savoir-faire d'initié.
 \end{itemize}
 
+Comme le documentent \textcite{lehman2024biblatex}, Bib\LaTeX{}, adossé au moteur de tri moderne \code{Biber},
+a profondément rénové cette discipline.
+En transférant la logique de mise en forme directement dans le langage \LaTeX{},
+Bib\LaTeX{} permet de concevoir des styles entièrement programmables et modulaires.
+
+Dans notre projet, cette couche est externalisée dans le dossier \code{biblio/}
+à travers trois fichiers complémentaires :
+\begin{enumerate}
+  \item \textbf{\code{references.bib} :} la base de données brute des notices (auteurs, titres, dates, DOI, URL).
+  \item \textbf{\code{custom-style.bbx} :} la mise en page de la bibliographie finale imprimée en fin d'ouvrage.
+  \item \textbf{\code{custom-style.cbx} :} la mise en page des renvois et des citations dans le cours du texte.
+\end{enumerate}
+
+\section{Personnalisation de la Bibliographie Finale : \code{custom-style.bbx}}
+\label{sec:bbx-detail}
+
+Le fichier \code{custom-style.bbx} hérite de la classe de référence \code{authoryear}
+et applique plusieurs raffinements typographiques :
+
+\begin{itemize}
+  \item \textbf{Noms d'auteurs en petites capitales :}
+  grâce à la redéfinition de la macro \code{\textbackslash mkbibnamefamily},
+  les noms de famille apparaissent en petites capitales (\textsc{Majuscules Réduites}) sans alourdir le texte.
+  \item \textbf{Distinction visuelle des titres :}
+  les titres d'articles ou d'actes de conférences sont placés entre guillemets de langue active (\code{\textbackslash enquote}),
+  tandis que les titres d'ouvrages et de thèses sont composés en italique (\code{\textbackslash mkbibemph}).
+  \item \textbf{Hyperliens d'identifiants DOI et URL :}
+  les identifiants numériques sont formatés sous forme de liens compacts cliquables
+  (par exemple \code{doi:10.1016/...}) renvoyant directement vers la publication originale de l'éditeur.
+  \item \textbf{Espacement vertical maîtrisé :}
+  le paramètre \code{\textbackslash bibitemsep} ajuste le blanc typographique entre deux notices successives.
+\end{itemize}
+
+\section{L'Art de Citer dans le Texte : \code{custom-style.cbx}}
+\label{sec:cbx-detail}
+
+Dans le corps de texte, le fichier \code{custom-style.cbx} gouverne la façon dont les renvois apparaissent :
+
+\begin{itemize}
+  \item \textbf{Citation parentétique (\code{\textbackslash autocite} ou \code{\textbackslash parencite}) :}
+  à privilégier pour étayer une affirmation scientifique sans interrompre la lecture courante.
+  Exemple : \autocite{knuth1984texbook}.
+  \item \textbf{Citation intégrée au discours (\code{\textbackslash textcite}) :}
+  à utiliser lorsque l'auteur fait partie intégrante de la phrase grammaticale.
+  Exemple : \textcite{lamport1994latex} a développé le premier macro-système \LaTeX{}.
+  \item \textbf{Gestion des co-auteurs :}
+  le réglage \code{maxcitenames=2} assure que les articles ayant jusqu'à deux auteurs
+  affichent les deux noms (ex. \textcite{mittelbach2023latex}),
+  tandis qu'au-delà de deux auteurs, la mention « et al. » est automatiquement insérée (ex. \textcite{lehman2024biblatex}).
+  \item \textbf{Lien hypertexte intégral :}
+  l'auteur et l'année sont cliquables, téléportant le lecteur directement sur la notice correspondante.
+\end{itemize}
+
+\section{Automatisation de la Compilation avec \code{latexmkrc}}
+\label{sec:compilation-latexmkrc}
+
+La compilation manuelle d'un document complet (comprenant la table des matières,
+les renvois croisés et la bibliographie) requiert traditionnellement une longue suite de commandes :
+\code{lualatex}, puis \code{biber}, puis à nouveau deux passes de \code{lualatex}.
+
+Le fichier \code{latexmkrc} placé à la racine du projet automatise entièrement cette chorégraphie.
+Il configure le programme \code{latexmk} avec les réglages optimaux :
+\begin{itemize}
+  \item \textbf{Moteur Lua\LaTeX{} par défaut :} paramétré via \code{\$pdf\_mode = 4;}.
+  \item \textbf{Moteur Biber automatique :} paramétré via \code{\$bibtex\_use = 2;}.
+  \item \textbf{Confinement dans le dossier \code{build/} :} paramétré via \code{\$out\_dir = 'build';}.
+\end{itemize}
+
+\begin{callout}[Avantage majeur du dossier build/]
+Grâce au paramètre \code{\$out\_dir = 'build'}, les dizaines de fichiers temporaires générés par \LaTeX{}
+(\code{.aux}, \code{.bbl}, \code{.bcf}, \code{.log}, \code{.toc}, \code{.synctex.gz})
+ne polluent plus jamais la racine de votre projet !
+La racine reste immaculée, claire et agréable à naviguer.
+\end{callout}
+
+Pour compiler l'intégralité du document en une seule touche, tapez simplement dans votre terminal :
+\begin{center}
+  \code{latexmk}
+\end{center}
+Le fichier PDF prêt pour la lecture ou l'impression est immédiatement généré dans \code{build/main.pdf}.
+Pour faire le ménage et supprimer les fichiers temporaires, utilisez \code{latexmk -c} (nettoyage intermédiaire)
+ou \code{latexmk -C} (nettoyage complet incluant le PDF).
+
+\section{Données Brutes et Graphiques Reproductibles : le Dossier \code{data/}}
+\label{sec:data-pgfplots}
+
+De la même manière que pour le code source,
+les données numériques brutes (mesures expérimentales, métriques de convergence, journaux de calcul)
+ne doivent pas être confondues avec les figures finales dans \code{figures/}.
+Le dossier \code{data/} isole ces fichiers au format standard \code{.csv} ou \code{.tsv}.
+
+Grâce au paquet \code{pgfplots}, \LaTeX{} génère les courbes directement à partir des données sources brutes,
+sans passer par un export PNG ou PDF intermédiaire.
+Le \cref{fig:courbe-csv} est produit en temps réel à partir de \code{data/benchmark-results.csv} :
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.88\textwidth,
+      height=6.2cm,
+      grid=major,
+      grid style={line width=0.4pt, draw=ThesisMuted!30},
+      xlabel={Itérations d'entraînement},
+      ylabel={Précision (\%)},
+      xmin=1, xmax=20,
+      ymin=50, ymax=102,
+      legend pos=south east,
+      legend style={font=\footnotesize\sffamily, fill=white, fill opacity=0.85}
+    ]
+      \addplot[
+        color=ThesisPrimary,
+        line width=1.3pt,
+        mark=*,
+        mark size=1.8pt
+      ] table[x=Iteration, y=Accuracy, col sep=comma] {data/benchmark-results.csv};
+      \addlegendentry{Architecture modulaire proposée}
+
+      \addplot[
+        color=ThesisSecondary,
+        line width=1.1pt,
+        dashed,
+        mark=square*,
+        mark size=1.6pt
+      ] table[x=Iteration, y=LossBaseline, col sep=comma] {data/benchmark-results.csv};
+      \addlegendentry{Modèle standard de référence}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Courbes de performance générées en temps réel depuis le fichier brut \code{data/benchmark-results.csv}}
+  \label{fig:courbe-csv}
+\end{figure}
+
+Cette approche offre deux garanties capitales pour une thèse :
+\begin{enumerate}
+  \item \textbf{La reproductibilité scientifique :} si vos simulations sont ré-exécutées,
+  il vous suffit d'écraser le fichier \code{.csv} pour que les courbes du mémoire se mettent à jour automatiquement.
+  \item \textbf{L'harmonie typographique absolue :} les axes, graduations et légendes
+  utilisent exactement la même police et les mêmes corps de texte que le reste de votre manuscrit.
+\end{enumerate}
+
+\section{Outillage de Qualité Logicielle : \code{.editorconfig} et \code{.chktexrc}}
+\label{sec:qualite-outils}
+
+Pour pérenniser le travail d'équipe et garantir une hygiène rédactionnelle exemplaire,
+le projet intègre deux fichiers de métaconfiguration indispensables :
+
+\subsection{Standardisation de l'éditeur : \code{.editorconfig}}
+Le fichier \code{.editorconfig} impose des conventions d'édition universelles reconnues par VS Code, Vim, Emacs et les pipelines \code{latexindent} :
+\begin{itemize}
+  \item Indentation stricte à 2 espaces pour l'ensemble des fichiers \LaTeX{} (\code{.tex}, \code{.cls}, \code{.sty}, \code{.clo}, \code{.bib}).
+  \item Encodage UTF-8 et fins de ligne uniformisées en format Unix (\code{LF}).
+  \item Suppression automatique des espaces superflues en fin de ligne lors de l'enregistrement.
+\end{itemize}
+
+\subsection{Linter typographique : \code{.chktexrc}}
+Le linter \code{chktex} analyse le code source pour détecter les entorses aux règles de l'art typographique.
+Le fichier \code{.chktexrc} fourni configure les règles métier :
+\begin{itemize}
+  \item \textbf{Obligation d'espaces insécables (\code{\textasciitilde}) :}
+  il alerte immédiatement si un auteur oublie le tilde insécable avant un renvoi
+  (ex. \code{\textbackslash cref\{...\}} ou \code{\textbackslash autocite\{...\}}),
+  empêchant qu'une référence ou un numéro ne soit orphelin en début de ligne.
+  \item \textbf{Filtrage des faux positifs :}
+  il neutralise les alertes obsolètes pour les environnements de programmation modernes (\code{tcolorbox}, \code{listings}).
+\end{itemize}
+
+\section{Recette Pratique : Basculer entre Écran et Impression}
+\label{sec:recette-bascule}
+
+Le passage d'une version numérique interactive à une version papier prête pour l'imprimeur
+ne demande **aucune modification** dans vos chapitres ou vos tableaux.
+Ouvrez simplement le fichier maître \code{main.tex} et modifiez la toute première ligne :
+
+\begin{itemize}
+  \item \textbf{Pour la lecture sur écran :}
+  \begin{center}
+    \code{\textbackslash documentclass[screen]\{mythesis\}}
+  \end{center}
+  \item \textbf{Pour l'impression papier reliée :}
+  \begin{center}
+    \code{\textbackslash documentclass[print]\{mythesis\}}
+  \end{center}
+\end{itemize}
+Relancez \code{latexmk} : votre document reconfigure instantanément sa pagination, ses marges,
+son décalage de pliure \code{BCOR} et le traitement chromatique de ses liens hypertextes.

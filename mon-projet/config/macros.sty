@@ -109,5 +109,31 @@
 \crefname{deficounter}{définition}{définitions}
 \Crefname{deficounter}{Définition}{Définitions}
 
+% --- Configuration du style de code source externe (listings/) ---
+\lstdefinestyle{mythesiscode}{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{ThesisBackground},
+  keywordstyle=\color{ThesisPrimary}\bfseries,
+  commentstyle=\color{ThesisMuted}\itshape,
+  stringstyle=\color{ThesisAccent},
+  numberstyle=\tiny\color{ThesisMuted},
+  numbers=left,
+  numbersep=8pt,
+  stepnumber=1,
+  frame=single,
+  rulecolor=\color{ThesisSecondary!30},
+  framesep=4pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2,
+  showstringspaces=false,
+  captionpos=b,
+  keepspaces=true
+}
+\lstset{style=mythesiscode}
+
+\crefname{lstlisting}{listing}{listings}
+\Crefname{lstlisting}{Listing}{Listings}
+
 \endinput
 

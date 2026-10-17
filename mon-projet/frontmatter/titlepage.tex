@@ -1,11 +1,11 @@
 %% ==============================================================================
 %% frontmatter/titlepage.tex
-%% Page de titre moderne et épurée utilisant les capacités KOMA-Script
+%% Page de titre moderne et épurée pour le manuel tutoriel
 %% ==============================================================================
 \begin{titlepage}
   \sffamily
   
-  % En-tête : Institution, composante et logo
+  % En-tête : Institution, composante et logo vectoriel
   \noindent
   \begin{minipage}[t]{0.72\textwidth}
     {\fontsize{13}{16}\bfseries\color{ThesisPrimary}\getinstitution}\par
@@ -25,11 +25,11 @@
 
   \vspace{1.5cm}
 
-  % Mention du diplôme et de la discipline
+  % Mention du document et de la discipline
   \begin{center}
     {\fontsize{11}{14}\bfseries\color{ThesisSecondary}\MakeUppercase{\getdegree}}\par
     \vspace{3mm}
-    {\fontsize{10}{13}\color{ThesisMuted}Spécialité : \textbf{\getspecialty}}\par
+    {\fontsize{10}{13}\color{ThesisMuted}Discipline : \textbf{\getspecialty}}\par
     
     \vspace{1.2cm}
 
@@ -39,7 +39,7 @@
     {\fontsize{22}{28}\bfseries\color{ThesisPrimary}\makeatletter\@title\makeatother}\par
     \ifdefined\@subtitle
       \vspace{4mm}
-      {\fontsize{14}{18}\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
+      {\fontsize{13}{17}\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
     \fi
     \vspace{6mm}
     \hrule height 0.5pt \relax
@@ -47,30 +47,28 @@
     \vspace{1.2cm}
 
     % Auteur et date
-    {\fontsize{11}{14}\color{ThesisMuted}Présenté et soutenu publiquement par}\par
+    {\fontsize{11}{14}\color{ThesisMuted}Rédigé et composé par}\par
     \vspace{3mm}
     {\fontsize{15}{18}\bfseries\color{ThesisPrimary}\makeatletter\@author\makeatother}\par
     \vspace{4mm}
-    {\fontsize{10}{13}\color{ThesisMuted}Soutenue le \makeatletter\@date\makeatother{} à \getlocation}\par
+    {\fontsize{10}{13}\color{ThesisMuted}Version mise à jour le \makeatletter\@date\makeatother{} -- \getlocation}\par
   \end{center}
 
   \vfill
 
-  % Composition du jury
+  % Comité d'évaluation typographique / Lecteurs référents
   \noindent
-  {\small\bfseries\color{ThesisPrimary}Composition du jury :}\par
+  {\small\bfseries\color{ThesisPrimary}Comité de relecture et références fondatrices :}\par
   \vspace{3mm}
   \noindent
   \begin{tabularx}{\textwidth}{@{} >{\bfseries}p{4.2cm} X >{\raggedleft\arraybackslash}p{4.0cm} @{}}
     \toprule
-    Pr. Robert Bringhurst & Professeur, University of British Columbia & Président du jury \\
-    Dr. Leslie Lamport    & Directeur de Recherche, INRIA               & Rapporteur \\
-    Pr. Donald Knuth      & Professeur Émérite, Stanford University     & Rapporteur \\
-    Dr. Claude Shannon    & Chercheur Senior, Bell Labs                 & Examinateur \\
-    \getsupervisor        & Professeur, \getinstitution                 & Directeur de thèse \\
-    \getcosupervisor      & Maître de Conférences, \getinstitution      & Co-directeur de thèse \\
+    Pr. Robert Bringhurst & Typographe, auteur de \textit{Elements of Typographic Style} & Expert Typographie \\
+    Dr. Leslie Lamport    & Créateur de \LaTeX{}, Prix Turing 2013                       & Fondateur Logiciel \\
+    Pr. Donald E. Knuth   & Créateur de \TeX{} et Metafont, Stanford University          & Fondateur Moteur \\
+    Markus Kohm           & Concepteur de l'écosystème KOMA-Script                       & Expert Architecture \\
+    Frank Mittelbach      & Responsable du projet \LaTeX3, auteur du \textit{\LaTeX{} Companion} & Référent Standard \\
     \bottomrule
   \end{tabularx}
 
 \end{titlepage}
-

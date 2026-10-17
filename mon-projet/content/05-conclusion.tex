@@ -1,0 +1,90 @@
+%% ==============================================================================
+%% content/05-conclusion.tex
+%% Chapitre 5 : Conclusion Générale et Perspectives
+%% Encadre la thèse symétriquement à l'Introduction Générale
+%% ==============================================================================
+\chapter{Conclusion Générale et Perspectives}
+\label{chap:conclusion-generale}
+
+\section{Le Statut de la Conclusion Générale en Thèse}
+\label{sec:conclusion-statut}
+
+Dans la structure académique d'une thèse de doctorat ou d'un mémoire d'habilitation,
+l'introduction générale et la conclusion générale occupent une place singulière.
+Alors que les chapitres intermédiaires développent les contributions scientifiques techniques pas à pas,
+la conclusion générale prend de la hauteur pour dresser le bilan critique des travaux,
+évaluer la portée des résultats obtenus et tracer les lignes de fuite pour les recherches futures.
+
+Noyer la conclusion à la fin du dernier chapitre de résultats constitue un écueil fréquent.
+En isolant la conclusion générale dans son propre module (\code{content/05-conclusion.tex} ou \code{content/conclusion.tex}),
+vous offrez au jury et aux lecteurs une vision d'ensemble claire et détendue des résultats.
+
+\begin{callout}[Numérotation : \code{\textbackslash chapter} ou \code{\textbackslash addchap} ?]
+Selon les traditions doctorales de votre établissement, deux conventions sont possibles :
+\begin{enumerate}
+  \item \textbf{Chapitre numéroté classique (\code{\textbackslash chapter\{Conclusion Générale\}}) :}
+  s'intègre dans le décompte séquentiel des chapitres (ex. Chapitre~5).
+  \item \textbf{Chapitre d'ouverture/fermeture non numéroté (\code{\textbackslash addchap\{Conclusion Générale\}}) :}
+  KOMA-Script propose la commande dédiée \code{\textbackslash addchap}.
+  Elle compose le titre avec la même majesté typographique qu'un chapitre numéroté,
+  l'insère dans la table des matières (\code{TOC})
+  et met à jour les en-têtes de page courants, tout en omettant le préfixe numérique.
+  Cette approche permet d'encadrer symétriquement le corps d'ouvrage
+  entre \code{\textbackslash addchap\{Introduction Générale\}} et \code{\textbackslash addchap\{Conclusion Générale\}}.
+\end{enumerate}
+\end{callout}
+
+\section{Synthèse des Apports de l'Architecture Modulaire}
+\label{sec:conclusion-synthese}
+
+Le canevas développé tout au long de ce tutoriel résout les limitations historiques
+des projets \LaTeX{} volumineux en formalisant six piliers méthodologiques :
+
+\begin{enumerate}
+  \item \textbf{Le découplage sémantique total :}
+  le fichier maître \code{main.tex} ordonnance la structure sans être pollué par le style ;
+  la classe \code{mythesis.cls} encapsule l'identité visuelle KOMA-Script ;
+  et les chapitres rédactionnels (\code{content/*.tex}) se concentrent exclusivement sur le fond.
+  \item \textbf{La flexibilité du support par fichiers d'options (\code{.clo}) :}
+  le passage d'un format de lecture sur écran (marges symétriques, palette interactive)
+  à un format d'impression papier reliée (recto-verso, décalage de pliure \code{BCOR=10mm}, liens monochromes)
+  s'effectue par la simple modification d'un mot-clé dans \code{main.tex}.
+  \item \textbf{La sanctuarisation des données brutes et du code source :}
+  l'introduction des dossiers dédiés \code{data/} (pour les jeux de données tabulaires \code{.csv} lus par \code{pgfplots})
+  et \code{listings/} (pour les codes sources externes importés sans copier-coller)
+  garantit une traçabilité expérimentale irréprochable.
+  \item \textbf{La reproductibilité typographique multi-plateforme :}
+  le stockage local des polices OpenType/TrueType dans le répertoire \code{fonts/}
+  immunise le projet contre les variations de polices entre Windows, Linux, macOS, Overleaf et les pipelines d'intégration continue CI/CD.
+  \item \textbf{La bibliographie modulaire Bib\LaTeX{} :}
+  la séparation entre données brutes (\code{references.bib}),
+  mise en page de la bibliographie finale (\code{custom-style.bbx})
+  et formatage des citations cliquables (\code{custom-style.cbx})
+  offre une liberté totale de personnalisation sans la complexité des anciens fichiers BST.
+  \item \textbf{L'outillage qualité automatisé :}
+  la présence conjointe de \code{latexmkrc} (confinement de la compilation dans \code{build/}),
+  de \code{.editorconfig} (uniformisation de l'indentation à deux espaces)
+  et de \code{.chktexrc} (contrôle automatique des espaces insécables avant \code{\textbackslash cite} et \code{\textbackslash ref})
+  élève le document aux standards industriels du génie logiciel.
+\end{enumerate}
+
+\section{Perspectives et Évolutions du Modèle}
+\label{sec:conclusion-perspectives}
+
+Cette architecture constitue un socle extensible qui ouvre plusieurs voies d'enrichissement :
+
+\begin{itemize}
+  \item \textbf{Intégration Continue (GitHub Actions / GitLab CI) :}
+  l'exécution automatique de \code{latexmk} dans un conteneur TeX Live à chaque \code{git push}
+  permet de générer et de publier les PDF d'évaluation (écran et papier) sous forme d'artefacts téléchargeables.
+  \item \textbf{Variantes de profils d'options :}
+  créer de nouveaux fichiers \code{.clo}, tels qu'un profil pour liseuse à encre électronique (\code{mythesis-ereader.clo})
+  ou un profil accessible à grand corps de texte (\code{mythesis-dyslexic.clo}).
+  \item \textbf{Extraction automatique de données :}
+  connecter des scripts Python générant automatiquement les courbes de \code{data/}
+  lors de l'exécution de bancs d'essai scientifiques.
+\end{itemize}
+
+En adoptant ces préceptes, vous transformez votre projet \LaTeX{} en une plateforme d'édition pérenne,
+élégante et véritablement partagée.
+

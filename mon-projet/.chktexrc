@@ -1,0 +1,35 @@
+# ==============================================================================
+# .chktexrc — Configuration du linter typographique ChkTeX pour LaTeX
+# Détecte automatiquement les fautes typographiques et les oublis d'espaces insécables
+# ==============================================================================
+
+# Commandes nécessitant impérativement une espace insécable (~) avant leur appel :
+# Ex : « au \cref{...} » génère un avertissement, « au~\cref{...} » est conforme.
+TabSpace
+{
+  \ref \pageref \vref \eqref
+  \cite \autocite \textcite \parencite \supercite
+  \cref \Cref
+}
+
+# Suppression des faux positifs trop stricts dans un contexte moderne :
+# 1  : Commande terminée par une espace (souvent intentionnel en texte)
+# 24 : Espace avant \pageref
+# 26 : Emploi d'une longueur explicite (\vspace, \hspace)
+# 36 : Caractères modificateurs / guillemets UTF-8
+# 46 : Utilisation d'un environnement verbeux (tcolorbox, listings)
+Silence
+{
+  1 24 26 36 46
+}
+
+# Macros autorisant des caractères spéciaux à l'intérieur de leurs arguments
+WipeArg
+{
+  \code{}
+  \url{}
+  \nolinkurl{}
+  \href{}{}
+  \lstinline[]{}
+}
+

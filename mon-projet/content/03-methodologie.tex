@@ -1,82 +1,148 @@
 %% ==============================================================================
 %% content/03-methodologie.tex
-%% Chapitre 3 : Architecture méthodologique et modélisation
+%% Chapitre 3 : Styles, Macros Métier et Intégration Graphique (config/ & figures/)
 %% ==============================================================================
-\chapter{Architecture Méthodologique et Modélisation}
-\label{chap:methodologie}
+\chapter{Styles, Macros Métier et Intégration Graphique}
+\label{chap:styles-macros-graphisme}
 
-\section{Formalisation Mathématique du Processus}
-\label{sec:methode-maths}
+\section{Organisation Modulaire du Dossier \code{config/}}
+\label{sec:config-organisation}
 
-Afin d'illustrer la cohérence des macros mathématiques définies dans \code{config/macros.sty},
-considérons un problème d'optimisation sous contraintes de régularité
-appliqué au recalage de paramètres typographiques ou de données multidimensionnelles.
-Soit un ensemble d'observations $\mathcal{D} = \{(\vect{x}_i, y_i)\}_{i=1}^N$
-où chaque vecteur $\vect{x}_i \in \setR^d$ représente un descripteur d'entrée
-et $y_i \in \setR$ la réponse associée.
+Le répertoire \code{config/} sépare rigoureusement deux catégories d'instructions souvent confondues :
+les paquets tiers d'une part, et les macros personnelles d'autre part.
 
-Le modèle cherche à estimer un vecteur de paramètres optimaux $\vect{\theta}^* \in \setR^d$
-minimisant une fonctionnelle de coût pénalisée :
-\begin{equation}
-  \label{eq:optimisation-globale}
-  \vect{\theta}^* = \argmin_{\vect{\theta} \in \setR^d} \left\{ \frac{1}{N} \sum_{i=1}^N \mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \lambda \, \mathcal{R}(\vect{\theta}) \right\}
-\end{equation}
-où $\mathcal{L}(\cdot)$ est une fonction de perte convexe,
-$\mathcal{R}(\vect{\theta}) = \frac{1}{2}\norm{\vect{\theta}}_2^2$ désigne un terme de régularisation de Tikhonov,
-et $\lambda > 0$ est un hyperparamètre d'arbitrage.
+\begin{itemize}
+  \item \textbf{\code{config/packages.sty} :}
+  déclare l'ensemble des dépendances logicielles externes nécessaires au document.
+  Il configure leur comportement global (moteur de polices, langues, tableaux, hyperliens)
+  dans le respect strict de l'ordre d'importation requis par \LaTeX{}.
+  \item \textbf{\code{config/macros.sty} :}
+  définit les outils métier spécifiques à la rédaction de votre ouvrage.
+  On y trouve vos conventions mathématiques, vos raccourcis textuels
+  et la personnalisation des environnements graphiques (\code{tcolorbox}).
+\end{itemize}
 
-\begin{hypothesis}[Convexité stricte]
-\label{hyp:convexite}
-La fonction de perte $\vect{\theta} \mapsto \mathcal{L}(y, f(\vect{x}; \vect{\theta}))$ est deux fois continûment différentiable
-et strictement convexe sur l'espace admissible $\setR^d$,
-garantissant l'unicité de la solution $\vect{\theta}^*$.
+Grâce à cette scission, si vous souhaitez réutiliser vos macros mathématiques dans un autre article,
+il vous suffit d'importer \code{macros.sty} sans devoir importer toute l'infrastructure de la thèse.
+
+\section{L'Art de Configurer les Paquets : \code{packages.sty}}
+\label{sec:packages-detail}
+
+Le fichier \code{packages.sty} met en \oe{}uvre plusieurs principes de composition moderne :
+
+\subsection{Détection universelle du moteur typographique}
+Le paquet \code{iftex} teste dynamiquement le compilateur utilisé :
+\begin{itemize}
+  \item Sous \textbf{Lua\LaTeX{}} ou \textbf{Xe\LaTeX{}}, il charge \code{fontspec} et active le crénage natif OpenType.
+  \item Sous \textbf{pdf\LaTeX{}}, il charge de manière transparente le codage \code{[T1]\{fontenc\}}, l'encodage \code{[utf8]\{inputenc\}} et la fonte vectorielle \code{lmodern}.
+\end{itemize}
+Votre document compile ainsi sans friction sur n'importe quelle machine ou forge d'intégration continue.
+
+\subsection{Microtypographie et lisibilité}
+Le paquet \code{microtype} applique deux raffinements majeurs de l'imprimerie traditionnelle :
+la saillie des marges (\textit{margin protrusion}, permettant aux tirets et à la ponctuation de déborder légèrement dans la marge blanche pour un alignement optique parfait)
+et l'expansion subtile des caractères (\textit{font expansion}), qui élimine les césures excessives et les lignes lâches.
+
+\subsection{Tableaux professionnels : la fin des filets verticaux}
+Comme l'expliquent \textcite{bringhurst2004elements} et \textcite{mittelbach2023latex},
+les tableaux typographiques de haute qualité n'utilisent **jamais** de filets verticaux.
+Ces filets fragmentent le regard et gênent la lecture des données.
+Notre configuration s'appuie sur le trio moderne :
+\begin{enumerate}
+  \item \code{booktabs} pour des filets horizontaux d'épaisseur variable (\code{\textbackslash toprule}, \code{\textbackslash midrule}, \code{\textbackslash bottomrule}),
+  \item \code{tabularx} pour le calcul automatique de colonnes extensibles adaptées à la largeur de page (\code{X}),
+  \item et \code{makecell} pour les sauts de ligne élégants à l'intérieur d'une même cellule.
+\end{enumerate}
+
+\section{Macros Sémantiques et Boîtes Graphiques : \code{macros.sty}}
+\label{sec:macros-detail}
+
+Le fichier \code{macros.sty} propose une boîte à outils prête à l'emploi.
+
+\subsection{Raccourcis mathématiques rigoureux}
+Pour éviter de ressaisir de longues commandes verbeuses, le fichier fournit :
+\begin{itemize}
+  \item Les vecteurs et matrices en gras droit : \code{\textbackslash vect\{x\}} ($\vect{x}$) et \code{\textbackslash mat\{M\}} ($\mat{M}$).
+  \item Les ensembles de nombres usuels : \code{\textbackslash setR} ($\setR$), \code{\textbackslash setN} ($\setN$), \code{\textbackslash setC} ($\setC$).
+  \item Les délimiteurs extensibles gérés par \code{mathtools} :
+  \code{\textbackslash norm\{x\}} ($\norm{x}$),
+  \code{\textbackslash abs\{x\}} ($\abs{x}$)
+  et le produit scalaire \code{\textbackslash scal\{x\}\{y\}} ($\scal{x}{y}$).
+  \item Le symbole différentiel droit conforme aux normes ISO : \code{\textbackslash diff} ($\diff x$).
+\end{itemize}
+
+\subsection{Environnements encadrés avec \code{tcolorbox}}
+Trois types d'encadrés personnalisés sont pré-paramétrés :
+\begin{enumerate}
+  \item \code{\textbackslash begin\{callout\}[Titre]...} : encadré d'information générale ou de remarque méthodologique.
+  \item \code{\textbackslash begin\{hypothesis\}[Titre]...} : boîte d'hypothèse scientifique, numérotée par chapitre.
+  \item \code{\textbackslash begin\{definitionbox\}[Titre]...} : boîte de définition formelle avec en-tête plein.
+\end{enumerate}
+
+Voici une illustration en situation réelle de la boîte d'hypothèse :
+
+\begin{hypothesis}[Découplage architectural strict]
+\label{hyp:decouplage}
+Tout composant graphique ou typographique peut être modifié ou remplacé
+sans qu'aucune ligne des chapitres de contenu (\code{content/*.tex}) ne doive être éditée.
 \end{hypothesis}
 
-Sous l'\cref{hyp:convexite}, le gradient de la fonctionnelle s'exprime analytiquement selon :
-\begin{equation}
-  \label{eq:gradient}
-  \nabla_{\vect{\theta}} \mathcal{J}(\vect{\theta}) = \frac{1}{N} \sum_{i=1}^N \nabla_{\vect{\theta}}\mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \lambda \vect{\theta}
-\end{equation}
-ce qui permet l'application d'un algorithme de descente à pas adaptatif.
+Grâce à l'intégration de \code{cleveref}, vous pouvez référencer automatiquement cet encadré dans le texte
+via \code{\textbackslash cref\{hyp:decouplage\}}, ce qui produit automatiquement : \cref{hyp:decouplage}.
 
-\section{Schéma de Principe et Pipeline Modulaire}
-\label{sec:schema-principe}
+\section{Gestion des Figures Vectorielles et Schémas TikZ}
+\label{sec:figures-tikz}
 
-Le flux de traitement et l'interaction entre les différents modules sont représentés sur le \cref{fig:schema-principe}.
-Le schéma vectoriel est externalisé dans le fichier \code{figures/schema-principe.tikz}
-et inséré directement via la commande standard \code{\textbackslash input}.
-Cette approche élimine tout artefact de pixellisation et garantit que les polices
-et les couleurs du dessin s'harmonisent rigoureusement avec la classe du document.
+Le dossier \code{figures/} héberge les médias sources du document :
+\begin{itemize}
+  \item \textbf{Fichiers PDF vectoriels (\code{logo.pdf}) :}
+  idéaux pour les logos institutionnels ou les graphiques haute fidélité issus d'outils d'ingénierie.
+  Ils ne se dégradent jamais au zoom et sont appelés classiquement via \code{\textbackslash includegraphics}.
+  \item \textbf{Schémas vectoriels programmés (\code{schema-principe.tikz}) :}
+  le code TikZ est externalisé dans son propre fichier source, ce qui permet de le versionner et de l'éditer isolément.
+\end{itemize}
 
 \begin{figure}[htbp]
   \centering
   \resizebox{\textwidth}{!}{\input{figures/schema-principe.tikz}}
-  \caption{Schéma de principe du pipeline itératif d'optimisation et d'évaluation}
-  \label{fig:schema-principe}
+  \caption{Schéma d'orchestration de l'architecture modulaire et du flux de compilation}
+  \label{fig:architecture-projet}
 \end{figure}
 
-\section{Le Rôle des Fichiers d'Options de Classe (.clo)}
-\label{sec:clo-role}
-
-L'un des apports majeurs de ce canevas réside dans l'exploitation native des fichiers \code{.clo} (\textit{Class Option}).
-En standard \LaTeX{}, ce mécanisme est souvent méconnu ou réservé aux tailles de corps (\code{size10.clo}, \code{size11.clo}).
-Dans notre architecture :
+Le \cref{fig:architecture-projet} illustre la chaîne complète régissant ce document.
+Deux astuces fondamentales sont ici appliquées :
+\begin{callout}[Astuces pour des schémas TikZ réussis]
 \begin{enumerate}
-  \item \textbf{\code{mythesis-screen.clo}} : active une géométrie à marges symétriques
-  (\code{twoside=false}, \code{BCOR=0mm}),
-  initialise une palette de couleurs contrastées
-  (\code{ThesisPrimary}, \code{ThesisSecondary})
-  et injecte les réglages \code{colorlinks=true} dans \code{hyperref}.
-  \item \textbf{\code{mythesis-print.clo}} : bascule en recto-verso
-  (\code{twoside=true}, \code{open=right}),
-  calcule un décalage de pliure adapté à la reliure
-  (\code{BCOR=10mm}),
-  et désactive la coloration des hyperliens (\code{hidelinks})
-  afin d'éviter les bavures ou les tons grisés à l'impression physique.
+  \item \textbf{Mise à l'échelle sans débordement :}
+  utilisez toujours \code{\textbackslash resizebox\{\textbackslash textwidth\}\{!\}\{\textbackslash input\{figures/schema.tikz\}\}}
+  pour que le dessin s'adapte exactement à la largeur utile de la page, quel que soit le profil de marge activé.
+  \item \textbf{Harmonisation des couleurs :}
+  utilisez les noms de couleurs de la classe (\code{ThesisPrimary}, \code{ThesisSecondary}, etc.) dans vos n\oe{}uds TikZ.
+  Votre schéma s'adaptera ainsi de lui-même si vous changez la palette de votre document !
 \end{enumerate}
+\end{callout}
 
-Cette conception garantit qu'aucun fichier de chapitre (\code{content/*.tex})
-ne contient la moindre instruction de mise en page dépendante du support de sortie.
-Le passage d'un mode à l'autre s'effectue par un unique mot-clé dans \code{main.tex} :
-soit \code{\textbackslash documentclass[screen]\{mythesis\}},
-soit \code{\textbackslash documentclass[print]\{mythesis\}}.
+\section{Sanctuarisation du Code Source Externe : le Dossier \code{listings/}}
+\label{sec:listings-externe}
+
+Une thèse ou un rapport technique intègre fréquemment des implémentations logicielles,
+des scripts d'analyse ou des modules algorithmiques.
+Le copier-coller de code directement dans les fichiers \code{.tex} constitue une mauvaise pratique notoire :
+il détruit l'indentation, corrompt les caractères spéciaux
+et empêche d'exécuter ou de tester le code en dehors du document.
+
+Pour préserver une hygiène irréprochable, les codes sources sont placés
+dans le répertoire dédié \code{listings/}.
+Ils conservent leur extension native (\code{.py}, \code{.c}, \code{.rs}, \code{.jl}),
+ce qui permet de les exécuter, de les profiler et de les tester unitairement avec vos outils habituels.
+Dans le document \LaTeX{}, le code est inséré sans aucune duplication grâce au paquet \code{listings} :
+
+\lstinputlisting[
+  language=Python,
+  caption={Pipeline d'optimisation modulaire importé directement depuis \code{listings/algorithm-pipeline.py}},
+  label={lst:pipeline-python}
+]{listings/algorithm-pipeline.py}
+
+Comme illustré dans le \cref{lst:pipeline-python},
+la mise en page hérite automatiquement de la typographie,
+de la numérotation des lignes et de la palette chromatique (\code{ThesisPrimary}, \code{ThesisAccent}) définies dans \code{config/macros.sty}.

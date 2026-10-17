@@ -1,30 +1,30 @@
 %% ==============================================================================
 %% main.tex
-%% Point d'entrée unique et chef d'orchestre du document
+%% Point d'entrée unique et chef d'orchestre du document tutoriel
 %% Classe : mythesis (bâtie sur KOMA-Script scrbook)
 %% ==============================================================================
 
-% Options disponibles pour la classe :
-%   - screen : version numérique (marges symétriques, liens cliquables en couleur)
-%   - print  : version papier (recto-verso, décalage de pliure BCOR, liens neutres)
+% Bascule instantanée de profil de document :
+%   - screen : version lecture numérique (marges symétriques, palette interactive)
+%   - print  : version impression papier reliée (recto-verso, décalage BCOR, liens neutres)
 \documentclass[screen]{mythesis}
 
-% --- Métadonnées du document ---
-\title{Architecture Modulaire pour Documents Scientifiques}
-\subtitle{Conception Découplée, Reproductibilité et Typographie Haute Fidélité}
+% --- Métadonnées du document tutoriel ---
+\title{Guide d'Architecture \LaTeX{} Modulaire}
+\subtitle{Conception Découplée, Profils Écran / Impression et Typographie Avancée sous KOMA-Script \code{scrbook}}
 \author{Guillaume \textsc{Auteur}}
 \date{17 Octobre 2026}
 
-% Métadonnées institutionnelles (utilisées pour la page de titre et le PDF)
-\institution{Institut des Sciences Appliquées \& Université de Recherche}
-\faculty{École Doctorale Informatique, Systèmes et Décision}
-\department{Laboratoire d'Ingénierie Logicielle et Mathématiques Appliquées}
-\degree{Thèse de Doctorat}
-\specialty{Informatique, Génie Logiciel \& Typographie Numérique}
+% Métadonnées institutionnelles
+\institution{Atelier Typographique \& Ingénierie Logicielle}
+\faculty{Laboratoire d'Architecture Documentaire \& Typographie Numérique}
+\department{Département Systèmes Ouverts \& Reproductibilité}
+\degree{Manuel de Référence \& Tutoriel Technique}
+\specialty{Ingénierie Documentaire \& Typographie Scientifique}
 \supervisor{Pr. Robert Bringhurst}
 \cosupervisor{Dr. Leslie Lamport}
 \location{Paris}
-\keywords{LaTeX, KOMA-Script, scrbook, architecture logicielle, BibLaTeX, Biber, typographie}
+\keywords{LaTeX, KOMA-Script, scrbook, modularité, .clo, .bbx, .cbx, BibLaTeX, LuaLaTeX, latexmk}
 
 % --- Base bibliographique BibLaTeX ---
 \addbibresource{biblio/references.bib}
@@ -42,7 +42,7 @@
 % Page de titre institutionnelle
 \input{frontmatter/titlepage.tex}
 
-% Remerciements et résumé bilingue
+% Remerciements et résumé didactique bilingue
 \input{frontmatter/acknowledgements.tex}
 \input{frontmatter/abstract.tex}
 
@@ -52,8 +52,7 @@
 \listoftables
 
 % ------------------------------------------------------------------------------
-% 2. Mainmatter : Corps du document découpé en chapitres
-%    L'instruction \include{} est réservée aux chapitres entiers.
+% 2. Mainmatter : Tutoriel découpé par chapitres thématiques
 % ------------------------------------------------------------------------------
 \mainmatter
 
@@ -61,6 +60,7 @@
 \include{content/02-etat-de-l-art}
 \include{content/03-methodologie}
 \include{content/04-resultats}
+\include{content/05-conclusion}
 
 % ------------------------------------------------------------------------------
 % 3. Annexes
@@ -80,5 +80,4 @@
 \printbibliography[heading=bibintoc, title={Références Bibliographiques}]
 
 \end{document}
-
 

@@ -1,70 +1,122 @@
 %% ==============================================================================
 %% content/01-introduction.tex
-%% Chapitre 1 : Introduction générale et motivation
+%% Chapitre 1 : Philosophie et Cartographie de l'Arborescence
 %% ==============================================================================
-\chapter{Introduction Générale}
-\label{chap:introduction}
+\chapter{Philosophie et Cartographie de l'Arborescence}
+\label{chap:philosophie-arborescence}
 
-\section{Contexte et Motivations}
-\label{sec:intro-contexte}
+\section{Le Problème du Préambule Monolithique}
+\label{sec:intro-probleme}
 
-La rédaction d'un mémoire universitaire ou d'un ouvrage technique de référence constitue une étape charnière dans l'activité scientifique.
-Depuis plusieurs décennies, le système typographique \TeX{} initié par \textcite{knuth1984texbook},
-complété par l'environnement logiciel \LaTeX{} conçu par \textcite{lamport1994latex},
-s'impose comme la référence incontournable de la publication scientifique rigoureuse.
-Cependant, à mesure que l'ampleur des documents augmente et que les exigences de diffusion se diversifient,
-la gestion d'un fichier source unique ou d'un préambule monolithique présente des limites criantes.
-
-Dans la pratique courante, les auteurs accumulent souvent des centaines de lignes de configurations hétérogènes,
-mélangeant la déclaration des polices,
-le réglage des marges,
-les redéfinitions de commandes mathématiques
-et l'inclusion de paquets tiers incompatibles.
-Cette approche engendre une fragilité technique majeure :
-la moindre modification d'un style ou le changement de moteur de compilation risque d'altérer l'ensemble de la structure.
-L'objectif de cette recherche est de formaliser une architecture logicielle pour \LaTeX{}
-fondée sur le principe éprouvé de la séparation des préoccupations (\textit{Separation of Concerns}).
-
-\section{Objectifs et Verrous Scientifiques}
-\label{sec:intro-objectifs}
-
-Pour répondre à ces enjeux, nous identifions trois verrous méthodologiques essentiels :
-
-\begin{enumerate}
-  \item \textbf{Le découplage sémantique :}
-  séparer rigoureusement la logique métier (le texte et les équations)
-  de la charte graphique globale et de l'orchestration des paquets.
-  \item \textbf{La flexibilité du support de diffusion :}
-  permettre une transition transparente entre une version optimisée pour la consultation numérique sur écran
-  (liens hypertexte interactifs, marges symétriques)
-  et une version destinée à l'impression papier de haute qualité
-  (compensation de la reliure \code{BCOR}, liens désaturés, neutralité chromatique).
-  \item \textbf{La modularité et la traçabilité collaborative :}
-  assurer un découpage granulaire des chapitres et des styles
-  facilitant le suivi de version sous Git et minimisant les conflits de fusion.
-\end{enumerate}
-
-\begin{callout}[Principe d'architecture]
-Un document \LaTeX{} de qualité professionnelle doit être abordé comme un projet logiciel :
-le fichier maître ordonnance,
-la classe encapsule les règles de composition,
-les fichiers d'options adaptent le livrable,
-et les fichiers de contenu portent la substance intellectuelle.
-\end{callout}
-
-\section{Organisation du Document}
-\label{sec:intro-plan}
-
-Le présent document est articulé en quatre chapitres principaux :
-
+Dans la plupart des projets \LaTeX{} débutants ou intermédiaires,
+les auteurs ont tendance à tout consigner dans un fichier unique, souvent volumineux.
+Le sommet du document devient alors un préambule monolithique d'une complexité décourageante,
+où s'entrecroisent :
 \begin{itemize}
-  \item Le \cref{chap:etat-art} dresse un panorama critique des approches de mise en page académique,
-  en s'appuyant notamment sur les préceptes de \textcite{bringhurst2004elements}
-  et sur l'écosystème KOMA-Script documenté par \textcite{kohm2024koma}.
-  \item Le \cref{chap:methodologie} formalise l'architecture modulaire retenue,
-  le mécanisme des fichiers \code{.clo} et la structuration du flux de travail.
-  \item Le \cref{chap:resultats} présente les résultats d'évaluation,
-  illustrant la robustesse du modèle face à des contraintes typographiques variées.
-  \item Enfin, les annexes et la bibliographie rassemblent les compléments d'implémentation.
+  \item les déclarations de paquets tiers accumulés au fil des années,
+  \item les réglages de géométrie et de marges en dur,
+  \item des rustines typographiques et des redéfinitions de commandes internes,
+  \item et des fragments de métadonnées dispersés.
 \end{itemize}
 
+Cette approche engendre une fragilité extrême :
+la moindre mise à jour d'un paquet ou le changement de moteur de rendu (par exemple de pdf\LaTeX{} vers Lua\LaTeX{})
+provoque des cascades d'avertissements et d'erreurs cryptiques.
+De surcroît, le travail en équipe sous Git devient rapidement un calvaire,
+car chaque collaborateur modifie le même en-tête pour ajouter un paquet ou une commande personnelle,
+générant des conflits de fusion (*merge conflicts*) incessants.
+
+\section{Le Principe de Séparation des Préoccupations}
+\label{sec:intro-separation}
+
+Pour concevoir un document robuste, modulable et facile à partager,
+nous transposons à \LaTeX{} l'un des principes cardinaux du génie logiciel :
+la \term{séparation des préoccupations} (\textit{Separation of Concerns}).
+Chaque composant du projet se voit assigner une responsabilité unique et étanche :
+
+\begin{enumerate}
+  \item \textbf{L'orchestration générale (\code{main.tex}) :}
+  il ne définit aucun style visuel, mais se contente d'appeler les blocs dans l'ordre logique
+  (préliminaires, chapitres, annexes, bibliographie).
+  \item \textbf{L'architecture et l'identité de classe (\code{mythesis.cls}) :}
+  elle encapsule la classe de base KOMA-Script (\code{scrbook}),
+  les métadonnées institutionnelles et la hiérarchie typographique globale.
+  \item \textbf{Les profils cibles de diffusion (\code{*.clo}) :}
+  ils ajustent la géométrie, la compensation de reliure et le comportement des liens
+  selon que le document est destiné à la lecture sur écran ou à l'impression papier.
+  \item \textbf{Les styles et macros métier (\code{config/}) :}
+  ils regroupent les extensions tierces nécessaires (\code{packages.sty})
+  et les raccourcis sémantiques ou boîtes personnalisées (\code{macros.sty}).
+  \item \textbf{La bibliographie programmable (\code{biblio/}) :}
+  elle sépare la base de données brute (\code{references.bib})
+  du moteur de mise en page des références (\code{.bbx}) et des citations (\code{.cbx}).
+  \item \textbf{Le contenu intellectuel pur (\code{content/}) :}
+  chaque chapitre est rédigé dans son propre fichier,
+  sans se soucier de la police de titre, de la couleur des liens ou de la reliure.
+\end{enumerate}
+
+\begin{callout}[Règle d'or de conception]
+Un chapitre ne doit jamais contenir d'instruction de géométrie (\code{\textbackslash geometry}),
+de modification de police globale ou de commande conditionnelle liée au support de lecture.
+Le texte source doit rester pur et totalement agnostique quant à son mode de diffusion.
+\end{callout}
+
+\section{Cartographie Complète de l'Arborescence}
+\label{sec:cartographie}
+
+L'arborescence qui pilote ce document est organisée de manière hiérarchique et intuitive :
+
+\begin{description}
+  \item[\code{main.tex}] Le point d'entrée unique soumis au compilateur.
+  C'est le seul fichier que l'utilisateur modifie pour activer un chapitre ou basculer de profil.
+  \item[\code{mythesis.cls}] Le fichier de classe personnalisé.
+  Il hérite de \code{scrbook} et charge l'option adéquate (\code{.clo}).
+  \item[\code{mythesis-screen.clo}] Profil dédié à la lecture sur écran, tablette ou liseuse.
+  \item[\code{mythesis-print.clo}] Profil dédié à l'impression papier et à la reliure d'art.
+  \item[\code{config/packages.sty}] Chargement ordonné des extensions tierces
+  (détection du moteur, langues, mathématiques, tableaux, TikZ).
+  \item[\code{config/macros.sty}] Bibliothèque de commandes métier, raccourcis de calcul et environnements d'enrichissement.
+  \item[\code{biblio/}] Base de données bibliographique et fichiers de style Bib\LaTeX{} sur mesure.
+  \item[\code{frontmatter/}] Éléments liminaires (page de titre institutionnelle, remerciements, résumés).
+  \item[\code{content/}] Corps principal de l'ouvrage, partitionné par chapitres numérotés et conclusion générale isolée.
+  \item[\code{backmatter/}] Éléments de clôture, annexes techniques et glossaire.
+  \item[\code{data/}] Données numériques brutes (\code{.csv}, \code{.tsv}) tracées dynamiquement par \code{pgfplots}.
+  \item[\code{listings/}] Codes sources externes testables (\code{.py}, \code{.c}, etc.) importés sans copier-coller.
+  \item[\code{figures/}] Ressources vectorielles (schémas TikZ modulaires et logos institutionnels).
+  \item[\code{fonts/}] Polices OpenType/TrueType locales assurant un rendu 100 \% identique partout (CI/CD, Overleaf).
+  \item[\code{latexmkrc}] Fichier de configuration pour l'automatisation de compilation dans le dossier \code{build/}.
+  \item[\code{.editorconfig}] Règles universelles d'indentation (2 espaces) et d'encodage (UTF-8, LF).
+  \item[\code{.chktexrc}] Paramétrage du linter typographique (détection des oublis d'espaces insécables \code{\textasciitilde}).
+\end{description}
+
+\section{Inclusion Modulaire : \code{\textbackslash include\{\}} vs \code{\textbackslash input\{\}}}
+\label{sec:include-vs-input}
+
+Une distinction fondamentale souvent méconnue en \LaTeX{} concerne le choix de la commande d'inclusion :
+
+\begin{itemize}
+  \item \textbf{\code{\textbackslash include\{chemin/fichier\}} (sans l'extension \code{.tex}) :}
+  cette commande est réservée \emph{exclusivement} aux chapitres entiers situés dans le corps du document (\code{content/}).
+  Elle insère automatiquement un saut de page propre (\code{\textbackslash clearpage} ou \code{\textbackslash cleardoublepage})
+  et produit un fichier auxiliaire dédié (\code{fichier.aux}).
+  Cette propriété permet d'utiliser la macro \code{\textbackslash includeonly\{...\}} dans le préambule
+  pour ne compiler qu'un seul chapitre en cours de rédaction tout en conservant intacts les numéros de pages
+  et les renvois croisés des autres chapitres !
+  \item \textbf{\code{\textbackslash input\{chemin/fichier.tex\}} :}
+  cette commande effectue une insertion textuelle pure, comme si le contenu du fichier était copié-collé à cet endroit précis.
+  Elle n'impose aucun saut de page et s'utilise impérativement pour les préambules,
+  les pages de garde, les sous-sections et les figures vectorielles externes.
+\end{itemize}
+
+\section{Bonnes Pratiques Git et Sauts de Ligne Sémantiques}
+\label{sec:git-semantique}
+
+Pour tirer le plein bénéfice de ce découpage collaboratif,
+nous recommandons d'adopter le \term{saut de ligne sémantique} (\textit{Semantic Line Breaks}) :
+chaque phrase ou proposition logique commence sur une nouvelle ligne dans le fichier source.
+
+En \LaTeX{}, un retour à la ligne simple est interprété comme une simple espace typographique ;
+seul un saut de ligne double marque un nouveau paragraphe.
+Grâce à cette règle, un diff Git signale avec une précision chirurgicale la phrase exacte modifiée par un co-auteur,
+sans marquer faussement tout le paragraphe comme ayant été altéré.
+Les revues de code et les fusions deviennent instantanées et sereines.

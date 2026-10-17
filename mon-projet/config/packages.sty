@@ -10,9 +10,30 @@
 \ifluatex
   \RequirePackage{fontspec}
   \defaultfontfeatures{Ligatures=TeX}
+  % Chargement des polices locales figées dans fonts/ (reproductibilité 100 % CI/CD et Overleaf)
+  \IfFileExists{fonts/texgyreheros-regular.otf}{%
+    \setsansfont{texgyreheros}[
+      Path = fonts/,
+      Extension = .otf,
+      UprightFont = *-regular,
+      BoldFont = *-bold,
+      ItalicFont = *-italic,
+      BoldItalicFont = *-bolditalic
+    ]%
+  }{}%
 \else\ifxetex
   \RequirePackage{fontspec}
   \defaultfontfeatures{Ligatures=TeX}
+  \IfFileExists{fonts/texgyreheros-regular.otf}{%
+    \setsansfont{texgyreheros}[
+      Path = fonts/,
+      Extension = .otf,
+      UprightFont = *-regular,
+      BoldFont = *-bold,
+      ItalicFont = *-italic,
+      BoldItalicFont = *-bolditalic
+    ]%
+  }{}%
 \else
   \RequirePackage[T1]{fontenc}
   \RequirePackage[utf8]{inputenc}
@@ -71,6 +92,13 @@
 
 % Boîtes d'enrichissement visuel (callouts, encadrés)
 \RequirePackage[skins, breakable]{tcolorbox}
+
+% --- Courbes scientifiques de données brutes (data/*.csv) ---
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% --- Inclusion et coloration de code source externe (listings/*.py) ---
+\RequirePackage{listings}
 
 % --- En-têtes et pieds de page KOMA-Script ---
 \RequirePackage[headsepline=0.5pt]{scrlayer-scrpage}

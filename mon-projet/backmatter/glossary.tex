@@ -1,6 +1,6 @@
 %% ==============================================================================
 %% backmatter/glossary.tex
-%% Glossaire des termes et table des acronymes
+%% Glossaire des termes et table des acronymes du projet LaTeX
 %% ==============================================================================
 \addchap{Glossaire et Sigles}
 \label{chap:glossaire}
@@ -9,44 +9,46 @@
 \addcontentsline{toc}{section}{Table des Sigles et Acronymes}
 
 \noindent
-\begin{tabularx}{\textwidth}{@{} >{\bfseries\color{ThesisPrimary}}p{2.8cm} X >{\raggedleft\arraybackslash\small\color{ThesisMuted}}p{3.5cm} @{}}
+\begin{tabularx}{\textwidth}{@{} >{\bfseries\color{ThesisPrimary}}p{2.6cm} X >{\raggedleft\arraybackslash\small\color{ThesisMuted}}p{3.5cm} @{}}
   \toprule
   Sigle & Définition / Signification complète & Domaine d'usage \\
   \midrule
-  API    & Application Programming Interface (Interface de programmation) & Génie logiciel \\
   BCOR   & Binding Correction (Compensation de marge pour la reliure)    & Typographie KOMA \\
-  BBX    & Bibliography Style File (Format de mise en page Bib\LaTeX{})    & Gestion bibliographique \\
-  CBX    & Citation Style File (Format des renvois dans le texte)          & Gestion bibliographique \\
-  CLO    & Class Option File (Réglages d'options modulaires \LaTeX{})      & Moteur \LaTeX{} \\
+  BBX    & Bibliography Style File (Mise en page Bib\LaTeX{} des références) & Gestion bibliographique \\
+  CBX    & Citation Style File (Mise en page des renvois dans le texte)  & Gestion bibliographique \\
+  CLO    & Class Option File (Réglages d'options modulaires de classe)     & Moteur \LaTeX{} \\
   CLS    & Document Class File (Fichier racine de classe de document)     & Moteur \LaTeX{} \\
+  CTAN   & Comprehensive \TeX{} Archive Network (Dépôt officiel des paquets) & Écosystème \TeX{} \\
   DIV    & Division Factor (Nombre de bandes pour la grille de page)      & Typographie KOMA \\
-  DOI    & Digital Object Identifier (Identifiant d'objet numérique)      & Édition scientifique \\
+  DOI    & Digital Object Identifier (Identifiant pérenne d'article)      & Édition scientifique \\
   KOMA   & KOMA-Script (Ensemble de classes avancées par Markus Kohm)     & Typographie \LaTeX{} \\
-  PDF    & Portable Document Format (Format de document portable)          & Standard de diffusion \\
+  PDF    & Portable Document Format (Standard de diffusion vectoriel)     & Standard numérique \\
   STY    & Package Style File (Fichier d'extension ou de macros)           & Moteur \LaTeX{} \\
-  TIKZ   & TikZ ist kein Zeichenprogramm (Outil de dessin vectoriel)      & Graphisme \LaTeX{} \\
+  TIKZ   & TikZ ist kein Zeichenprogramm (Moteur de dessin vectoriel)     & Graphisme \LaTeX{} \\
   TOC    & Table of Contents (Table des matières générale)                & Structure éditoriale \\
   \bottomrule
 \end{tabularx}
 
 \vspace{1.2cm}
 
-\section*{Glossaire des Termes Techniques}
-\addcontentsline{toc}{section}{Glossaire des Termes Techniques}
+\section*{Glossaire des Notions Typographiques}
+\addcontentsline{toc}{section}{Glossaire des Notions Typographiques}
 
 \setkomafont{descriptionlabel}{\bfseries\sffamily\color{ThesisPrimary}}
 \begin{description}
-  \item[Architecture modulaire] Organisation logicielle découpant un projet en sous-ensembles indépendants
-  et interchangeables, limitant le couplage et facilitant la maintenance collective.
   \item[Belle page] Dans un livre imprimé recto-verso, page impaire (située à droite lorsque l'ouvrage est ouvert),
-  sur laquelle doivent traditionnellement s'ouvrir les têtes de chapitres.
-  \item[Crénage (\textit{kerning})] Ajustement de l'espace séparant deux caractères consécutifs
-  afin d'harmoniser leur espacement optique et d'éviter les vides disgracieux (pris en charge par \code{microtype}).
-  \item[Découplage des préoccupations] Principe d'ingénierie consistant à séparer les responsabilités
-  d'un système (dans notre cas : structure, style visuel, logique métier et contenu textuel).
-  \item[Empagement] Surface et proportions du rectangle de texte imprimé par rapport aux dimensions
-  totales de la feuille de papier.
+  sur laquelle doivent traditionnellement s'ouvrir les têtes de chapitres (\code{open=right}).
+  \item[Compensation de pliure (\code{BCOR})] Élargissement stratégique de la marge intérieure du bloc de texte,
+  destiné à compenser l'espace absorbé physiquement par la reliure, l'encollage ou la couture de l'ouvrage.
+  \item[Crénage (\textit{kerning})] Ajustement millimétrique de l'espace optique séparant deux glyphes consécutifs
+  (par exemple entre « V » et « A ») afin d'éviter les vides inesthétiques.
+  \item[Découplage sémantique] Méthode d'ingénierie consistant à séparer les responsabilités
+  d'un projet (orchestration, style, options d'affichage, contenu textuel pur).
+  \item[Empagement (\textit{Satzspiegel})] Surface et proportions du rectangle de texte imprimé par rapport aux dimensions
+  totales de la feuille de papier, calculé de façon optique par KOMA-Script via le diviseur \code{DIV}.
+  \item[Microtypographie] Ensemble de techniques fines (protrusion des marges et expansion des polices)
+  automatisées par le paquet \code{microtype} pour équilibrer la densité de gris typographique de la page.
   \item[Saut de ligne sémantique] Pratique de rédaction sous contrôle de version consistant
-  à scinder le code source d'un paragraphe à la fin de chaque phrase ou proposition,
+  à scinder le code source d'un paragraphe à la fin de chaque phrase ou proposition logique,
   rendant les historiques Git clairs et exempts de faux conflits.
 \end{description}

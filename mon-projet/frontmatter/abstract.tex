@@ -1,48 +1,44 @@
 %% ==============================================================================
 %% frontmatter/abstract.tex
-%% Résumés bilingues (Français et Anglais) et mots-clés
+%% Résumés bilingues (Français et Anglais) du tutoriel et mots-clés
 %% ==============================================================================
 \addchap{Résumé / Abstract}
 
 % --- Résumé en français ---
-\section*{Résumé}
+\section*{Présentation du Manuel}
 
-La conception de documents scientifiques volumineux, tels que les mémoires de thèse et les rapports d'expertise,
-se heurte fréquemment à des difficultés d'évolutivité, de cohérence graphique et de portabilité collaborative.
-Ce travail propose une architecture éditoriale modulaire et découplée,
-bâtie sur les fondations de la classe \LaTeX{} moderne \code{scrbook} (KOMA-Script).
-En instaurant une séparation stricte entre l'orchestration du document maître (\code{main.tex}),
-la classe racine (\code{mythesis.cls}),
-les profils cibles écran et impression via les fichiers d'options (\code{.clo}),
-ainsi que la configuration fine des styles bibliographiques (\code{.bbx}/\code{.cbx}),
-cette approche garantit une clarté conceptuelle maximale.
-Le système démontre qu'une structure hautement granulaire favorise le travail collaboratif sous contrôle de version,
-réduit considérablement la dette technique des préambules monolithiques
-et assure une conformité typographique optimale quel que soit le canal de diffusion.
+Ce document constitue un tutoriel interactif et auto-documenté
+dédié à la maîtrise d'une architecture \LaTeX{} professionnelle, modulaire et découplée,
+fondée sur la classe de référence \code{scrbook} de l'écosystème KOMA-Script.
+Le lecteur y trouvera une dissection méthodique de l'arborescence du projet,
+explicitant le rôle spécifique de chaque composant :
+l'ordonnancement par le fichier maître (\code{main.tex}),
+l'encapsulation de la mise en page dans la classe personnalisée (\code{mythesis.cls}),
+la bascule instantanée entre profil d'affichage écran et profil d'impression reliée via les fichiers d'options (\code{.clo}),
+ainsi que la configuration fine des styles bibliographiques (\code{.bbx}/\code{.cbx}).
+L'ouvrage fournit des instructions pratiques pour personnaliser la palette chromatique,
+enrichir les macros de rédaction, exploiter les schémas vectoriels TikZ
+et automatiser la compilation via \code{latexmk} en isolant les fichiers temporaires dans un sous-dossier dédié.
 
 \vspace{0.8em}
-\noindent\textbf{Mots-clés :} \getkeywords, classe scrbook, modularité, typographie, Bib\LaTeX.
+\noindent\textbf{Mots-clés :} Tutoriel \LaTeX{}, KOMA-Script, classe \code{scrbook}, architecture modulaire, profils \code{.clo}, Bib\LaTeX{}, compilation \code{latexmk}.
 
 \vspace{1.5cm}
 
 % --- Abstract en anglais ---
 \begin{otherlanguage}{english}
-\section*{Abstract}
+\section*{Handbook Overview}
 
-The authoring of large-scale scientific manuscripts, such as doctoral dissertations and technical monographs,
-often suffers from maintainability bottlenecks, visual inconsistencies, and cumbersome collaborative workflows.
-This research introduces a decoupled and highly modular \LaTeX{} document architecture,
-engineered on top of the modern \code{scrbook} class from the KOMA-Script suite.
-By establishing a strict separation of concerns between master document orchestration (\code{main.tex}),
-core document class semantics (\code{mythesis.cls}),
-target-specific layout options via dedicated class options (\code{.clo}),
-and fine-grained citation and bibliography tailoring (\code{.bbx}/\code{.cbx}),
-this framework achieves superior transparency and maintainability.
-The proposed layout demonstrates that modular decomposition mitigates merge conflicts in version-controlled repositories,
-eliminates monolithic preamble pollution,
-and delivers publication-grade typographical quality for both digital interactive reading and physical print production.
+This manuscript is a hands-on, self-documenting tutorial designed to master a modern, modular,
+and fully decoupled \LaTeX{} publishing architecture built upon KOMA-Script's \code{scrbook} class.
+Through a detailed walk-through of the project tree, this guide explains the exact purpose of every file:
+document orchestration in \code{main.tex},
+semantic styling encapsulation within the custom class (\code{mythesis.cls}),
+seamless switching between interactive screen reading and binding-ready print versions via class option files (\code{.clo}),
+and fine-grained citation and bibliography tailoring (\code{.bbx}/\code{.cbx}).
+Practical recipes demonstrate how to adapt color palettes, develop custom mathematical macros,
+embed scaled vector TikZ diagrams, and automate zero-friction builds using \code{latexmk} with out-of-source compilation in a dedicated directory.
 
 \vspace{0.8em}
-\noindent\textbf{Keywords :} Scientific publishing, KOMA-Script, modular document architecture, \LaTeX{}, Bib\LaTeX.
+\noindent\textbf{Keywords :} \LaTeX{} tutorial, KOMA-Script, \code{scrbook} class, modular architecture, class options \code{.clo}, Bib\LaTeX{}, \code{latexmk} workflow.
 \end{otherlanguage}
-

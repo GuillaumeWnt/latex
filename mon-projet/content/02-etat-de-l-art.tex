@@ -1,75 +1,119 @@
 %% ==============================================================================
 %% content/02-etat-de-l-art.tex
-%% Chapitre 2 : État de l'art et fondements typographiques
+%% Chapitre 2 : La Classe Racine et les Profils d'Options (.cls & .clo)
 %% ==============================================================================
-\chapter{État de l'Art et Fondements Typographiques}
-\label{chap:etat-art}
+\chapter{La Classe Racine et les Profils d'Options (.cls \& .clo)}
+\label{chap:classe-et-options}
 
-\section{Évolution des Classes de Documents en \LaTeX{}}
-\label{sec:classes-evolution}
+\section{Pourquoi Bâtir sur KOMA-Script \code{scrbook} ?}
+\label{sec:pourquoi-scrbook}
 
-Historiquement, la distribution standard de \LaTeX{} fournit les classes de base \code{book}, \code{report} et \code{article}.
-Bien que largement répandues et pérennes, ces classes ont été conçues dans les années 1980
-selon des conventions typographiques anglo-saxonnes rigides,
-avec des paramètres de mise en page souvent figés dans le marbre du code source.
-Pour modifier la taille des marges ou la structure des en-têtes,
-les utilisateurs devaient recourir à des extensions externes telles que \code{geometry}, \code{fancyhdr} ou \code{titlesec}.
-Cependant, l'interaction de ces couches disparates introduit fréquemment des avertissements
-et rompt la cohérence géométrique du bloc typographique.
+La distribution standard de \LaTeX{} propose historiquement la classe \code{book}.
+Conçue il y a plus de quarante ans, cette classe repose sur des normes typographiques américaines rigides,
+avec des marges étroites et un système d'en-têtes peu personnalisable.
+Pour modifier son apparence, les utilisateurs sont généralement contraints d'empiler des extensions disparates :
+\code{geometry} pour les marges,
+\code{fancyhdr} pour les en-têtes,
+et \code{titlesec} pour les titres de section.
+Or, ces extensions entrent régulièrement en conflit et surchargent les mécanismes internes du moteur.
 
-Pour surmonter ces contraintes, Markus Kohm a développé l'écosystème KOMA-Script \autocite{kohm2024koma},
-comprenant notamment la classe de référence \code{scrbook}.
-Contrairement aux classes standards, KOMA-Script intègre nativement le calcul géométrique selon les règles de la Renaissance,
-la gestion dynamique du diviseur de page (\code{DIV}),
-la compensation de pliure (\code{BCOR})
-et un moteur d'en-têtes hautement sophistiqué via \code{scrlayer-scrpage}.
+À l'inverse, la suite KOMA-Script développée par Markus Kohm \autocite{kohm2024koma}
+constitue une refonte moderne et cohérente de la mise en page éditoriale.
+Fondée sur les règles de proportions harmonieuses de la typographie classique européenne \autocite{bringhurst2004elements,mittelbach2023latex},
+la classe \code{scrbook} intègre en son c\oe{}ur :
+\begin{itemize}
+  \item un calcul dynamique et optique du bloc de texte (\textit{Satzspiegel}) via le paramètre de division \code{DIV},
+  \item la prise en compte mathématique de la compensation de reliure (\code{BCOR}),
+  \item un système de couches d'en-têtes puissant et natif via \code{scrlayer-scrpage},
+  \item et des commandes directes d'ajustement des polices (\code{\textbackslash setkomafont}).
+\end{itemize}
 
-\section{Comparaison des Approches d'Architecture}
-\label{sec:comparatif-architectures}
+\section{Anatomie de la Classe Personnalisée : \code{mythesis.cls}}
+\label{sec:anatomie-cls}
 
-L'analyse de la littérature et des pratiques de développement scientifique met en évidence
-trois paradigmes majeurs pour la composition de documents longs,
-résumés dans le \cref{tab:comparaison-approches}.
+Notre classe racine \code{mythesis.cls} encapsule ces fonctionnalités
+pour offrir une interface claire et épurée.
+Elle prend en charge :
+
+\begin{enumerate}
+  \item \textbf{L'interception des options :}
+  l'utilisateur peut spécifier \code{[screen]} ou \code{[print]}.
+  Toute autre option non reconnue (par exemple la taille de corps \code{12pt} ou l'option \code{draft})
+  est automatiquement transmise à la classe parente \code{scrbook} via la macro standard \code{\textbackslash PassOptionsToClass}.
+  \item \textbf{La déclaration des métadonnées du document :}
+  la classe fournit des accesseurs sémantiques (\code{\textbackslash institution}, \code{\textbackslash degree}, \code{\textbackslash supervisor}, \code{\textbackslash location}, \code{\textbackslash keywords})
+  qui alimentent automatiquement la page de garde et les propriétés PDF du visualiseur.
+  \item \textbf{La hiérarchie typographique KOMA-Script :}
+  les styles des titres sont définis globalement avec \code{\textbackslash setkomafont\{chapter\}} et \code{\textbackslash setkomafont{disposition}},
+  garantissant une cohérence visuelle sans modifier le corps du texte.
+  \item \textbf{Le chargement conditionnel de l'option de classe (\code{.clo}) :}
+  selon le mode choisi, la classe injecte soit \code{mythesis-screen.clo}, soit \code{mythesis-print.clo}.
+\end{enumerate}
+
+\section{Le Rôle Déterminant des Fichiers \code{.clo}}
+\label{sec:mecanisme-clo}
+
+En \LaTeX{}, l'extension \code{.clo} signifie \textit{Class Option}.
+C'est exactement le mécanisme qu'utilise le système \LaTeX{} pour charger les tailles de police de base
+(par exemple \code{size10.clo} ou \code{scrsize11pt.clo}).
+Dans notre projet, nous détournons élégamment cette fonctionnalité standard
+pour définir les profils d'affichage sans alourdir le fichier principal.
+
+\subsection{Le profil écran : \code{mythesis-screen.clo}}
+Ce profil est pensé pour la lecture numérique interactive (sur écran d'ordinateur, tablette ou smartphone) :
+\begin{itemize}
+  \item \textbf{Marges symétriques :} réglage de \code{twoside=false} et \code{BCOR=0mm}.
+  Le texte est parfaitement centré sur la page, ce qui offre un confort maximal lors du défilement vertical.
+  \item \textbf{Palette chromatique accessible :} définition des couleurs sémantiques (\code{ThesisPrimary}, \code{ThesisSecondary}, \code{ThesisAccent})
+  avec des teintes bleu marine et sarcelle profondes pour un contraste optimal.
+  \item \textbf{Hyperliens interactifs :} configuration de \code{hyperref} avec \code{colorlinks=true},
+  permettant de distinguer immédiatement les renvois internes (en bleu pétrole), les citations bibliographiques (en vert forêt)
+  et les adresses web externes (en violet prune).
+  \item \textbf{Signets PDF ouverts :} les panneaux de navigation du lecteur PDF s'ouvrent automatiquement dès l'ouverture du document.
+\end{itemize}
+
+\subsection{Le profil impression : \code{mythesis-print.clo}}
+Ce profil est optimisé pour la fabrication physique d'un livre ou d'un mémoire relié :
+\begin{itemize}
+  \item \textbf{Mise en page recto-verso :} réglage de \code{twoside=true} et \code{open=right}.
+  Les chapitres majeurs s'ouvrent obligatoirement sur une « belle page » (page impaire située à droite dans le livre ouvert).
+  \item \textbf{Compensation de pliure (\code{BCOR}) :} application d'un décalage physique (\code{BCOR=10mm}).
+  L'empagement intérieur est décalé pour tenir compte de l'espace absorbé par l'encollage ou la couture de la reliure,
+  évitant que le texte ne disparaisse au fond de la gorge du livre.
+  \item \textbf{Neutralisation des liens (\code{hidelinks}) :} sur papier, les liens colorés produiraient des trames grisâtres inélégantes.
+  L'option \code{hidelinks=true} conserve les liens cliquables dans le PDF numérique sous-jacent,
+  mais affiche les textes en noir franc pour une impression laser ou offset impeccable.
+\end{itemize}
+
+\section{Tableau Récapitulatif des Deux Profils}
+\label{sec:tableau-profils}
+
+Le \cref{tab:comparaison-profils} résume les divergences de comportement entre les deux profils.
 
 \begin{table}[htbp]
   \centering
-  \caption{Comparaison multidimensionnelle des architectures de documents \LaTeX{}}
-  \label{tab:comparaison-approches}
-  \begin{tabularx}{\textwidth}{@{} l X X X @{}}
+  \caption{Spécifications comparatives des profils d'options \code{.clo}}
+  \label{tab:comparaison-profils}
+  \begin{tabularx}{\textwidth}{@{} l X X @{}}
     \toprule
-    \textbf{Critère} & \textbf{Modèle Monolithique} & \textbf{Approche Extensions} & \textbf{Architecture Modulaire (.cls/.clo)} \\
+    \textbf{Caractéristique} & \textbf{Profil Écran (\code{mythesis-screen.clo})} & \textbf{Profil Impression (\code{mythesis-print.clo})} \\
     \midrule
-    Découplage code/style & Nul (tout dans \code{main.tex}) & Partiel (fichiers \code{.tex} inclus) & Total (classe et options dédiées) \\
-    Gestion écran / papier & Manuelle et sujette à erreurs & Conditionnels \code{\textbackslash if} dispersés & Fichiers d'options \code{.clo} étanches \\
-    Conflits de fusion Git & Élevés sur le préambule & Modérés & Minimes (granulat fin par composant) \\
-    Interopérabilité & Faible & Moyenne & Élevée (partageable comme paquet ou classe) \\
-    Maintenance long terme & Dette technique rapide & Risque de collisions de paquets & Contrôle centralisé et extensibilité propre \\
+    Mode de page           & Recto seul (\code{twoside=false}) & Recto-verso véritable (\code{twoside=true}) \\
+    Départ des chapitres   & Page suivante quelconque & Page impaire obligatoire (\code{open=right}) \\
+    Compensation reliure   & \qty{0}{\milli\meter} (\code{BCOR=0mm}) & \qty{10}{\milli\meter} (\code{BCOR=10mm}) \\
+    Diviseur de grille     & \code{DIV=12} & \code{DIV=12} recalculé avec BCOR \\
+    Couleur des liens      & Palette interactive contrastée & Monochrome noir (\code{hidelinks=true}) \\
+    En-têtes et folios     & Symétriques (\code{\textbackslash ihead}, \code{\textbackslash ohead}) & Alternés versos/rectos (\code{\textbackslash lehead}, \code{\textbackslash rohead}) \\
+    Usage privilégié       & Lecture PDF, soumission en ligne & Reliure thermique, spirale ou cousue \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
-Comme le soulignent \textcite{martin2023architectures},
-l'introduction d'un couplage faible entre les couches logicielles est la clé de voûte
-de la reproductibilité dans les sciences computationnelles.
-Ce constat s'applique directement à la documentation scientifique,
-où la séparation entre le texte brut et le moteur de rendu garantit une durabilité maximale des écrits.
-
-\section{Modernisation de la Gestion Bibliographique}
-\label{sec:biblio-moderne}
-
-Pendant de nombreuses années, l'outil historique \code{BibTeX} a constitué la norme pour la gestion des citations.
-Toutefois, la rigidité de ses fichiers de style compilés en langage BST
-rendait toute personnalisation fastidieuse et opaque.
-L'avènement de Bib\LaTeX{}, couplé au moteur d'indexation moderne \code{Biber},
-a profondément transformé cet écosystème en permettant de programmer les règles de rendu directement en \LaTeX{}.
-
-Dans cette architecture, nous exploitons la puissance de Bib\LaTeX{}
-en définissant notre propre style bibliographique à travers deux fichiers complémentaires :
-\begin{itemize}
-  \item \code{custom-style.bbx} : pilote la structure des notices dans la liste finale des références
-  (ordre des champs, typographie des noms en petites capitales, formatage des identifiants DOI).
-  \item \code{custom-style.cbx} : gouverne le format des renvois dans le texte
-  (citations auteur-date cliquables, gestion des co-auteurs multiples selon les préceptes de \textcite{bringhurst2004elements}).
-\end{itemize}
-Cette configuration assure une cohérence éditoriale parfaite entre les citations et leur cible.
-
+\begin{callout}[Recette : Créer un nouveau profil de classe]
+Pour ajouter une nouvelle variante (par exemple un profil brouillon \code{mythesis-draft.clo} ou un profil grand format) :
+\begin{enumerate}
+  \item Créez un fichier \code{mythesis-nom.clo} à la racine.
+  \item Déclarez l'option dans \code{mythesis.cls} via \code{\textbackslash DeclareOption\{nom\}\{...\}}.
+  \item Activez-le simplement dans \code{main.tex} avec \code{\textbackslash documentclass[nom]\{mythesis\}}.
+\end{enumerate}
+\end{callout}

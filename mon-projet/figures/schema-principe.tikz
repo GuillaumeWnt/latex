@@ -1,112 +1,122 @@
 %% ==============================================================================
 %% figures/schema-principe.tikz
-%% Schéma de principe modulaire : Pipeline méthodologique
-%% Modélisable directement via \input{figures/schema-principe.tikz}
+%% Schéma d'architecture modulaire du projet LaTeX
+%% Représente le flux d'orchestration, les couches de fichiers et la compilation
 %% ==============================================================================
 \begin{tikzpicture}[
   >=Stealth,
-  node distance=1.4cm and 1.8cm,
+  node distance=1.2cm and 1.4cm,
   every node/.style={font=\small\sffamily},
   % Styles des blocs
-  block/.style={
-    draw=ThesisPrimary!80,
+  filebox/.style={
+    draw=ThesisPrimary!70,
     line width=0.8pt,
     rounded corners=3pt,
-    fill=ThesisPrimary!5,
-    text=ThesisText,
-    align=center,
-    minimum height=1.0cm,
-    minimum width=2.6cm,
-    inner sep=6pt
-  },
-  engine/.style={
-    draw=ThesisSecondary!90,
-    line width=1.1pt,
-    rounded corners=4pt,
-    fill=ThesisSecondary!10,
-    text=ThesisText,
-    align=center,
-    minimum height=1.2cm,
-    minimum width=3.0cm,
-    inner sep=8pt
-  },
-  decision/.style={
-    draw=ThesisAccent!90,
-    line width=0.9pt,
-    diamond,
-    aspect=1.8,
-    fill=ThesisAccent!8,
-    text=ThesisText,
-    align=center,
-    inner sep=3pt
-  },
-  io/.style={
-    draw=ThesisMuted!70,
-    line width=0.8pt,
     fill=white,
     text=ThesisText,
     align=center,
-    minimum height=0.9cm,
-    minimum width=2.4cm,
+    minimum height=0.85cm,
+    minimum width=2.6cm,
+    inner sep=4pt
+  },
+  layerbox/.style={
+    draw=ThesisSecondary!80,
+    line width=0.9pt,
+    rounded corners=4pt,
+    fill=ThesisSecondary!6,
+    text=ThesisText,
+    align=center,
+    minimum height=0.95cm,
+    minimum width=3.0cm,
     inner sep=5pt
   },
-  line/.style={
+  enginebox/.style={
+    draw=ThesisPrimary!90,
+    line width=1.2pt,
+    rounded corners=4pt,
+    fill=ThesisPrimary!10,
+    text=ThesisPrimary,
+    align=center,
+    minimum height=1.2cm,
+    minimum width=3.2cm,
+    inner sep=8pt,
+    font=\small\bfseries\sffamily
+  },
+  targetbox/.style={
+    draw=ThesisAccent!90,
+    line width=1.1pt,
+    rounded corners=4pt,
+    fill=ThesisAccent!8,
+    text=ThesisText,
+    align=center,
+    minimum height=1.1cm,
+    minimum width=3.2cm,
+    inner sep=7pt
+  },
+  arrowline/.style={
     ->,
-    line width=0.8pt,
+    line width=0.9pt,
     draw=ThesisText!80
   },
   dashedline/.style={
     ->,
     line width=0.8pt,
     dashed,
-    draw=ThesisSecondary!80
+    draw=ThesisSecondary!90
   },
-  labeltext/.style={
-    font=\footnotesize\sffamily,
-    text=ThesisMuted
+  taglabel/.style={
+    font=\footnotesize\bfseries\sffamily,
+    text=ThesisSecondary
   }
 ]
 
-  % 1. Entrées
-  \node[io] (input) {Données brutes\\$(\mathbf{x}_i, y_i)_{i=1}^N$};
-  
-  % 2. Prétraitement
-  \node[block, right=of input] (prep) {Prétraitement \&\\Normalisation};
-  
-  % 3. Moteur méthodologique
-  \node[engine, right=of prep] (model) {\textbf{C\oe{}ur d'optimisation}\\$\min_{\boldsymbol{\theta}} \mathcal{L}(\boldsymbol{\theta}) + \lambda \mathcal{R}(\boldsymbol{\theta})$};
-  
-  % 4. Décision / Validation
-  \node[decision, right=of model] (check) {Critère de\\convergence ?};
-  
-  % 5. Sortie finale
-  \node[io, right=of check] (output) {Résultats validés\\$\hat{\boldsymbol{\theta}}^*, \text{KPI}$};
-  
-  % Rétroaction (Feedback loop)
-  \node[block, below=1.2cm of model] (update) {Mise à jour adaptative\\du pas d'apprentissage};
+  % --- Colonne 1 : Couches de conception et sources ---
+  \node[layerbox] (cls) {\textbf{mythesis.cls}\\Base \texttt{scrbook} \& métadonnées};
+  \node[layerbox, below=0.5cm of cls] (clo) {\textbf{Profils .clo}\\Écran vs Impression};
+  \node[layerbox, below=0.5cm of clo] (config) {\textbf{config/*.sty}\\Paquets tiers \& macros};
+  \node[layerbox, below=0.5cm of config] (fonts) {\textbf{fonts/}\\Polices OpenType locales};
+  \node[layerbox, below=0.5cm of fonts] (bib) {\textbf{biblio/}\\.bib, .bbx, .cbx};
 
-  % Connexions directes
-  \draw[line] (input) -- node[above, labeltext] {Flux brut} (prep);
-  \draw[line] (prep) -- node[above, labeltext] {$\tilde{\mathbf{x}}_i$} (model);
-  \draw[line] (model) -- node[above, labeltext] {$\boldsymbol{\theta}^{(k)}$} (check);
-  \draw[line] (check) -- node[above, labeltext] {Oui} (output);
-  
-  % Boucle de retour
-  \draw[dashedline] (check.south) |- node[near start, right, labeltext] {Non} (update.east);
-  \draw[dashedline] (update.west) -| node[near end, left, labeltext] {$\boldsymbol{\theta}^{(k+1)}$} (model.south);
-
-  % Cadre englobant (Phase itérative)
+  % Cadre englobant pour la couche Style & Paramètres
   \begin{scope}[on background layer]
     \node[
       draw=ThesisSecondary!30,
       fill=ThesisSecondary!3,
-      dashed,
       rounded corners=6pt,
-      fit=(model) (check) (update),
-      inner sep=10pt,
-      label={[labeltext, anchor=south west]north west:Phase itérative d'optimisation}
-    ] (boxIter) {};
+      fit=(cls) (clo) (config) (fonts) (bib),
+      inner sep=7pt,
+      label={[taglabel, anchor=south west]north west:Couche Style \& Paramètres}
+    ] (boxStyle) {};
   \end{scope}
 
-\end{tikzpicture}
+  % --- Colonne 2 : Chef d'orchestre & Rédaction ---
+  \node[enginebox, right=2.0cm of clo] (main) {\textbf{main.tex}\\\small Orchestrateur unique};
+  
+  \node[filebox, above=0.7cm of main] (front) {\textbf{frontmatter/}\\Titre, résumé, TOC};
+  \node[filebox, below=0.5cm of main] (content) {\textbf{content/*.tex}\\Chapitres \& Conclusion};
+  \node[filebox, below=0.4cm of content] (data) {\textbf{data/ \& listings/}\\Données brutes \& scripts};
+  \node[filebox, below=0.4cm of data] (back) {\textbf{backmatter/}\\Annexes \& glossaire};
 
+  % Connexions vers main.tex
+  \draw[arrowline] (front) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash input}} (main);
+  \draw[arrowline] (content) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (main);
+  \draw[arrowline] (data) -| ++(1.4cm,0.8cm) |- (main.south east);
+  \draw[arrowline] (back) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (data);
+
+  \draw[dashedline] (cls.east) -- (main.west);
+  \draw[dashedline] (clo.east) -- (main.west);
+  \draw[dashedline] (config.east) -- (main.west);
+  \draw[dashedline] (bib.east) -- (main.west);
+
+  % --- Colonne 3 : Moteur & Sorties cibles ---
+  \node[enginebox, right=2.0cm of main] (engine) {Moteur \texttt{latexmk}\\Lua\LaTeX{} + Biber\\Sortie isolée : \texttt{build/}};
+  
+  \node[targetbox, above right=0.3cm and 1.4cm of engine] (targetScreen) {\textbf{build/main.pdf (Écran)}\\Marges symétriques\\Liens interactifs colorés};
+  \node[targetbox, below right=0.3cm and 1.4cm of engine] (targetPrint) {\textbf{build/main.pdf (Papier)}\\Recto-verso + reliure \texttt{BCOR}\\Liens neutres monochromes};
+
+  % Connexions compilation et cibles
+  \draw[arrowline, line width=1.1pt] (main) -- (engine);
+  \draw[arrowline] (engine.east) -- ++(0.7cm,0) |- node[near end, above, font=\scriptsize\bfseries\color{ThesisLink}] {\texttt{[screen]}} (targetScreen.west);
+  \draw[arrowline] (engine.east) -- ++(0.7cm,0) |- node[near end, below, font=\scriptsize\bfseries\color{ThesisPrimary}] {\texttt{[print]}} (targetPrint.west);
+
+\end{tikzpicture}
