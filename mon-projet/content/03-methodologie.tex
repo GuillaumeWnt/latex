@@ -1,0 +1,82 @@
+%% ==============================================================================
+%% content/03-methodologie.tex
+%% Chapitre 3 : Architecture méthodologique et modélisation
+%% ==============================================================================
+\chapter{Architecture Méthodologique et Modélisation}
+\label{chap:methodologie}
+
+\section{Formalisation Mathématique du Processus}
+\label{sec:methode-maths}
+
+Afin d'illustrer la cohérence des macros mathématiques définies dans \code{config/macros.sty},
+considérons un problème d'optimisation sous contraintes de régularité
+appliqué au recalage de paramètres typographiques ou de données multidimensionnelles.
+Soit un ensemble d'observations $\mathcal{D} = \{(\vect{x}_i, y_i)\}_{i=1}^N$
+où chaque vecteur $\vect{x}_i \in \setR^d$ représente un descripteur d'entrée
+et $y_i \in \setR$ la réponse associée.
+
+Le modèle cherche à estimer un vecteur de paramètres optimaux $\vect{\theta}^* \in \setR^d$
+minimisant une fonctionnelle de coût pénalisée :
+\begin{equation}
+  \label{eq:optimisation-globale}
+  \vect{\theta}^* = \argmin_{\vect{\theta} \in \setR^d} \left\{ \frac{1}{N} \sum_{i=1}^N \mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \lambda \, \mathcal{R}(\vect{\theta}) \right\}
+\end{equation}
+où $\mathcal{L}(\cdot)$ est une fonction de perte convexe,
+$\mathcal{R}(\vect{\theta}) = \frac{1}{2}\norm{\vect{\theta}}_2^2$ désigne un terme de régularisation de Tikhonov,
+et $\lambda > 0$ est un hyperparamètre d'arbitrage.
+
+\begin{hypothesis}[Convexité stricte]
+\label{hyp:convexite}
+La fonction de perte $\vect{\theta} \mapsto \mathcal{L}(y, f(\vect{x}; \vect{\theta}))$ est deux fois continûment différentiable
+et strictement convexe sur l'espace admissible $\setR^d$,
+garantissant l'unicité de la solution $\vect{\theta}^*$.
+\end{hypothesis}
+
+Sous l'\cref{hyp:convexite}, le gradient de la fonctionnelle s'exprime analytiquement selon :
+\begin{equation}
+  \label{eq:gradient}
+  \nabla_{\vect{\theta}} \mathcal{J}(\vect{\theta}) = \frac{1}{N} \sum_{i=1}^N \nabla_{\vect{\theta}}\mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \lambda \vect{\theta}
+\end{equation}
+ce qui permet l'application d'un algorithme de descente à pas adaptatif.
+
+\section{Schéma de Principe et Pipeline Modulaire}
+\label{sec:schema-principe}
+
+Le flux de traitement et l'interaction entre les différents modules sont représentés sur le \cref{fig:schema-principe}.
+Le schéma vectoriel est externalisé dans le fichier \code{figures/schema-principe.tikz}
+et inséré directement via la commande standard \code{\textbackslash input}.
+Cette approche élimine tout artefact de pixellisation et garantit que les polices
+et les couleurs du dessin s'harmonisent rigoureusement avec la classe du document.
+
+\begin{figure}[htbp]
+  \centering
+  \resizebox{\textwidth}{!}{\input{figures/schema-principe.tikz}}
+  \caption{Schéma de principe du pipeline itératif d'optimisation et d'évaluation}
+  \label{fig:schema-principe}
+\end{figure}
+
+\section{Le Rôle des Fichiers d'Options de Classe (.clo)}
+\label{sec:clo-role}
+
+L'un des apports majeurs de ce canevas réside dans l'exploitation native des fichiers \code{.clo} (\textit{Class Option}).
+En standard \LaTeX{}, ce mécanisme est souvent méconnu ou réservé aux tailles de corps (\code{size10.clo}, \code{size11.clo}).
+Dans notre architecture :
+\begin{enumerate}
+  \item \textbf{\code{mythesis-screen.clo}} : active une géométrie à marges symétriques
+  (\code{twoside=false}, \code{BCOR=0mm}),
+  initialise une palette de couleurs contrastées
+  (\code{ThesisPrimary}, \code{ThesisSecondary})
+  et injecte les réglages \code{colorlinks=true} dans \code{hyperref}.
+  \item \textbf{\code{mythesis-print.clo}} : bascule en recto-verso
+  (\code{twoside=true}, \code{open=right}),
+  calcule un décalage de pliure adapté à la reliure
+  (\code{BCOR=10mm}),
+  et désactive la coloration des hyperliens (\code{hidelinks})
+  afin d'éviter les bavures ou les tons grisés à l'impression physique.
+\end{enumerate}
+
+Cette conception garantit qu'aucun fichier de chapitre (\code{content/*.tex})
+ne contient la moindre instruction de mise en page dépendante du support de sortie.
+Le passage d'un mode à l'autre s'effectue par un unique mot-clé dans \code{main.tex} :
+soit \code{\textbackslash documentclass[screen]\{mythesis\}},
+soit \code{\textbackslash documentclass[print]\{mythesis\}}.

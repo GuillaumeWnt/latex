@@ -1,0 +1,36 @@
+# ==============================================================================
+# .gitignore — Fichiers temporaires et auxiliaires de compilation LaTeX
+# ==============================================================================
+
+# Répertoire de sortie de compilation
+build/
+
+# Fichiers auxiliaires TeX standards
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.tdo
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+
+# Fichiers systèmes et d'éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+

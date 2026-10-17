@@ -1,0 +1,112 @@
+%% ==============================================================================
+%% figures/schema-principe.tikz
+%% Schéma de principe modulaire : Pipeline méthodologique
+%% Modélisable directement via \input{figures/schema-principe.tikz}
+%% ==============================================================================
+\begin{tikzpicture}[
+  >=Stealth,
+  node distance=1.4cm and 1.8cm,
+  every node/.style={font=\small\sffamily},
+  % Styles des blocs
+  block/.style={
+    draw=ThesisPrimary!80,
+    line width=0.8pt,
+    rounded corners=3pt,
+    fill=ThesisPrimary!5,
+    text=ThesisText,
+    align=center,
+    minimum height=1.0cm,
+    minimum width=2.6cm,
+    inner sep=6pt
+  },
+  engine/.style={
+    draw=ThesisSecondary!90,
+    line width=1.1pt,
+    rounded corners=4pt,
+    fill=ThesisSecondary!10,
+    text=ThesisText,
+    align=center,
+    minimum height=1.2cm,
+    minimum width=3.0cm,
+    inner sep=8pt
+  },
+  decision/.style={
+    draw=ThesisAccent!90,
+    line width=0.9pt,
+    diamond,
+    aspect=1.8,
+    fill=ThesisAccent!8,
+    text=ThesisText,
+    align=center,
+    inner sep=3pt
+  },
+  io/.style={
+    draw=ThesisMuted!70,
+    line width=0.8pt,
+    fill=white,
+    text=ThesisText,
+    align=center,
+    minimum height=0.9cm,
+    minimum width=2.4cm,
+    inner sep=5pt
+  },
+  line/.style={
+    ->,
+    line width=0.8pt,
+    draw=ThesisText!80
+  },
+  dashedline/.style={
+    ->,
+    line width=0.8pt,
+    dashed,
+    draw=ThesisSecondary!80
+  },
+  labeltext/.style={
+    font=\footnotesize\sffamily,
+    text=ThesisMuted
+  }
+]
+
+  % 1. Entrées
+  \node[io] (input) {Données brutes\\$(\mathbf{x}_i, y_i)_{i=1}^N$};
+  
+  % 2. Prétraitement
+  \node[block, right=of input] (prep) {Prétraitement \&\\Normalisation};
+  
+  % 3. Moteur méthodologique
+  \node[engine, right=of prep] (model) {\textbf{C\oe{}ur d'optimisation}\\$\min_{\boldsymbol{\theta}} \mathcal{L}(\boldsymbol{\theta}) + \lambda \mathcal{R}(\boldsymbol{\theta})$};
+  
+  % 4. Décision / Validation
+  \node[decision, right=of model] (check) {Critère de\\convergence ?};
+  
+  % 5. Sortie finale
+  \node[io, right=of check] (output) {Résultats validés\\$\hat{\boldsymbol{\theta}}^*, \text{KPI}$};
+  
+  % Rétroaction (Feedback loop)
+  \node[block, below=1.2cm of model] (update) {Mise à jour adaptative\\du pas d'apprentissage};
+
+  % Connexions directes
+  \draw[line] (input) -- node[above, labeltext] {Flux brut} (prep);
+  \draw[line] (prep) -- node[above, labeltext] {$\tilde{\mathbf{x}}_i$} (model);
+  \draw[line] (model) -- node[above, labeltext] {$\boldsymbol{\theta}^{(k)}$} (check);
+  \draw[line] (check) -- node[above, labeltext] {Oui} (output);
+  
+  % Boucle de retour
+  \draw[dashedline] (check.south) |- node[near start, right, labeltext] {Non} (update.east);
+  \draw[dashedline] (update.west) -| node[near end, left, labeltext] {$\boldsymbol{\theta}^{(k+1)}$} (model.south);
+
+  % Cadre englobant (Phase itérative)
+  \begin{scope}[on background layer]
+    \node[
+      draw=ThesisSecondary!30,
+      fill=ThesisSecondary!3,
+      dashed,
+      rounded corners=6pt,
+      fit=(model) (check) (update),
+      inner sep=10pt,
+      label={[labeltext, anchor=south west]north west:Phase itérative d'optimisation}
+    ] (boxIter) {};
+  \end{scope}
+
+\end{tikzpicture}
+

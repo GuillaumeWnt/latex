@@ -1,0 +1,43 @@
+%% ==============================================================================
+%% mythesis-screen.clo
+%% Option de classe : Configuration optimisée pour la lecture sur écran / tablette
+%% ==============================================================================
+\ProvidesFile{mythesis-screen.clo}[2026/10/17 v1.0 Screen Layout Configuration for mythesis]
+
+% --- Géométrie et mise en page KOMA-Script ---
+% Marges symétriques pour lecture continue sur écran, sans décalage de reliure
+\KOMAoptions{
+  twoside=false,
+  BCOR=0mm,
+  DIV=12
+}
+\recalctypearea
+
+% --- Palette chromatique pour écran (Accessible & Moderne) ---
+\definecolor{ThesisPrimary}{RGB}{15, 60, 110}     % Bleu marine profond (titres, accents majeurs)
+\definecolor{ThesisSecondary}{RGB}{20, 110, 120}  % Sarcelle / Teal (sous-titres, cadres)
+\definecolor{ThesisAccent}{RGB}{190, 75, 40}      % Corail / Terracotta (attentions, décisions)
+\definecolor{ThesisText}{RGB}{35, 40, 48}         % Gris anthracite doux pour la lecture
+\definecolor{ThesisMuted}{RGB}{100, 110, 120}     % Gris moyen (notes, légendes)
+\definecolor{ThesisBackground}{RGB}{248, 249, 251}% Fond très léger pour blocs
+
+% Liens hypertexte colorés pour navigation interactive
+\definecolor{ThesisLink}{RGB}{18, 90, 150}        % Liens internes
+\definecolor{ThesisCite}{RGB}{25, 120, 70}        % Citations bibliographiques
+\definecolor{ThesisUrl}{RGB}{115, 45, 140}        % URLs externes
+
+% Configuration Hyperref spécifique à l'écran
+\PassOptionsToPackage{
+  colorlinks=true,
+  linkcolor=ThesisLink,
+  citecolor=ThesisCite,
+  urlcolor=ThesisUrl,
+  filecolor=ThesisLink,
+  bookmarksopen=true,
+  bookmarksnumbered=true,
+  pdfpagemode=UseOutlines,
+  pdfdisplaydoctitle=true
+}{hyperref}
+
+\endinput
+

@@ -1,0 +1,73 @@
+%% ==============================================================================
+%% content/04-resultats.tex
+%% Chapitre 4 : Résultats expérimentaux et validation
+%% ==============================================================================
+\chapter{Résultats Expérimentaux et Validation}
+\label{chap:resultats}
+
+\section{Protocole Expérimental et Métriques}
+\label{sec:resultats-protocole}
+
+Pour valider l'efficience et la robustesse de notre architecture,
+nous avons conduit une campagne de bancs d'essai sur plusieurs jeux de données représentatifs.
+Les grandeurs physiques et les métriques de performance sont systématiquement formulées
+à l'aide du paquet \code{siunitx}, assurant le respect des normes métrologiques internationales.
+À titre d'exemple, la puissance crête mesurée est de \qty{142.8}{\kilo\watt},
+tandis que la vitesse de convergence moyenne s'établit à \qty{1.45e-3}{\second\per\iter}.
+
+\begin{definitionbox}[Indice d'efficience typographique ($\eta_T$)]
+\label{def:efficience}
+Soit $N_p$ le nombre total de pages d'un document et $T_c$ le temps de compilation complet avec Biber.
+L'indice d'efficience typographique est défini par le ratio :
+\begin{equation}
+  \eta_T = \frac{N_p}{T_c} \quad \left[\text{pages}\cdot\unit{\second^{-1}}\right]
+\end{equation}
+Un ratio élevé témoigne d'une compilation optimisée sans goulets d'étranglement dans le préambule.
+\end{definitionbox}
+
+\section{Analyse Comparative des Performances}
+\label{sec:resultats-analyse}
+
+Les données quantitatives obtenues lors des campagnes de test
+sont récapitulées dans le \cref{tab:resultats-synthese}.
+Comme préconisé par les bonnes pratiques typographiques,
+ce tableau utilise exclusivement les filets horizontaux du paquet \code{booktabs}
+(\code{\textbackslash toprule}, \code{\textbackslash midrule}, \code{\textbackslash bottomrule})
+et proscrit tout filet vertical afin de favoriser le balayage visuel continu de la donnée.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Synthèse comparative des performances selon la configuration de compilation}
+  \label{tab:resultats-synthese}
+  \begin{tabularx}{\textwidth}{@{} l r r r X @{}}
+    \toprule
+    \textbf{Configuration} & \textbf{Mémoire (\unit{\mega\byte})} & \textbf{Temps (\unit{\second})} & \textbf{Score $\eta_T$} & \textbf{Observations} \\
+    \midrule
+    Modèle Monolithique   & \num{248.5} & \num{8.42} & \num{12.4} & Avertissements de fontes et collision de paquets \\
+    Extensions disparates & \num{310.2} & \num{9.15} & \num{11.5} & Redondance des inclusions de macros \\
+    \textbf{Notre classe (Écran)}   & \num{182.4} & \num{4.18} & \num{25.1} & Navigation fluide, hyperliens dynamiques \\
+    \textbf{Notre classe (Papier)}  & \num{185.0} & \num{4.22} & \num{24.9} & Géométrie BCOR compensée, contraste maximal \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Ces résultats corroborent les observations de \textcite{dupont2024methodologie} :
+la rationalisation des couches d'importation permet de diviser par deux le temps de compilation
+tout en garantissant une totale immunité face aux régressions visuelles.
+Comme le démontrent également les travaux de \textcite{goodfellow2016deep} et \textcite{vaswani2017attention},
+la rigueur dans la structuration des composants logiciels et des pipelines de traitement
+constitue un facteur déterminant pour la reproductibilité expérimentale.
+
+\section{Discussion et Synthèse}
+\label{sec:resultats-discussion}
+
+L'évaluation qualitative met en lumière trois bénéfices majeurs pour l'utilisateur :
+\begin{itemize}
+  \item \textbf{Lisibilité du code source :} un nouvel intervenant identifie instantanément
+  où ajouter un chapitre, une macro ou une entrée bibliographique sans risque d'effets de bord.
+  \item \textbf{Polyvalence du livrable :} générer la version finale prête pour l'imprimeur
+  ou la version numérique pour le jury ne nécessite qu'un seul basculement d'option.
+  \item \textbf{Stabilité pérenne :} l'absence d'extensions obsolètes
+  garantit une compatibilité totale avec les distributions \TeX{} Live contemporaines et futures.
+\end{itemize}
+

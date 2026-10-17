@@ -1,0 +1,61 @@
+%% ==============================================================================
+%% backmatter/appendix-a.tex
+%% Annexe A : Compléments mathématiques et paramètres de configuration
+%% ==============================================================================
+\chapter{Compléments Mathématiques et Paramètres}
+\label{anx:complements}
+
+\section{Démonstration de la Convexité de la Fonctionnelle Pénalisée}
+\label{sec:preuve-convexite}
+
+Nous explicitons ici la démonstration relative à la régularité du critère d'optimisation
+introduit dans l'\cref{eq:optimisation-globale} du \cref{chap:methodologie}.
+
+Soit la fonctionnelle régularisée définie pour tout $\vect{\theta} \in \setR^d$ par :
+\begin{equation}
+  \mathcal{J}(\vect{\theta}) = \frac{1}{N} \sum_{i=1}^N \mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \frac{\lambda}{2} \norm{\vect{\theta}}_2^2
+\end{equation}
+
+Calculons la matrice hessienne $\nabla^2 \mathcal{J}(\vect{\theta})$.
+Par linéarité de l'opérateur de dérivation, nous obtenons :
+\begin{equation}
+  \nabla^2 \mathcal{J}(\vect{\theta}) = \frac{1}{N} \sum_{i=1}^N \nabla^2_{\vect{\theta}}\mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) + \lambda \mat{I}_d
+\end{equation}
+où $\mat{I}_d$ désigne la matrice identité de dimension $d \times d$.
+
+Puisque la perte $\mathcal{L}$ est convexe par hypothèse, sa hessienne est semi-définie positive, soit :
+\begin{equation}
+  \forall \vect{v} \in \setR^d \setminus \{\vect{0}\}, \quad \vect{v}^\top \nabla^2_{\vect{\theta}}\mathcal{L}\bigl(y_i, f(\vect{x}_i; \vect{\theta})\bigr) \vect{v} \ge 0
+\end{equation}
+
+Par conséquent, pour tout vecteur non nul $\vect{v} \in \setR^d$ :
+\begin{equation}
+  \vect{v}^\top \nabla^2 \mathcal{J}(\vect{\theta}) \vect{v} \ge \lambda \norm{\vect{v}}_2^2 > 0 \quad (\text{car } \lambda > 0)
+\end{equation}
+La matrice hessienne est donc strictement définie positive sur l'ensemble de l'espace $\setR^d$.
+La fonctionnelle $\mathcal{J}$ est par conséquent strictement convexe,
+ce qui garantit l'existence et l'unicité du minimum global $\vect{\theta}^*$.
+
+\section{Tableau des Paramètres Typographiques et Numériques}
+\label{sec:parametres-table}
+
+Le \cref{tab:parametres-defaut} consigne les constantes numériques et typographiques
+retenues pour les deux profils de compilation.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Spécifications détaillées des réglages d'options de classe}
+  \label{tab:parametres-defaut}
+  \begin{tabularx}{\textwidth}{@{} l l l X @{}}
+    \toprule
+    \textbf{Paramètre} & \textbf{Profil Écran (\code{.clo})} & \textbf{Profil Papier (\code{.clo})} & \textbf{Justification typographique} \\
+    \midrule
+    \code{twoside}    & \code{false} (recto seul) & \code{true} (recto-verso) & Confort de défilement vs pagination d'ouvrage \\
+    \code{open}       & \code{any}                & \code{right}              & Les chapitres débutent impérativement sur belle page \\
+    \code{BCOR}       & \qty{0}{\milli\meter}     & \qty{10}{\milli\meter}    & Compensation physique de la pliure à la reliure \\
+    \code{DIV}        & \num{12}                  & \num{12}                  & Rapport d'empagement harmonieux selon KOMA-Script \\
+    Couleur liens     & Palette interactive      & Monochrome (\code{black}) & Clarté numérique vs sobriété et netteté papier \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+

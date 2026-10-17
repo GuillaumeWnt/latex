@@ -1,0 +1,48 @@
+%% ==============================================================================
+%% frontmatter/abstract.tex
+%% Résumés bilingues (Français et Anglais) et mots-clés
+%% ==============================================================================
+\addchap{Résumé / Abstract}
+
+% --- Résumé en français ---
+\section*{Résumé}
+
+La conception de documents scientifiques volumineux, tels que les mémoires de thèse et les rapports d'expertise,
+se heurte fréquemment à des difficultés d'évolutivité, de cohérence graphique et de portabilité collaborative.
+Ce travail propose une architecture éditoriale modulaire et découplée,
+bâtie sur les fondations de la classe \LaTeX{} moderne \code{scrbook} (KOMA-Script).
+En instaurant une séparation stricte entre l'orchestration du document maître (\code{main.tex}),
+la classe racine (\code{mythesis.cls}),
+les profils cibles écran et impression via les fichiers d'options (\code{.clo}),
+ainsi que la configuration fine des styles bibliographiques (\code{.bbx}/\code{.cbx}),
+cette approche garantit une clarté conceptuelle maximale.
+Le système démontre qu'une structure hautement granulaire favorise le travail collaboratif sous contrôle de version,
+réduit considérablement la dette technique des préambules monolithiques
+et assure une conformité typographique optimale quel que soit le canal de diffusion.
+
+\vspace{0.8em}
+\noindent\textbf{Mots-clés :} \getkeywords, classe scrbook, modularité, typographie, Bib\LaTeX.
+
+\vspace{1.5cm}
+
+% --- Abstract en anglais ---
+\begin{otherlanguage}{english}
+\section*{Abstract}
+
+The authoring of large-scale scientific manuscripts, such as doctoral dissertations and technical monographs,
+often suffers from maintainability bottlenecks, visual inconsistencies, and cumbersome collaborative workflows.
+This research introduces a decoupled and highly modular \LaTeX{} document architecture,
+engineered on top of the modern \code{scrbook} class from the KOMA-Script suite.
+By establishing a strict separation of concerns between master document orchestration (\code{main.tex}),
+core document class semantics (\code{mythesis.cls}),
+target-specific layout options via dedicated class options (\code{.clo}),
+and fine-grained citation and bibliography tailoring (\code{.bbx}/\code{.cbx}),
+this framework achieves superior transparency and maintainability.
+The proposed layout demonstrates that modular decomposition mitigates merge conflicts in version-controlled repositories,
+eliminates monolithic preamble pollution,
+and delivers publication-grade typographical quality for both digital interactive reading and physical print production.
+
+\vspace{0.8em}
+\noindent\textbf{Keywords :} Scientific publishing, KOMA-Script, modular document architecture, \LaTeX{}, Bib\LaTeX.
+\end{otherlanguage}
+

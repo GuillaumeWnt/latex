@@ -1,0 +1,70 @@
+%% ==============================================================================
+%% content/01-introduction.tex
+%% Chapitre 1 : Introduction générale et motivation
+%% ==============================================================================
+\chapter{Introduction Générale}
+\label{chap:introduction}
+
+\section{Contexte et Motivations}
+\label{sec:intro-contexte}
+
+La rédaction d'un mémoire universitaire ou d'un ouvrage technique de référence constitue une étape charnière dans l'activité scientifique.
+Depuis plusieurs décennies, le système typographique \TeX{} initié par \textcite{knuth1984texbook},
+complété par l'environnement logiciel \LaTeX{} conçu par \textcite{lamport1994latex},
+s'impose comme la référence incontournable de la publication scientifique rigoureuse.
+Cependant, à mesure que l'ampleur des documents augmente et que les exigences de diffusion se diversifient,
+la gestion d'un fichier source unique ou d'un préambule monolithique présente des limites criantes.
+
+Dans la pratique courante, les auteurs accumulent souvent des centaines de lignes de configurations hétérogènes,
+mélangeant la déclaration des polices,
+le réglage des marges,
+les redéfinitions de commandes mathématiques
+et l'inclusion de paquets tiers incompatibles.
+Cette approche engendre une fragilité technique majeure :
+la moindre modification d'un style ou le changement de moteur de compilation risque d'altérer l'ensemble de la structure.
+L'objectif de cette recherche est de formaliser une architecture logicielle pour \LaTeX{}
+fondée sur le principe éprouvé de la séparation des préoccupations (\textit{Separation of Concerns}).
+
+\section{Objectifs et Verrous Scientifiques}
+\label{sec:intro-objectifs}
+
+Pour répondre à ces enjeux, nous identifions trois verrous méthodologiques essentiels :
+
+\begin{enumerate}
+  \item \textbf{Le découplage sémantique :}
+  séparer rigoureusement la logique métier (le texte et les équations)
+  de la charte graphique globale et de l'orchestration des paquets.
+  \item \textbf{La flexibilité du support de diffusion :}
+  permettre une transition transparente entre une version optimisée pour la consultation numérique sur écran
+  (liens hypertexte interactifs, marges symétriques)
+  et une version destinée à l'impression papier de haute qualité
+  (compensation de la reliure \code{BCOR}, liens désaturés, neutralité chromatique).
+  \item \textbf{La modularité et la traçabilité collaborative :}
+  assurer un découpage granulaire des chapitres et des styles
+  facilitant le suivi de version sous Git et minimisant les conflits de fusion.
+\end{enumerate}
+
+\begin{callout}[Principe d'architecture]
+Un document \LaTeX{} de qualité professionnelle doit être abordé comme un projet logiciel :
+le fichier maître ordonnance,
+la classe encapsule les règles de composition,
+les fichiers d'options adaptent le livrable,
+et les fichiers de contenu portent la substance intellectuelle.
+\end{callout}
+
+\section{Organisation du Document}
+\label{sec:intro-plan}
+
+Le présent document est articulé en quatre chapitres principaux :
+
+\begin{itemize}
+  \item Le \cref{chap:etat-art} dresse un panorama critique des approches de mise en page académique,
+  en s'appuyant notamment sur les préceptes de \textcite{bringhurst2004elements}
+  et sur l'écosystème KOMA-Script documenté par \textcite{kohm2024koma}.
+  \item Le \cref{chap:methodologie} formalise l'architecture modulaire retenue,
+  le mécanisme des fichiers \code{.clo} et la structuration du flux de travail.
+  \item Le \cref{chap:resultats} présente les résultats d'évaluation,
+  illustrant la robustesse du modèle face à des contraintes typographiques variées.
+  \item Enfin, les annexes et la bibliographie rassemblent les compléments d'implémentation.
+\end{itemize}
+

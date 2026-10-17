@@ -1,0 +1,93 @@
+%% ==============================================================================
+%% config/packages.sty
+%% Appel et configuration centralisée des packages tiers
+%% ==============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config/packages}[2026/10/17 v1.0 Packages Configuration for mythesis]
+
+% --- Détection du moteur et polices de caractères ---
+\RequirePackage{iftex}
+\ifluatex
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX}
+\else\ifxetex
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX}
+\else
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage{lmodern}
+\fi\fi
+
+% Micro-typographie (crénage optique, saillie des marges)
+\RequirePackage{microtype}
+
+% --- Langues et typographie internationale ---
+% Le français est déclaré en dernier pour être la langue par défaut
+\RequirePackage[english, french]{babel}
+
+% Guillemets automatiques et adaptés à la langue active
+\RequirePackage[autostyle=true]{csquotes}
+
+% --- Outils mathématiques modernes ---
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+
+% --- Tableaux professionnels (règles strictes booktabs) ---
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\RequirePackage{makecell}
+\RequirePackage{multirow}
+
+% Espacement vertical accru dans les cellules de tableau
+\renewcommand{\arraystretch}{1.15}
+
+% --- Grandeurs physiques et unités SI ---
+\RequirePackage{siunitx}
+\sisetup{
+  locale = FR,
+  detect-all = true,
+  group-minimum-digits = 4,
+  uncertainty-mode = separate
+}
+\DeclareSIUnit\iter{it}
+
+% --- Graphiques et figures vectorielles TikZ ---
+\RequirePackage{graphicx}
+\graphicspath{{figures/}}
+
+\RequirePackage{tikz}
+\usetikzlibrary{
+  arrows.meta,
+  positioning,
+  calc,
+  fit,
+  backgrounds,
+  shapes.geometric
+}
+
+% Boîtes d'enrichissement visuel (callouts, encadrés)
+\RequirePackage[skins, breakable]{tcolorbox}
+
+% --- En-têtes et pieds de page KOMA-Script ---
+\RequirePackage[headsepline=0.5pt]{scrlayer-scrpage}
+\addtokomafont{headsepline}{\color{ThesisSecondary!40}}
+
+% --- Bibliographie BibLaTeX ---
+% Le style fait appel à biblio/custom-style.bbx et biblio/custom-style.cbx
+\RequirePackage[
+  backend=biber,
+  style=biblio/custom-style
+]{biblatex}
+
+% --- Navigation hypertexte et métadonnées PDF ---
+\RequirePackage{hyperref}
+\RequirePackage{bookmark}
+
+% Référencement croisé intelligent (doit impérativement être chargé après hyperref)
+\RequirePackage[capitalise, noabbrev, french]{cleveref}
+
+\endinput

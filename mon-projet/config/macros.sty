@@ -1,0 +1,113 @@
+%% ==============================================================================
+%% config/macros.sty
+%% Commandes métier, raccourcis mathématiques et environnements personnalisés
+%% ==============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config/macros}[2026/10/17 v1.0 Custom Macros for mythesis]
+
+% --- Notations mathématiques sémantiques ---
+% Vecteurs et matrices en gras droit / italique
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+
+% Ensembles usuels
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\setN}{\mathbb{N}}
+\newcommand{\setZ}{\mathbb{Z}}
+\newcommand{\setC}{\mathbb{C}}
+
+% Délimiteurs extensibles via mathtools
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\scal}{\langle}{\rangle}
+
+% Symbole différentiel droit pour le calcul intégral
+\newcommand{\diff}{\mathop{}\!\mathrm{d}}
+
+% Opérateurs d'optimisation
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\DeclareMathOperator{\trace}{\mathrm{Tr}}
+\DeclareMathOperator{\diag}{\mathrm{diag}}
+
+% --- Balisage textuel sémantique ---
+% Terme technique introduit pour la première fois
+\newcommand{\term}[1]{\textbf{\textcolor{ThesisPrimary}{#1}}}
+
+% Fragment de code en ligne
+\newcommand{\code}[1]{\texttt{\textcolor{ThesisPrimary!90}{#1}}}
+
+% --- Environnements visuels (tcolorbox) ---
+
+% Boîte d'information / Remarque
+\newtcolorbox{callout}[1][Remarque]{%
+  enhanced,
+  breakable,
+  colback=ThesisPrimary!4,
+  colframe=ThesisPrimary!70,
+  coltitle=ThesisPrimary,
+  fonttitle=\bfseries\sffamily\small,
+  title={#1},
+  left=10pt,
+  right=10pt,
+  top=6pt,
+  bottom=6pt,
+  arc=3pt,
+  boxrule=0.8pt,
+  before skip=12pt,
+  after skip=12pt
+}
+
+% Boîte d'hypothèse scientifique numérotée
+\newcounter{hypocounter}[chapter]
+\renewcommand{\thehypocounter}{\thechapter.\arabic{hypocounter}}
+
+\newtcolorbox[use counter=hypocounter]{hypothesis}[1][]{%
+  enhanced,
+  breakable,
+  colback=ThesisSecondary!4,
+  colframe=ThesisSecondary!80,
+  coltitle=ThesisSecondary,
+  fonttitle=\bfseries\sffamily\small,
+  title={Hypothèse~\thehypocounter\ifstrempty{#1}{}{ : #1}},
+  left=10pt,
+  right=10pt,
+  top=6pt,
+  bottom=6pt,
+  arc=3pt,
+  boxrule=0.9pt,
+  before skip=12pt,
+  after skip=12pt
+}
+
+% Boîte de définition formelle
+\newcounter{deficounter}[chapter]
+\renewcommand{\thedeficounter}{\thechapter.\arabic{deficounter}}
+
+\newtcolorbox[use counter=deficounter]{definitionbox}[1][]{%
+  enhanced,
+  breakable,
+  colback=ThesisBackground,
+  colframe=ThesisPrimary!90,
+  coltitle=white,
+  colbacktitle=ThesisPrimary!90,
+  fonttitle=\bfseries\sffamily\small,
+  title={Définition~\thedeficounter\ifstrempty{#1}{}{ --- #1}},
+  left=10pt,
+  right=10pt,
+  top=6pt,
+  bottom=6pt,
+  arc=2pt,
+  boxrule=0.8pt,
+  before skip=12pt,
+  after skip=12pt
+}
+
+% Déclaration des alias cleveref pour nos compteurs personnalisés
+\crefname{hypocounter}{hypothèse}{hypothèses}
+\Crefname{hypocounter}{Hypothèse}{Hypothèses}
+\crefname{deficounter}{définition}{définitions}
+\Crefname{deficounter}{Définition}{Définitions}
+
+\endinput
+

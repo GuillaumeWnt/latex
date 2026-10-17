@@ -1,0 +1,56 @@
+%% ==============================================================================
+%% biblio/custom-style.bbx
+%% Style bibliographique personnalisé BibLaTeX (mise en page des entrées)
+%% ==============================================================================
+\ProvidesFile{custom-style.bbx}[2026/10/17 v1.0 Custom Bibliography Style for mythesis]
+
+% Hérite de la base moderne auteur-année standard
+\RequireBibliographyStyle{authoryear}
+
+% --- Options globales d'affichage ---
+\ExecuteBibliographyOptions{
+  sorting=nyt,        % Nom, Année, Titre
+  maxbibnames=8,      % Affiche jusqu'à 8 auteurs avant "et al."
+  minbibnames=1,
+  giveninits=true,    % Initiales des prénoms
+  uniquename=false,
+  uniquelist=false,
+  doi=true,
+  url=true,
+  isbn=false,
+  eprint=false
+}
+
+% --- Espacement entre les entrées ---
+\setlength{\bibitemsep}{0.6\baselineskip plus 0.2\baselineskip minus 0.1\baselineskip}
+\setlength{\bibhang}{1.5em}
+
+% --- Typographie des noms d'auteurs dans la bibliographie ---
+% Noms de famille en petites capitales subtiles
+\renewcommand*{\mkbibnamefamily}[1]{\textsc{#1}}
+\renewcommand*{\mkbibnameprefix}[1]{#1}
+
+% Ponctuation après l'auteur/année
+\renewcommand*{\labelnamepunct}{\addspace\textemdash\addspace}
+
+% --- Mise en valeur des titres ---
+\DeclareFieldFormat[article,inproceedings,incollection]{title}{\enquote{#1}}
+\DeclareFieldFormat[book,thesis,phdthesis,manual]{title}{\mkbibemph{#1}}
+
+% --- Formatage du DOI sous forme de lien compact ---
+\DeclareFieldFormat{doi}{%
+  \ifhyperref
+    {\href{https://doi.org/#1}{\texttt{doi:\nolinkurl{#1}}}}%
+    {\texttt{doi:\nolinkurl{#1}}}%
+}
+
+% --- Formatage de l'URL et de la date de consultation ---
+\DeclareFieldFormat{url}{%
+  \ifhyperref
+    {\href{#1}{\texttt{url:\nolinkurl{#1}}}}%
+    {\texttt{url:\nolinkurl{#1}}}%
+}
+\DeclareFieldFormat{urldate}{\bibstring{urlseen}\space#1}
+
+\endinput
+

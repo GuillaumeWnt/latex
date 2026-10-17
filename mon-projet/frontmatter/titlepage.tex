@@ -1,0 +1,76 @@
+%% ==============================================================================
+%% frontmatter/titlepage.tex
+%% Page de titre moderne et épurée utilisant les capacités KOMA-Script
+%% ==============================================================================
+\begin{titlepage}
+  \sffamily
+  
+  % En-tête : Institution, composante et logo
+  \noindent
+  \begin{minipage}[t]{0.72\textwidth}
+    {\fontsize{13}{16}\bfseries\color{ThesisPrimary}\getinstitution}\par
+    \vspace{2mm}
+    {\fontsize{10}{13}\color{ThesisSecondary}\getfaculty}\par
+    {\fontsize{9}{12}\color{ThesisMuted}\getdepartment}\par
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.25\textwidth}
+    \raggedleft
+    \IfFileExists{figures/logo.pdf}{%
+      \includegraphics[height=1.8cm]{logo.pdf}%
+    }{%
+      \rule{1.8cm}{1.8cm}%
+    }
+  \end{minipage}
+
+  \vspace{1.5cm}
+
+  % Mention du diplôme et de la discipline
+  \begin{center}
+    {\fontsize{11}{14}\bfseries\color{ThesisSecondary}\MakeUppercase{\getdegree}}\par
+    \vspace{3mm}
+    {\fontsize{10}{13}\color{ThesisMuted}Spécialité : \textbf{\getspecialty}}\par
+    
+    \vspace{1.2cm}
+
+    % Titre principal et sous-titre
+    \hrule height 1.5pt \relax
+    \vspace{6mm}
+    {\fontsize{22}{28}\bfseries\color{ThesisPrimary}\makeatletter\@title\makeatother}\par
+    \ifdefined\@subtitle
+      \vspace{4mm}
+      {\fontsize{14}{18}\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
+    \fi
+    \vspace{6mm}
+    \hrule height 0.5pt \relax
+
+    \vspace{1.2cm}
+
+    % Auteur et date
+    {\fontsize{11}{14}\color{ThesisMuted}Présenté et soutenu publiquement par}\par
+    \vspace{3mm}
+    {\fontsize{15}{18}\bfseries\color{ThesisPrimary}\makeatletter\@author\makeatother}\par
+    \vspace{4mm}
+    {\fontsize{10}{13}\color{ThesisMuted}Soutenue le \makeatletter\@date\makeatother{} à \getlocation}\par
+  \end{center}
+
+  \vfill
+
+  % Composition du jury
+  \noindent
+  {\small\bfseries\color{ThesisPrimary}Composition du jury :}\par
+  \vspace{3mm}
+  \noindent
+  \begin{tabularx}{\textwidth}{@{} >{\bfseries}p{4.2cm} X >{\raggedleft\arraybackslash}p{4.0cm} @{}}
+    \toprule
+    Pr. Robert Bringhurst & Professeur, University of British Columbia & Président du jury \\
+    Dr. Leslie Lamport    & Directeur de Recherche, INRIA               & Rapporteur \\
+    Pr. Donald Knuth      & Professeur Émérite, Stanford University     & Rapporteur \\
+    Dr. Claude Shannon    & Chercheur Senior, Bell Labs                 & Examinateur \\
+    \getsupervisor        & Professeur, \getinstitution                 & Directeur de thèse \\
+    \getcosupervisor      & Maître de Conférences, \getinstitution      & Co-directeur de thèse \\
+    \bottomrule
+  \end{tabularx}
+
+\end{titlepage}
+

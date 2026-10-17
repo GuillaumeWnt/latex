@@ -1,0 +1,24 @@
+%% ==============================================================================
+%% biblio/custom-style.cbx
+%% Style de citation personnalisé BibLaTeX (citations dans le texte)
+%% ==============================================================================
+\ProvidesFile{custom-style.cbx}[2026/10/17 v1.0 Custom Citation Style for mythesis]
+
+% Hérite du style auteur-année compact standard
+\RequireCitationStyle{authoryear-comp}
+
+% --- Options des citations dans le corps de texte ---
+\ExecuteBibliographyOptions{
+  maxcitenames=2,     % "Dupont et Martin (2023)" ou "Vaswani et al. (2017)"
+  mincitenames=1,
+  uniquelist=false
+}
+
+% Séparateur entre auteurs et année : espace simple
+\renewcommand*{\nameyeardelim}{\addspace}
+
+% Format de délimitation des citations multiples
+\renewcommand*{\multicitedelim}{\addsemicolon\space}
+
+\endinput
+

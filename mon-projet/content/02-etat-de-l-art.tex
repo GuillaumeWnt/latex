@@ -1,0 +1,75 @@
+%% ==============================================================================
+%% content/02-etat-de-l-art.tex
+%% Chapitre 2 : État de l'art et fondements typographiques
+%% ==============================================================================
+\chapter{État de l'Art et Fondements Typographiques}
+\label{chap:etat-art}
+
+\section{Évolution des Classes de Documents en \LaTeX{}}
+\label{sec:classes-evolution}
+
+Historiquement, la distribution standard de \LaTeX{} fournit les classes de base \code{book}, \code{report} et \code{article}.
+Bien que largement répandues et pérennes, ces classes ont été conçues dans les années 1980
+selon des conventions typographiques anglo-saxonnes rigides,
+avec des paramètres de mise en page souvent figés dans le marbre du code source.
+Pour modifier la taille des marges ou la structure des en-têtes,
+les utilisateurs devaient recourir à des extensions externes telles que \code{geometry}, \code{fancyhdr} ou \code{titlesec}.
+Cependant, l'interaction de ces couches disparates introduit fréquemment des avertissements
+et rompt la cohérence géométrique du bloc typographique.
+
+Pour surmonter ces contraintes, Markus Kohm a développé l'écosystème KOMA-Script \autocite{kohm2024koma},
+comprenant notamment la classe de référence \code{scrbook}.
+Contrairement aux classes standards, KOMA-Script intègre nativement le calcul géométrique selon les règles de la Renaissance,
+la gestion dynamique du diviseur de page (\code{DIV}),
+la compensation de pliure (\code{BCOR})
+et un moteur d'en-têtes hautement sophistiqué via \code{scrlayer-scrpage}.
+
+\section{Comparaison des Approches d'Architecture}
+\label{sec:comparatif-architectures}
+
+L'analyse de la littérature et des pratiques de développement scientifique met en évidence
+trois paradigmes majeurs pour la composition de documents longs,
+résumés dans le \cref{tab:comparaison-approches}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Comparaison multidimensionnelle des architectures de documents \LaTeX{}}
+  \label{tab:comparaison-approches}
+  \begin{tabularx}{\textwidth}{@{} l X X X @{}}
+    \toprule
+    \textbf{Critère} & \textbf{Modèle Monolithique} & \textbf{Approche Extensions} & \textbf{Architecture Modulaire (.cls/.clo)} \\
+    \midrule
+    Découplage code/style & Nul (tout dans \code{main.tex}) & Partiel (fichiers \code{.tex} inclus) & Total (classe et options dédiées) \\
+    Gestion écran / papier & Manuelle et sujette à erreurs & Conditionnels \code{\textbackslash if} dispersés & Fichiers d'options \code{.clo} étanches \\
+    Conflits de fusion Git & Élevés sur le préambule & Modérés & Minimes (granulat fin par composant) \\
+    Interopérabilité & Faible & Moyenne & Élevée (partageable comme paquet ou classe) \\
+    Maintenance long terme & Dette technique rapide & Risque de collisions de paquets & Contrôle centralisé et extensibilité propre \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Comme le soulignent \textcite{martin2023architectures},
+l'introduction d'un couplage faible entre les couches logicielles est la clé de voûte
+de la reproductibilité dans les sciences computationnelles.
+Ce constat s'applique directement à la documentation scientifique,
+où la séparation entre le texte brut et le moteur de rendu garantit une durabilité maximale des écrits.
+
+\section{Modernisation de la Gestion Bibliographique}
+\label{sec:biblio-moderne}
+
+Pendant de nombreuses années, l'outil historique \code{BibTeX} a constitué la norme pour la gestion des citations.
+Toutefois, la rigidité de ses fichiers de style compilés en langage BST
+rendait toute personnalisation fastidieuse et opaque.
+L'avènement de Bib\LaTeX{}, couplé au moteur d'indexation moderne \code{Biber},
+a profondément transformé cet écosystème en permettant de programmer les règles de rendu directement en \LaTeX{}.
+
+Dans cette architecture, nous exploitons la puissance de Bib\LaTeX{}
+en définissant notre propre style bibliographique à travers deux fichiers complémentaires :
+\begin{itemize}
+  \item \code{custom-style.bbx} : pilote la structure des notices dans la liste finale des références
+  (ordre des champs, typographie des noms en petites capitales, formatage des identifiants DOI).
+  \item \code{custom-style.cbx} : gouverne le format des renvois dans le texte
+  (citations auteur-date cliquables, gestion des co-auteurs multiples selon les préceptes de \textcite{bringhurst2004elements}).
+\end{itemize}
+Cette configuration assure une cohérence éditoriale parfaite entre les citations et leur cible.
+
