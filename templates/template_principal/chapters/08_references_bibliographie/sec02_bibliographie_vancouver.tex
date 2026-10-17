@@ -8,6 +8,18 @@ La qualité des sources et leur référencement rigoureux constituent le socle d
 L'ancien moteur \textsf{Bib\TeX{}} (1985), limité aux caractères ASCII 7 bits et dépendant de fichiers de style rigides (\texttt{.bst}), est aujourd'hui totalement dépassé.
 \texttt{ClasseGuillaume} s'appuie sur le couple de référence contemporain : le paquet \textsf{biblatex} propulsé par le moteur de tri Unicode \textbf{Biber}.
 
+\subsection{Indépendance absolue entre données brutes (\texttt{.bib}) et style de rendu}
+\label{subsec:independance_bib_style}
+
+L'un des atouts fondamentaux de l'écosystème \LaTeX{} réside dans la séparation étanche entre le fond et la forme :
+\begin{itemize}
+  \item Le fichier \texttt{bib/references.bib} constitue une \textbf{base de données brute et universelle}.
+  Il est totalement \emph{agnostique} du style de publication et ne stocke que les métadonnées sémantiques (auteurs, titres, volumes, éditeurs, dates, identifiants DOI et URL).
+  \item Le \textbf{style de restitution visuelle} (Vancouver, IEEE, APA, Chicago, Nature, etc.) est quant à lui gouverné de manière unique dans le document \LaTeX{} (option \texttt{style=vancouver} de \textsf{biblatex} dans la classe ou le préambule).
+\end{itemize}
+
+Ainsi, pour soumettre un même mémoire ou article à une revue exigeant le style auteur-date (ex. APA) plutôt qu'un style numérique séquentiel (Vancouver ou IEEE), il suffit de modifier un seul mot dans la configuration de \textsf{biblatex}, sans jamais devoir réécrire ou modifier la moindre ligne du fichier \texttt{references.bib}.
+
 \subsection{Pourquoi le style Vancouver médical et technique ?}
 \label{subsec:pourquoi_vancouver}
 
