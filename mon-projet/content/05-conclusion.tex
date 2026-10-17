@@ -54,13 +54,13 @@ des projets \LaTeX{} volumineux en formalisant six piliers méthodologiques :
   et \code{listings/} (pour les codes sources externes importés sans copier-coller)
   garantit une traçabilité expérimentale irréprochable.
   \item \textbf{La reproductibilité typographique multi-plateforme :}
-  le stockage local des polices OpenType/TrueType dans le répertoire \code{fonts/}
-  immunise le projet contre les variations de polices entre Windows, Linux, macOS, Overleaf et les pipelines d'intégration continue CI/CD.
-  \item \textbf{La bibliographie modulaire Bib\LaTeX{} :}
-  la séparation entre données brutes (\code{references.bib}),
-  mise en page de la bibliographie finale (\code{custom-style.bbx})
-  et formatage des citations cliquables (\code{custom-style.cbx})
-  offre une liberté totale de personnalisation sans la complexité des anciens fichiers BST.
+  le stockage des polices OpenType dans le répertoire \code{fonts/}
+  immunise le projet contre les variations d'OS (Windows, Linux, macOS, Overleaf ou CI/CD).
+  \item \textbf{Citations et bibliographie :}
+  découplage net entre sources (\code{references.bib}),
+  mise en page finale (\code{custom-style.bbx})
+  et citations cliquables (\code{custom-style.cbx})
+  offre une grande liberté sans la complexité des anciens fichiers BST.
   \item \textbf{L'outillage qualité automatisé :}
   la présence conjointe de \code{latexmkrc} (confinement de la compilation dans \code{build/}),
   de \code{.editorconfig} (uniformisation de l'indentation à deux espaces)

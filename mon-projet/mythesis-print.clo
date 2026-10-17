@@ -31,7 +31,7 @@
 % dans le PDF numérique, mais s'impriment en noir sans bordure ni couleur vive.
 \PassOptionsToPackage{
   colorlinks=false,
-  hidelinks=true,
+  hidelinks,
   bookmarksopen=false,
   bookmarksnumbered=true,
   pdfpagemode=UseNone,

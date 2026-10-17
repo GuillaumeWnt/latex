@@ -8,15 +8,26 @@
 $pdf_mode = 4;
 
 # Moteur de compilation LuaLaTeX avec arrêt sur erreur et enregistreur
-$lualatex = 'lualatex --interaction=nonstopmode --synctex=1 %O %S';
+$lualatex = 'lualatex --interaction=nonstopmode --synctex=0 %O %S';
 
 # Moteur bibliographique Biber pour BibLaTeX
-$bibtex_use = 2;
+$bibtex_use = 1;
 $biber = 'biber %O %S';
 
 # Répertoire de sortie pour isoler les fichiers auxiliaires de compilation
 $out_dir = 'build';
 
+# Fichiers générés par les extensions (évite les boucles de relance logreq / biblatex)
+push @generated_exts, 'run.xml';
+
 # Nettoyage automatique des extensions auxiliaires avec `latexmk -c` ou `-C`
 $clean_ext = 'aux bbl bcf blg run.xml toc lof lot out synctex.gz fdb_latexmk fls log tdo idx ilg ind';
+
+# --- Optionnel : Support de l'externalisation TikZ avec build/ (Option B) ---
+# Si vous souhaitez activer \usetikzlibrary{external} au lieu du paquet standalone :
+# 1. Décommentez l'option -shell-escape ci-dessous :
+#    $lualatex = 'lualatex -shell-escape --interaction=nonstopmode --synctex=1 %O %S';
+# 2. Décommentez la création automatique du répertoire de cache dans build/ :
+#    use File::Path qw(make_path);
+#    make_path("$out_dir/tikz-cache");
 

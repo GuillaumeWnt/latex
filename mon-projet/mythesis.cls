@@ -10,8 +10,14 @@
 \newif\ifmythesis@print
 \mythesis@printfalse
 
-\DeclareOption{print}{\mythesis@printtrue}
-\DeclareOption{screen}{\mythesis@printfalse}
+\DeclareOption{print}{%
+  \mythesis@printtrue
+  \@expandtwoargs\@removeelement{print}\@classoptionslist\@classoptionslist
+}
+\DeclareOption{screen}{%
+  \mythesis@printfalse
+  \@expandtwoargs\@removeelement{screen}\@classoptionslist\@classoptionslist
+}
 % Transmettre toute autre option à la classe de base scrbook
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
 
@@ -111,7 +117,7 @@
     pdfauthor={\@author},
     pdfsubject={\mythesis@degree{} -- \mythesis@specialty},
     pdfkeywords={\mythesis@keywords},
-    pdfcreator={LuaLaTeX with KOMA-Script scrbook & mythesis class}
+    pdfcreator={LuaLaTeX with KOMA-Script scrbook and mythesis class}
   }
 }
 

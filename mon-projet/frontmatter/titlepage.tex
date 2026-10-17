@@ -36,10 +36,10 @@
     % Titre principal et sous-titre
     \hrule height 1.5pt \relax
     \vspace{6mm}
-    {\fontsize{22}{28}\bfseries\color{ThesisPrimary}\makeatletter\@title\makeatother}\par
+    {\fontsize{20.74}{26}\selectfont\bfseries\color{ThesisPrimary}\makeatletter\@title\makeatother}\par
     \ifdefined\@subtitle
       \vspace{4mm}
-      {\fontsize{13}{17}\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
+      {\fontsize{12}{15}\selectfont\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
     \fi
     \vspace{6mm}
     \hrule height 0.5pt \relax
@@ -47,11 +47,11 @@
     \vspace{1.2cm}
 
     % Auteur et date
-    {\fontsize{11}{14}\color{ThesisMuted}Rédigé et composé par}\par
+    {\fontsize{11}{14}\selectfont\color{ThesisMuted}Rédigé et composé par}\par
     \vspace{3mm}
-    {\fontsize{15}{18}\bfseries\color{ThesisPrimary}\makeatletter\@author\makeatother}\par
+    {\fontsize{14.4}{18}\selectfont\bfseries\color{ThesisPrimary}\makeatletter\@author\makeatother}\par
     \vspace{4mm}
-    {\fontsize{10}{13}\color{ThesisMuted}Version mise à jour le \makeatletter\@date\makeatother{} -- \getlocation}\par
+    {\fontsize{10}{13}\selectfont\color{ThesisMuted}Version mise à jour le \makeatletter\@date\makeatother{} -- \getlocation}\par
   \end{center}
 
   \vfill
@@ -61,7 +61,7 @@
   {\small\bfseries\color{ThesisPrimary}Comité de relecture et références fondatrices :}\par
   \vspace{3mm}
   \noindent
-  \begin{tabularx}{\textwidth}{@{} >{\bfseries}p{4.2cm} X >{\raggedleft\arraybackslash}p{4.0cm} @{}}
+  \begin{tabularx}{\textwidth}{@{} >{\bfseries}p{4.2cm} >{\raggedright\arraybackslash}X >{\raggedleft\arraybackslash}p{4.0cm} @{}}
     \toprule
     Pr. Robert Bringhurst & Typographe, auteur de \textit{Elements of Typographic Style} & Expert Typographie \\
     Dr. Leslie Lamport    & Créateur de \LaTeX{}, Prix Turing 2013                       & Fondateur Logiciel \\

@@ -49,9 +49,9 @@ les tableaux typographiques de haute qualité n'utilisent **jamais** de filets v
 Ces filets fragmentent le regard et gênent la lecture des données.
 Notre configuration s'appuie sur le trio moderne :
 \begin{enumerate}
-  \item \code{booktabs} pour des filets horizontaux d'épaisseur variable (\code{\textbackslash toprule}, \code{\textbackslash midrule}, \code{\textbackslash bottomrule}),
-  \item \code{tabularx} pour le calcul automatique de colonnes extensibles adaptées à la largeur de page (\code{X}),
-  \item et \code{makecell} pour les sauts de ligne élégants à l'intérieur d'une même cellule.
+  \item \textbf{Filets hiérarchisés :} le paquet \code{booktabs} (\code{\textbackslash toprule}, \code{\textbackslash midrule}, \code{\textbackslash bottomrule}),
+  \item \textbf{Largeurs automatiques :} le paquet \code{tabularx} et sa colonne \code{X},
+  \item \textbf{Cellules multilignes :} le paquet \code{makecell} pour les retours à la ligne internes.
 \end{enumerate}
 
 \section{Macros Sémantiques et Boîtes Graphiques : \code{macros.sty}}
@@ -90,36 +90,61 @@ sans qu'aucune ligne des chapitres de contenu (\code{content/*.tex}) ne doive ê
 Grâce à l'intégration de \code{cleveref}, vous pouvez référencer automatiquement cet encadré dans le texte
 via \code{\textbackslash cref\{hyp:decouplage\}}, ce qui produit automatiquement : \cref{hyp:decouplage}.
 
-\section{Gestion des Figures Vectorielles et Schémas TikZ}
+\section{Gestion des Figures Vectorielles : Standalone vs Externalisation TikZ}
 \label{sec:figures-tikz}
 
-Le dossier \code{figures/} héberge les médias sources du document :
-\begin{itemize}
-  \item \textbf{Fichiers PDF vectoriels (\code{logo.pdf}) :}
-  idéaux pour les logos institutionnels ou les graphiques haute fidélité issus d'outils d'ingénierie.
-  Ils ne se dégradent jamais au zoom et sont appelés classiquement via \code{\textbackslash includegraphics}.
-  \item \textbf{Schémas vectoriels programmés (\code{schema-principe.tikz}) :}
-  le code TikZ est externalisé dans son propre fichier source, ce qui permet de le versionner et de l'éditer isolément.
-\end{itemize}
+\subsection{Le problème du recalcul systématique de TikZ}
+Par défaut, à chaque compilation du manuscrit, le moteur \LaTeX{} recalcule et redessine l'ensemble
+des figures TikZ et des tracés \code{pgfplots} à partir de zéro.
+Sur un manuscrit de thèse comprenant 30 à 50 figures élaborées,
+ce traitement peut ajouter plusieurs minutes à chaque cycle de compilation,
+même si vous avez simplement corrigé une coquille typographique dans un paragraphe textuel.
+
+\subsection{Pourquoi l'externalisation classique plante avec \code{out\_dir = 'build'} ?}
+Pour accélérer ce processus, la bibliothèque native \code{\textbackslash usetikzlibrary\{external\}} propose
+d'isoler chaque schéma dans un sous-processus d'arrière-plan via l'option \code{-shell-escape},
+générant un PDF d'image réutilisé aux compilations ultérieures.
+Toutefois, dès que le projet utilise un dossier de sortie isolé (\code{\$out\_dir = 'build'}),
+deux conflits majeurs surgissent :
+\begin{enumerate}
+  \item \textbf{Conflit de répertoire :} TikZ cherche à écrire ses fichiers temporaires et ses sommes de contrôle
+  dans un sous-dossier (ex. \code{tikz-cache/main-fig0.md5}). Si ce sous-dossier n'est pas préalablement créé
+  à l'intérieur de \code{build/}, la compilation s'interrompt avec l'erreur :
+  \code{! I can't write on file 'tikz-cache/main-fig0.md5'}.
+  \item \textbf{Conflit de contexte de processus :} le processus principal travaille dans \code{build/},
+  mais le sous-processus lancé par \code{\textbackslash write18} s'exécute à la racine.
+  Le PDF généré par le sous-processus se retrouve alors égaré à la racine tandis que le moteur principal l'attend dans \code{build/}.
+\end{enumerate}
+
+\subsection{La solution reine en thèse : le paquet \code{standalone} (Option A)}
+Pour s'affranchir définitivement de ces écueils et respecter les règles de sécurité
+(évitant l'activation d'un \code{-shell-escape} non restreint),
+notre architecture adopte le paquet \code{standalone}.
+
+Chaque figure devient un fichier \LaTeX{} autonome dans le dossier \code{figures/tikz/} :
+\begin{enumerate}
+  \item \textbf{Édition ultra-rapide :} vous pouvez ouvrir \code{figures/tikz/schema-principe.tex}
+  et le compiler isolément en moins d'une seconde dans votre éditeur pour ajuster vos n\oe{}uds.
+  \item \textbf{Inclusion fluide :} dans le chapitre,
+  l'instruction \code{\textbackslash includestandalone} extrait le tracé sans réexécuter de préambule :
+\end{enumerate}
 
 \begin{figure}[htbp]
   \centering
-  \resizebox{\textwidth}{!}{\input{figures/schema-principe.tikz}}
-  \caption{Schéma d'orchestration de l'architecture modulaire et du flux de compilation}
+  \includestandalone[width=\textwidth]{figures/tikz/schema-principe}
+  \caption[Schéma d'orchestration modulaire]{Schéma d'orchestration modulaire inclus via le paquet \code{standalone}}
   \label{fig:architecture-projet}
 \end{figure}
 
-Le \cref{fig:architecture-projet} illustre la chaîne complète régissant ce document.
-Deux astuces fondamentales sont ici appliquées :
-\begin{callout}[Astuces pour des schémas TikZ réussis]
-\begin{enumerate}
-  \item \textbf{Mise à l'échelle sans débordement :}
-  utilisez toujours \code{\textbackslash resizebox\{\textbackslash textwidth\}\{!\}\{\textbackslash input\{figures/schema.tikz\}\}}
-  pour que le dessin s'adapte exactement à la largeur utile de la page, quel que soit le profil de marge activé.
-  \item \textbf{Harmonisation des couleurs :}
-  utilisez les noms de couleurs de la classe (\code{ThesisPrimary}, \code{ThesisSecondary}, etc.) dans vos n\oe{}uds TikZ.
-  Votre schéma s'adaptera ainsi de lui-même si vous changez la palette de votre document !
-\end{enumerate}
+Comme démontré sur le \cref{fig:architecture-projet},
+le schéma hérite fidèlement de la palette chromatique de la thèse (\code{ThesisPrimary}, \code{ThesisSecondary})
+grâce à la directive \code{\textbackslash providecolor} déclarée dans l'en-tête du fichier autonome.
+
+\begin{callout}[Alternative : Précompilation en PDF]
+Pour un temps de compilation de thèse strictement nul sur les figures stabilisées,
+vous pouvez compiler le fichier \code{schema-principe.tex} une fois pour toutes
+en \code{schema-principe.pdf}, puis l'appeler classiquement par \code{\textbackslash includegraphics}.
+Vous obtenez ainsi une vélocité maximale sans compromettre la source vectorielle.
 \end{callout}
 
 \section{Sanctuarisation du Code Source Externe : le Dossier \code{listings/}}

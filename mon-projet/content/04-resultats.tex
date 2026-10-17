@@ -36,8 +36,8 @@ Le fichier \code{custom-style.bbx} hérite de la classe de référence \code{aut
 et applique plusieurs raffinements typographiques :
 
 \begin{itemize}
-  \item \textbf{Noms d'auteurs en petites capitales :}
-  grâce à la redéfinition de la macro \code{\textbackslash mkbibnamefamily},
+  \item \textbf{Noms en petites capitales :}
+  grâce à la macro \code{\textbackslash mkbibnamefamily},
   les noms de famille apparaissent en petites capitales (\textsc{Majuscules Réduites}) sans alourdir le texte.
   \item \textbf{Distinction visuelle des titres :}
   les titres d'articles ou d'actes de conférences sont placés entre guillemets de langue active (\code{\textbackslash enquote}),
@@ -95,7 +95,7 @@ Pour compiler l'intégralité du document en une seule touche, tapez simplement 
 \begin{center}
   \code{latexmk}
 \end{center}
-Le fichier PDF prêt pour la lecture ou l'impression est immédiatement généré dans \code{build/main.pdf}.
+Le PDF compilé pour la lecture ou l'impression est généré dans le dossier \code{build/main.pdf}.
 Pour faire le ménage et supprimer les fichiers temporaires, utilisez \code{latexmk -c} (nettoyage intermédiaire)
 ou \code{latexmk -C} (nettoyage complet incluant le PDF).
 
@@ -144,7 +144,7 @@ Le \cref{fig:courbe-csv} est produit en temps réel à partir de \code{data/benc
       \addlegendentry{Modèle standard de référence}
     \end{axis}
   \end{tikzpicture}
-  \caption{Courbes de performance générées en temps réel depuis le fichier brut \code{data/benchmark-results.csv}}
+  \caption[Courbes de performance issues des données brutes CSV]{Courbes de performance générées en temps réel depuis le fichier brut \code{data/benchmark-results.csv}}
   \label{fig:courbe-csv}
 \end{figure}
 

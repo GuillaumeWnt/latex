@@ -64,8 +64,9 @@ Ce profil est pensé pour la lecture numérique interactive (sur écran d'ordina
 \begin{itemize}
   \item \textbf{Marges symétriques :} réglage de \code{twoside=false} et \code{BCOR=0mm}.
   Le texte est parfaitement centré sur la page, ce qui offre un confort maximal lors du défilement vertical.
-  \item \textbf{Palette chromatique accessible :} définition des couleurs sémantiques (\code{ThesisPrimary}, \code{ThesisSecondary}, \code{ThesisAccent})
-  avec des teintes bleu marine et sarcelle profondes pour un contraste optimal.
+  \item \textbf{Palette chromatique :} couleurs sémantiques (\code{ThesisPrimary},
+  \code{ThesisSecondary} et \code{ThesisAccent})
+  avec des nuances bleu marine et sarcelle pour un contraste optimal.
   \item \textbf{Hyperliens interactifs :} configuration de \code{hyperref} avec \code{colorlinks=true},
   permettant de distinguer immédiatement les renvois internes (en bleu pétrole), les citations bibliographiques (en vert forêt)
   et les adresses web externes (en violet prune).
@@ -94,7 +95,7 @@ Le \cref{tab:comparaison-profils} résume les divergences de comportement entre 
   \centering
   \caption{Spécifications comparatives des profils d'options \code{.clo}}
   \label{tab:comparaison-profils}
-  \begin{tabularx}{\textwidth}{@{} l X X @{}}
+  \begin{tabularx}{\textwidth}{@{} l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X @{}}
     \toprule
     \textbf{Caractéristique} & \textbf{Profil Écran (\code{mythesis-screen.clo})} & \textbf{Profil Impression (\code{mythesis-print.clo})} \\
     \midrule

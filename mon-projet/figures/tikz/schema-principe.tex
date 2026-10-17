@@ -1,0 +1,144 @@
+%% ==============================================================================
+%% figures/tikz/schema-principe.tex
+%% Schéma d'architecture autonome (standalone)
+%% Peut être compilé isolément en 0.5s ou inclus via \includestandalone
+%% ==============================================================================
+\documentclass[tikz, border=3mm]{standalone}
+
+\usepackage{xcolor}
+% Couleurs par défaut avec \providecolor (héritées de la classe si compilé dans la thèse)
+\providecolor{ThesisPrimary}{RGB}{15, 60, 110}
+\providecolor{ThesisSecondary}{RGB}{20, 110, 120}
+\providecolor{ThesisAccent}{RGB}{190, 75, 40}
+\providecolor{ThesisText}{RGB}{35, 40, 48}
+\providecolor{ThesisMuted}{RGB}{100, 110, 120}
+\providecolor{ThesisLink}{RGB}{18, 90, 150}
+
+\usetikzlibrary{
+  arrows.meta,
+  positioning,
+  calc,
+  fit,
+  backgrounds,
+  shapes.geometric
+}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Stealth,
+  node distance=1.2cm and 1.4cm,
+  every node/.style={font=\small\sffamily},
+  filebox/.style={
+    draw=ThesisPrimary!70,
+    line width=0.8pt,
+    rounded corners=3pt,
+    fill=white,
+    text=ThesisText,
+    align=center,
+    minimum height=0.85cm,
+    minimum width=2.6cm,
+    inner sep=4pt
+  },
+  layerbox/.style={
+    draw=ThesisSecondary!80,
+    line width=0.9pt,
+    rounded corners=4pt,
+    fill=ThesisSecondary!6,
+    text=ThesisText,
+    align=center,
+    minimum height=0.95cm,
+    minimum width=3.0cm,
+    inner sep=5pt
+  },
+  enginebox/.style={
+    draw=ThesisPrimary!90,
+    line width=1.2pt,
+    rounded corners=4pt,
+    fill=ThesisPrimary!10,
+    text=ThesisPrimary,
+    align=center,
+    minimum height=1.2cm,
+    minimum width=3.2cm,
+    inner sep=8pt,
+    font=\small\bfseries\sffamily
+  },
+  targetbox/.style={
+    draw=ThesisAccent!90,
+    line width=1.1pt,
+    rounded corners=4pt,
+    fill=ThesisAccent!8,
+    text=ThesisText,
+    align=center,
+    minimum height=1.1cm,
+    minimum width=3.2cm,
+    inner sep=7pt
+  },
+  arrowline/.style={
+    ->,
+    line width=0.9pt,
+    draw=ThesisText!80
+  },
+  dashedline/.style={
+    ->,
+    line width=0.8pt,
+    dashed,
+    draw=ThesisSecondary!90
+  },
+  taglabel/.style={
+    font=\footnotesize\bfseries\sffamily,
+    text=ThesisSecondary
+  }
+]
+
+  % --- Colonne 1 : Couches de conception et sources ---
+  \node[layerbox] (cls) {\textbf{mythesis.cls}\\Base \texttt{scrbook} \& métadonnées};
+  \node[layerbox, below=0.5cm of cls] (clo) {\textbf{Profils .clo}\\Écran vs Impression};
+  \node[layerbox, below=0.5cm of clo] (config) {\textbf{config/*.sty}\\Paquets tiers \& macros};
+  \node[layerbox, below=0.5cm of config] (fonts) {\textbf{fonts/}\\Polices OpenType locales};
+  \node[layerbox, below=0.5cm of fonts] (bib) {\textbf{biblio/}\\.bib, .bbx, .cbx};
+
+  % Cadre englobant pour la couche Style & Paramètres
+  \begin{scope}[on background layer]
+    \node[
+      draw=ThesisSecondary!30,
+      fill=ThesisSecondary!3,
+      rounded corners=6pt,
+      fit=(cls) (clo) (config) (fonts) (bib),
+      inner sep=7pt,
+      label={[taglabel, anchor=south west]north west:Couche Style \& Paramètres}
+    ] (boxStyle) {};
+  \end{scope}
+
+  % --- Colonne 2 : Chef d'orchestre & Rédaction ---
+  \node[enginebox, right=2.0cm of clo] (main) {\textbf{main.tex}\\\small Orchestrateur unique};
+  
+  \node[filebox, above=0.7cm of main] (front) {\textbf{frontmatter/}\\Titre, résumé, TOC};
+  \node[filebox, below=0.5cm of main] (content) {\textbf{content/*.tex}\\Chapitres \& Conclusion};
+  \node[filebox, below=0.4cm of content] (data) {\textbf{data/ \& listings/}\\Données brutes \& scripts};
+  \node[filebox, below=0.4cm of data] (back) {\textbf{backmatter/}\\Annexes \& glossaire};
+
+  % Connexions vers main.tex
+  \draw[arrowline] (front) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash input}} (main);
+  \draw[arrowline] (content) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (main);
+  \draw[arrowline] (data) -| ++(1.4cm,0.8cm) |- (main.south east);
+  \draw[arrowline] (back) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (data);
+
+  \draw[dashedline] (cls.east) -- (main.west);
+  \draw[dashedline] (clo.east) -- (main.west);
+  \draw[dashedline] (config.east) -- (main.west);
+  \draw[dashedline] (bib.east) -- (main.west);
+
+  % --- Colonne 3 : Moteur & Sorties cibles ---
+  \node[enginebox, right=2.0cm of main] (engine) {Moteur \texttt{latexmk}\\Lua\LaTeX{} + Biber\\Sortie isolée : \texttt{build/}};
+  
+  \node[targetbox, above right=0.3cm and 1.4cm of engine] (targetScreen) {\textbf{build/main.pdf (Écran)}\\Marges symétriques\\Liens interactifs colorés};
+  \node[targetbox, below right=0.3cm and 1.4cm of engine] (targetPrint) {\textbf{build/main.pdf (Papier)}\\Recto-verso + reliure \texttt{BCOR}\\Liens neutres monochromes};
+
+  % Connexions compilation et cibles
+  \draw[arrowline, line width=1.1pt] (main) -- (engine);
+  \draw[arrowline] (engine.east) -- ++(0.7cm,0) |- node[near end, above, font=\scriptsize\bfseries\color{ThesisLink}] {\texttt{[screen]}} (targetScreen.west);
+  \draw[arrowline] (engine.east) -- ++(0.7cm,0) |- node[near end, below, font=\scriptsize\bfseries\color{ThesisPrimary}] {\texttt{[print]}} (targetPrint.west);
+
+\end{tikzpicture}
+\end{document}
+

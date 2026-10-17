@@ -46,6 +46,10 @@
 % --- Langues et typographie internationale ---
 % Le français est déclaré en dernier pour être la langue par défaut
 \RequirePackage[english, french]{babel}
+% Neutralisation de l'avertissement informatif de babel-french sur les listes expérimentales
+\makeatletter
+\global\let\warning@FBlegacylists\relax
+\makeatother
 
 % Guillemets automatiques et adaptés à la langue active
 \RequirePackage[autostyle=true]{csquotes}
@@ -76,10 +80,11 @@
 }
 \DeclareSIUnit\iter{it}
 
-% --- Graphiques et figures vectorielles TikZ ---
+% --- Graphiques et figures vectorielles TikZ & Standalone ---
 \RequirePackage{graphicx}
-\graphicspath{{figures/}}
+\graphicspath{{figures/}{figures/tikz/}}
 
+\RequirePackage{standalone}
 \RequirePackage{tikz}
 \usetikzlibrary{
   arrows.meta,
@@ -89,6 +94,19 @@
   backgrounds,
   shapes.geometric
 }
+
+% --- Option B (Alternative) : Externalisation automatique TikZ avec dossier build/ ---
+% Si vous préférez \usetikzlibrary{external} au lieu du paquet standalone :
+% 1. Activez -shell-escape et make_path dans latexmkrc.
+% 2. Décommentez les lignes suivantes :
+% \usetikzlibrary{external}
+% \tikzsetexternalprefix{tikz-cache/}
+% \tikzset{external/system call={%
+%   lualatex \tikzexternalcheckshellescape -halt-on-error
+%   -interaction=batchmode -output-directory=build
+%   -jobname "\image" "\texsource"%
+% }}
+% \tikzexternalize
 
 % Boîtes d'enrichissement visuel (callouts, encadrés)
 \RequirePackage[skins, breakable]{tcolorbox}
@@ -113,7 +131,6 @@
 
 % --- Navigation hypertexte et métadonnées PDF ---
 \RequirePackage{hyperref}
-\RequirePackage{bookmark}
 
 % Référencement croisé intelligent (doit impérativement être chargé après hyperref)
 \RequirePackage[capitalise, noabbrev, french]{cleveref}
