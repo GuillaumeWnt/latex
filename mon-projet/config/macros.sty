@@ -135,56 +135,92 @@
 \crefname{lstlisting}{listing}{listings}
 \Crefname{lstlisting}{Listing}{Listings}
 
-% --- Macros d'interactivité PDF légère et utile (paquet ocgx2) ---
-% Bouton interactif discret pour basculer un ou plusieurs calques vectoriels
-\newcommand{\ocgbutton}[2]{%
-  \switchocg{#1}{%
-    \setlength{\fboxsep}{3.5pt}%
-    \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
-      \small\sffamily\bfseries\textcolor{ThesisPrimary}{#2}%
+% --- Macros d'interactivité PDF intelligente : profil écran vs profil impression ---
+
+\ifprintversion
+  % ============================================================================
+  % PROFIL IMPRESSION PAPIER (print) :
+  % - Neutralisation totale des calques PDF pour un rendu 100% statique et lisible
+  % - Omission complète des boutons de bascule (inopérants sur papier)
+  % - Aplatissement linéaire propre des vues pour le lecteur papier et l'imprimeur
+  % ============================================================================
+  \RenewDocumentEnvironment{ocg}{O{} m m m}{%
+    \begingroup
+  }{%
+    \endgroup
+  }
+
+  % Les boutons interactifs sont strictement omis sur le papier
+  \newcommand{\ocgbutton}[2]{\relax}
+  \newcommand{\ocgselectbutton}[3]{\relax}
+
+  % Gestionnaire d'affichage statique pour l'impression papier
+  \long\def\@thesis@ocgstack@both#1#2{#1\par\vspace{10pt}\noindent#2}
+  \long\def\@thesis@ocgstack@first#1#2{#1}
+  \long\def\@thesis@ocgstack@second#1#2{#2}
+
+  \NewDocumentCommand{\ocgstack}{O{both} +m +m}{%
+    \par\noindent%
+    \csname @thesis@ocgstack@#1\endcsname{#2}{#3}%
+    \par%
+  }
+
+  \NewDocumentCommand{\ocgstackthree}{O{all} +m +m +m}{%
+    \par\noindent%
+    #2\par\vspace{10pt}\noindent#3\par\vspace{10pt}\noindent#4\par%
+  }
+\else
+  % ============================================================================
+  % PROFIL ÉCRAN NUMÉRIQUE (screen) :
+  % - Calques PDF interactifs dynamiques (paquet ocgx2)
+  % - Boutons cliquables de bascule instantanée
+  % - Superposition géométrique parfaite TikZ à l'ancrage (north west à 0,0)
+  % ============================================================================
+  \newcommand{\ocgbutton}[2]{%
+    \switchocg{#1}{%
+      \setlength{\fboxsep}{3.5pt}%
+      \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
+        \small\sffamily\bfseries\textcolor{ThesisPrimary}{#2}%
+      }%
     }%
-  }%
-}
+  }
 
-% Bouton de sélection exclusive : active le calque #1 et masque le calque #2
-\newcommand{\ocgselectbutton}[3]{%
-  \actionsocg{}{#1}{#2}{%
-    \setlength{\fboxsep}{3.5pt}%
-    \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
-      \small\sffamily\bfseries\textcolor{ThesisPrimary}{#3}%
+  \newcommand{\ocgselectbutton}[3]{%
+    \actionsocg{}{#1}{#2}{%
+      \setlength{\fboxsep}{3.5pt}%
+      \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
+        \small\sffamily\bfseries\textcolor{ThesisPrimary}{#3}%
+      }%
     }%
-  }%
-}
+  }
 
-% Superposition parfaite sans décalage pour calques interactifs (OCG)
-% Exploite les coordonnées d'ancrage TikZ (north west à 0,0) pour aligner rigoureusement
-% les calques au même endroit tout en calculant automatiquement la hauteur maximale d'enveloppe.
-\newcommand{\ocgstack}[2]{%
-  \par\noindent%
-  \begin{tikzpicture}[remember picture=false]%
-    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
-      #1%
-    };%
-    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
-      #2%
-    };%
-  \end{tikzpicture}\par%
-}
+  \NewDocumentCommand{\ocgstack}{O{both} +m +m}{%
+    \par\noindent%
+    \begin{tikzpicture}[remember picture=false]%
+      \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+        #2%
+      };%
+      \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+        #3%
+      };%
+    \end{tikzpicture}\par%
+  }
 
-\newcommand{\ocgstackthree}[3]{%
-  \par\noindent%
-  \begin{tikzpicture}[remember picture=false]%
-    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
-      #1%
-    };%
-    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
-      #2%
-    };%
-    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
-      #3%
-    };%
-  \end{tikzpicture}\par%
-}
+  \NewDocumentCommand{\ocgstackthree}{O{all} +m +m +m}{%
+    \par\noindent%
+    \begin{tikzpicture}[remember picture=false]%
+      \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+        #2%
+      };%
+      \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+        #3%
+      };%
+      \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+        #4%
+      };%
+    \end{tikzpicture}\par%
+  }
+\fi
 
 % --- Inclusion propre de documents PDF externes (paquet pdfpages) ---
 % Préserve le folio et les en-têtes de la thèse avec facteur d'échelle sécurisé

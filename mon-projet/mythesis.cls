@@ -43,6 +43,18 @@
   \input{mythesis-screen.clo}
 \fi
 
+% --- Conditionnels publics de profil de document (accessibles aux auteurs) ---
+\newif\ifprintversion
+\ifmythesis@print
+  \printversiontrue
+\else
+  \printversionfalse
+\fi
+
+\NewDocumentCommand{\ifprint}{m m}{\ifprintversion#1\else#2\fi}
+\NewDocumentCommand{\screenonly}{+m}{\ifprintversion\else#1\fi}
+\NewDocumentCommand{\printonly}{+m}{\ifprintversion#1\fi}
+
 % --- Définition des métadonnées du document ---
 \newcommand{\institution}[1]{\def\mythesis@institution{#1}}
 \newcommand{\faculty}[1]{\def\mythesis@faculty{#1}}
