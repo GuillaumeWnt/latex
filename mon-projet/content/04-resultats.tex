@@ -230,23 +230,37 @@ un bouton permet d'alterner entre une synthèse textuelle concise et le relevé 
     Basculer la vue : Synthèse $\longleftrightarrow$ Métriques détaillées%
   }
   \par\vspace{8pt}
-  \begin{ocg}{Vue Synthétique}{ocg_box_syn}{1}
-    \textbf{Comportement asymptotique de l'optimiseur :}\par
-    La convergence exponentielle observée sur l'architecture modulaire démontre que la décroissance de la perte suit la loi $\mathcal{L}(t) = \mathcal{L}_\infty + \alpha \mathrm{e}^{-\beta t}$.
-    Le découplage structurel élimine les interférences de gradient et stabilise le conditionnement du système.
-  \end{ocg}%
-  \begin{ocg}{Tableau Détaillé}{ocg_box_det}{0}
-    \textbf{Relevé comparatif des performances à convergence :}\par\vspace{4pt}
-    \begin{tabularx}{\linewidth}{@{} >{\raggedright\arraybackslash}X r r r @{}}
-      \toprule
-      \textbf{Configuration} & \textbf{Précision finale} & \textbf{Perte résiduelle} & \textbf{Gain mesuré} \\
-      \midrule
-      Modèle de référence    & \SI{82.4}{\percent}       & 0.305                     & Référence \\
-      Architecture proposée  & \SI{98.9}{\percent}       & 0.084                     & $+$\SI{16.5}{\percent} \\
-      \bottomrule
-    \end{tabularx}
-  \end{ocg}
+  \ocgstack{%
+    \begin{ocg}{Vue Synthétique}{ocg_box_syn}{1}%
+      \textbf{Comportement asymptotique de l'optimiseur :}\par\vspace{3pt}
+      La convergence exponentielle observée sur l'architecture modulaire démontre que la décroissance de la perte suit la loi $\mathcal{L}(t) = \mathcal{L}_\infty + \alpha \mathrm{e}^{-\beta t}$.
+      Le découplage structurel élimine les interférences de gradient et stabilise le conditionnement du système.
+    \end{ocg}%
+  }{%
+    \begin{ocg}{Tableau Détaillé}{ocg_box_det}{0}%
+      \textbf{Relevé comparatif des performances à convergence :}\par\vspace{3pt}
+      \begin{tabularx}{\linewidth}{@{} >{\raggedright\arraybackslash}X r r r @{}}
+        \toprule
+        \textbf{Configuration} & \textbf{Précision finale} & \textbf{Perte résiduelle} & \textbf{Gain mesuré} \\
+        \midrule
+        Modèle de référence    & \SI{82.4}{\percent}       & 0.305                     & Référence \\
+        Architecture proposée  & \SI{98.9}{\percent}       & 0.084                     & $+$\SI{16.5}{\percent} \\
+        \bottomrule
+      \end{tabularx}%
+    \end{ocg}%
+  }
 \end{callout}
+
+\subsubsection[Superposition parfaite sans décalage (ocgstack)]{Superposition parfaite sans décalage (\code{\textbackslash ocgstack})}
+Dans le moteur \TeX{}, les calques PDF (\code{ocgx2}) contrôlent uniquement la visibilité visuelle à l'affichage : ils ne réduisent pas la hauteur réservée dans le flux de la page.
+Placer deux environnements \code{ocg} consécutifs pousse \TeX{} à empiler le premier puis le second en dessous, créant un espace blanc béant et un décalage vertical disgracieux lors du basculement.
+
+Pour obtenir une **superposition géométrique parfaite à 100\,\% sans aucun ajustement manuel**, notre macro \code{\textbackslash ocgstack\{vue1\}\{vue2\}} (définie dans \code{config/macros.sty}) exploite l'ancrage de nœuds TikZ :
+\begin{itemize}
+  \item Les deux vues sont calées au même point d'ancrage (\code{anchor=north west} à l'origine \code{(0,0)}) avec une largeur égale à l'empagement (\code{text width=\textbackslash linewidth}).
+  \item La boîte englobante de TikZ calcule automatiquement la hauteur maximale entre les deux calques.
+  L'encadré conserve ainsi une dimension fixe et stable, sans saut d'affichage ni décalage de texte.
+\end{itemize}
 
 \section{Outillage de Qualité Logicielle : \code{.editorconfig} et \code{.chktexrc}}
 \label{sec:qualite-outils}

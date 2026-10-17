@@ -156,6 +156,36 @@
   }%
 }
 
+% Superposition parfaite sans décalage pour calques interactifs (OCG)
+% Exploite les coordonnées d'ancrage TikZ (north west à 0,0) pour aligner rigoureusement
+% les calques au même endroit tout en calculant automatiquement la hauteur maximale d'enveloppe.
+\newcommand{\ocgstack}[2]{%
+  \par\noindent%
+  \begin{tikzpicture}[remember picture=false]%
+    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+      #1%
+    };%
+    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+      #2%
+    };%
+  \end{tikzpicture}\par%
+}
+
+\newcommand{\ocgstackthree}[3]{%
+  \par\noindent%
+  \begin{tikzpicture}[remember picture=false]%
+    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+      #1%
+    };%
+    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+      #2%
+    };%
+    \node[inner sep=0pt, text width=\linewidth, align=flush left, anchor=north west] at (0,0) {%
+      #3%
+    };%
+  \end{tikzpicture}\par%
+}
+
 % --- Inclusion propre de documents PDF externes (paquet pdfpages) ---
 % Préserve le folio et les en-têtes de la thèse avec facteur d'échelle sécurisé
 \newcommand{\includepdfpaper}[2][pages=-]{%
