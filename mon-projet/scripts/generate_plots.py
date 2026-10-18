@@ -182,6 +182,62 @@ def generate_3d_surface_pdf() -> Path:
     return target_pdf
 
 
+def generate_2d_benchmark_pdf() -> Path:
+    """
+    Cas 3 : Génère un graphique 2D comparatif complet (Fonction de perte / Loss)
+    exporté directement en PDF vectoriel par Matplotlib.
+    """
+    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    target_pdf = FIGURES_DIR / "python-benchmark.pdf"
+
+    setup_matplotlib_style()
+
+    fig, ax = plt.subplots(figsize=(5.4, 2.7), dpi=300)
+
+    it = np.arange(1, 21)
+    loss_prop = 0.08 + 0.70 * np.exp(-0.30 * it)
+    loss_base = 0.30 + 0.55 * np.exp(-0.18 * it)
+
+    ax.plot(
+        it,
+        loss_prop,
+        color=HEX_PRIMARY,
+        linewidth=1.8,
+        marker="o",
+        markersize=4,
+        label="Architecture modulaire (proposée)",
+    )
+    ax.plot(
+        it,
+        loss_base,
+        color=HEX_ACCENT,
+        linewidth=1.5,
+        linestyle="--",
+        marker="s",
+        markersize=4,
+        label="Modèle de référence",
+    )
+
+    ax.set_xlabel("Itérations d'entraînement")
+    ax.set_ylabel("Fonction de perte (Loss)")
+    ax.set_xlim(0.5, 20.5)
+    ax.grid(True, linestyle=":", alpha=0.6)
+    ax.legend(frameon=True, facecolor="white", edgecolor=HEX_MUTED)
+
+    # Nettoyage des bordures supérieure et droite
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    plt.tight_layout()
+    fig.savefig(target_pdf, bbox_inches="tight")
+    plt.close(fig)
+
+    print(f"[OK] Cas 3 - Courbe 2D vectorielle PDF générée : {target_pdf}")
+    return target_pdf
+
+
 if __name__ == "__main__":
     generate_benchmark_csv()
+    generate_2d_benchmark_pdf()
     generate_3d_surface_pdf()
+

@@ -12,7 +12,7 @@ $lualatex = 'lualatex --interaction=nonstopmode --synctex=0 %O %S';
 
 # Moteur bibliographique Biber pour BibLaTeX
 $bibtex_use = 1;
-$biber = 'biber --input-directory build --output-directory build %R';
+$biber = 'biber %O %B';
 
 # Répertoire de sortie pour isoler les fichiers auxiliaires de compilation
 $out_dir = 'build';

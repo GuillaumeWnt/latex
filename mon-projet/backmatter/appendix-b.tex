@@ -1,0 +1,19 @@
+%% ==============================================================================
+%% backmatter/appendix-b.tex
+%% Annexe B : Spécimen d'Insertion Réglementaire de Document PDF Externe
+%% ==============================================================================
+\chapter{Spécimen d'Insertion Réglementaire de Document PDF Externe}
+\label{anx:document-externe}
+
+Dans de nombreux livrables académiques, les annexes finales doivent rassembler des documents tiers
+au format PDF : conventions de recherche, attestations de jury, tirés-à-part d'articles publiés,
+ou formulaires institutionnels officiels.
+
+L'annexion directe s'effectue au moyen de la commande dédiée \code{\textbackslash includepdfpaper}
+déclarée dans \code{config/macros.sty} avec le concours du paquet \code{pdfpages}.
+Elle permet d'insérer ces pièces jointes tout en préservant le bandeau d'en-tête KOMA-Script,
+le logo institutionnel et la numérotation séquentielle des pages.
+
+Le document officiel ci-après illustre cette intégration en grandeur réelle sur deux pages.
+
+\includepdfpaper[pages=-]{figures/sample-annex-doc.pdf}

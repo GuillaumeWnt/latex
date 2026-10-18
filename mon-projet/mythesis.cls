@@ -222,6 +222,7 @@
 
 \newcommand{\activerStyleStandard}{%
   \cleardoublepage%
+  \automark[section]{chapter}%
   \KOMAoptions{headsepline=0.5pt, footsepline=false}%
   \pagestyle{scrheadings}%
 }

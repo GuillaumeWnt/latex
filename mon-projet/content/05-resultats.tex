@@ -175,8 +175,27 @@ l'architecture proposée franchit le seuil des \SI{98}{\percent} dès la douziè
 tandis que le modèle de référence plafonne à \SI{83}{\percent}.
 L'harmonie typographique est totale : les fontes, graisses et espacements sont rigoureusement identiques à ceux du corps de texte.
 
-\subsection[Cas 2 : Visualisation 3D complexe vers Export vectoriel direct]{Cas 2 : Visualisation 3D complexe \texorpdfstring{$\to$}{vers} Export vectoriel direct via Python}
-\label{subsec:cas2-python3d}
+\subsection[Cas 2 : Graphique 2D haute résolution exporté par Matplotlib]{Cas 2 : Graphique 2D haute résolution exporté par Matplotlib}
+\label{subsec:cas2-python2d}
+
+Pour les représentations 2D complexes comportant des calculs d'intervalles de confiance,
+des ajustements non linéaires ou de multiples séries temporelles,
+l'export direct au format PDF vectoriel depuis Python constitue une alternative d'une grande fluidité.
+Le script \code{scripts/generate\_plots.py} génère la figure \code{figures/python-benchmark.pdf}
+dont l'intégration dans \LaTeX{} est immédiate (\cref{fig:python-benchmark}) :
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.82\textwidth]{figures/python-benchmark}
+  \caption[Évolution des fonctions de perte générée par Python]{Convergence comparée des fonctions de perte (\textit{Loss}) générée en PDF vectoriel par Matplotlib via l'environnement \code{uv}}
+  \label{fig:python-benchmark}
+\end{figure}
+
+Les étiquettes d'axes, les légendes et la palette chromatique sont calibrées pour s'accorder
+rigoureusement avec la charte graphique de la thèse sans aucune pixellisation.
+
+\subsection[Cas 3 : Visualisation 3D complexe vers Export vectoriel direct]{Cas 3 : Visualisation 3D complexe \texorpdfstring{$\to$}{vers} Export vectoriel direct via Python}
+\label{subsec:cas3-python3d}
 
 À l'inverse, dès qu'une figure met en jeu des représentations denses (surfaces tridimensionnelles,
 cartes thermiques à forte résolution ou nuages de plus de \num{10000} points),
