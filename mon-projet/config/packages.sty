@@ -45,7 +45,12 @@
 
 % --- Géométrie de page dynamique et assouplie (compatible KOMA usegeometry) ---
 \RequirePackage{geometry}
-\geometry{headheight=26pt, footskip=30pt}
+\geometry{
+  headheight=26pt,
+  footskip=30pt,
+  marginparsep=3mm,
+  marginparwidth=2.0cm
+}
 
 % Totalisation des pages (pour styles de débogage et folios X sur Y)
 \RequirePackage{lastpage}
@@ -146,7 +151,8 @@
 
 % --- Collaboration, révisions et notes marginales (todonotes) ---
 \ifusetodos
-  \setlength{\marginparwidth}{2.2cm}
+  \setlength{\marginparwidth}{2.0cm}
+  \setlength{\marginparsep}{3mm}
   \RequirePackage[colorinlistoftodos, loadshadowlibrary, shadow]{todonotes}
   \setuptodonotes{size=\tiny, color=ThesisPrimary!20}
   % Chargement sécurisé de soul & pdfcomment sans avertissement de package obsolète
