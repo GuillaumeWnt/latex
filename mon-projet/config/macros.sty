@@ -218,9 +218,14 @@
         % Commande LaTeX détectée (ex: \url) : pas de troncature, caption propre pour .tdo
         \todo[#1, color=#2, caption={\detokenize{#3}}]{#3}%
       }{%
-        % Texte simple : troncature à 30 caractères + infobulle interactive au survol
-        \StrLeft{#3}{30}[\apercu]%
-        \todo[#1, color=#2, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
+        % Texte simple : troncature dynamique si > 30 caractères + infobulle interactive
+        \StrLen{#3}[\longueurTexte]%
+        \ifnum\longueurTexte>30
+          \StrLeft{#3}{30}[\apercu]%
+          \todo[#1, color=#2, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
+        \else
+          \todo[#1, color=#2, caption={#3}]{\pdftooltip{#3}{#3}}%
+        \fi
       }%
       \hyperref[table_todos]{\highLight[#2]{#4}}%
     \fi

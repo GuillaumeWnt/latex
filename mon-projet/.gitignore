@@ -26,6 +26,8 @@ build/
 *.nav
 *.snm
 *.vrb
+*.upa
+*.upb
 
 # Fichiers systèmes et d'éditeurs
 .DS_Store
