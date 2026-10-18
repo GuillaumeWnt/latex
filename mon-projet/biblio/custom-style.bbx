@@ -18,7 +18,14 @@
   doi=true,
   url=true,
   isbn=false,
-  eprint=false
+  eprint=false,
+  backref=true        % Active les renvois vers les pages citant la référence
+}
+
+% --- Personnalisation du libellé des rétroliens (backreferences) ---
+\DefineBibliographyStrings{french}{%
+  backrefpage  = {cf\adddot\space p\adddot},
+  backrefpages = {cf\adddot\space pp\adddot},
 }
 
 % --- Espacement entre les entrées ---
