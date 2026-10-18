@@ -28,13 +28,20 @@
    - Adopt **semantic line breaks** (one sentence or clause per line). This minimizes Git merge conflicts and makes diffs readable.
    - Maintain a 2-space indentation inside environments (`\begin{...}` ... `\end{...}`).
 
-5. **Rule Adaptability & Escalation to User (Feedback Loop):**
-   - If an AI agent encounters a situation where an existing rule, constraint, or guideline in this workspace is ill-adapted, overly rigid, contradictory, or preventing the best technical outcome:
+5. **Git Commit Suggestions on Changes:**
+   - Whenever an AI assistant modifies, creates, or deletes files or directories, it **must always** propose a concise, meaningful Git commit message suggestion at the end of its response (preferably following Conventional Commits, e.g., `feat: ...`, `fix: ...`, `refactor: ...`, `docs: ...`).
+   - *(Dès qu'une IA apporte des modifications à des fichiers ou dossiers, elle doit systématiquement proposer une idée de message de commit pour Git).*
+
+6. **Rule Governance & Strict Centralization in `.agents/`:**
+   - **Mandatory Prior User Approval:** Whenever any AI assistant (Claude, OpenAI/ChatGPT, Google Antigravity, GitHub Copilot, or any other) wishes to create, modify, or delete a rule, it **must always ask the user for explicit confirmation first**. Never add or alter rules unilaterally. *(Toute création ou modification de règle requiert l'accord préalable de l'utilisateur).*
+   - **Strict Centralization in `.agents/`:** All rules, guidelines, and directives **must strictly and exclusively be written in the central `.agents/` directory** (under [`.agents/rules/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules) or in the root [`AGENTS.md`](file:///c:/Users/guill/dev/perso/latex/general/AGENTS.md)), regardless of which AI assistant is being used.
+   - **No Dispersal into Client-Specific Folders:** Never write rules directly into client-specific directories (such as `.claude/`, `.gemini/`, `.vscode/`, etc.). Those directories serve solely as lightweight routers pointing back to `.agents/` to ensure a single source of truth and full portability when switching AI tools. *(Centralisation totale dans `.agents/` car chaque dossier d'IA renvoie vers `.agents/`).*
+   - **Rule Adaptability (Feedback Loop):** If an AI agent encounters a situation where an existing rule, constraint, or guideline in this workspace is ill-adapted, overly rigid, contradictory, or preventing the best technical outcome:
      - **Never ignore or bypass the rule silently.**
      - **Escalate the issue to the user immediately:** explain clearly why the rule is problematic or ill-adapted in the current context, and suggest modifying or removing it.
      - **Update/remove the rule upon agreement:** with the user's validation, edit the relevant rule file in `.agents/rules/` or `AGENTS.md` so that the documentation stays living, pragmatic, and aligned with real project needs.
 
-6. **Templates Ecosystem (`templates/`) & Evolution Freedom:**
+7. **Templates Ecosystem (`templates/`) & Evolution Freedom:**
    - **`template_principal` as Foundation:** Le répertoire `templates/template_principal/` constitue le modèle de référence principal et pérenne sur lequel s'appuyer en priorité (architecture modulaire, `ClasseGuillaume.cls`, compilation LuaLaTeX).
    - **Modularité et extensibilité :** Le répertoire `templates/` contient plusieurs templates adaptés à divers types de livrables. L'utilisateur peut en ajouter de nouveaux librement. Les agents doivent explorer dynamiquement le dossier `templates/` pour trouver des modèles adaptés au besoin sans dépendre d'une liste fixe de noms.
    - **Liberté d'optimisation & ajout de packages :** Ces templates ne sont pas tous parvenus à un stade optimal. Les agents ont pleine autorisation de s'écarter de pratiques obsolètes ou sous-optimales présentes dans certains modèles, de moderniser la syntaxe et d'ajouter de nouveaux packages pertinents selon les exigences du projet.
