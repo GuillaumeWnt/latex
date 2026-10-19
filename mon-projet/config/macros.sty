@@ -19,7 +19,7 @@
 % Délimiteurs extensibles via mathtools
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\scal}{\langle}{\rangle}
+\DeclarePairedDelimiterX{\scal}[2]{\langle}{\rangle}{#1 , #2}
 
 % Symbole différentiel droit pour le calcul intégral
 \newcommand{\diff}{\mathop{}\!\mathrm{d}}

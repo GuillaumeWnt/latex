@@ -9,7 +9,7 @@ Exécution recommandée via l'environnement virtuel uv :
 Ce script produit :
 1. data/benchmark-results.csv : Données numériques légères pour pgfplots dans LaTeX.
 2. figures/python-3d-surface.pdf : Surface 3D complexe et dense pré-rendue en PDF vectoriel.
-3. figures/python-2d-benchmark.pdf : Courbe 2D haute résolution avec intervalle de confiance.
+3. figures/python-benchmark.pdf : Courbe 2D haute résolution avec intervalle de confiance.
 """
 
 from pathlib import Path
@@ -25,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 FIGURES_DIR = BASE_DIR / "figures"
 
-# Palette chromatique officielle mythesis (RGB normalisé)
-HEX_PRIMARY = "#141419"    # Noir chaud graphite
-HEX_SECONDARY = "#3C414B"  # Gris foncé texturé
-HEX_ACCENT = "#4B729F"     # Bleu ardoise académique
-HEX_MUTED = "#6E7378"      # Gris intermédiaire
-HEX_BG = "#F5F5F7"         # Fond neutre très pâle
+# Palette chromatique officielle mythesis — profil screen (RGB normalisé)
+HEX_PRIMARY = "#0F3C6E"    # Bleu marine profond (ThesisPrimary: 15, 60, 110)
+HEX_SECONDARY = "#146E78"  # Sarcelle / Teal (ThesisSecondary: 20, 110, 120)
+HEX_ACCENT = "#BE4B28"     # Corail / Terracotta (ThesisAccent: 190, 75, 40)
+HEX_MUTED = "#646E78"      # Gris moyen (ThesisMuted: 100, 110, 120)
+HEX_BG = "#F8F9FB"         # Fond très léger (ThesisBackground: 248, 249, 251)
 
 
 def setup_matplotlib_style():

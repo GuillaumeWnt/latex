@@ -12,6 +12,7 @@
   DIV=12
 }
 \recalctypearea
+\raggedbottom
 
 % --- Palette chromatique pour écran (Accessible & Moderne) ---
 \definecolor{ThesisPrimary}{RGB}{15, 60, 110}     % Bleu marine profond (titres, accents majeurs)

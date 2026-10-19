@@ -53,6 +53,9 @@
 % --- Chargement précoce de la gestion des couleurs ---
 \RequirePackage[dvipsnames]{xcolor}
 
+% --- Outils de test et conditionnels modernes ---
+\RequirePackage{etoolbox}
+
 % --- Chargement du fichier d'options spécifique (.clo) ---
 \ifmythesis@print
   \input{mythesis-print.clo}
@@ -109,6 +112,7 @@
 \supervisor{Pr. Nom Encadrant}
 \cosupervisor{Dr. Nom Co-encadrant}
 \location{Paris}
+\jury{}
 \keywords{LaTeX, KOMA-Script, modularité, reproductibilité}
 
 % Accesseurs publics pour les pages de titre et le corps
@@ -119,8 +123,12 @@
 \newcommand{\getspecialty}{\mythesis@specialty}
 \newcommand{\getsupervisor}{\mythesis@supervisor}
 \newcommand{\getcosupervisor}{\mythesis@cosupervisor}
+\newcommand{\getjury}{\mythesis@jury}
 \newcommand{\getlocation}{\mythesis@location}
 \newcommand{\getkeywords}{\mythesis@keywords}
+\newcommand{\gettitle}{\@title}
+\newcommand{\getauthor}{\@author}
+\newcommand{\getdate}{\@date}
 
 % --- Typographie KOMA-Script ---
 \setkomafont{disposition}{\bfseries\sffamily\color{ThesisPrimary}}
@@ -165,11 +173,11 @@
   width=2cm,
   height=2cm,
   contents={%
-    \ifx\mythesis@logo\empty\else
+    \ifdefempty{\mythesis@logo}{}{%
       \IfFileExists{\mythesis@logo}{%
         \includegraphics[width=1.4cm]{\mythesis@logo}%
       }{}%
-    \fi
+    }%
   }
 ]{thesis.logo.layer}
 
@@ -178,11 +186,11 @@
 \newcommand{\masquerLogo}{\ModifyLayer[contents={}]{thesis.logo.layer}}
 \newcommand{\afficherLogo}{%
   \ModifyLayer[contents={%
-    \ifx\mythesis@logo\empty\else
+    \ifdefempty{\mythesis@logo}{}{%
       \IfFileExists{\mythesis@logo}{%
         \includegraphics[width=1.4cm]{\mythesis@logo}%
       }{}%
-    \fi
+    }%
   }]{thesis.logo.layer}%
 }
 

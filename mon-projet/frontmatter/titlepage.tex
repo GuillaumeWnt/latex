@@ -36,7 +36,7 @@
     % Titre principal et sous-titre
     \hrule height 1.5pt \relax
     \vspace{6mm}
-    {\fontsize{20.74}{26}\selectfont\bfseries\color{ThesisPrimary}\makeatletter\@title\makeatother}\par
+    {\fontsize{20.74}{26}\selectfont\bfseries\color{ThesisPrimary}\gettitle}\par
     \ifdefined\@subtitle
       \vspace{4mm}
       {\fontsize{12}{15}\selectfont\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
@@ -49,9 +49,9 @@
     % Auteur et date
     {\fontsize{11}{14}\selectfont\color{ThesisMuted}Rédigé et composé par}\par
     \vspace{3mm}
-    {\fontsize{14.4}{18}\selectfont\bfseries\color{ThesisPrimary}\makeatletter\@author\makeatother}\par
+    {\fontsize{14.4}{18}\selectfont\bfseries\color{ThesisPrimary}\getauthor}\par
     \vspace{4mm}
-    {\fontsize{10}{13}\selectfont\color{ThesisMuted}Version mise à jour le \makeatletter\@date\makeatother{} -- \getlocation}\par
+    {\fontsize{10}{13}\selectfont\color{ThesisMuted}Version mise à jour le \getdate{} -- \getlocation}\par
   \end{center}
 
   \vfill
