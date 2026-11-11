@@ -27,11 +27,7 @@
 \end{singlespace}
 
 % PAGE DE GARDE PRINCIPALE
-\geometrieLarge
-\begin{titlepage}
 \input{pageDeGardes/principale}
-\end{titlepage}
-\geometrieWord
 
 % PROFONDEUR TABLE DES MATIERES
 \setcounter{tocdepth}{2}
@@ -44,11 +40,8 @@
 %------------------------------------------------------------------------------------
 \mainmatter
 
-\geometrieLarge
-\begin{titlepage}
+% PAGE DE GARDE CAS DIAGNOSTIQUE
 \input{pageDeGardes/secondaireChap1}
-\end{titlepage}
-\geometrieWord
 
 \chapter{Cas Diagnostique}
 \input{contents/1_cas_diagnostique/1_cas_clinique}
@@ -63,11 +56,8 @@
 \end{figure}
 \geometrieWord
 
-\geometrieLarge
-\begin{titlepage}
+% PAGE DE GARDE ACTIVITE EXTERIEURE
 \input{pageDeGardes/secondaireChap2}
-\end{titlepage}
-\geometrieWord
 
 \chapter{Activité extérieure}
 \input{contents/2_activite_exterieure/1_Resume_de_l_activite}
@@ -82,6 +72,9 @@
 \end{figure}
 \geometrieWord
 
+% PAGE DE GARDE CAS THERAPEUTIQUE
+\input{pageDeGardes/secondaireChap3}
+
 \chapter{Cas thérapeutique}
 \input{contents/3_cas_therapeutique/1_cas_clinique}
 \input{contents/3_cas_therapeutique/2_demarche_de_medecine_factuelle}
@@ -94,6 +87,9 @@
     \label{fig:fiche_validation_DrBenAlaya}
 \end{figure}
 \geometrieWord
+
+% PAGE DE GARDE INCIDENT MEDICAL
+\input{pageDeGardes/secondaireChap4}
 
 \chapter{Incident médical}
 \input{contents/4_Incident_medical/1_incident_medical}
