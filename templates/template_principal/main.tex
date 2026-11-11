@@ -6,8 +6,8 @@
 %====================================================================================
 \documentclass[
   % draft,             % Activer pour masquer les images et accélérer la compilation
-  french,              % Langue principale
   english,             % Langue secondaire
+  french,              % Langue principale (en dernier pour babel)
   font=calibri,        % Options de police : calibri, heros, libertinus, comicsans, standard
   todoNote             % Activer l'affichage des notes et révisions
 ]{ClasseGuillaume}
@@ -39,18 +39,16 @@
 \frontmatter
 \masquerLogo % Le logo ne s'affiche pas sur la couverture ni les préliminaires
 
-% 1. Page de garde principale (en géométrie large)
-\geometrieLarge
-\input{chapters/00_frontmatter/titlepage.tex}
+% 1. Page de garde principale (isolée dans un environnement pageDesign sur-mesure)
+\begin{pageDesign}[left=1.4cm, right=1.4cm, top=1.6cm, bottom=1.6cm]
+  \input{chapters/00_frontmatter/titlepage.tex}
+\end{pageDesign}
 
-% 2. Bascule en géométrie Word pour les préliminaires rédigés
+% 2. Bascule en géométrie Word pour le mémoire et les annotations de marge
 \geometrieWord
 
-% 3. Tableau de bord des révisions (avec cible cliquable pour \todoH)
-\begin{singlespace}
-\listoftodos[Tableau de Bord des Révisions et Tâches de Rédaction]
-\label{table_todos}
-\end{singlespace}
+% 3. Tableau de bord des révisions (avec cible cliquable #table_todos pour \todoH)
+\tableDesTodos[Tableau de Bord des Révisions et Tâches de Rédaction]
 
 % 4. Résumé et Abstract bilingues avec mots-clés
 \input{chapters/00_frontmatter/abstract.tex}

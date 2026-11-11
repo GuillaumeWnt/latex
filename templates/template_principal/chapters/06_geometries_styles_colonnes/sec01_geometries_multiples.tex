@@ -1,33 +1,47 @@
 %------------------------------------------------------------------------------------
-%  SECTION 6.1 : GÉOMÉTRIES MULTIPLES À LA VOLÉE
+%  SECTION 6.1 : GÉOMÉTRIES MULTIPLES À LA VOLÉE & COHABITATION KOMA / GEOMETRY
 %------------------------------------------------------------------------------------
-\section{Alternance Dynamique des Géométries de Page}
+\section{Cohabitation KOMA-Script / \textsf{geometry} et Géométries Dynamiques}
 \label{sec:geometries_multiples}
 
 Dans un mémoire ou un rapport d'ingénierie, une taille de marge unique pour l'ensemble du volume est inadaptée :
-la page de couverture et les grands tableaux requièrent des marges étroites pour maximiser l'espace utile, le corps du texte nécessite une largeur de colonne ergonomique (65 à 75 caractères par ligne pour un confort visuel optimal), tandis que la phase de relecture collaborative exige une marge latérale généreuse pour accueillir les annotations.
+la page de couverture et les grands tableaux requièrent des marges étroites pour maximiser l'espace utile, le corps du texte nécessite une largeur de colonne ergonomique (65 à 75 caractères par ligne pour un confort visuel optimal), tandis que la phase de relecture collaborative exige une marge latérale dédiée aux annotations.
 
-En \LaTeX{} standard, changer de géométrie en cours de document provoque souvent des décalages imprévisibles dans les en-têtes ou rompt l'alignement recto-verso.
-\texttt{ClasseGuillaume} résout cette difficulté en encapsulant la gestion du paquet \textsf{geometry} et du moteur \textsf{typearea} de KOMA-Script au sein de trois commandes directes et sécurisées.
+En \LaTeX{} classique, faire cohabiter une classe KOMA-Script (\texttt{scrbook}) et le paquet \textsf{geometry} provoque souvent des avertissements (\texttt{Package typearea Warning: Bad type area settings}) ou désaligne les en-têtes \textsf{scrlayer-scrpage} lors d'un appel à \texttt{\textbackslash newgeometry}.
+\texttt{ClasseGuillaume} résout cette difficulté à la racine grâce à trois mécanismes complémentaires :
+\begin{enumerate}
+  \item \textbf{Initialisation unique avant \texttt{\textbackslash LoadClass} :}
+  Les options fondamentales (\texttt{fontsize=11pt}, \texttt{paper=a4}, \texttt{DIV=12}, \texttt{usegeometry=true}) sont transmises une seule fois via \texttt{\textbackslash PassOptionsToClass}, évitant les recalculs redondants de \textsf{typearea}.
+  \item \textbf{Synchronisation automatique (\texttt{\textbackslash syncKomaGeometry}) :}
+  Un crochet (\emph{hook}) est greffé sur \texttt{\textbackslash newgeometry} et \texttt{\textbackslash restoregeometry} afin de recalculer automatiquement la largeur des en-têtes et pieds de page (\texttt{headwidth=text}, \texttt{footwidth=text}) ainsi que l'espacement inter-paragraphe KOMA à chaque changement de marges.
+  \item \textbf{Mémorisation de la géométrie active :}
+  La classe mémorise dans \texttt{\textbackslash currentGeometryCmd} le profil courant afin de le rétablir fidèlement après une page au design isolé.
+\end{enumerate}
 
-\subsection{Les trois commandes de géométrie de la classe}
+\subsection{Les commandes de géométrie et l'environnement \texttt{pageDesign}}
 \label{subsec:trois_commandes_geometrie}
 
 \begin{itemize}
-  \item \textbf{\texttt{\textbackslash geometrieWord} :}
-  Fixe des marges symétriques de \qty{2.5}{\centi\meter} sur les quatre bords et alloue une marge latérale dédiée de \qty{2.2}{\centi\meter} (\texttt{marginparwidth}) avec un séparateur de \qty{3}{\milli\meter} (\texttt{marginparsep}).
-  C'est la géométrie par excellence pour le corps de texte rédigé et la phase de relecture collaborative avec les notes \texttt{\textbackslash todoH}.
-  
-  \item \textbf{\texttt{\textbackslash geometrieLarge} (ou \texttt{\textbackslash geometrieExemple}) :}
-  Applique des marges compactes de \qty{1.2}{\centi\meter} à gauche et à droite, et \qty{1.6}{\centi\meter} en haut et en bas.
-  Elle annule l'espace marginal pour offrir une largeur utile maximale de \qty{18.6}{\centi\meter}, idéale pour la page de garde, les posters de synthèse, ou les grands tableaux récapitulatifs.
-
   \item \textbf{\texttt{\textbackslash geometrieStandard} :}
-  Restaure instantanément la mise en page canonique calculée par l'algorithme typographique de KOMA-Script (\texttt{DIV = 12}), garantissant des proportions harmonieuses selon les canons du livre d'art.
+  Restaure la mise en page canonique calculée par l'algorithme typographique de KOMA-Script (\texttt{DIV = 12}), garantissant des proportions harmonieuses selon les canons du livre d'art.
+
+  \item \textbf{\texttt{\textbackslash geometrieWord} :}
+  Fixe des marges symétriques de \qty{2.5}{\centi\meter} sur les quatre bords et alloue une marge latérale dédiée de \qty{2.0}{\centi\meter} (\texttt{marginparwidth}) avec un séparateur de \qty{2.5}{\milli\meter} (\texttt{marginparsep}).
+  Cette configuration réserve \qty{2.5}{\milli\meter} de sécurité au bord droit de la feuille pour l'ombre portée des notes \texttt{\textbackslash todoH}.
+
+  \item \textbf{\texttt{\textbackslash geometrieLarge} (ou \texttt{\textbackslash geometrieExemple}) :}
+  Applique des marges compactes de \qty{1.2}{\centi\meter} à gauche et à droite, et \qty{1.6}{\centi\meter} en haut et en bas, offrant une largeur utile de \qty{18.6}{\centi\meter} idéale pour les tableaux larges ou les synthèses.
+
+  \item \textbf{\texttt{\textbackslash geometrieLibre\{}\emph{options geometry}\textbf{\}} :}
+  Permet d'appliquer à la volée n'importe quelle configuration \textsf{geometry} personnalisée en conservant les en-têtes \textsf{scrlayer-scrpage} parfaitement alignés sur la nouvelle largeur de texte.
+
+  \item \textbf{Environnement \texttt{\textbackslash begin\{pageDesign\}[}\emph{options geometry}\textbf{]} \dots{} \texttt{\textbackslash end\{pageDesign\}} :}
+  Conçu pour les pages au design totalement libre (page de garde, poster, intercalaire graphique).
+  Il ouvre une page neuve avec les marges souhaitées, supprime les en-têtes/pieds de page (\texttt{empty}), masque temporairement le logo d'angle, puis restaure automatiquement la géométrie et l'état du logo précédents à la fermeture de l'environnement.
 \end{itemize}
 
 \begin{boiteSynthese}{Règle de bascule propre}
-  Chacune de ces commandes intègre automatiquement une directive \texttt{\textbackslash cleardoublepage} avant d'appliquer les nouvelles marges.
-  Cette précaution fondamentale garantit qu'une nouvelle géométrie commence toujours sur une page neuve et prévient tout débordement de texte entre deux pages consécutives aux proportions divergentes.
+  Chacune de ces commandes intègre automatiquement un saut de page (\texttt{\textbackslash cleardoublepage} ou \texttt{\textbackslash clearpage}) et déclenche \texttt{\textbackslash syncKomaGeometry}.
+  Cette architecture garantit qu'une nouvelle géométrie commence toujours sur une page neuve avec des en-têtes immédiatement ajustés à la nouvelle justification.
 \end{boiteSynthese}
 

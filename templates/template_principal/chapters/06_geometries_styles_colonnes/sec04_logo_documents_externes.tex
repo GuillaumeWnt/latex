@@ -11,29 +11,33 @@ Deux défis récurrents dans la formalisation d'un livrable officiel concernent 
 
 L'insertion manuelle d'un logo dans les en-têtes (\texttt{\textbackslash ihead} ou \texttt{\textbackslash ohead}) modifie l'encombrement vertical (\texttt{headheight}) et crée des décalages de texte selon que la page est paire ou impaire.
 
-\texttt{ClasseGuillaume} s'affranchit de cette contrainte en utilisant le concept de **couche d'arrière-plan** (\emph{background layer}) du moteur \textsf{scrlayer} :
+\texttt{ClasseGuillaume} s'affranchit de cette contrainte en utilisant le concept de \textbf{couche d'arrière-plan} (\emph{background layer}) du moteur \textsf{scrlayer}, calibrée dans le coin supérieur droit extérieur afin de ne jamais empiéter sur le filet d'en-tête ni sur la zone de texte :
 
 \begin{verbatim}
 \DeclareNewLayer[
   background,
-  topmargin,
   align = tr,
-  hoffset = \paperwidth - 1.8cm, % Calibré dynamiquement sur le bord droit
-  voffset = 1.2cm,
-  width = 3cm,
-  height = 3cm,
+  hoffset = \paperwidth - 0.45cm, % Ancrage dans le coin supérieur droit
+  voffset = 0.40cm,
+  width = 1.6cm,
+  height = 1.6cm,
   contents = {%
-    \IfFileExists{images/logo_test.png}{%
-      \includegraphics[width=2.2cm]{images/logo_test.png}%
-    }{}%
+    \ifshowlogo
+      \IfFileExists{\@logoPath}{%
+        \hfill\includegraphics[
+          width=\@logoWidth, height=\@logoWidth, keepaspectratio
+        ]{\@logoPath}%
+      }{}%
+    \fi
   }
 ]{logo.layer}
 \end{verbatim}
 
 \begin{boiteSynthese}{Commandes de pilotage du logo institutionnel}
-  Le calque flotte au-dessus de la mise en page sans jamais interférer avec le texte du corps. Deux commandes permettent d'en moduler l'affichage selon les chapitres :
+  Le calque flotte dans le coin supérieur droit sans jamais interférer avec le filet d'en-tête ni le corps du texte. Trois commandes permettent d'en piloter l'affichage :
   \begin{itemize}
-    \item \texttt{\textbackslash masquerLogo} : Désactive instantanément le calque (utilisé dans le Frontmatter pour préserver la virginité de la page de titre et du résumé).
+    \item \texttt{\textbackslash definirLogo\{\emph{chemin}\}[\emph{largeur}]} : Définit le fichier image et sa taille maximale (par défaut \texttt{images/logo\_test.png} à \qty{1.35}{\centi\meter}).
+    \item \texttt{\textbackslash masquerLogo} : Désactive instantanément le calque (utilisé dans le Frontmatter et automatiquement dans l'environnement \texttt{pageDesign}).
     \item \texttt{\textbackslash afficherLogo} : Réactive le calque en tête du corps de texte (\texttt{\textbackslash mainmatter}) ou dans les sections spécialisées.
   \end{itemize}
 \end{boiteSynthese}
@@ -55,5 +59,5 @@ La classe intègre le paquet de référence \textsf{pdfpages} :
 ]{documents/rapport_mesures.pdf}
 \end{verbatim}
 Cette méthode vectorielle conserve la netteté parfaite des textes et graphiques d'origine tout en assurant une continuité sans faille de la pagination générale de votre mémoire.
-Une démonstration concrète est proposée en Annexe~\ref{annexe:specimen_externe}.
+Une démonstration concrète est proposée en~\cref{annexe:specimen_externe}.
 

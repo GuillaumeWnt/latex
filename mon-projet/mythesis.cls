@@ -129,6 +129,7 @@
 \newcommand{\gettitle}{\@title}
 \newcommand{\getauthor}{\@author}
 \newcommand{\getdate}{\@date}
+\newcommand{\getsubtitle}{\@subtitle}
 
 % --- Typographie KOMA-Script ---
 \setkomafont{disposition}{\bfseries\sffamily\color{ThesisPrimary}}

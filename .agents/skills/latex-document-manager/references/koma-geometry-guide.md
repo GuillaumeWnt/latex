@@ -16,55 +16,52 @@ This guide explains how this repository combines **KOMA-Script** (`scrbook`) and
 
 ---
 
-## 2. Best Practices & The Hybrid Protocol
+## 2. Best Practices & The Hybrid Synchronization Protocol
 
-To prevent conflicts and avoid the infamous warning `Package scrlayer-scrpage Warning: \headheight to small`:
+To prevent conflicts (`Package typearea Warning: Bad type area settings!`, `Package scrlayer-scrpage Warning: \headheight to small`, or misaligned headers after `\newgeometry`):
 
-### Rule 1: Always pass `usegeometry=true` to the Document Class
-When loading KOMA-Script in `ClasseGuillaume.cls`:
+### Rule 1: Pass Base Layout Options Once Before `\LoadClass{scrbook}`
+Never call `\KOMAoptions{fontsize=11pt, paper=a4, DIV=12}` or `\recalctypearea` *after* loading fonts or configuring `\geometry{...}`, as that triggers multiple `typearea` recalculations that overwrite `geometry`'s `footskip` and emit `Bad type area settings` warnings. Instead, pass them once before `\LoadClass`:
 ```latex
-\LoadClass[
-  11pt,
-  a4paper,
-  oneside,
-  usegeometry=true,      % Tells KOMA to delegate geometry calculations cleanly
-  parskip=half-
-]{scrbook}
+\PassOptionsToClass{
+  fontsize=11pt,
+  paper=a4,
+  twoside=false,
+  twocolumn=false,
+  DIV=12,
+  usegeometry=true
+}{scrbook}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
+\ProcessOptions\relax
+\LoadClass{scrbook}
 ```
 
-### Rule 2: Explicitly declare `headheight` and `footskip` in all Geometry macros
-Whenever `\newgeometry` or `\geometry` is configured, always include explicit values:
+### Rule 2: Synchronize `scrlayer-scrpage` and KOMA `parskip` on Every `\newgeometry` / `\restoregeometry`
+When `geometry` changes `\textwidth` and `\oddsidemargin` mid-document via `\newgeometry` or `\restoregeometry`, it does **not** automatically notify `scrlayer-scrpage` or KOMA's relative paragraph skip. Hook a synchronization macro into both commands using `etoolbox`:
 ```latex
-\newgeometry{
-  top=2.5cm,
-  bottom=2.5cm,
-  left=2.5cm,
-  right=2.5cm,
-  headheight=26pt,       % Prevents scrlayer-scrpage header collision
-  footskip=30pt
+\newcommand{\syncKomaGeometry}{%
+  \csname par@updaterelative\endcsname
+  \KOMAoptions{headwidth=text, footwidth=text}%
 }
+\apptocmd{\newgeometry}{\syncKomaGeometry}{}{}
+\apptocmd{\restoregeometry}{\syncKomaGeometry}{}{}
 ```
+
+### Rule 3: Explicitly Declare `headheight` and `footskip`
+Always set `headheight=26pt` and `footskip=30pt` in `\geometry` and `\newgeometry` presets so `scrlayer-scrpage` headers never overflow.
 
 ---
 
-## 3. Predefined Geometry Presets in `ClasseGuillaume.cls`
+## 3. Geometry Commands & `pageDesign` Environment in `ClasseGuillaume.cls`
 
-1. **Default Document Layout:**
-   - Balanced academic proportions with room for margin notes (`\todoH`) when in draft mode.
+1. **`\geometrieStandard` (Default Canonical Layout):**
+   - Calls `\cleardoublepage\restoregeometry` and tracks `\renewcommand*{\currentGeometryCmd}{\geometrieStandard}`.
 2. **`\geometrieWord`:**
-   - Standard 2.5 cm margins all around:
-   ```latex
-   \newcommand{\geometrieWord}{%
-     \newgeometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=26pt, footskip=30pt}%
-   }
-   ```
+   - Symmetric 2.5 cm margins with `marginparwidth=2.0cm, marginparsep=2.5mm` (leaving 2.5 mm safety clearance on the right edge for `\todoH` drop shadows).
 3. **`\geometrieLarge`:**
-   - Narrower 1.5 cm margins for dense technical appendices, large data tables, or wide figures:
-   ```latex
-   \newcommand{\geometrieLarge}{%
-     \newgeometry{top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm, headheight=26pt, footskip=30pt}%
-   }
-   ```
-4. **Returning to Default:**
-   - Always call `\restoregeometry` at the conclusion of a custom section.
+   - Compact margins (`left=1.2cm, right=1.2cm, top=1.6cm, bottom=1.6cm`) for wide tables or syntheses.
+4. **`\geometrieLibre{<geometry options>}`:**
+   - Applies custom `geometry` parameters mid-document with automatic KOMA header/footer synchronization.
+5. **`\begin{pageDesign}[<geometry options>] ... \end{pageDesign}`:**
+   - Opens an isolated custom-designed page (`\thispagestyle{empty}`, `\masquerLogo`, custom margins) and automatically restores the previously active geometry (`\currentGeometryCmd`) and logo visibility at `\end{pageDesign}`.
 

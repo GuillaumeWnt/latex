@@ -18,13 +18,16 @@ lorsqu'un titre de section ou de chapitre s'étend sur deux lignes, l'interligne
 Le titre apparaît alors artificiellement distendu et déconnecté de son texte.
 
 \begin{boiteSynthese}{Protection automatique des titres dans ClasseGuillaume}
-  Pour pallier cette anomalie, \texttt{ClasseGuillaume} intègre une règle typographique stricte au sein des polices KOMA-Script :
+  Pour pallier cette anomalie, \texttt{ClasseGuillaume} intègre une règle typographique stricte au sein de la famille globale des titres KOMA-Script (\texttt{disposition}) ainsi que de chaque niveau hiérarchique :
   \begin{verbatim}
-  \addtokomafont{section}{\setstretch{1}\selectfont}
-  \addtokomafont{subsection}{\setstretch{1}\selectfont}
-  \addtokomafont{subsubsection}{\setstretch{1}\selectfont}
+\addtokomafont{disposition}{\bfseries\color{primaryColor}\setstretch{1}}
+\addtokomafont{part}{\setstretch{1}\selectfont}
+\addtokomafont{chapter}{\setstretch{1}\selectfont}
+\addtokomafont{section}{\setstretch{1}\selectfont}
+\addtokomafont{subsection}{\setstretch{1}\selectfont}
+\addtokomafont{subsubsection}{\setstretch{1}\selectfont}
   \end{verbatim}
-  Ainsi, le corps du mémoire bénéficie de la fluidité de l'interligne 1,5, tandis que l'ensemble des titres longs conservent un interligne simple compact, rigoureux et professionnel.
+  Ainsi, le corps du mémoire bénéficie de la fluidité de l'interligne 1,5, tandis que l'ensemble des titres longs (parties, chapitres et sections) conservent un interligne simple compact, rigoureux et professionnel.
 \end{boiteSynthese}
 
 \subsection{Microtypographie et élimination des lignes orphelines et veuves}

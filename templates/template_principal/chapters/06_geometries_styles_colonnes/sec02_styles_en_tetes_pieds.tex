@@ -19,20 +19,31 @@ Le style actif par défaut dans l'ensemble du mémoire est \texttt{scrheadings} 
   \item Le pied de page reste volontairement épuré pour ne pas alourdir la composition.
 \end{itemize}
 
+\clearpage
+\begingroup
+% Bascule locale en StyleFocus sur une page dédiée
+\pagestyle{StyleFocus}
+
 \subsection{Démonstration en direct du style épuré : \texttt{StyleFocus}}
 \label{subsec:style_focus}
 
 Pour les lectures concentrées, les synthèses de fin de partie ou les rapports managériaux, la classe fournit le style \texttt{StyleFocus}.
-Ce style supprime le filet d'en-tête, centre le rappel de section entre tirets (\texttt{-- \textbackslash headmark{} --}) et positionne le numéro de page au centre du pied de page.
+Ce style désactive automatiquement le filet d'en-tête via son crochet \texttt{onselect}, centre le rappel de section entre tirets (\texttt{-- \textbackslash headmark{} --}) et positionne le numéro de page au centre du pied de page.
 
-\begingroup
-% Bascule locale en StyleFocus
-\pagestyle{StyleFocus}
-
-Nous activons immédiatement \texttt{StyleFocus} sur cette portion de texte.
+Nous activons immédiatement \texttt{StyleFocus} sur cette page entière.
 Observez l'en-tête et le pied de cette page :
 la ligne supérieure a disparu, laissant place à une respiration minimale, tandis que la pagination est descendue au centre du pied de page.
-Cette disposition est particulièrement prisée pour les sections de réflexion ou les déclarations éthiques.
+Cette disposition est particulièrement prisée pour les sections de réflexion, les résumés exécutifs ou les déclarations éthiques.
+
+\begin{boiteSynthese}{Pourquoi insérer un \texttt{\textbackslash clearpage} avant de changer de style ?}
+  En \LaTeX{}, le style de page (\texttt{\textbackslash pagestyle}) est évalué par la routine de sortie (\emph{shipout}) au moment où la page complète est expédiée vers le fichier PDF.
+  Si plusieurs commandes \texttt{\textbackslash pagestyle} se succèdent sur une même page sans saut de page intermédiaire, seul le dernier style appelé sur la page est effectivement rendu.
+  Précéder chaque bascule d'un \texttt{\textbackslash clearpage} garantit que chaque style dispose de sa propre page de démonstration.
+\end{boiteSynthese}
+
+\clearpage
+% Bascule locale en StyleTest sur la page suivante
+\pagestyle{StyleTest}
 
 \subsection{Démonstration en direct du style de diagnostic : \texttt{StyleTest}}
 \label{subsec:style_test}
@@ -41,22 +52,20 @@ Durant la phase de développement et de révision technique, l'auteur a besoin d
 
 La classe intègre à cet effet le style technique \texttt{StyleTest} :
 \begin{itemize}
-  \item Un badge orange centré \texttt{\tiny [DEBUG VIEW]} dans l'en-tête.
-  \item Des filets supérieur (\qty{0.8}{pt}) et inférieur (\qty{0.4}{pt}).
+  \item Un badge orange \texttt{\tiny [DEBUG VIEW]} accolé au numéro de page dans l'en-tête.
+  \item Des filets supérieur (\qty{0.8}{pt}) et inférieur (\qty{0.4}{pt}) activés dynamiquement via \texttt{onselect}.
   \item L'indication explicite du fichier racine (\texttt{\textbackslash jobname.tex}) dans le pied de page.
   \item Le décompte complet des pages via le paquet \textsf{lastpage} : \texttt{p.~\textbackslash thepage/\textbackslash pageref\{LastPage\}}.
 \end{itemize}
 
-% Bascule locale en StyleTest
-\pagestyle{StyleTest}
+Cette nouvelle bascule active instantanément la vue de diagnostic sur la présente page.
+Elle permet aux équipes de relecture de vérifier en un coup d'œil le nom du fichier source et la pagination relative sans devoir inspecter les métadonnées internes du fichier PDF.
 
-Cette nouvelle bascule active instantanément la vue de diagnostic sur les pages courantes.
-Elle permet aux équipes de relecture de vérifier en un coup d'œil l'horodatage et la pagination relative sans devoir inspecter les métadonnées internes du fichier PDF.
-
+\clearpage
 \endgroup
 % Rétablissement automatique de scrheadings à la sortie du groupe
 \pagestyle{scrheadings}
 
-La sortie du bloc rétablit automatiquement le style standard \texttt{scrheadings} pour la suite du mémoire.
-Ces bascules illustrent la flexibilité extrême offerte par la classe pour rythmer la lecture selon la nature des contenus.
+La sortie du bloc rétablit automatiquement le style standard \texttt{scrheadings} (et réinitialise ses filets de séparation) pour la suite du mémoire.
+Ces bascules illustrent la flexibilité offerte par la classe pour rythmer la lecture selon la nature des contenus.
 

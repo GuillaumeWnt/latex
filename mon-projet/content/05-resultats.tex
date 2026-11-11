@@ -121,7 +121,7 @@ Il matérialise deux flux d'ingénierie distincts selon la densité et la nature
 Pour des courbes 2D (quelques dizaines à quelques centaines de points),
 la méthode d'excellence consiste à exporter un fichier CSV compact dans \code{data/benchmark-results.csv}.
 Le tracé est ensuite entièrement composé par le paquet \code{pgfplots} dans le manuscrit,
-comme illustré sur le \cref{fig:courbe-csv} :
+comme illustré sur le~\cref{fig:courbe-csv} :
 
 \begin{figure}[htbp]
   \centering
@@ -170,9 +170,9 @@ comme illustré sur le \cref{fig:courbe-csv} :
   \label{fig:courbe-csv}
 \end{figure}
 
-Comme visible sur le \cref{fig:courbe-csv}, les deux dynamiques partagent la même échelle verticale :
-l'architecture proposée franchit le seuil des \SI{98}{\percent} dès la douzième itération,
-tandis que le modèle de référence plafonne à \SI{83}{\percent}.
+Comme visible sur le~\cref{fig:courbe-csv}, les deux dynamiques partagent la même échelle verticale :
+l'architecture proposée franchit le seuil des \qty{98}{\percent} dès la douzième itération,
+tandis que le modèle de référence plafonne à \qty{83}{\percent}.
 L'harmonie typographique est totale : les fontes, graisses et espacements sont rigoureusement identiques à ceux du corps de texte.
 
 \subsection[Cas 2 : Graphique 2D haute résolution exporté par Matplotlib]{Cas 2 : Graphique 2D haute résolution exporté par Matplotlib}
@@ -267,8 +267,8 @@ un bouton permet d'alterner entre une synthèse textuelle concise et le relevé 
         \toprule
         \textbf{Configuration} & \textbf{Précision finale} & \textbf{Perte résiduelle} & \textbf{Gain mesuré} \\
         \midrule
-        Modèle de référence    & \SI{82.4}{\percent}       & 0.305                     & Référence \\
-        Architecture proposée  & \SI{98.9}{\percent}       & 0.084                     & $+$\SI{16.5}{\percent} \\
+        Modèle de référence    & \qty{82.4}{\percent}       & 0.305                     & Référence \\
+        Architecture proposée  & \qty{98.9}{\percent}       & 0.084                     & $+$\qty{16.5}{\percent} \\
         \bottomrule
       \end{tabularx}%
     \end{ocg}%

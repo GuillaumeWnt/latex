@@ -11,9 +11,10 @@ Le dossier est organisé selon le principe de **séparation stricte du contenu e
 ```text
 templates/template_principal/
 ├── README.md                      # Guide d'utilisation et aide-mémoire (ce fichier)
-├── main.tex                       # Fichier maître (ordonnancement des chapitres)
-├── ClasseGuillaume.cls            # Classe KOMA-Script enrichie, corrigée et interactive
-├── Fonts/                         # Polices OpenType/TrueType locales
+├── .latexmkrc                     # Configuration automatique latexmk (LuaLaTeX + build/)
+├── main.tex                       # Fichier maître (ordonnancement des 4 parties et annexes)
+├── ClasseGuillaume.cls            # Classe KOMA-Script (scrbook) + geometry synchronisée (v2.2)
+├── Fonts/                         # Polices OpenType/TrueType locales (repli Overleaf/Linux)
 │   ├── AsapFontFiles/             # Police Asap Condensed pour les titres
 │   ├── CalibriFontFiles/          # Police Calibri pour le corps de texte
 │   └── ComicSansMSFontFiles/      # Police Comic Sans MS
@@ -21,16 +22,26 @@ templates/template_principal/
 │   ├── FacMedLogo.jpg
 │   ├── UCLouvainLogo.png
 │   └── logo_test.png
-├── chapters/                      # Corps du document découpé en modules
-│   ├── 00_frontmatter/            # Couverture, liste todos, résumé bilingue
-│   ├── 01_chapitre1/              # Chapitre I (théorie, tableaux, illustrations, encadrés)
-│   └── 02_chapitre2/              # Chapitre II (méthodologie, annotations interactives, biblio)
-├── tables/                        # Tableaux complexes au format booktabs
-│   └── hypotheses_diagnostiques.tex
+├── chapters/                      # Corps du document découpé en 8 chapitres et 4 annexes
+│   ├── 00_frontmatter/            # Couverture (titlepage), résumé bilingue, remerciements
+│   ├── 01_fondations/             # Architecture modulaire, LuaLaTeX, interlignes & microtype
+│   ├── 02_titres_typo_couleurs/   # Hiérarchie des titres, parcimonie & charte chromatique
+│   ├── 03_sciences_maths/         # Équations (mathtools/unicode-math) & unités (siunitx)
+│   ├── 04_tableaux/               # Règles booktabs, tabularx, longtable & mode paysage
+│   ├── 05_illustrations_boites/   # Figures, flottant illustration, cadreFigure & boiteSynthese
+│   ├── 06_geometries_styles_colonnes/ # Cohabitation KOMA/geometry, styles de page, multicol & logo
+│   ├── 07_collaboration_todos/    # Système \todoH, profils de relecteurs & \missingfigure
+│   ├── 08_references_bibliographie/ # Références cleveref & bibliographie Biber/Vancouver
+│   └── 99_annexes/                # Aide-mémoire (Annexe A), palettes (B), Git (C), pdfpages (D)
+├── tables/                        # Tableaux modulaires au format booktabs (colonnes L et Y)
+│   ├── tableau_comparatif_classe.tex
+│   ├── tableau_donnees_multipage.tex
+│   ├── tableau_paysage_synthese.tex
+│   └── tableau_synthese_mesures.tex
 ├── bib/                           # Base de données bibliographique Biber / Vancouver
 │   └── references.bib
-└── scripts/                       # Outils de compilation
-    ├── compile.ps1                # Script PowerShell de compilation LuaLaTeX
+└── scripts/                       # Outils d'automatisation PowerShell
+    ├── compile.ps1                # Script de compilation LuaLaTeX (UTF-8 sécurisé)
     └── clean.ps1                  # Nettoyage des fichiers auxiliaires
 ```
 
@@ -73,11 +84,13 @@ La commande `\todoH{style}{couleur}{commentaire}{texte}` intègre un comportemen
 \missingfigure[figwidth=\linewidth, figheight=4cm]{Schéma à intégrer}
 ```
 
-### 2. Géométries de page multiples
-Passez facilement d'une mise en page à une autre selon la nature des pages :
-- `\geometrieWord` : Marges classiques de 2,5 cm partout (avec marge réservée aux notes).
-- `\geometrieLarge` : Marges étroites de 1,2 cm (idéal pour la page de couverture ou les figures pleines pages).
-- `\geometrieStandard` : Restauration de la géométrie KOMA-Script originale.
+### 2. Cohabitation KOMA-Script / `geometry` et Géométries de page multiples
+`ClasseGuillaume.cls` synchronise automatiquement `scrbook` (`scrlayer-scrpage` + `parskip`) avec `geometry` à chaque changement de marges via `\syncKomaGeometry` :
+- `\geometrieStandard` : Restauration de la géométrie canonique KOMA-Script (`DIV=12`).
+- `\geometrieWord` : Marges classiques de 2,5 cm partout avec marge latérale de 2,0 cm réservée aux notes `\todoH`.
+- `\geometrieLarge` : Marges étroites de 1,2 cm à gauche/droite et 1,6 cm en haut/bas (idéal pour les grands tableaux ou synthèses).
+- `\geometrieLibre{<options geometry>}` : Applique à la volée n'importe quelle configuration `geometry` sur-mesure tout en réalignant automatiquement les en-têtes KOMA.
+- `\begin{pageDesign}[<options geometry>] ... \end{pageDesign}` : Isolat complet pour designer librement une ou plusieurs pages (couverture, poster, intercalaire) sans en-tête ni logo, avec retour automatique à la géométrie et à l'état du logo actifs à la fermeture de l'environnement.
 
 ### 3. Encadrés et boîtes visuelles (`tcolorbox`)
 - **Cadre décoratif pour images :**

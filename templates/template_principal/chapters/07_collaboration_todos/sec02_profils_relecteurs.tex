@@ -18,7 +18,7 @@ La classe intègre plusieurs styles de relecteurs prêts à l'emploi :
   \item \texttt{TestStyle} : Style neutre pour les auto-vérifications techniques.
 \end{itemize}
 
-Démonstration croisée : ici, Marie note que \todoH{MarieStyle}{Emerald!30}{Penser à insérer le protocole de calibration des capteurs avant soutenance finale.}{cette étape de mesure devra être corrélée} avec les résultats théoriques obtenus au Chapitre~\ref{chap:sciences_maths}.
+Démonstration croisée : ici, Marie note que \todoH{MarieStyle}{Emerald!30}{Penser à insérer le protocole de calibration des capteurs avant soutenance finale.}{cette étape de mesure devra être corrélée} avec les résultats théoriques obtenus au~\cref{chap:sciences_maths}.
 
 \subsection{Réservation de figures provisoires avec \texttt{\textbackslash missingfigure}}
 \label{subsec:missing_figures_demo}
@@ -49,7 +49,8 @@ Le cauchemar traditionnel de l'auteur sous \LaTeX{} est de devoir supprimer manu
 \begin{boiteSynthese}{Passage en version finale en une seule manipulation}
   Dans \texttt{ClasseGuillaume}, le mode révision est entièrement piloté par une seule option de classe dans \texttt{main.tex} :
   \begin{itemize}
-    \item \textbf{Phase de rédaction / relecture :} \texttt{\textbackslash documentclass[..., todoNote]\{ClasseGuillaume\}}
+    \item \textbf{Phase de rédaction / relecture :}\par\smallskip\noindent
+      \texttt{\textbackslash documentclass[..., todoNote]\{ClasseGuillaume\}}
     \item \textbf{Version finale pour impression :} Il suffit de \textbf{retirer le mot-clé \texttt{todoNote}} de l'en-tête \texttt{\textbackslash documentclass}.
   \end{itemize}
   Instantanément, toutes les notes dans la marge s'évaporent, les surlignages colorés redeviennent du texte ordinaire rigoureusement immaculé, et le tableau des révisions disparaît du début du document. Aucune modification du texte source n'est requise !

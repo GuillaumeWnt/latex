@@ -114,14 +114,14 @@
   
   \node[filebox, above=0.7cm of main] (front) {\textbf{frontmatter/}\\Titre, résumé, TOC};
   \node[filebox, below=0.5cm of main] (content) {\textbf{content/*.tex}\\Chapitres \& Conclusion};
-  \node[filebox, below=0.4cm of content] (data) {\textbf{data/ \& listings/}\\Données brutes \& scripts};
-  \node[filebox, below=0.4cm of data] (back) {\textbf{backmatter/}\\Annexes \& glossaire};
+  \node[filebox, below=0.4cm of content] (back) {\textbf{backmatter/}\\Annexes \& glossaire};
+  \node[filebox, below=0.4cm of back] (data) {\textbf{data/ \& listings/}\\Données brutes \& scripts};
 
-  % Connexions vers main.tex
+  % Connexions vers main.tex et content/
   \draw[arrowline] (front) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash input}} (main);
   \draw[arrowline] (content) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (main);
-  \draw[arrowline] (data) -| ++(1.4cm,0.8cm) |- (main.south east);
-  \draw[arrowline] (back) -- node[right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (data);
+  \draw[arrowline] (back) -| ++(1.4cm,0.8cm) |- node[near end, right, font=\tiny\color{ThesisMuted}] {\texttt{\textbackslash include}} (main.south east);
+  \draw[dashedline] (data) -| ++(-1.4cm,0.8cm) |- node[near end, left, font=\tiny\color{ThesisMuted}] {données / code} (content.south west);
 
   \draw[dashedline] (cls.east) -- (main.west);
   \draw[dashedline] (clo.east) -- (main.west);

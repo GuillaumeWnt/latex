@@ -6,10 +6,11 @@
   \begin{singlespace}
   \centering
 
-  % En-tête institutionnel avec logos
+  % En-tête institutionnel avec logos (bornés en largeur et hauteur pour éviter tout Overfull \hbox)
   \begin{minipage}[c]{0.28\textwidth}
+    \raggedright
     \IfFileExists{images/UCLouvainLogo.png}{%
-      \includegraphics[height=1.8cm,keepaspectratio]{images/UCLouvainLogo.png}%
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{images/UCLouvainLogo.png}%
     }{}%
   \end{minipage}
   \hfill
@@ -23,7 +24,7 @@
   \begin{minipage}[c]{0.28\textwidth}
     \raggedleft
     \IfFileExists{images/FacMedLogo.jpg}{%
-      \includegraphics[height=1.8cm,keepaspectratio]{images/FacMedLogo.jpg}%
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{images/FacMedLogo.jpg}%
     }{}%
   \end{minipage}
 

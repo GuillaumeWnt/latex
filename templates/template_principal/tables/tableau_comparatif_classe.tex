@@ -6,7 +6,7 @@
   \small
   \caption{Comparatif synthétique des fonctionnalités : \LaTeX{} Standard vs \texttt{ClasseGuillaume}}
   \label{tab:comparatif_classe}
-  \begin{tabularx}{\textwidth}{p{3.2cm} p{5.5cm} X}
+  \begin{tabularx}{\textwidth}{L{3.2cm} L{5.5cm} Y}
     \toprule
     \textbf{Fonctionnalité} & \textbf{En \LaTeX{} Standard (\emph{Vanilla})} & \textbf{Avec \texttt{ClasseGuillaume.cls}} \\
     \midrule
@@ -16,7 +16,7 @@
     \addlinespace
     \textbf{Puces de paragraphes} & \texttt{\textbackslash paragraph} renvoie à la ligne ou nécessite un réglage KOMA & Puce colorée en ligne prête à l'emploi (\texttt{\textbackslash textbullet~}) avec poursuite immédiate du texte. \\
     \addlinespace
-    \textbf{Changement de marges} & Écriture manuelle lourde de \texttt{\textbackslash newgeometry} à chaque bascule & Trois commandes immédiates : \texttt{\textbackslash geometrieWord}, \texttt{\textbackslash geometrieLarge}, \texttt{\textbackslash geometrieStandard}. \\
+    \textbf{Changement de marges} & Conflits entre KOMA-Script et \textsf{geometry}, en-têtes désalignés & Quatre commandes (\texttt{\textbackslash geometrieWord}, \texttt{\textbackslash geometrieLarge}, \texttt{\textbackslash geometrieStandard}, \texttt{\textbackslash geometrieLibre}) et environnement \texttt{pageDesign} synchronisés. \\
     \addlinespace
     \textbf{Notes de révision} & \textsf{todonotes} déborde des marges, casse en UTF-8 et sans infobulle & \texttt{\textbackslash todoH} : surlignage \textsf{lua-ul}, troncature automatique > 30 car., infobulle PDF et lien retour. \\
     \addlinespace

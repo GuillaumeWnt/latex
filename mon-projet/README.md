@@ -27,10 +27,10 @@ mon-projet/
 │
 ├── fonts/                   # POLICES : polices OpenType/TrueType locales (fontspec Path=fonts/)
 │   ├── README.md            # Guide de sanctuarisation des polices pour CI/CD et Overleaf
-│   ├── Asap-Condensed-Regular.ttf
-│   ├── Asap-Condensed-Bold.ttf
-│   ├── Asap-Condensed-Italic.ttf
-│   └── Asap-Condensed-BoldItalic.ttf
+│   ├── texgyreheros-regular.otf
+│   ├── texgyreheros-bold.otf
+│   ├── texgyreheros-italic.otf
+│   └── texgyreheros-bolditalic.otf
 │
 ├── data/                    # DONNÉES : jeux de données bruts (.csv, .tsv) tracés par pgfplots
 │   └── benchmark-results.csv
@@ -51,17 +51,24 @@ mon-projet/
 ├── content/                 # Tutoriel thématique découpé en chapitres autonomes
 │   ├── 01-introduction.tex  # Chapitre 1 : Philosophie et cartographie de l'arborescence
 │   ├── 02-etat-de-l-art.tex # Chapitre 2 : La classe racine et les profils d'options (.cls & .clo)
-│   ├── 03-methodologie.tex  # Chapitre 3 : Styles, macros métier et schémas vectoriels TikZ
-│   ├── 04-resultats.tex     # Chapitre 4 : Bibliographie, données brutes (data/) et linters
-│   └── 05-conclusion.tex    # Chapitre 5 : Conclusion générale et perspectives (isolée)
+│   ├── 03-methodologie.tex  # Chapitre 3 : Styles, macros métier et intégration graphique
+│   ├── 04-dynamique-page.tex # Chapitre 4 : Maîtrise dynamique de l'empagement : KOMA-Script, géométries et multi-colonnes
+│   ├── 05-resultats.tex     # Chapitre 5 : Bibliographie programmable et compilation automatisée
+│   └── 06-conclusion.tex    # Chapitre 6 : Conclusion générale et perspectives (isolée)
 │
 ├── backmatter/              # Documents de clôture
 │   ├── appendix-a.tex       # Annexe A : Aide-mémoire & Cheat Sheet des commandes
+│   ├── appendix-b.tex       # Annexe B : Spécimen d'insertion réglementaire de document PDF externe
 │   └── glossary.tex         # Table des sigles / acronymes et glossaire typographique
 │
 └── figures/                 # Médias graphiques et dessins vectoriels
     ├── logo.pdf             # Logo institutionnel vectoriel (utilisé en page de titre)
-    └── schema-principe.tikz # Schéma TikZ modulaire inclus via \input{}
+    ├── python-benchmark.pdf # Courbe 2D haute résolution générée par Matplotlib
+    ├── python-3d-surface.pdf # Surface 3D complexe non-convexe pré-calculée en PDF
+    ├── sample-annex-doc.pdf # Document multipage externe pour l'Annexe B
+    └── tikz/
+        ├── schema-principe.tex # Schéma d'architecture TikZ vectoriel autonome (standalone)
+        └── schema-principe.pdf # Précompilation PDF haute performance
 ```
 
 ---
@@ -74,7 +81,7 @@ mon-projet/
    Les codes sources (`listings/algorithm-pipeline.py`) conservent leur extension native et peuvent être testés ou exécutés indépendamment. L'insertion via `\lstinputlisting` élimine tout copier-coller dans le document LaTeX.
 3. **Figeage des polices locales (`fonts/`) :**
    Les polices TrueType/OpenType sont stockées dans `fonts/`. Grâce à la directive `Path = fonts/` de `fontspec`, le document produit un rendu visuel 100 % identique quel que soit le poste (Windows, macOS, Linux), sur Overleaf ou dans un conteneur CI/CD.
-4. **Conclusion générale dédiée (`content/05-conclusion.tex`) :**
+4. **Conclusion générale dédiée (`content/06-conclusion.tex`) :**
    La conclusion générale n'est plus noyée dans les résultats. Elle encadre symétriquement le manuscrit aux côtés de l'introduction générale (avec support natif de `\chapter` numéroté ou `\addchap` non numéroté).
 5. **Standardisation et Linter qualité (`.editorconfig` & `.chktexrc`) :**
    - `.editorconfig` impose l'indentation à 2 espaces et l'encodage UTF-8/LF.

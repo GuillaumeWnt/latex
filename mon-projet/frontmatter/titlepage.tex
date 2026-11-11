@@ -37,10 +37,10 @@
     \hrule height 1.5pt \relax
     \vspace{6mm}
     {\fontsize{20.74}{26}\selectfont\bfseries\color{ThesisPrimary}\gettitle}\par
-    \ifdefined\@subtitle
+    \ifdefempty{\getsubtitle}{}{%
       \vspace{4mm}
-      {\fontsize{12}{15}\selectfont\color{ThesisSecondary}\makeatletter\@subtitle\makeatother}\par
-    \fi
+      {\fontsize{12}{15}\selectfont\color{ThesisSecondary}\getsubtitle}\par
+    }
     \vspace{6mm}
     \hrule height 0.5pt \relax
 

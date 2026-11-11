@@ -92,9 +92,9 @@ foreach ($file in $texFiles) {
         }
     }
 
-    # 9. Check for \caption without a following \label in the same float
+    # 9. Check for \caption without a following \label in the same float (supports nested braces inside \caption)
     $fullContent = $lines -join "`n"
-    $captionMatches = [regex]::Matches($fullContent, '\\caption\{[^}]*\}(?!\s*\\label)')
+    $captionMatches = [regex]::Matches($fullContent, '\\caption\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}(?!\s*\\label)')
     foreach ($cm in $captionMatches) {
         Write-Host "[MISSING \label AFTER \caption] $relPath -> A \caption{} is not followed by \label{}" -ForegroundColor Yellow
         $issueCount++

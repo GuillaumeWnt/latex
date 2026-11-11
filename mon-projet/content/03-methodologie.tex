@@ -136,7 +136,7 @@ Chaque figure devient un fichier \LaTeX{} autonome dans le dossier \code{figures
   \label{fig:architecture-projet}
 \end{figure}
 
-Comme démontré sur le \cref{fig:architecture-projet},
+Comme démontré sur le~\cref{fig:architecture-projet},
 le schéma hérite fidèlement de la palette chromatique de la thèse (\code{ThesisPrimary}, \code{ThesisSecondary})
 grâce à la directive \code{\textbackslash providecolor} déclarée dans l'en-tête du fichier autonome.
 
@@ -168,7 +168,7 @@ Dans le document \LaTeX{}, le code est inséré sans aucune duplication grâce a
   label={lst:pipeline-python}
 ]{listings/algorithm-pipeline.py}
 
-Comme illustré dans le \cref{lst:pipeline-python},
+Comme illustré dans le~\cref{lst:pipeline-python},
 la mise en page hérite automatiquement de la typographie,
 de la numérotation des lignes et de la palette chromatique (\code{ThesisPrimary}, \code{ThesisAccent}) définies dans \code{config/macros.sty}.
 
@@ -228,7 +228,7 @@ Cette commande applique deux réglages indispensables :
   applique une réduction d'échelle subtile afin que le document annexé ne chevauche pas les en-têtes et respecte la grille typographique de votre ouvrage.
 \end{itemize}
 
-Un spécimen complet est inséré \textit{in extenso} en \cref{anx:document-externe} (\hyperref[anx:document-externe]{Annexe B}) pour attester visuellement de la continuité des bandeaux d'en-tête et de la numérotation au-dessus d'une pièce jointe externe.
+Un spécimen complet est inséré \textit{in extenso} en~\cref{anx:document-externe} (\hyperref[anx:document-externe]{Annexe B}) pour attester visuellement de la continuité des bandeaux d'en-tête et de la numérotation au-dessus d'une pièce jointe externe.
 
 \section{Flexibilité de Mise en Page : Géométries Multiples et Logo Dynamique}
 \label{sec:geometries-logo}
@@ -246,12 +246,12 @@ Grâce à l'activation conjointe de la directive \code{usegeometry=true} dans \c
 et du paquet \code{geometry}, notre architecture fournit trois commandes directes et sécurisées :
 
 \begin{itemize}
-  \item \code{\textbackslash geometrieLarge} : applique des marges compactes de \SI{1.5}{\centi\meter} à gauche et droite,
-  et \SI{1.8}{\centi\meter} en haut et bas. Elle maximise la surface utile (\SI{18}{\centi\meter} de largeur)
+  \item \code{\textbackslash geometrieLarge} : applique des marges compactes de \qty{1.5}{\centi\meter} à gauche et droite,
+  et \qty{1.8}{\centi\meter} en haut et bas. Elle maximise la surface utile (\qty{18}{\centi\meter} de largeur)
   sans modifier le style des en-têtes.
   \item \code{\textbackslash geometrieWord} (ou \code{\textbackslash geometrieAnnotation}) :
-  instaure des marges symétriques de \SI{2.5}{\centi\meter} tout en allouant une marge marginale dédiée
-  de \SI{2.5}{\centi\meter} (\code{marginparwidth}) avec un séparateur de \SI{3}{\milli\meter}.
+  instaure des marges symétriques de \qty{2.5}{\centi\meter} tout en allouant une marge marginale dédiée
+  de \qty{2.5}{\centi\meter} (\code{marginparwidth}) avec un séparateur de \qty{3}{\milli\meter}.
   C'est le profil idéal lors des phases de relecture active avec \code{\textbackslash todoH}.
   \item \code{\textbackslash geometrieStandard} : restaure immédiatement la géométrie canonique KOMA-Script (\code{DIV=12}).
 \end{itemize}
