@@ -392,6 +392,7 @@
 \RequirePackage{adjustbox}      % Outils pour redimensionner/rogner
 \RequirePackage{tcolorbox}      % pour faire de jolis cadres
 \RequirePackage{rotating}       % Pour les figures tournées (sidewaysfigure)
+\RequirePackage{pdflscape}      % Pour les pages en mode paysage (rotation auto dans le visualiseur PDF)
 \RequirePackage{float}          % Pour l'option [H] (Placez-le ICI impérativement)
 \RequirePackage{tocbasic}       % Equivalent de float pour KOMA
 \DeclareNewTOC[%

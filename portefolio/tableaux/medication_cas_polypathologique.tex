@@ -1,4 +1,12 @@
-\begin{xltabular}{\linewidth}{>{\raggedright\arraybackslash\bfseries}p{3.1cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{4.0cm} >{\raggedright\arraybackslash}X}
+% ====================================================================================
+% VERSION 1 : PORTRAIT EPURÉ STYLE BOOKTABS (SANS LIGNES VERTICALES)
+% ====================================================================================
+\begingroup
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.15}
+
+\begin{xltabular}{\linewidth}{>{\raggedright\arraybackslash\bfseries}p{3.1cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.9cm} >{\raggedright\arraybackslash}X}
     \caption{Médication du patient (septembre 2026)} \label{tab:medication_patient} \\
     \toprule
     \textbf{Dénomination Commune Internationale (DCI)} & \textbf{Nom commercial \& Posologie} & \textbf{Classe pharmacothérapeutique} & \textbf{Indication clinique} \\
@@ -82,12 +90,10 @@
     Dapagliflozine & 
     Forxiga 10\,mg \newline 1 cp/j & 
     Inhibiteur du cotransporteur sodium-glucose de type 2 (iSGLT2) & 
-    Triple indication :
-    \begin{itemize}[leftmargin=*, nosep]
-        \item Diabète de type 2 ;
-        \item Cardioprotection ;
-        \item Néphroprotection.
-    \end{itemize} \\
+    Triple indication : \newline
+    \textbullet~Diabète de type 2 ; \newline
+    \textbullet~Cardioprotection ; \newline
+    \textbullet~Néphroprotection. \\
     \midrule
 
     Oxygénothérapie chronique & 
@@ -95,3 +101,4 @@
     Support ventilatoire & 
     Support pour l'hypoxémie nocturne et les troubles de diffusion dans le cadre de la BPCO. \\
 \end{xltabular}
+\endgroup
