@@ -40,6 +40,19 @@
     SuppressWarning=true
   }%
 }
+\AtBeginDocument{%
+  % Harmonisation francophone : "Tableau" au lieu de l'anglicisme "Table"
+  \@ifundefined{captionsfrench}{}{%
+    \addto\captionsfrench{%
+      \renewcommand*{\tablename}{Tableau}%
+      \renewcommand*{\listtablename}{Liste des tableaux}%
+    }%
+  }%
+  \iflanguage{french}{%
+    \renewcommand*{\tablename}{Tableau}%
+    \renewcommand*{\listtablename}{Liste des tableaux}%
+  }{}%
+}
 %\selectlanguage{french}
 %\selectlanguage{english}
 
@@ -393,6 +406,7 @@
 \RequirePackage{booktabs}       % Lignes professionnelles (\toprule, \midrule)
 \RequirePackage{longtable}      % Tableaux sur plusieurs pages
 \RequirePackage{tabularx}       % Tableaux à largeur fixe (ex: largeur du texte)
+\RequirePackage{xltabular}      % Tableaux pleine largeur sur plusieurs pages
 \RequirePackage{multirow}       % Fusion verticale de cellules
 
 % --- Images ---
