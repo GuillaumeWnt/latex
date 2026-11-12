@@ -1,36 +1,20 @@
-# Draw.io MCP Guide (`io.draw/mcp`)
+# Guide Draw.io MCP (`io.draw/mcp`)
 
-This guide explains how to generate, configure, and maintain Draw.io diagrams in this LaTeX workspace using the `io.draw/mcp` server.
-
----
-
-## 1. Available Tools
-
-### `create_diagram`
-Generates a new Draw.io diagram model.
-- **Input Parameters:**
-  - Diagram title/name.
-  - Structure nodes, connectors, hierarchy, and labels.
-- **Output:** Valid Draw.io XML graph model (`<mxGraphModel>`).
-
-### `search_shapes`
-Searches standard Draw.io stencil libraries for specialized domain shapes:
-- Cloud architectures: AWS, Azure, Google Cloud stencils.
-- Software engineering: UML, ERD, Flowchart, BPMN stencils.
-- Hardware & Networking: Routers, switches, databases.
+Conventions d'utilisation du serveur MCP `io.draw/mcp` dans l'écosystème `template_officiel`.
 
 ---
 
-## 2. Best Practices for LaTeX Integration
+## 1. Outils MCP Principaux
 
-1. **Storage Location:** Store all `.drawio` / `.drawio.xml` source files in `images/diagrams/`.
-2. **Vector Export:**
-   - Draw.io diagrams should be exported to PDF or EPS vector format whenever possible (`images/diagrams/<name>.pdf`).
-   - Vector PDFs scale infinitely without pixelation and retain sharp text and line weights.
-3. **Typography Harmony:**
-   - Set diagram font family to a neutral sans-serif (e.g., Arial, Helvetica) or matching serif to complement the document font.
-   - Maintain font sizes between 9pt and 11pt relative to the intended figure scale.
-4. **Color Harmony:**
-   - Avoid saturated primaries (pure red `#FF0000`, pure green `#00FF00`).
-   - Use soft muted fills (e.g., slate `#F1F5F9`, muted blue `#E0F2FE`, sage `#DCFCE7`) with dark borders (`#334155`).
+- **`create_diagram` :** Génère ou édite un graphe Draw.io (`<mxGraphModel>`) à partir de nœuds, connecteurs et styles structurés.
+- **`search_shapes` :** Recherche des bibliothèques de formes (UML, ERD, Flowchart, BPMN, réseau, cloud).
 
+---
+
+## 2. Intégration dans `templates/template_officiel/`
+
+1. **Stockage :** Enregistrer les sources `.drawio` / `.drawio.xml` dans `figures/` (ou `figures/diagrams/` si nombreuses).
+2. **Export vectoriel :** Toujours exporter en `.pdf` vectoriel dans `figures/<nom>.pdf` (netteté infinie, polices vectorielles).
+3. **Harmonie visuelle :**
+   - Polices neutres sans-serif (Helvetica / Arial / TeX Gyre Heros), taille relative 9–11 pt.
+   - Palette douce coordonnée à `mythesis-screen.clo` : fond `#F6F8FB`, bleu marine `#0F3C6E`, sarcelle `#146E78`, corail `#BE4B28`, bordures `#334155`.

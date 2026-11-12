@@ -1,39 +1,34 @@
-# Memory Knowledge Graph Guide (`@modelcontextprotocol/server-memory`)
+# Guide du Graphe de Connaissances (`memory` MCP)
 
-This guide defines the conventions and schema for storing persistent project knowledge in this LaTeX workspace.
+Ce guide définit le schéma recommandé pour stocker la mémoire persistante des projets basés sur `templates/template_officiel/`.
 
 ---
 
-## 1. Entity Architecture
+## 1. Types d'entités standardisés
 
-Use standardized entity types when invoking `create_entities`:
-
-| Entity Type | Required Observation Fields | Example |
+| Type d'entité | Champs d'observation attendus | Exemple aligné `template_officiel` |
 | :--- | :--- | :--- |
-| `DocumentConfig` | Class, engine, language, font option | `{"name": "ThesisProject", "observations": ["Class: ClasseGuillaume.cls", "Font: Calibri", "Engine: LuaLaTeX"]}` |
-| `GeometryPreset` | Margins, headheight, footskip, target scope | `{"name": "GeometrieWord", "observations": ["2.5cm all sides", "headheight=26pt", "footskip=30pt"]}` |
-| `GlossaryTerm` | Acronym, expanded name, definition, scope | `{"name": "Term_CNN", "observations": ["Full: Convolutional Neural Network", "Defined in Chapter 1"]}` |
-| `LiteratureEntity` | Citation key, authors, year, key takeaway | `{"name": "smith2024deep", "observations": ["Authors: Smith & Doe (2024)", "Key finding: 94% segmentation accuracy"]}` |
-| `ChapterMilestone` | Chapter number, title, authoring status | `{"name": "Chapter_01", "observations": ["Title: Introduction & Contexte", "Status: Fully drafted, compiles code 0"]}` |
+| `DocumentConfig` | Classe, moteur, police, mode | `{"name": "ProjetDemo", "observations": ["Class: mythesis.cls", "Engine: LuaLaTeX", "Font: texgyreheros (fonts/)", "Mode: screen / oneside"]}` |
+| `GeometryPreset` | Marges, `headheight`, `footskip` | `{"name": "GeometrieOfficielle", "observations": ["2.5cm marges", "headheight=20pt", "footskip=28pt", "Sync via \\syncKomaGeometry"]}` |
+| `GlossaryTerm` | Acronyme, définition, 1re occurrence | `{"name": "Term_PID", "observations": ["Proportionnel-Intégral-Dérivé", "Défini dans content/01-introduction.tex"]}` |
+| `LiteratureEntity` | Clé BibLaTeX, auteurs, année, apport | `{"name": "dupont2024", "observations": ["Fichier: biblio/references.bib", "Style: custom-style (authoryear)"]}` |
+| `ChapterMilestone` | Fichier `content/*.tex`, statut compilation | `{"name": "Ch03_Methodologie", "observations": ["Fichier: content/03-methodologie.tex", "Statut: validé, 0 erreur, 0 Overfull hbox"]}` |
 
 ---
 
-## 2. Standard Relation Types
+## 2. Relations standardisées
 
-Use standardized relations when invoking `create_relations`:
-
-| From | Relation | To | Description |
+| Source | Relation | Cible | Rôle |
 | :--- | :--- | :--- | :--- |
-| `DocumentConfig` | `uses_geometry` | `GeometryPreset` | Associates layout presets with master document |
-| `ChapterMilestone` | `defines_term` | `GlossaryTerm` | Marks where a term was first introduced |
-| `ChapterMilestone` | `cites` | `LiteratureEntity` | Maps bibliographical dependency per chapter |
-| `LiteratureEntity` | `supports_claim` | `ResearchClaim` | Links empirical sources to written arguments |
+| `DocumentConfig` | `uses_geometry` | `GeometryPreset` | Associe la géométrie active au projet |
+| `ChapterMilestone` | `defines_term` | `GlossaryTerm` | Trace le chapitre d'introduction d'un terme |
+| `ChapterMilestone` | `cites` | `LiteratureEntity` | Cartographie les dépendances bibliographiques |
+| `LiteratureEntity` | `supports_claim` | `ResearchClaim` | Relie une affirmation à sa source |
 
 ---
 
-## 3. Maintenance Cycle
+## 3. Cycle de maintenance
 
-1. **Session Warm-Up:** Query `read_graph` or `search_nodes` to verify active project settings before editing `.tex` files.
-2. **Incremental Updates:** Whenever a new table, chapter, or citation is created, append corresponding nodes and relations.
-3. **Pruning:** Remove outdated notes using `delete_observations` or `delete_entities` when drafting reaches final publication release.
-
+1. **Ouverture de session :** lire le graphe (`search_nodes` / `read_graph`) avant de modifier un chapitre existant pour préserver la cohérence terminologique.
+2. **Mise à jour continue :** ajouter les nouveaux termes, macros ou backports décidés pour `template_officiel`.
+3. **Nettoyage :** purger via `delete_observations` / `delete_entities` les remarques temporaires (`\todoH`) une fois résolues.

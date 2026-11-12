@@ -1,39 +1,43 @@
 ---
 name: visual-diagrams
 description: >-
-  Use this skill when creating, editing, or integrating technical diagrams, flowcharts, architectures,
-  and figures using Draw.io MCP (io.draw/mcp) or native TikZ/tcolorbox (cadreFigure) in LaTeX.
+  Utiliser ce skill pour concevoir, éditer ou intégrer des schémas techniques, diagrammes de flux
+  et figures vectorielles via Draw.io MCP (io.draw/mcp) ou TikZ/tcolorbox (cadreFigure) en LaTeX.
 ---
 
-# Visual Diagrams & Technical Schematics Skill
+# Skill : Diagrammes Visuels & Schémas Techniques
 
-This skill provides step-by-step instructions, reference manuals, and templates for designing and embedding technical diagrams in LaTeX documents using Draw.io (`io.draw/mcp`) and native TikZ.
-
----
-
-## 1. Quick Workflows
-
-### Generating Schematics via Draw.io MCP
-1. Formulate diagram structure (nodes, relationships, containers).
-2. Call `create_diagram` with diagram parameters or XML structure.
-3. Save output to `images/diagrams/<name>.drawio.xml`.
-4. Export as PDF/SVG vector graphic into `images/` or embed directly.
-
-### Authoring Native TikZ Flowcharts
-1. Place modular TikZ code inside `figures/<name>.tikz` or directly in a chapter.
-2. Use relative positioning (`below=of ...`, `right=of ...`) rather than absolute coordinates.
-3. Wrap in a figure environment or the document's custom `cadreFigure` container.
+Workflow de conception et d'intégration de figures vectorielles dans les projets basés sur `templates/template_officiel/` via Draw.io (`io.draw/mcp`) et TikZ/PGFPlots natif.
 
 ---
 
-## 2. Reference Documentation
-- **[Draw.io MCP Integration Guide](./references/drawio-mcp-guide.md):** Detailed guide to calling `create_diagram` and `search_shapes`.
-- **[TikZ & tcolorbox Cheatsheet](./references/tikz-tcolorbox-cheatsheet.md):** Reusable styling presets, palette harmony, and `cadreFigure` wrapping.
+## 1. Draw.io MCP vs TikZ Natif
+
+| Besoin | Outil recommandé | Emplacement dans `template_officiel` |
+| :--- | :--- | :--- |
+| Architectures systèmes, topologies réseau, schémas blocs complexes | Draw.io (`io.draw/mcp`) | `figures/<nom>.drawio.xml` + export vectoriel `.pdf` |
+| Organigrammes, automates, courbes de données, figures héritant des polices | TikZ / `standalone` / `pgfplots` | `figures/tikz/<nom>.tex` (précompilé `.pdf`) ou `figures/<nom>.tikz` |
 
 ---
 
-## 3. Examples & Assets
-- **[Sample Modular Flowchart](./examples/sample-flowchart.tex):** Clean TikZ flowchart with branching logic.
-- **[Sample Architecture XML](./examples/sample-architecture.drawio.xml):** Production-ready Draw.io XML schema for multi-tier architectures.
-- **[Sample Cadre Figure](./examples/sample-cadre-figure.tex):** Demonstration of `cadreFigure` usage in `ClasseGuillaume.cls`.
+## 2. Procédure Rapide
 
+### Schéma Draw.io (`io.draw/mcp`)
+1. Identifier les nœuds, flux et hiérarchies ; utiliser `search_shapes` si des icônes métier sont nécessaires.
+2. Générer le diagramme avec `create_diagram` et sauvegarder la source dans `figures/<nom>.drawio.xml`.
+3. Exporter en PDF vectoriel dans `figures/<nom>.pdf` puis l'intégrer dans `figure` + `cadreFigure`.
+
+### Schéma TikZ Natif
+1. Privilégier la compilation autonome `standalone` dans `figures/tikz/<nom>.tex` $\rightarrow$ `figures/tikz/<nom>.pdf` (accélère `latexmk`).
+2. Utiliser le positionnement relatif (`positioning`) et les couleurs du thème (`ThesisPrimary`, `ThesisSecondary`, `ThesisAccent`).
+3. Encapsuler dans `figure` (ou `illustration`) avec `\begin{cadreFigure}[width=0.9\linewidth]` et `\label{fig:...}` après `\caption{...}`.
+
+---
+
+## 3. Références & Exemples
+
+- **[Guide Draw.io MCP](./references/drawio-mcp-guide.md)**
+- **[Aide-Mémoire TikZ & `cadreFigure`](./references/tikz-tcolorbox-cheatsheet.md)**
+- **[Exemple Organigramme TikZ](./examples/sample-flowchart.tex)**
+- **[Exemple `cadreFigure`](./examples/sample-cadre-figure.tex)**
+- **[Exemple Architecture Draw.io](./examples/sample-architecture.drawio.xml)**

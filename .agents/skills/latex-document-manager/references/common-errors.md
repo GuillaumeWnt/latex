@@ -1,44 +1,41 @@
-# Common LaTeX Errors & Diagnostics Guide
+# Erreurs Courantes & Diagnostics LuaLaTeX
 
 ---
 
-## 1. Syntax & Structural Errors
+## 1. Erreurs de Syntaxe & Caractères
 
 ### `! Undefined control sequence`
-- **Cause:** You used a macro that LaTeX does not recognize (typo in command name, or missing package).
-- **Fix:** Check the line number indicated after `l.<line>`. Verify spelling or import the relevant package.
+- **Cause :** Macro inconnue (faute de frappe ou package absent de `config/packages.sty`).
+- **Correctif :** Inspecter la ligne `l.<num>` dans `build/main.log` et vérifier le nom ou le package.
 
-### `! Missing character: There is no → (U+2192) in font ...`
-- **Cause:** A math symbol (like `\rightarrow`, `\alpha`, `\sum`) was used directly in text mode. When using OpenType text fonts via `fontspec`, text fonts lack math glyphs.
-- **Fix:** Always wrap math symbols in math mode: `$\rightarrow$`.
+### `Missing character: There is no → (U+2192) in font ...`
+- **Cause :** Symbole mathématique (`\rightarrow`, `\alpha`, `\approx`) placé en mode texte hors `$ ... $`.
+- **Correctif :** Toujours encadrer en mode mathématique (`$\rightarrow$`).
 
 ### `! Package lua-ul Error: Color support in lua-ul requires luacolor.`
-- **Cause:** `lua-ul` was used with color arguments without importing `luacolor`.
-- **Fix:** Add `\RequirePackage{luacolor}` before loading `lua-ul`.
+- **Cause :** `lua-ul` appelé sans `luacolor` préalable.
+- **Correctif :** Charger `\RequirePackage{luacolor}` avant `lua-ul` et compiler sous LuaLaTeX.
 
 ### `! Missing number, treated as zero. <to be read again> \group_end:`
-- **Cause:** An internal TeX primitive counter (like `\year`) was passed as a unit name to `siunitx` (e.g. `\qtyrange{18}{65}{\year}`).
-- **Fix:** Use standard unit abbreviations or plain text: `de 18 à 65~ans` or `\qtyrange{18}{65}{\kilo\gram}`.
+- **Cause :** Compteur interne TeX (comme `\year`) passé en unité à `siunitx` (`\qtyrange{18}{65}{\year}`).
+- **Correctif :** Utiliser une unité SI valide ou du texte avec espace insécable (`de 18 à 65~ans`).
 
 ---
 
-## 2. Layout, Geometry & Warnings
+## 2. Mise en Page, Polices & Bibliographie
 
-### `Package scrlayer-scrpage Warning: \headheight to low. At least XXpt needed...`
-- **Cause:** A `\newgeometry` or KOMA-Script setup defined a `headheight` smaller than the height of the font used in the header.
-- **Fix:** Explicitly pass `headheight=26pt, footskip=30pt` to `\newgeometry` and in `\geometry{...}`.
+### `Package scrlayer-scrpage Warning: \headheight to low`
+- **Cause :** `\newgeometry` a omis `headheight` ou `footskip`.
+- **Correctif :** Préciser `headheight=20pt, footskip=28pt` dans `\newgeometry`, ou utiliser `\geometrieWord`, `\geometrieLarge`, `\geometrieLibre`.
 
-### `Overfull \hbox (XXpt too wide) in paragraph at lines Y--Z`
-- **Cause:** A line could not be hyphenated and protrudes into the margin.
-- **Fix:**
-  1. Add soft hyphens: `hy\-phen\-ation`.
-  2. For URLs, load `xurl`.
-  3. Load `microtype` in preamble.
+### `fontspec` : fichier de police introuvable
+- **Cause :** Chemin `fonts/` absent ou option `font=...` pointant vers une police non installée.
+- **Correctif :** Vérifier la présence des `.otf` dans `fonts/` ou basculer vers `font=heros` / `font=libertinus` dans `main.tex`.
 
-### `LaTeX Warning: There were undefined references`
-- **Cause:** Cross-referencing labels are newly created or changed.
-- **Fix:** Recompile. `latexmk` handles this automatically in multiple passes.
+### `Overfull \hbox (XXpt too wide)`
+- **Cause :** Mot ou tableau dépassant `\linewidth`.
+- **Correctif :** Reformuler, insérer `\-`, charger `xurl` pour les URL, ou utiliser les colonnes `Y` / `L{...}` de `tabularx`.
 
-### `LaTeX Warning: Citation 'XYZ' on page P undefined`
-- **Cause:** The citation key was not found in `bib/references.bib`, or Biber hasn't processed the `.bcf` file yet.
-- **Fix:** Recompile with `latexmk -lualatex -outdir=build main.tex` (or `biber build/main`).
+### `LaTeX Warning: Citation '...' undefined` ou `There were undefined references`
+- **Cause :** Clé absente de `biblio/references.bib` ou passe Biber / LuaLaTeX manquante.
+- **Correctif :** Vérifier la clé dans `biblio/references.bib` et relancer `latexmk`.

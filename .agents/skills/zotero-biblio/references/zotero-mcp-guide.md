@@ -1,57 +1,28 @@
-# Zotero MCP Tool Guide (`zotero-citations`)
+# Guide des Outils MCP Zotero (`zotero-citations`)
 
-This guide details the capabilities of the `zotero-citations` MCP server and how to utilize them within LaTeX authoring workflows.
-
----
-
-## 1. Search & Discovery Tools
-
-### `zotero_search_items`
-- **Use Case:** Find references already stored in the local Zotero library.
-- **Parameters:**
-  - `query`: Text search across title, creator, notes, and metadata.
-  - `collection`: (Optional) Limit search to a specific collection key.
-  - `tag`: (Optional) Filter by user tag.
-  - `limit`: Number of results to return.
-
-### `zotero_scholar`
-- **Use Case:** Search Google Scholar for academic papers, citation counts, and BibTeX snippets.
-- **Parameters:**
-  - `query`: Search query (keywords, author, title).
-  - `num_results`: Number of entries to retrieve.
-
-### `zotero_semantic_search`
-- **Use Case:** Find conceptually related literature in your library using embedding-based search rather than simple keyword matching.
+Ce guide récapitule les principaux outils du serveur MCP `zotero-citations` pour alimenter et vérifier `biblio/references.bib`.
 
 ---
 
-## 2. Extraction & Evidence Synthesis
+## 1. Recherche & Découverte
 
-### `zotero_evidence_table`
-- **Use Case:** Automatically extract structured comparisons across selected papers.
-- **Parameters:**
-  - `item_keys`: Array of Zotero item keys to include.
-  - `fields`: Array of columns to extract (e.g., `["Objective", "Methodology", "Sample", "Results", "Limitations"]`).
-- **LaTeX Integration:** Convert the extracted JSON/table into a `tabularx` environment inside `tables/evidence_table.tex`.
-
-### `zotero_get_item`
-- **Use Case:** Retrieve full metadata for a specific item key.
-- **Fields of Interest for BibLaTeX:**
-  - `title`, `creators` (authors/editors)
-  - `publicationTitle` -> `journaltitle` / `booktitle`
-  - `date` -> `year` / `date`
-  - `DOI` -> `doi = {10.xxx}`
-  - `url`, `urldate`
-  - `abstractNote` -> used for synthesizing chapter context
+- **`zotero_search_items`** : recherche dans la bibliothèque Zotero locale (`query`, `collection` optionnelle, `tag` optionnel, `limit`).
+- **`zotero_semantic_search`** : recherche conceptuelle par similarité sémantique dans la bibliothèque.
+- **`zotero_scholar`** : recherche académique externe (`query`, `num_results`) pour récupérer métadonnées, compteurs de citations et extraits BibTeX.
 
 ---
 
-## 3. Library Management & Export
+## 2. Extraction & Synthèse
 
-### `zotero_export`
-- **Use Case:** Export collections or selected items directly to BibLaTeX format.
-- **Format Options:** `biblatex`, `bibtex`, `csljson`.
+- **`zotero_get_item`** : extrait les métadonnées complètes d'un item (`title`, `creators`, `publicationTitle` → `journaltitle`/`booktitle`, `date`, `DOI`, `url`, `urldate`, `abstractNote`).
+- **`zotero_evidence_table`** : génère une matrice structurée à partir d'une liste `item_keys` et de colonnes `fields` (ex. `["Objective", "Methodology", "Sample", "Results", "Limitations"]`).
+  - Intégrer le résultat dans `content/<section>.tex` (ou dans un fichier dédié inclus par `\input{...}`) au format `tabularx` + `booktabs` (`L`, `C`, `R`, `Y`).
 
-### `zotero_tag_audit`
-- **Use Case:** Verify consistent tagging across literature collections to identify untagged or unread papers.
+---
 
+## 3. Export & Hygiène de bibliothèque
+
+- **`zotero_export`** : export direct d'items ou de collections au format `biblatex` (à privilégier par rapport à `bibtex` brut).
+- **`zotero_tag_audit`** : contrôle la cohérence des tags et repère les références non classées.
+
+> **Rappel qualité :** après tout ajout ou mise à jour dans `biblio/references.bib`, lancer `audit-bib.ps1` et recompiler avec `latexmk` pour vérifier que Biber n'émet ni erreur ni avertissement (`WARN - BibTeX subsystem`).

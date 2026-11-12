@@ -1,43 +1,37 @@
 ---
 name: latex-quality-auditor
 description: >-
-  Use this skill when auditing LaTeX documents for publication quality, typographical compliance,
-  table modernization (booktabs/tabularx), semantic line breaks, and eliminating obsolete syntax.
+  Utiliser ce skill pour auditer la qualité typographique LaTeX, moderniser les tableaux
+  (booktabs/tabularx), exécuter ChkTeX / lint-latex.ps1 et vérifier le log de compilation.
 ---
 
-# LaTeX Quality Assurance & Typographical Auditor Skill
+# Skill : Audit Typographique & Qualité LaTeX
 
-This skill provides checklists, transformation recipes, and automated linter scripts to ensure LaTeX source code complies with the highest academic and typographical standards.
+Boîte à outils pour vérifier la conformité des sources `.tex` aux standards du dépôt et réduire erreurs et avertissements au minimum.
 
 ---
 
-## 1. Fast Workflows
+## 1. Contrôle Automatisé (`lint-latex.ps1` + `chktex`)
 
-### Run the Automated LaTeX Linter
-Audit all `.tex` files in a directory or template:
 ```powershell
-.\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "content"
+# Audit statique seul :
+.\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>"
+
+# Audit statique + ChkTeX (utilise le .chktexrc du projet) :
+.\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>" -RunChkTeX
 ```
-The script flags:
-- Obsolete font commands (`{\bf`, `{\it`, `{\tt}`).
-- Display math using `$$ ... $$` instead of `\[ ... \]`.
-- Hardcoded vertical lines `|` in `tabular` / `tabularx`.
-- Missing non-breaking spaces `~` before `\cite{}` and `\cref{}`.
-- Unescaped arrows outside math mode (`\rightarrow` instead of `$\rightarrow$`).
 
-### Table Modernization Workflow
-1. Identify legacy `tabular` blocks containing `|` and `\hline`.
-2. Follow the [Table Conversion Guide](./references/table-conversion-guide.md) to migrate to `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) and `tabularx`.
-3. Add `siunitx` alignment for numerical columns (`S` column type).
+Le script détecte :
+- Commandes de police obsolètes (`{\bf`, `{\it`, `{\tt}`, etc.) et maths `$$ ... $$`.
+- Filets verticaux `|` et `\hline` dans les tableaux.
+- Oublis d'espace insécable `~` avant les citations (`\parencite`, `\textcite`, `\cite`, etc.) et renvois (`\cref`, `\Cref`, `\cpageref`).
+- Usage manuel de `\ref{}` au lieu de `\cref{}` / `\Cref{}`.
+- Sauts de paragraphe via `\\` hors environnements tabulaires/mathématiques.
+- `\caption{...}` sans `\label{...}` associé.
 
 ---
 
-## 2. Reference Documentation
-- **[Publication Typography Checklist](./references/typography-checklist.md):** Exhaustive rules for French/English academic typography, punctuation, math expressions, and margin notes.
-- **[Table Conversion Guide](./references/table-conversion-guide.md):** Step-by-step before/after recipes for modernizing LaTeX tables.
+## 2. Documentation de Référence
 
----
-
-## 3. Automation Scripts
-- **[Lint Script (`lint-latex.ps1`)](./scripts/lint-latex.ps1):** PowerShell script executing static analysis across `.tex` files.
-
+- **[Liste de Contrôle Typographique](./references/typography-checklist.md) :** Points de vérification avant livraison (syntaxe, `~`, `siunitx` v3, flottants, notes `\todoH` et zéro avertissement).
+- **[Guide de Conversion de Tableaux](./references/table-conversion-guide.md) :** Recettes avant/après vers `booktabs` + `tabularx` (`L`, `C`, `R`, `Y`).

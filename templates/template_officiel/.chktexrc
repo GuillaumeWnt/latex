@@ -1,0 +1,47 @@
+# ==============================================================================
+# .chktexrc — Configuration ChkTeX adaptée au français et à template_officiel
+# ==============================================================================
+
+TabSize = 2
+
+# Options par défaut :
+# -n1  : commande terminée par une espace (nombreux faux positifs en macros)
+# -n12 : espace inter-mots après ponctuation
+# -n24 : saut de ligne entre \section/\caption et \label
+# -n26 : espace avant ponctuation double (: ; ? !) normale en typographie française
+# -n36 : espace devant parenthèse (fréquent après macros/cotes)
+# -n46 : environnements personnalisés
+CmdLine
+{
+  -n1 -n12 -n24 -n26 -n36 -n46
+}
+
+# Commandes exigeant une espace insécable (~) devant leur appel (ajout aux valeurs globales) :
+Linker
+{
+  \autocite \parencite \supercite
+  \cref \Cref \cpageref
+}
+
+# Commandes tolérant d'être suivies d'une espace :
+Silent
+{
+  \LaTeX \LuaLaTeX \TeX
+  \frontmatter \mainmatter \backmatter
+  \tableofcontents \listoffigures \listoftables \printbibliography
+  \toprule \midrule \bottomrule \addlinespace \syncKomaGeometry
+}
+
+# Macros dont les arguments contiennent du code, des chemins ou du texte littéral (syntaxe ChkTeX avec ':') :
+WipeArg
+{
+  \code:{}
+  \term:{}
+  \url:{}
+  \nolinkurl:{}
+  \href:{}{}
+  \lstinline:[]{}
+  \todoH:[][]{}{}
+  \noteMarge:[]{}
+  \includestandalone:[]{}
+}

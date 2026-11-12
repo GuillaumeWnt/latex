@@ -1,4 +1,4 @@
-﻿{
+{
     "servers":  {
                     "io.draw/mcp":  {
                                         "type":  "http",
@@ -47,15 +47,6 @@
                                                          "ZOTEUS_LOCAL":  "true"
                                                      }
                                          },
-                    "workspace-filesystem":  {
-                                                 "type":  "stdio",
-                                                 "command":  "npx",
-                                                 "args":  [
-                                                              "-y",
-                                                              "@modelcontextprotocol/server-filesystem",
-                                                              "${workspaceFolder}"
-                                                          ]
-                                             },
                     "brave-search":  {
                                          "type":  "stdio",
                                          "command":  "npx",
@@ -66,15 +57,7 @@
                                          "env":  {
                                                      "BRAVE_API_KEY":  "${env:BRAVE_API_KEY}"
                                                  }
-                                     },
-                    "memory":  {
-                                   "type":  "stdio",
-                                   "command":  "npx",
-                                   "args":  [
-                                                "-y",
-                                                "@modelcontextprotocol/server-memory"
-                                            ]
-                               }
+                                     }
                 },
     "inputs":  [
 

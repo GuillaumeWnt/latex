@@ -1,4 +1,4 @@
-﻿{
+{
     "mcpServers":  {
                        "io.draw/mcp":  {
                                            "url":  "https://mcp.draw.io/mcp",
@@ -42,14 +42,6 @@
                                                             "ZOTEUS_LOCAL":  "true"
                                                         }
                                             },
-                       "workspace-filesystem":  {
-                                                    "command":  "npx",
-                                                    "args":  [
-                                                                 "-y",
-                                                                 "@modelcontextprotocol/server-filesystem",
-                                                                 "${workspaceFolder}"
-                                                             ]
-                                                },
                        "brave-search":  {
                                             "type":  "stdio",
                                             "command":  "npx",
@@ -60,14 +52,6 @@
                                             "env":  {
                                                         "BRAVE_API_KEY":  "${env:BRAVE_API_KEY}"
                                                     }
-                                        },
-                       "memory":  {
-                                      "type":  "stdio",
-                                      "command":  "npx",
-                                      "args":  [
-                                                   "-y",
-                                                   "@modelcontextprotocol/server-memory"
-                                               ]
-                                  }
+                                        }
                    }
 }

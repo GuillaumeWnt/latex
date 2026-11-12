@@ -6,6 +6,7 @@
       "type": "shell",
       "command": "powershell",
       "args": [
+        "-NoProfile",
         "-ExecutionPolicy",
         "Bypass",
         "-File",
@@ -21,7 +22,48 @@
         "clear": false
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Audit Typographique LaTeX (template_officiel)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/.agents/skills/latex-quality-auditor/scripts/lint-latex.ps1",
+        "-TargetDir",
+        "${workspaceFolder}/templates/template_officiel",
+        "-RunChkTeX"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Nettoyer fichiers temporaires LaTeX (template_officiel)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/.agents/skills/latex-document-manager/scripts/clean.ps1",
+        "-ProjectDir",
+        "${workspaceFolder}/templates/template_officiel"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
     }
   ]
 }
-

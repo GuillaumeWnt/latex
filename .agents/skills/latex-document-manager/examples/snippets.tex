@@ -1,35 +1,42 @@
 % ==============================================================================
-% Reference Snippets: Tables, Math, Figures
+% Extraits de Référence : Tableaux, Équations, Figures & Boîtes (mythesis.cls)
 % ==============================================================================
 
-% --- 1. Publication-Quality Table (booktabs + tabularx) ---
+% --- 1. Tableau professionnel (booktabs + tabularx + colonnes L/Y + siunitx) ---
 \begin{table}[htbp]
   \centering
-  \caption{Comparison of experimental metrics across baseline models.}
-  \label{tab:baseline_comparison}
-  \begin{tabularx}{\linewidth}{l X r r}
+  \caption{Comparaison des performances expérimentales sur le jeu de test.}
+  \label{tab:comparatif-modeles}
+  \begin{tabularx}{\linewidth}{@{} l Y S[table-format=2.1] S[table-format=2.1] @{}}
     \toprule
-    \textbf{Model} & \textbf{Architecture} & \textbf{Accuracy (\%)} & \textbf{Latency (ms)} \\
+    \textbf{Modèle} & \textbf{Architecture} & \textbf{Précision (\%)} & \textbf{Latence (\unit{\milli\second})} \\
     \midrule
-    Baseline A     & Transformer (6 layers) & 84.2                    & 12.4                  \\
-    Baseline B     & Hybrid CNN-RNN         & 81.7                    & 9.1                   \\
-    \textbf{Ours}  & Modular Bi-LSTM        & \textbf{89.5}           & \textbf{7.8}          \\
+    Référence A     & Transformeur (6 couches) & 84,2 & 12,4 \\
+    Référence B     & Hybride CNN-RNN          & 81,7 &  9,1 \\
+    \textbf{Proposé}& Bi-LSTM modulaire        & 89,5 &  7,8 \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
-% --- 2. Multiline Aligned Equation ---
+% --- 2. Équation alignée avec macros sémantiques (config/macros.sty) ---
 \begin{align}
-  \label{eq:optimization_objective}
-  \mathcal{L}(\theta) &= \mathbb{E}_{x \sim \mathcal{D}} \left[ -\log p_\theta(x) \right] + \lambda \mathcal{R}(\theta) \\
-  &= \frac{1}{N} \sum_{i=1}^{N} \ell(f_\theta(x_i), y_i) + \frac{\lambda}{2} \|\theta\|_2^2.
+  \label{eq:objectif-optimisation}
+  \mathcal{L}(\vect{\theta})
+    &= \mathbb{E}_{x \sim \mathcal{D}}\!\left[-\log p_{\vect{\theta}}(x)\right] + \lambda\,\mathcal{R}(\vect{\theta}) \\
+    &= \frac{1}{N}\sum_{i=1}^{N} \ell\bigl(f_{\vect{\theta}}(x_i), y_i\bigr) + \frac{\lambda}{2}\norm{\vect{\theta}}_2^2.
 \end{align}
 
-% --- 3. Professional Figure with caption and cleveref label ---
+% --- 3. Figure vectorielle encadrée ---
 \begin{figure}[htbp]
   \centering
-  % \includegraphics[width=0.8\linewidth]{figures/pdf/architecture.pdf}
-  \caption{Overview of the end-to-end data processing pipeline.}
-  \label{fig:pipeline_overview}
+  \begin{cadreFigure}[width=0.85\linewidth]
+    \includegraphics[width=\linewidth]{figures/python-benchmark.pdf}
+  \end{cadreFigure}
+  \caption{Évolution comparée de la fonction de perte au fil des itérations.}
+  \label{fig:benchmark-loss}
 \end{figure}
 
+% --- 4. Boîte de synthèse ---
+\begin{boiteSynthese}{Point clé à retenir}
+  Les macros \code{\textbackslash vect}, \code{\textbackslash norm} et les boîtes \code{boiteSynthese} s'adaptent automatiquement aux profils \code{screen} et \code{print}.
+\end{boiteSynthese}

@@ -1,18 +1,7 @@
-# GitHub Copilot Instructions — AI Context Router
+# Instructions GitHub Copilot — Routeur vers `.agents/`
 
-> **Single Source of Truth:** All project-specific guidelines, coding standards, architecture rules, and workflows are centralized in [`AGENTS.md`](../AGENTS.md) and the [`.agents/`](../.agents) directory.
+> **Source Unique de Vérité :** Toutes les règles, conventions, workflows, skills et outils propres à ce workspace sont centralisés dans [`AGENTS.md`](../AGENTS.md) et le dossier [`.agents/`](../.agents).
 
----
-
-## 1. Operating Instructions for Copilot
-When generating code, answering questions, or proposing refactors in this workspace:
-
-* **Discover Project Rules:**
-  - Always consult [`AGENTS.md`](../AGENTS.md) for core principles and overarching guidelines.
-  - Review active guidelines in [`.agents/rules/`](../.agents/rules/) (coding style, architecture, testing, security).
-* **Execute Workflows:**
-  - For operational procedures (builds, tests, reviews), refer to the runbooks in [`.agents/workflows/`](../.agents/workflows/).
-* **Use Existing Assets:**
-  - Leverage project templates, examples, and scripts available in [`.agents/skills/`](../.agents/skills/) and [`.agents/scripts/`](../.agents/scripts/).
-* **Consistency:**
-  - Strictly follow the conventions established in the project without inventing unapproved styles or external dependencies.
+* **Règles & architecture :** consulter [`AGENTS.md`](../AGENTS.md) et [`.agents/rules/`](../.agents/rules/).
+* **Workflows :** appliquer les procédures dans [`.agents/workflows/`](../.agents/workflows/).
+* **Compétences & scripts :** exploiter [`.agents/skills/`](../.agents/skills/) et [`.agents/scripts/`](../.agents/scripts/) sans inventer de conventions parallèles.

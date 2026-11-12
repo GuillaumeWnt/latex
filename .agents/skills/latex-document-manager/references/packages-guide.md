@@ -1,47 +1,34 @@
-# Modern LaTeX Packages Cheatsheet
+# Guide des Packages Modernes (`config/packages.sty`)
 
-A curated list of recommended packages for professional typography and formatting in this workspace.
-
----
-
-## 1. Document Layout, Geometry & Headings
-- **`scrlayer-scrpage`**: Standard headers and footers customization for KOMA-Script (`\ohead`, `\ihead`, `\lehead`). Replaces obsolete `fancyhdr`.
-- **`geometry`**: Fine-grained page dimensions and dynamic layout switches (`\geometrieWord`, `\geometrieLarge`, `\restoregeometry`). Always specify `headheight=26pt, footskip=30pt` when used with KOMA.
-- **`setspace`**: Line spacing control (`\singlespacing`, `\onehalfspacing`, `\doublespacing`).
-- **`microtype`**: Subliminal typographical enhancements (character protrusion, font expansion).
+Inventaire des packages configurés par défaut dans `templates/template_officiel/config/packages.sty` :
 
 ---
 
-## 2. Fonts, Typography & Language (LuaLaTeX)
-- **`fontspec`**: Advanced font loading for OpenType and TrueType fonts under LuaLaTeX.
-- **`unicode-math`**: Unicode mathematics fonts (`\setmathfont{XITS Math}`).
-- **`luacolor` & `lua-ul`**: Safe text underlining (`\underLine`) and background highlighting (`\highLight`) preserving hyphenation and UTF-8 accents.
-- **`babel`**: Multilingual support (`\frenchsetup{StandardLists=true}`).
-- **`csquotes`**: Context-sensitive quotations (`\enquote{...}`).
-- **`siunitx`**: Standardized typesetting of units and quantities (`\qty{10}{\meter\per\second}`).
+## 1. Moteur, Polices & Microtypographie (LuaLaTeX)
+- **`iftex` + `fontspec`** : Chargement natif des polices OpenType/TrueType locales depuis `fonts/` (`TeX Gyre Heros` avec repli système, `TeX Gyre Cursor` en chasse fixe, options `font=libertinus|heros|calibri|standard`).
+- **`microtype`** : Protrusion optique des marges et expansion subtile des caractères.
+- **`luacolor` + `lua-ul`** : Surlignage et soulignement compatibles UTF-8 et césures sous LuaLaTeX (remplace `soul` pour le texte courant).
 
----
+## 2. Mise en Page, Langues & Géométrie
+- **`scrhack`** : Corrige les incompatibilités de paquets tiers avec KOMA-Script.
+- **`scrlayer-scrpage`** : En-têtes/pieds KOMA (`autooneside=false`, filets conditionnels). Remplace `fancyhdr`.
+- **`geometry` + `pdflscape` + `multicol`** : Bascules de marges (`\geometrieWord`, `\geometrieLarge`), pages paysage et multi-colonnes.
+- **`babel` (`[english, french]`) + `csquotes`** : Typographie française moderne (`\frenchsetup{StandardLists=true, TocPartNameFull=false, SuppressWarning=true}`) et guillemets automatiques `\enquote{...}`.
 
-## 3. Mathematics
-- **`amsmath`**: Standard AMS mathematical enhancements.
-- **`mathtools`**: Bugfixes and enhancements to `amsmath` (e.g. `\DeclarePairedDelimiter`).
+## 3. Sciences, Mathématiques & Tableaux
+- **`amsmath`, `mathtools`, `amssymb`, `amsthm`** : Équations, délimiteurs extensibles (`\abs`, `\norm`, `\scal`) et théorèmes.
+- **`siunitx` (v3, `locale = FR`)** : Unités et nombres formatés (`\qty{25}{\meter\per\second}`, `\qtyrange{10}{20}{\kilo\gram}`, unités personnalisées `\iter`, `\bar`).
+- **`booktabs`, `tabularx`, `longtable`, `array`, `makecell`, `multirow`, `ragged2e`** : Tableaux sans filets verticaux avec colonnes prédéfinies `L{...}`, `C{...}`, `R{...}`, `Y`.
+- **`enumitem`** : Listes personnalisables (`nosep`, `leftmargin=*`).
 
----
+## 4. Graphiques, Encadrés & Code
+- **`graphicx` + `caption` + `subcaption`** : Figures et sous-figures `(a)`, `(b)` (remplace `subfig`/`subfigure`).
+- **`tikz` + `standalone` + `pgfplots` (`compat=1.18`)** : Schémas vectoriels et courbes tracées depuis `data/*.csv`.
+- **`tcolorbox` (`[skins, breakable]`)** : Boîtes `callout`, `attentionbox`, `hypothesis`, `definitionbox`, `boiteSynthese`, `cadreFigure`.
+- **`listings`** : Inclusion de codes sources testables depuis `listings/` via `\lstinputlisting` (style `mythesiscode`, sans `-shell-escape`).
+- **`pdfpages` + `ocgx2`** : Insertion d'annexes PDF (`\includepdfpaper`) et calques interactifs écran/impression (`\ocgbutton`, `\ocgstack`).
 
-## 4. Tables, Figures & Visual Boxes
-- **`booktabs`**: Publication-quality tables (`\toprule`, `\midrule`, `\bottomrule`). Never use vertical lines (`|`).
-- **`tabularx`**: Tables with auto-expanding columns (`X` column type).
-- **`graphicx`**: Image inclusion (`\includegraphics[width=\linewidth]{...}`).
-- **`subcaption`**: Multi-panel figures and sub-figures.
-- **`tcolorbox`**: Modern styled boxes and decorated frames (`\begin{cadreFigure}`, `\begin{boiteSynthese}`).
-- **`pdfpages`**: Multi-page PDF insertion for appendix attachments (`\includepdf`).
-
----
-
-## 5. Review Notes & Hyperlinks
-- **`todonotes`**: Margin notes and revision management.
-- **`pdfcomment`**: Tooltips on hover in PDF (`\pdftooltip`).
-- **`xurl`**: Automatic URL line-breaking across margins and notes.
-- **`hyperref`**: PDF hyperlinks, bookmarks, and document metadata.
-- **`cleveref`**: Intelligent cross-referencing (`\cref`, `\Cref`, `\cpageref`). Always load after `hyperref`.
-- **`biblatex`**: Modern bibliography engine (paired with `biber`).
+## 5. Révisions, Bibliographie & Liens
+- **`marginnote` + `todonotes` + `pdfcomment`** : Manchettes éditoriales (`\noteMarge`) et révisions collaboratives (`\todoH`).
+- **`biblatex` (`backend=biber`, `style=biblio/custom-style`)** : Citations et bibliographie programmables.
+- **`xurl` + `hyperref` + `bookmark` + `cleveref`** : Césure des URL, signets PDF et renvois intelligents (`\cref`, `\Cref`, `\cpageref`).

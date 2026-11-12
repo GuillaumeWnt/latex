@@ -1,62 +1,57 @@
-# AGENTS.md — Global Directives for AI Agents
+# AGENTS.md — Directives Locales du Workspace LaTeX
 
-> **Project Purpose:** Professional, modular, and high-quality LaTeX authoring workspace.
-> **Scope:** These directives apply to all AI coding assistants (Google Antigravity, Claude, GitHub Copilot, OpenAI Operator, etc.).
+> **Portée :** Ce fichier complète les directives globales (`C:\Users\guill\.agents\AGENTS.md`) pour l'écosystème LaTeX modulaire de ce dépôt. Les règles déjà définies globalement (langue française, commits Conventional Commits, suivi `plan.md`, `uv`, capitalisation `.md`, gouvernance `.agents/`, économie de tokens) ne sont pas répétées ici.
 
 ---
 
-## 1. Core Principles
+## 1. Cycle de Vie des Projets & Rétroportage (`templates/template_officiel/`)
 
-1. **Separation of Concerns:**
-   - Keep document styling, font configurations, and package preambles strictly separate from text content.
-   - Content belongs in dedicated modular files (`content/` or `chapters/`), included via `\input{}` or `\include{}`.
-   - Document structure and styling belong in `preamble/` (or custom `.sty`/`.cls` files).
+1. **Modèle unique pour tout nouveau projet :**
+   - Tout nouveau projet doit être créé sous `projets/<nom_projet>/` en reprenant intégralement la structure, la classe (`mythesis.cls`, `mythesis-screen.clo`, `mythesis-print.clo`), la configuration (`config/packages.sty`, `config/macros.sty`) et l'outillage (`latexmkrc`, `.chktexrc`, `.editorconfig`, `.gitignore`) de [`templates/template_officiel/`](file:///c:/Users/guill/dev/perso/latex/general/templates/template_officiel/README.md).
+   - Les autres modèles présents dans [`templates/`](file:///c:/Users/guill/dev/perso/latex/general/templates) (`template_principal/`, `BE_mecanique/`, `labo_PID/`, etc.) sont conservés comme archives ou références ponctuelles ; ne jamais répliquer leurs pratiques obsolètes.
+2. **Rétroportage systématique vers `template_officiel` :**
+   - Toute nouvelle fonctionnalité, macro générique, amélioration typographique/architecturale ou correction de bug développée sur un projet dérivé **doit également être rétroportée dans `templates/template_officiel/`** (de façon neutre et réutilisable, sans y importer de contenu propre au projet).
+   - Mettre à jour `templates/template_officiel/README.md` ou `backmatter/appendix-a.tex` si une macro ou option publique est ajoutée ou modifiée.
 
-2. **Modern LaTeX Standards (No Obsolete Packages/Syntax):**
-   - **Never** use obsolete font commands like `{\bf ...}`, `{\it ...}`, or `{\tt ...}`. Always use `\textbf{...}`, `\textit{...}`, `\texttt{...}` or `\emph{...}`.
-   - **Never** use `$$ ... $$` for display math. Always use `\[ ... \]` or AMS environments (`equation`, `align`, `gather`).
-   - Use `biblatex` with `biber` backend for citations; avoid legacy `bibtex` unless explicitly requested.
-   - For tables, use `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) and **never** use vertical lines (`|`).
-   - For cross-referencing, prefer `cleveref` (`\cref{}`, `\Cref{}`) over manual "figure \ref{}".
+---
 
-3. **Compilation Workflow:**
-   - Always prioritize `latexmk` for compilation (`latexmk -pdf` or `latexmk -lualatex`).
-   - Compilation artifacts (`.aux`, `.log`, `.toc`, etc.) should be routed to an output directory (e.g., `-outdir=build`) whenever possible.
-   - Never commit or edit auxiliary compilation files.
+## 2. Contrôle Post-Édition : Zéro Erreur & Avertissements Minimaux
 
-4. **Git-Friendly Formatting:**
-   - Adopt **semantic line breaks** (one sentence or clause per line). This minimizes Git merge conflicts and makes diffs readable.
-   - Maintain a 2-space indentation inside environments (`\begin{...}` ... `\end{...}`).
+À l'issue de **chaque ajout ou modification significative de code LaTeX** :
+1. **Compiler systématiquement** avec `latexmk` (LuaLaTeX + Biber dans `build/`).
+2. **Exiger 0 erreur fatale** (code de sortie `0`, PDF généré dans `build/`).
+3. **Inspecter le fichier `.log`** (`build/main.log`) et exécuter **`chktex`** (via `.chktexrc`) et/ou `lint-latex.ps1` afin d'éliminer les avertissements évitables (`Overfull \hbox`, références/citations indéfinies, `Missing character`, avertissements `scrlayer-scrpage` ou `chktex`) et n'en conserver que le strict minimum justifié.
 
-5. **Git Commit Suggestions on Changes:**
-   - Whenever an AI assistant modifies, creates, or deletes files or directories, it **must always** propose a concise, meaningful Git commit message suggestion at the end of its response (preferably following Conventional Commits, e.g., `feat: ...`, `fix: ...`, `refactor: ...`, `docs: ...`).
-   - *(Dès qu'une IA apporte des modifications à des fichiers ou dossiers, elle doit systématiquement proposer une idée de message de commit pour Git).*
+---
 
-6. **Rule Governance & Strict Centralization in `.agents/`:**
-   - **Mandatory Prior User Approval:** Whenever any AI assistant (Claude, OpenAI/ChatGPT, Google Antigravity, GitHub Copilot, or any other) wishes to create, modify, or delete a rule, it **must always ask the user for explicit confirmation first**. Never add or alter rules unilaterally. *(Toute création ou modification de règle requiert l'accord préalable de l'utilisateur).*
-   - **Strict Centralization in `.agents/`:** All rules, guidelines, and directives **must strictly and exclusively be written in the central `.agents/` directory** (under [`.agents/rules/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules) or in the root [`AGENTS.md`](file:///c:/Users/guill/dev/perso/latex/general/AGENTS.md)), regardless of which AI assistant is being used.
-   - **No Dispersal into Client-Specific Folders:** Never write rules directly into client-specific directories (such as `.claude/`, `.gemini/`, `.vscode/`, etc.). Those directories serve solely as lightweight routers pointing back to `.agents/` to ensure a single source of truth and full portability when switching AI tools. *(Centralisation totale dans `.agents/` car chaque dossier d'IA renvoie vers `.agents/`).*
-   - **Rule Adaptability (Feedback Loop):** If an AI agent encounters a situation where an existing rule, constraint, or guideline in this workspace is ill-adapted, overly rigid, contradictory, or preventing the best technical outcome:
-     - **Never ignore or bypass the rule silently.**
-     - **Escalate the issue to the user immediately:** explain clearly why the rule is problematic or ill-adapted in the current context, and suggest modifying or removing it.
-     - **Update/remove the rule upon agreement:** with the user's validation, edit the relevant rule file in `.agents/rules/` or `AGENTS.md` so that the documentation stays living, pragmatic, and aligned with real project needs.
+## 3. Standards LaTeX du Workspace
 
-7. **Templates Ecosystem (`templates/`) & Evolution Freedom:**
-   - **`template_principal` as Foundation:** Le répertoire `templates/template_principal/` constitue le modèle de référence principal et pérenne sur lequel s'appuyer en priorité (architecture modulaire, `ClasseGuillaume.cls`, compilation LuaLaTeX).
-   - **Modularité et extensibilité :** Le répertoire `templates/` contient plusieurs templates adaptés à divers types de livrables. L'utilisateur peut en ajouter de nouveaux librement. Les agents doivent explorer dynamiquement le dossier `templates/` pour trouver des modèles adaptés au besoin sans dépendre d'une liste fixe de noms.
-   - **Liberté d'optimisation & ajout de packages :** Ces templates ne sont pas tous parvenus à un stade optimal. Les agents ont pleine autorisation de s'écarter de pratiques obsolètes ou sous-optimales présentes dans certains modèles, de moderniser la syntaxe et d'ajouter de nouveaux packages pertinents selon les exigences du projet.
+1. **Séparation stricte contenu / présentation :**
+   - Contenu rédactionnel pur dans `content/`, `frontmatter/`, `backmatter/` ; aucune configuration de géométrie, de police ou de package dans les chapitres.
+   - Packages et macros métier centralisés dans `config/packages.sty`, `config/macros.sty` et `mythesis.cls`.
+2. **Syntaxe moderne obligatoire :**
+   - Commandes sémantiques (`\textbf`, `\emph`, `\code`, `\term`) et jamais `{\bf}`, `{\it}`, `{\tt}`.
+   - Maths AMS (`\[ ... \]`, `equation`, `align`), jamais `$$ ... $$`.
+   - Tableaux avec `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) et `tabularx`, **sans jamais de filets verticaux `|` ni de `\hline`**.
+   - Références croisées via `cleveref` (`~\cref{}`, `\Cref{}`, `~\cpageref{}`) et citations BibLaTeX/Biber (`~\parencite{}`, `\textcite{}`) précédées d'une espace insécable `~`.
+   - Unités via `siunitx` v3 (`\qty`, `\qtyrange`, `\num`).
+3. **Formatage Git-friendly :**
+   - Sauts de ligne sémantiques (une phrase ou clause par ligne) et indentation à 2 espaces.
+   - Ne jamais commiter ni éditer les artefacts de `build/`.
+4. **Rédaction rapide Markdown $\rightarrow$ LaTeX enrichi :**
+   - Lorsqu'un brouillon est rédigé en Markdown puis transcrit en LaTeX, appliquer systématiquement le skill [`markdown-to-latex`](file:///c:/Users/guill/dev/perso/latex/general/.agents/skills/markdown-to-latex/SKILL.md) et le workflow [`markdown-to-latex.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/workflows/markdown-to-latex.md).
 
-## 2. Directory Navigation for Agents
+---
 
-Refer to the following `.agents/` resources when working on this repository:
+## 4. Navigation dans `.agents/`
 
-| Path | Purpose | When to consult |
-| :--- | :--- | :--- |
-| [`.agents/rules/architecture.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/architecture.md) | Standard document tree, file breakdown & templates | When creating or organizing documents |
-| [`.agents/rules/coding-style.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/coding-style.md) | Formatting rules, math, tables, floats, labels | When drafting or editing LaTeX source code |
-| [`.agents/rules/testing.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/testing.md) | Compilation commands, linters, diagnostics | When building or debugging compile errors |
-| [`.agents/rules/security.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/security.md) | `-shell-escape` restrictions, data hygiene | When executing scripts or adding tools |
-| [`.agents/workflows/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/workflows) | Step-by-step procedures (clean build, release) | When executing multi-step operations |
-| [`.agents/skills/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/skills) | Reusable skills, templates, scripts & cheatsheets | On demand for specialized workflows |
-| [`.agents/subagents/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/subagents) | Specialized subagent roles (biblio, diagrams, QA, compiler, memory & web research) | When delegating focused domain tasks |
-
+| Ressource | Rôle |
+| :--- | :--- |
+| [`.agents/rules/architecture.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/architecture.md) | Arborescence `template_officiel`, règle de rétroportage et inclusions |
+| [`.agents/rules/general.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/general.md) | Philosophie modulaire, KOMA-Script + `geometry`, ordre des packages, typographie |
+| [`.agents/rules/coding-style.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/coding-style.md) | Syntaxe LaTeX, maths, tableaux, boîtes `tcolorbox`, labels et annotations |
+| [`.agents/rules/testing.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/testing.md) | Compilation LuaLaTeX, contrôle 0 erreur / avertissements minimaux, `chktex` |
+| [`.agents/rules/security.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/security.md) | Restriction `-shell-escape` et hygiène des métadonnées / `.bib` |
+| [`.agents/workflows/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/workflows) | Procédures (`new-project.md`, `markdown-to-latex.md`, `build-and-verify.md`) |
+| [`.agents/skills/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/skills) | Skills spécialisés (`markdown-to-latex`, `latex-document-manager`, `latex-quality-auditor`, `visual-diagrams`, `zotero-biblio`, `project-memory`) |
+| [`.agents/subagents/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/subagents) | Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, mémoire) |

@@ -1,33 +1,13 @@
-# LaTeX Security & Hygiene Guidelines
+# Sécurité & Hygiène Documentaire LaTeX
 
-## 1. Shell Escape Policy (`-shell-escape`)
-- **Default Rule:** Never execute LaTeX with `-shell-escape` enabled by default.
-  - `-shell-escape` allows arbitrary system commands to be executed during compilation.
-  - If a package strictly requires external tools (e.g. `minted` for Pygments or `tikz-externalize`):
-    1. Prefer safer alternatives whenever possible (e.g., `listings` or `fvextra` without shell-escape).
-    2. If required, use `-shell-restricted` instead of unrestricted `-shell-escape`.
+## 1. Politique `-shell-escape`
+- **Interdit par défaut :** Ne jamais activer `-shell-escape` dans `latexmkrc` ni en ligne de commande (exécution de commandes système arbitraires lors de la compilation).
+- **Alternatives sûres :** Utiliser `listings` (`\lstinputlisting` déjà configuré dans `config/packages.sty`) plutôt que `minted`, et la précompilation `standalone` (`figures/tikz/`) plutôt que `tikz-externalize`.
+- Si une exception est indispensable et validée par l'utilisateur, privilégier `-shell-restricted`.
 
 ---
 
-## 2. Input Sanitization & Special Characters
-When generating LaTeX code dynamically or importing external text, always ensure the following 10 reserved characters are properly escaped or handled:
-
-| Character | Escape in Text | Purpose in LaTeX |
-| :---: | :---: | :--- |
-| `%` | `\%` | Line comment |
-| `&` | `\&` | Table alignment |
-| `_` | `\_` | Math subscript |
-| `$` | `\$` | Math mode toggle |
-| `#` | `\#` | Macro parameter |
-| `{` `}` | `\{` `\}` | Grouping delimiter |
-| `~` | `\textasciitilde{}` | Non-breaking space |
-| `^` | `\textasciicircum{}` | Math superscript |
-| `\` | `\textbackslash{}` | Macro escape symbol |
-
----
-
-## 3. Sensitive Data & Bibliography Hygiene
-- **No API keys or credentials in comments:** Do not put credentials, private tokens, or confidential reviewer notes in `%` comments. They can remain exposed in `.tex` or leak into PDF metadata.
-- **Deduplicate `.bib` files:** Verify that private institutional fields (e.g., internal URLs, confidential preprint notes) are purged before sharing or publishing.
-- **Sanitize PDF Metadata:** When configuring `hyperref`, check that author names, affiliations, and subjects in `\hypersetup{pdftitle=..., pdfauthor=...}` do not leak unwanted metadata.
-
+## 2. Hygiène des Sources, `.bib` & Métadonnées PDF
+- **Pas de données sensibles :** Ne jamais laisser de notes confidentielles de relecteurs, URLs internes privées, ni identifiants dans les commentaires `%`, `\todoH` ou fichiers `.bib` destinés à être partagés.
+- **Assainissement des métadonnées :** Avant diffusion finale, vérifier `\hypersetup` (`pdftitle`, `pdfauthor`, `pdfsubject`, `pdfkeywords`), désactiver l'option `todos` dans `\documentclass` et purger les champs superflus dans `biblio/references.bib`.
+- **Échappement lors de génération automatisée :** Toute conversion automatique vers LaTeX (ex. scripts Python, Markdown $\rightarrow$ LaTeX) doit échapper les caractères réservés TeX (`%`, `&`, `_`, `$`, `#`, `{`, `}`, `~`, `^`, `\`) hors blocs de code (`lstlisting`, `\code`) et hors mode mathématique.

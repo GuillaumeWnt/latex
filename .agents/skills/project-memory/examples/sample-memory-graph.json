@@ -1,59 +1,58 @@
 {
   "entities": [
     {
-      "name": "ThesisProject",
+      "name": "ProjetDemo",
       "entityType": "DocumentConfig",
       "observations": [
-        "Class: ClasseGuillaume.cls",
-        "Engine: LuaLaTeX",
-        "Primary Font: Calibri (local TTF)",
-        "Review Mode: Active with \\todoH notes in margins"
+        "Template: templates/template_officiel (mythesis.cls)",
+        "Engine: LuaLaTeX via latexmk",
+        "Font: TeX Gyre Heros (local OTF dans fonts/)",
+        "BibLaTeX: biblio/custom-style + biblio/references.bib"
       ]
     },
     {
-      "name": "GeometrieWord",
+      "name": "GeometrieOfficielle",
       "entityType": "GeometryPreset",
       "observations": [
-        "Margins: 2.5cm all sides",
-        "headheight=26pt, footskip=30pt",
-        "Compatible with scrlayer-scrpage without height warnings"
+        "Marges: 2.5cm (top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm)",
+        "headheight=20pt, footskip=28pt",
+        "Synchronisation KOMA-Script + geometry via \\syncKomaGeometry"
       ]
     },
     {
-      "name": "Term_CNN",
+      "name": "Term_PID",
       "entityType": "GlossaryTerm",
       "observations": [
-        "Full expansion: Convolutional Neural Network",
-        "Defined in Chapter 1, Section 2"
+        "Expansion: Régulateur Proportionnel-Intégral-Dérivé",
+        "Défini dans content/01-introduction.tex"
       ]
     },
     {
       "name": "smith2024deep",
       "entityType": "LiteratureEntity",
       "observations": [
-        "Authors: John Smith, Jane Doe",
-        "Title: Deep Learning for Technical Document Analysis",
+        "Auteurs: John Smith, Jane Doe",
+        "Titre: Deep Learning for Technical Document Analysis",
         "DOI: 10.1016/j.jct.2024.01.015",
-        "Used as primary benchmark in Chapter 1"
+        "Stocké dans biblio/references.bib"
       ]
     }
   ],
   "relations": [
     {
-      "from": "ThesisProject",
+      "from": "ProjetDemo",
       "relationType": "uses_geometry",
-      "to": "GeometrieWord"
+      "to": "GeometrieOfficielle"
     },
     {
-      "from": "ThesisProject",
+      "from": "ProjetDemo",
       "relationType": "references",
       "to": "smith2024deep"
     },
     {
-      "from": "ThesisProject",
+      "from": "ProjetDemo",
       "relationType": "defines_term",
-      "to": "Term_CNN"
+      "to": "Term_PID"
     }
   ]
 }
-

@@ -1,19 +1,18 @@
 % sample-cadre-figure.tex
-% Example of cadreFigure encapsulation with tcolorbox in ClasseGuillaume.cls
+% Exemple d'encapsulation avec cadreFigure (config/macros.sty)
 
-\begin{cadreFigure}{Représentation schématique du pipeline de traitement}
+\begin{figure}[htbp]
   \centering
-  \begin{tikzpicture}[node distance=2cm, auto]
-    \node[draw, rounded corners, fill=blue!10, text width=3cm, align=center] (a) {Entrée : Données brutes};
-    \node[draw, rounded corners, fill=teal!10, text width=3cm, align=center, right=of a] (b) {Transformation \& Normalisation};
-    \node[draw, rounded corners, fill=green!10, text width=3cm, align=center, right=of b] (c) {Sortie : Visualisation};
-    
-    \draw[->, thick] (a) -- (b);
-    \draw[->, thick] (b) -- (c);
-  \end{tikzpicture}
-  \vspace{0.5em}
-  
-  \captionof{figure}{Architecture modulaire des flux de données.}
-  \label{fig:pipeline-traitement}
-\end{cadreFigure}
+  \begin{cadreFigure}[width=0.92\linewidth]
+    \begin{tikzpicture}[node distance=1.4cm, auto]
+      \node[draw=ThesisPrimary!75, rounded corners=3pt, fill=ThesisPrimary!8, text width=3.1cm, align=center, font=\small\sffamily] (a) {Entrée : Données brutes};
+      \node[draw=ThesisSecondary!75, rounded corners=3pt, fill=ThesisSecondary!10, text width=3.3cm, align=center, font=\small\sffamily, right=of a] (b) {Transformation \& Normalisation};
+      \node[draw=ThesisAccent!75, rounded corners=3pt, fill=ThesisAccent!10, text width=3.1cm, align=center, font=\small\sffamily, right=of b] (c) {Sortie : Visualisation};
 
+      \draw[-Stealth, thick, ThesisSecondary] (a) -- (b);
+      \draw[-Stealth, thick, ThesisSecondary] (b) -- (c);
+    \end{tikzpicture}
+  \end{cadreFigure}
+  \caption{Architecture modulaire des flux de données.}
+  \label{fig:pipeline-traitement}
+\end{figure}

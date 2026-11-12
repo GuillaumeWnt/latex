@@ -1,145 +1,73 @@
-# Document Architecture & Modular Layout
+# Architecture Documentaire & Modèle `template_officiel`
 
-## 1. Recommended Workspace Directory Trees
+## 1. Structure de Référence (`templates/template_officiel/`)
 
-This workspace supports two clean, modular architectures for LaTeX authoring:
-
-### Layout A: Modèle de Référence (`templates/template_principal/`)
-Le dossier `templates/` héberge plusieurs modèles de documents afin de couvrir différents besoins. Parmi eux, **`templates/template_principal/` est le template principal et pérenne de référence** sur lequel s'appuyer en priorité :
+Tout nouveau projet créé dans ce dépôt doit être placé sous `projets/<nom_projet>/` et suivre intégralement l'architecture modulaire de `templates/template_officiel/` :
 
 ```text
-templates/template_principal/
-├── README.md                 # Documentation complète et aide-mémoire
-├── main.tex                 # Fichier maître (ordonnance chapitres, frontmatter, backmatter)
-├── ClasseGuillaume.cls      # Classe personnalisée modulaire (KOMA-Script, polices, styles)
-├── Fonts/                   # Polices OpenType / TrueType locales (Asap, Calibri, ComicSans)
-├── images/                  # Ressources graphiques et logos institutionnels
-├── chapters/                # Modules de chapitres
-│   ├── 00_frontmatter/      # Page de titre, résumé, todos
-│   ├── 01_chapitre1/        # Sections modulaires du chapitre 1
-│   └── 02_chapitre2/        # Sections modulaires du chapitre 2
-├── tables/                  # Tableaux booktabs / tabularx externalisés
-├── bib/                     # Base bibliographique BibLaTeX (references.bib)
-├── scripts/                 # Scripts de compilation et nettoyage (compile.ps1, clean.ps1)
-└── build/                   # Dossier de compilation (gitignored)
-```
-
-### Écosystème des templates (`templates/`) & directives d'évolution
-- **Multiplicité et modularité :** Le répertoire `templates/` contient plusieurs templates adaptés à divers types de documents (rapports, notes de calcul, mémoires, etc.). L'utilisateur peut en ajouter de nouveaux au fil du temps sans avoir à modifier la documentation. Les agents doivent explorer dynamiquement le dossier `templates/` pour découvrir les modèles disponibles selon le contexte.
-- **Rôle pivot de `template_principal` :** `templates/template_principal/` reste le socle de référence structurel et typographique immuable du dépôt.
-- **Liberté d'optimisation et modernisation :** Les templates présents dans `templates/` ne sont pas tous parfaits ou optimaux à ce jour. Si un modèle comporte des mauvaises pratiques (packages obsolètes, formatage rigide, commandes dépréciées, etc.), **l'IA a pleine autorisation de s'en écarter, de moderniser le code et d'ajouter tout package ou macro moderne pertinent** pour garantir un résultat de qualité supérieure.
-
-### Layout B: Preamble-Folder Layout (`preamble/`) — *Reference Only*
-> **Note:** This layout is documented as a reference architecture for articles and multi-author papers. It is **not currently implemented** in this workspace. Only Layout A is active.
-
-Recommended for articles and modular multi-author papers without custom `.cls`:
-
-```text
-├── main.tex                 # Master file
-├── preamble/                # Modular configuration files
-│   ├── packages.tex         # \usepackage imports
-│   ├── geometry.tex         # Page margins, headers & footers
-│   ├── typography.tex       # Fonts, language (babel), microtype
-│   ├── math.tex             # AMS packages, custom theorem environments
-│   ├── tables.tex           # booktabs, tabularx
-│   ├── graphics.tex         # graphicx, figure setup
-│   ├── biblio.tex           # biblatex configuration
-│   ├── hyperref.tex         # hyperref, cleveref, PDF metadata
-│   └── commands.tex         # Custom shortcuts and macros
-├── content/                 # Document body sections
-├── figures/                 # All visual assets
-├── bib/                     # Bibliography files
-└── build/                   # Compilation output directory (gitignored)
+projets/<nom_projet>/
+├── main.tex                  # Chef d'orchestre unique (profil screen/print, front/main/appendix/back)
+├── mythesis.cls              # Classe KOMA-Script (scrbook) + métadonnées + calque logo
+├── mythesis-screen.clo       # Profil écran (marges symétriques, palette interactive, hyperliens colorés)
+├── mythesis-print.clo        # Profil impression reliée (twoside, BCOR=10mm, liens neutres)
+├── latexmkrc                 # Compilation auto LuaLaTeX + Biber + outdir=build
+├── .chktexrc                 # Linter typographique (espaces insécables ~ avant \cref/\cite)
+├── .editorconfig             # UTF-8, LF, indentation 2 espaces (.tex/.cls/.sty/.bib)
+├── .gitignore                # Exclusion de build/ et des auxiliaires TeX
+├── config/
+│   ├── packages.sty          # Importation ordonnée et configuration des packages tiers
+│   └── macros.sty            # Macros maths/texte (\term, \code), boîtes tcolorbox, géométries, \todoH
+├── frontmatter/              # Page de titre, remerciements, résumés bilingues
+├── content/                  # Chapitres rédactionnels autonomes (01-*.tex ... conclusion.tex)
+├── backmatter/               # Annexes (appendix-*.tex) et glossaire (glossary.tex)
+├── biblio/                   # Base references.bib + styles BibLaTeX custom-style.bbx/.cbx
+├── data/                     # Données brutes (.csv, .tsv) tracées par pgfplots
+├── listings/                 # Codes sources externes testables importés via \lstinputlisting
+├── figures/                  # Médias vectoriels, figures Python/Matplotlib et sous-dossier tikz/
+├── fonts/                    # Polices locales OpenType (portabilité CI/CD & Overleaf)
+├── scripts/                  # Scripts locaux (ex. generate_plots.py via uv)
+└── build/                    # Sorties de compilation (généré automatiquement, gitignored)
 ```
 
 ---
 
-## 2. Master File Anatomy (`main.tex`)
+## 2. Création de Projet & Règle de Rétroportage
 
-A clean master file delegates all styling to the class/preamble and orchestrates structure:
-
-```latex
-\documentclass[
-  french,
-  english,
-  font=calibri,
-  todoNote
-]{ClasseGuillaume}
-
-% --- Metadata ---
-\title{Document Title}
-\author{Author Name}
-\date{\today}
-
-% --- Bibliography Database ---
-\addbibresource{bib/references.bib}
-
-\begin{document}
-
-% --- Frontmatter ---
-\frontmatter
-\masquerLogo
-\geometrieLarge
-\input{chapters/00_frontmatter/titlepage.tex}
-\geometrieWord
-\begin{singlespace}
-  \listoftodos[Liste des révisions]
-  \label{table_todos}
-\end{singlespace}
-\input{chapters/00_frontmatter/abstract.tex}
-\tableofcontents
-
-% --- Mainmatter ---
-\mainmatter
-\afficherLogo
-\chapter{First Chapter}
-\input{chapters/01_chapitre1/sec01_presentation.tex}
-
-% --- Annexes ---
-\appendix
-\chapter{Documents Complémentaires}
-\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{path/to/annexe.pdf}  % adapter le chemin
-
-% --- Backmatter ---
-\backmatter
-\listoffigures
-\listofillustrations
-\listoftables
-\printbibliography[heading=bibintoc, title={Références Bibliographiques}]
-
-\end{document}
-```
+1. **Initialisation :**
+   - Copier `templates/template_officiel/` (hors dossier `build/`) vers `projets/<nom_projet>/`.
+   - Adapter les métadonnées dans `main.tex` et les textes de `frontmatter/`, `content/`, `backmatter/`, `biblio/references.bib`.
+   - Ne jamais créer un nouveau projet en partant de zéro ou d'un ancien modèle (`template_principal/`, `BE_mecanique/`, `labo_PID/`), sauf demande explicite de l'utilisateur.
+2. **Rétroportage continu vers `templates/template_officiel/` :**
+   - Dès qu'une fonctionnalité générique (nouvelle macro dans `config/macros.sty`, environnement `tcolorbox`, amélioration de `mythesis.cls`/`.clo`, nouveau réglage `config/packages.sty`, correction de bug ou d'avertissement TeX, amélioration de `latexmkrc`/`.chktexrc`) est ajoutée ou corrigée dans un projet, **elle doit également être rétroportée dans `templates/template_officiel/`**.
+   - Vérifier que l'ajout rétroporté reste générique, compatible `screen` et `print`, et compile sans erreur dans `templates/template_officiel/`.
 
 ---
 
-## 3. Inclusion Rules: `\input{}` vs `\include{}`
+## 3. Règles d'Inclusion : `\include{}` vs `\input{}`
 
-- **Use `\input{path/file.tex}`:**
-  - For preamble components and `.cls` sub-modules.
-  - For sections, tables, and subsections inside chapters.
-  - Does NOT enforce an unwanted page break.
-- **Use `\include{path/file}` (without `.tex` extension):**
-  - Only for entire standalone chapters in `report` or `book` classes.
-  - Automatically inserts `\clearpage`.
-  - **Never use `\include{}` inside sections, tables, or another included file.**
+- **`\include{chemin/fichier}` (sans extension `.tex`) :**
+  - Réservé exclusivement aux chapitres entiers (`content/*.tex`) et annexes autonomes (`backmatter/appendix-*.tex`) appelés depuis `main.tex`.
+  - Insère automatiquement un saut de page, crée un `.aux` dédié (nécessite les sous-dossiers `build/content/` et `build/backmatter/` gérés par `latexmkrc`) et permet `\includeonly{...}`.
+- **`\input{chemin/fichier.tex}` :**
+  - Pour tous les sous-éléments : `frontmatter/`, sections internes, tableaux externalisés, schémas TikZ (`figures/tikz/`), `backmatter/glossary.tex`.
+  - N'insère pas de saut de page forcé et ne doit jamais contenir d'appel `\include{}`.
 
 ---
 
-## 4. Specialized AI Assistants & Skills Tree (`.agents/`)
+## 4. Organisation de `.agents/`
 
 ```text
 .agents/
-├── subagents/
-│   ├── biblio-researcher.md     # Zotero MCP, arXiv, Brave Search, BibLaTeX evidence synthesis
-│   ├── diagram-designer.md      # Draw.io MCP, TikZ, cadreFigure, illustration float
-│   ├── latex-qa-reviewer.md     # Typographical auditing, booktabs, ~ spacing, memory recall
-│   ├── compiler-debugger.md     # LuaLaTeX logs, geometry/KOMA conflicts, fontspec
-│   └── knowledge-curator.md     # Memory MCP (knowledge graph), Brave Search fact-checking
-└── skills/
-    ├── latex-document-manager/  # Core LaTeX authoring runbook, KOMA+geometry guide
-    ├── zotero-biblio/           # Literature research, evidence tables, bib audit
-    ├── visual-diagrams/         # Draw.io MCP & TikZ schematics, cadreFigure
-    ├── latex-quality-auditor/   # Pre-flight publishing audit, lint-latex.ps1
-    └── project-memory/          # Knowledge graph persistence, styling recall, web search
+├── mcp_config.json            # Serveurs MCP métier du workspace (synchronisés via sync-mcp.ps1)
+├── rules/                     # Règles locales (architecture, general, coding-style, testing, security)
+├── scripts/sync-mcp.ps1       # Synchronisation MCP vers .vscode, .claude, .gemini
+├── workflows/                 # Procédures pas-à-pas (new-project, markdown-to-latex, build-and-verify)
+├── subagents/                 # Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, mémoire)
+└── skills/                    # Skills modulaires :
+    ├── markdown-to-latex/     # Conversion Markdown -> LaTeX enrichi (mythesis)
+    ├── latex-document-manager/# Gestion documentaire, KOMA+geometry, erreurs courantes
+    ├── latex-quality-auditor/ # Audit typographique, booktabs, lint-latex.ps1 + chktex
+    ├── visual-diagrams/       # Draw.io MCP & TikZ / cadreFigure
+    ├── zotero-biblio/         # Zotero MCP, BibLaTeX/Biber, audit .bib
+    └── project-memory/        # Graphe Memory MCP & vérification Brave Search
 ```
-

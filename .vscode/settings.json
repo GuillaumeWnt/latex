@@ -1,10 +1,26 @@
 {
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "file": ".github/copilot-instructions.md"
-    },
-    {
-      "file": "AGENTS.md"
-    }
-  ]
+  "files.eol": "\n",
+  "[latex]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on"
+  },
+  "[tex]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on"
+  },
+  "[bibtex]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "latex-workshop.linting.chktex.enabled": true,
+  "latex-workshop.formatting.latex": "latexindent",
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+  "latex-workshop.latex.search.rootFiles.exclude": [
+    "**/build/**",
+    "**/.venv/**",
+    "**/node_modules/**"
+  ],
+  "files.exclude": {}
 }

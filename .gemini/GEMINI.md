@@ -1,10 +1,7 @@
-# Gemini Workspace Directives — AI Context Router
+# Directives Gemini / Antigravity — Routeur vers `.agents/`
 
-> **Single Source of Truth:** All project-specific guidelines, coding standards, architecture rules, and workflows are centralized in [`AGENTS.md`](../AGENTS.md) and the [`.agents/`](../.agents) directory.
+> **Source Unique de Vérité :** Toutes les règles, conventions, workflows, skills et outils propres à ce workspace sont centralisés dans [`AGENTS.md`](../AGENTS.md) et le dossier [`.agents/`](../.agents).
 
----
-
-## Directives
-1. **Context Discovery:** Check [`AGENTS.md`](../AGENTS.md) and [`.agents/rules/`](../.agents/rules/) for project-specific conventions, style guidelines, and constraints.
-2. **Standard Procedures:** Execute tasks following the established runbooks in [`.agents/workflows/`](../.agents/workflows/).
-3. **Capabilities & Utilities:** Utilize available templates, documentation references, and helper scripts in [`.agents/skills/`](../.agents/skills/) and [`.agents/scripts/`](../.agents/scripts/).
+1. **Directives & règles :** consulter [`AGENTS.md`](../AGENTS.md) et [`.agents/rules/`](../.agents/rules/).
+2. **Workflows :** suivre les procédures dans [`.agents/workflows/`](../.agents/workflows/).
+3. **Compétences, sous-agents & scripts :** mobiliser [`.agents/skills/`](../.agents/skills/), [`.agents/subagents/`](../.agents/subagents/) et [`.agents/scripts/`](../.agents/scripts/).

@@ -1,76 +1,73 @@
-# TikZ & tcolorbox Cheatsheet
-
-This cheatsheet covers standard practices for authoring native TikZ graphics and `tcolorbox` figure wrappers within `ClasseGuillaume.cls`.
+# Aide-Mémoire TikZ & `tcolorbox` (`mythesis.cls`)
 
 ---
 
-## 1. The `cadreFigure` Environment
+## 1. Environnement `cadreFigure`
 
-In `ClasseGuillaume.cls`, visual elements can be placed inside an elegant framed box:
+Dans `config/macros.sty`, `cadreFigure` accepte un argument **optionnel** d'options `tcolorbox` (il ne prend pas de `{Titre}` obligatoire) :
 
 ```latex
-\begin{cadreFigure}{Titre synthétique de l'illustration}
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\linewidth]{images/mon_schema.pdf}
-\end{cadreFigure}
+  \begin{cadreFigure}[width=0.88\linewidth]
+    \includegraphics[width=\linewidth]{figures/tikz/schema-principe.pdf}
+  \end{cadreFigure}
+  \caption{Architecture modulaire du système.}
+  \label{fig:architecture-systeme}
+\end{figure}
 ```
 
-- Adds a crisp border and styled title bar matching the document palette.
-- Prevents page-break splits inside complex diagrams.
+Pour un encadré titré sans flottant, utiliser `\begin{boiteSynthese}{Titre} ... \end{boiteSynthese}`.
 
 ---
 
-## 2. Best Practices for TikZ Flowcharts
-
-### Modular TikZ Setup
-Define common styles cleanly:
+## 2. Styles TikZ Harmonisés (`ThesisPrimary` / `ThesisSecondary` / `ThesisAccent`)
 
 ```latex
 \tikzset{
   base_node/.style = {
-    draw=black!70,
+    draw=ThesisPrimary!75,
     thick,
     rounded corners=3pt,
     minimum height=1cm,
-    minimum width=2.5cm,
-    text centered,
+    minimum width=2.6cm,
+    align=center,
     font=\small\sffamily
   },
   process/.style = {
     base_node,
-    fill=blue!10
+    fill=ThesisPrimary!8
   },
   decision/.style = {
     diamond,
-    draw=black!70,
+    draw=ThesisAccent!80,
     thick,
-    aspect=2,
-    fill=amber!15,
+    aspect=2.1,
+    fill=ThesisAccent!10,
     font=\small\sffamily,
-    text centered
+    align=center
   },
   arrow/.style = {
     ->,
-    >=stealth,
+    >=Stealth,
     thick,
-    draw=black!80
+    draw=ThesisSecondary!85
   }
 }
 ```
 
-### Relative Node Placement
-Always use relative positioning (`positioning` library):
+### Positionnement relatif (`positioning`)
+
 ```latex
-\node[process] (start) {Étape Initiale};
-\node[process, below=1.2cm of start] (step1) {Traitement Principal};
-\node[decision, below=1.2cm of step1] (test) {Condition Validée ?};
-\node[process, right=1.5cm of test] (alt) {Branche Alternative};
-\node[process, below=1.2cm of test] (end) {Finalisation};
+\node[process] (start) {Étape initiale};
+\node[process, below=1.0cm of start] (step1) {Traitement principal};
+\node[decision, below=1.0cm of step1] (test) {Condition validée ?};
+\node[process, right=1.5cm of test] (alt) {Branche alternative};
+\node[process, below=1.0cm of test] (end) {Finalisation};
 
 \draw[arrow] (start) -- (step1);
 \draw[arrow] (step1) -- (test);
-\draw[arrow] (test) -- node[left, font=\footnotesize] {Oui} (end);
-\draw[arrow] (test) -- node[above, font=\footnotesize] {Non} (alt);
+\draw[arrow] (test) -- node[left, font=\footnotesize\sffamily] {Oui} (end);
+\draw[arrow] (test) -- node[above, font=\footnotesize\sffamily] {Non} (alt);
 \draw[arrow] (alt) |- (step1);
 ```
-

@@ -5,12 +5,12 @@
     Source of Truth:
       - .agents/mcp_config.json (format: { "mcpServers": { ... } })
 
-    Target Destinations:
-      - .vscode/mcp.json             (VS Code format: { "servers": { ... }, "inputs": [ ... ] })
-      - .mcp.json                    (Claude Code root standard)
-      - .claude/mcp.json             (Claude directory standard)
-      - .gemini/mcp_config.json      (Gemini workspace config)
-      - .gemini/config/mcp_config.json (Antigravity config format)
+    Target Destinations (UTF-8 without BOM):
+      - .vscode/mcp.json               (VS Code format: { "servers": { ... }, "inputs": [ ... ] })
+      - .mcp.json                      (Claude Code root standard)
+      - .claude/mcp.json               (Claude directory standard)
+      - .gemini/mcp_config.json        (Gemini workspace config)
+      - .gemini/config/mcp_config.json (Antigravity local config format)
 #>
 
 [CmdletBinding()]
@@ -21,13 +21,23 @@ param (
 $ErrorActionPreference = "Stop"
 
 try {
-    # 1. Verify and read source file
-    if (-not (Test-Path $SourceFile)) {
-        Write-Warning "Source file $SourceFile not found. Creating default empty structure."
-        @{ mcpServers = @{} } | ConvertTo-Json -Depth 10 | Set-Content $SourceFile -Encoding UTF8
+    $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+    $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+    $ResolvedSource = if ([System.IO.Path]::IsPathRooted($SourceFile)) {
+        $SourceFile
+    } else {
+        Join-Path $RepoRoot $SourceFile
     }
 
-    $rawContent = Get-Content -Path $SourceFile -Raw -Encoding UTF8
+    # 1. Verify and read source file
+    if (-not (Test-Path $ResolvedSource)) {
+        Write-Warning "Source file $ResolvedSource not found. Creating default empty structure."
+        $defaultJson = (@{ mcpServers = @{} } | ConvertTo-Json -Depth 10) + "`n"
+        [System.IO.File]::WriteAllText($ResolvedSource, $defaultJson, $Utf8NoBom)
+    }
+
+    $rawContent = [System.IO.File]::ReadAllText($ResolvedSource, [System.Text.Encoding]::UTF8)
     $sourceData = $rawContent | ConvertFrom-Json
 
     if ($null -eq $sourceData.mcpServers) {
@@ -41,7 +51,6 @@ try {
         $config = $property.Value
         $entry = [ordered]@{}
 
-        # Infer type: url -> http, command -> stdio
         if ($config.PSObject.Properties.Match('type').Count -gt 0) {
             $entry['type'] = $config.type
         } elseif ($config.PSObject.Properties.Match('url').Count -gt 0) {
@@ -50,7 +59,6 @@ try {
             $entry['type'] = "stdio"
         }
 
-        # Copy all other properties
         foreach ($p in $config.PSObject.Properties) {
             if ($p.Name -ne 'type') {
                 $entry[$p.Name] = $p.Value
@@ -60,12 +68,13 @@ try {
     }
 
     # Preserve any existing user inputs in .vscode/mcp.json
+    $vsCodeTarget = Join-Path $RepoRoot ".vscode\mcp.json"
     $inputs = @()
-    if (Test-Path ".vscode/mcp.json") {
+    if (Test-Path $vsCodeTarget) {
         try {
-            $existingVsCode = (Get-Content ".vscode/mcp.json" -Raw -Encoding UTF8) | ConvertFrom-Json
+            $existingVsCode = ([System.IO.File]::ReadAllText($vsCodeTarget, [System.Text.Encoding]::UTF8)) | ConvertFrom-Json
             if ($null -ne $existingVsCode.inputs) {
-                $inputs = $existingVsCode.inputs
+                $inputs = @($existingVsCode.inputs)
             }
         } catch {}
     }
@@ -74,35 +83,33 @@ try {
         servers = [PSCustomObject]$vsCodeServers
         inputs  = $inputs
     }
-    $vsCodeJson = $vsCodePayload | ConvertTo-Json -Depth 10
+    $vsCodeJson = ($vsCodePayload | ConvertTo-Json -Depth 10) + "`n"
 
-    if (-not (Test-Path ".vscode")) { New-Item -ItemType Directory -Path ".vscode" -Force | Out-Null }
-    [System.IO.File]::WriteAllText(".vscode/mcp.json", $vsCodeJson, [System.Text.Encoding]::UTF8)
+    $vsCodeDir = Split-Path -Parent $vsCodeTarget
+    if (-not (Test-Path $vsCodeDir)) { New-Item -ItemType Directory -Path $vsCodeDir -Force | Out-Null }
+    [System.IO.File]::WriteAllText($vsCodeTarget, $vsCodeJson, $Utf8NoBom)
 
     # 3. Build Standard mcpServers payload (Claude & Gemini)
     $standardPayload = [ordered]@{
         mcpServers = $sourceData.mcpServers
     }
-    $standardJson = $standardPayload | ConvertTo-Json -Depth 10
+    $standardJson = ($standardPayload | ConvertTo-Json -Depth 10) + "`n"
 
-    # Write .mcp.json (Root)
-    [System.IO.File]::WriteAllText(".mcp.json", $standardJson, [System.Text.Encoding]::UTF8)
+    $targets = @(
+        (Join-Path $RepoRoot ".mcp.json"),
+        (Join-Path $RepoRoot ".claude\mcp.json"),
+        (Join-Path $RepoRoot ".gemini\mcp_config.json"),
+        (Join-Path $RepoRoot ".gemini\config\mcp_config.json")
+    )
 
-    # Write .claude/mcp.json
-    if (-not (Test-Path ".claude")) { New-Item -ItemType Directory -Path ".claude" -Force | Out-Null }
-    [System.IO.File]::WriteAllText(".claude/mcp.json", $standardJson, [System.Text.Encoding]::UTF8)
+    foreach ($target in $targets) {
+        $dir = Split-Path -Parent $target
+        if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+        [System.IO.File]::WriteAllText($target, $standardJson, $Utf8NoBom)
+    }
 
-    # Write .gemini/mcp_config.json
-    if (-not (Test-Path ".gemini")) { New-Item -ItemType Directory -Path ".gemini" -Force | Out-Null }
-    [System.IO.File]::WriteAllText(".gemini/mcp_config.json", $standardJson, [System.Text.Encoding]::UTF8)
-
-    # Write .gemini/config/mcp_config.json
-    if (-not (Test-Path ".gemini/config")) { New-Item -ItemType Directory -Path ".gemini/config" -Force | Out-Null }
-    [System.IO.File]::WriteAllText(".gemini/config/mcp_config.json", $standardJson, [System.Text.Encoding]::UTF8)
-
-    Write-Host "[OK] MCP servers synchronized across .vscode, .claude, and .gemini from .agents/mcp_config.json." -ForegroundColor Green
+    Write-Host "[OK] MCP servers synchronized across .vscode, .claude, and .gemini from .agents/mcp_config.json (UTF-8 without BOM)." -ForegroundColor Green
 } catch {
     Write-Error "Failed to synchronize MCP configurations: $_"
     exit 1
 }
-

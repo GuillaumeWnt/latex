@@ -1,38 +1,36 @@
 ---
 name: latex-document-manager
 description: >-
-  Use this skill when creating, structuring, compiling, or troubleshooting LaTeX documents,
-  modular preambles, mathematical formatting, and bibliographies in this workspace.
+  Utiliser ce skill pour créer un projet depuis templates/template_officiel/, structurer ou compiler
+  des documents LaTeX sous LuaLaTeX, gérer KOMA-Script + geometry et rétroporter les améliorations.
 ---
 
-# LaTeX Document Manager Skill
+# Skill : Gestionnaire de Documents LaTeX (`template_officiel`)
 
-This skill provides operational workflows, templates, and scripts for managing LaTeX documents within this repository.
-
----
-
-## 1. Fast Scripts & Utilities
-
-Helper scripts are available in the [`scripts/`](./scripts/) directory and directly in templates:
-- **[Compile Document](../../../templates/template_principal/scripts/compile.ps1):** Runs `latexmk -lualatex` targeting `main.tex` and outputs to `build/`.
-- **[Clean Build](../../../templates/template_principal/scripts/clean.ps1):** Cleans auxiliary compilation files.
+Workflow opérationnel pour initialiser, configurer, compiler et déboguer des projets LaTeX modulaires basés sur [`templates/template_officiel/`](../../../templates/template_officiel/README.md).
 
 ---
 
-## 2. Reusable Templates & Modular Ecosystem
+## 1. Initialisation & Rétroportage
 
-Ready-to-use document templates are located in [`templates/`](../../../templates/):
-- **[Template Principal (`templates/template_principal/`)](../../../templates/template_principal/README.md):** Complete academic thesis, portfolio, and report template based on `ClasseGuillaume.cls`, with full LuaLaTeX font support, intelligent todonotes, multiple geometries, and booktabs tables. **This is the primary reference template on which to base projects.**
-- **Écosystème modulaire de templates :** Le dossier `templates/` contient plusieurs autres modèles (notes de calcul, rapports techniques, etc.) et l'utilisateur est libre d'en ajouter d'autres à tout moment. L'agent doit explorer dynamiquement le dossier `templates/` pour découvrir les structures pertinentes sans dépendre d'une liste figée.
-- **Liberté d'optimisation :** Ces templates ne sont pas tous parvenus à un état optimal. L'agent est explicitement encouragé à s'écarter de pratiques obsolètes ou déconseillées rencontrées dans certains templates, à moderniser la structure et à introduire tout package moderne nécessaire.
-- **[Article Template](./resources/templates/article-template.tex):** Clean, standard article template with modular preambles.
+1. **Créer un projet :** Copier [`templates/template_officiel/`](../../../templates/template_officiel/) (sans `build/`) vers `projets/<nom_projet>/`.
+2. **Rétroportage :** Toute amélioration générique (`mythesis.cls`, `.clo`, `config/packages.sty`, `config/macros.sty`, `latexmkrc`, `.chktexrc`) ou correction de bug réalisée dans un projet doit également être reportée dans `templates/template_officiel/`.
 
 ---
 
-## 3. Reference Documentation
+## 2. Scripts Rapides (`scripts/`)
 
-Consult these reference manuals during complex edits:
-- **[KOMA-Script & Geometry Hybrid Guide](./references/koma-geometry-guide.md):** Architectural rationale and instructions for mixing KOMA-Script and `geometry` without header warnings.
-- **[Modern Packages Guide](./references/packages-guide.md):** Best practices for fonts, math, figures, tables, and BibLaTeX.
-- **[Common Errors & Diagnostics](./references/common-errors.md):** Detailed guide to resolving Overfull `\hbox`, missing packages, and bib anomalies.
-- **[Code Snippets & Examples](./examples/snippets.tex):** Production-ready snippets for tables, math, callout boxes, and custom geometry switches.
+- [`scripts/compile.ps1`](./scripts/compile.ps1) : Compile un document via `latexmk` (LuaLaTeX + `build/`) et résume les erreurs et avertissements du `.log`.
+  ```powershell
+  .\.agents\skills\latex-document-manager\scripts\compile.ps1 -ProjectDir "projets\<nom_projet>"
+  ```
+- [`scripts/clean.ps1`](./scripts/clean.ps1) : Nettoie les fichiers auxiliaires dans `build/` (`-All` pour supprimer aussi le PDF).
+
+---
+
+## 3. Documentation de Référence
+
+- **[Guide KOMA-Script & Geometry](./references/koma-geometry-guide.md) :** Synchronisation `scrbook` + `geometry`, gestion de `\mythesis@bcor`, `pageDesign` et profils de marges.
+- **[Guide des Packages Modernes](./references/packages-guide.md) :** Inventaire aligné sur `config/packages.sty` (`fontspec`, `lua-ul`, `siunitx` v3, `biblatex`, `cleveref`, `ocgx2`).
+- **[Erreurs Courantes & Diagnostics](./references/common-errors.md) :** Résolution rapide des erreurs LuaLaTeX, `fontspec`, `headheight`, `siunitx` et Biber.
+- **[Exemples Prêts à l'Emploi](./examples/snippets.tex) :** Tableaux `booktabs`/`tabularx`, équations `align` et figures `tcolorbox`.

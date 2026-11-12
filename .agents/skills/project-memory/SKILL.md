@@ -5,42 +5,37 @@ description: >-
   glossary terms, acronyms, or fact-checking web data using the Memory MCP and Brave Search servers.
 ---
 
-# Project Memory & Web Research Skill
+# Compétence Mémoire Projet & Recherche Web (`project-memory`)
 
-This skill provides operational workflows, schema conventions, and search playbooks for maintaining persistent project knowledge across sessions using the `memory` MCP server, coupled with real-time web verification via `brave-search`.
+Workflows pour persister les décisions éditoriales d'un projet LaTeX via le serveur MCP **`memory`** (configuré globalement dans `C:\Users\guill\.agents\mcp_config.json`) et effectuer des vérifications externes via **`brave-search`** (configuré dans `.agents/mcp_config.json`).
 
 ---
 
-## 1. Quick Workflows
+## 1. Workflows essentiels
 
-### Context Recall at Session Start
-1. Query `read_graph` or `search_nodes` to recall:
-   - Document metadata and active geometry settings.
-   - Project-specific glossary terms and acronyms.
-   - Pending tasks or chapter status.
-2. Verify that writing or formatting aligns with recorded decisions.
+### Rappel de contexte en début de session
+1. Interroger `read_graph` ou `search_nodes` pour retrouver :
+   - La configuration active du projet (`mythesis.cls`, police, géométrie, options print/screen).
+   - Les acronymes, notations mathématiques et conventions de glossaire figées.
+   - L'état d'avancement des chapitres dans `projets/<nom_projet>/`.
 
-### Registering New Editorial Decisions or Terminology
-1. Call `create_entities` with descriptive entity types:
-   - `GlossaryTerm` for technical definitions and acronyms.
-   - `StylingPreference` for custom macros or layout rules.
-   - `ResearchClaim` for verified empirical facts.
-2. Link entities to chapters or documents with `create_relations`.
+### Enregistrement de décisions éditoriales et notations
+1. Créer les nœuds via `create_entities` avec des types cohérents :
+   - `DocumentConfig` (classe, options, polices)
+   - `GlossaryTerm` / `Notation` (terme, sigle, notation LaTeX)
+   - `StylingPreference` (macros projet, choix à rétro-porter dans `template_officiel`)
+   - `ResearchClaim` / `LiteratureEntity` (faits vérifiés, clés BibLaTeX)
+2. Relier ces entités aux projets/chapitres via `create_relations`.
 
-### Live Fact-Checking & CTAN Verification
-1. Call `brave_web_search` with targeted queries:
-   - `site:ctan.org <package_name> manual`
+### Vérification technique CTAN & DOI (`brave-search`)
+1. Lancer `brave_web_search` avec des requêtes ciblées :
+   - `site:ctan.org <package> documentation`
    - `"10.xxxx/..." doi metadata`
-2. Summarize findings and save validated observations into `memory`.
+2. Capitaliser les résultats validés dans `memory` (et, si le sujet est structurant pour le projet, dans un fichier `.md` dédié selon la règle globale de capitalisation documentaire).
 
 ---
 
-## 2. Reference Documentation
-- **[Memory Knowledge Graph Guide](./references/memory-graph-guide.md):** Entity schemas, relation types, and persistence patterns.
-- **[Brave Search Playbook](./references/brave-search-playbook.md):** Efficient query strategies for academic verification and package lookups.
-
----
-
-## 3. Examples
-- **[Sample Memory Graph](./examples/sample-memory-graph.json):** Concrete knowledge graph snapshot illustrating document configurations, glossary terms, and literature nodes.
-
+## 2. Ressources associées
+- **[Guide du graphe de mémoire](./references/memory-graph-guide.md)** : schéma d'entités et relations recommandés pour `template_officiel`.
+- **[Playbook Brave Search](./references/brave-search-playbook.md)** : requêtes ciblées CTAN, DOI et normes.
+- **[Exemple de graphe JSON](./examples/sample-memory-graph.json)** : instantané aligné sur `mythesis.cls`.
