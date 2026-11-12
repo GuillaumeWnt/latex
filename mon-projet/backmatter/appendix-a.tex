@@ -33,25 +33,31 @@ les boîtes visuelles et les commandes d'orchestration définis dans \code{confi
 
 \begin{table}[htbp]
   \centering
+  \small
   \caption{Aide-mémoire des boîtes graphiques, interactivité et orchestration}
   \label{tab:recap-env-outils}
-  \begin{tabularx}{\textwidth}{@{} l l >{\raggedright\arraybackslash}X @{}}
+  \begin{tabularx}{\textwidth}{@{} l l Y @{}}
     \toprule
     \textbf{Environnement / Commande} & \textbf{Type} & \textbf{Usage et comportement} \\
     \midrule
     \code{callout} & Boîte cadrée & Remarque, conseil ou note méthodologique \\
-    \code{hypothesis} & Boîte numérotée & Hypothèse scientifique (compatible \code{cleveref}) \\
-    \code{definitionbox} & Boîte d'en-tête & Définition formelle avec bandeau coloré \\
+    \code{attentionbox} & Boîte d'alerte & Point de vigilance critique (bordure \code{ThesisAccent}) \\
+    \code{hypothesis} & Boîte numérotée & Hypothèse scientifique par chapitre (\code{\textbackslash cref}) \\
+    \code{definitionbox} & Boîte numérotée & Définition formelle par chapitre (\code{\textbackslash cref}) \\
     \code{boiteSynthese} & Boîte synthèse & Synthèse didactique avec cartouche coloré \\
-    \code{cadreFigure}   & Cadre arrondi & Encadrement soigné pour figures et schémas \\
+    \code{cadreFigure}   & Cadre arrondi & Encadrement soigné pour figures et sous-figures \\
+    \code{illustration}  & Flottant KOMA & Flottant dédié aux planches iconographiques \\
     \code{\textbackslash ocgbutton\{id\}\{txt\}} & Bouton cliquable & Bascule interactive d'un calque vectoriel OCG \\
     \code{\textbackslash ocgstack\{vue1\}\{vue2\}} & Double vue & Superposition écran ou linéarisation sur papier \\
     \code{\textbackslash includepdfpaper\{doc\}} & Pages PDF & Insertion multipage avec en-têtes préservés \\
+    \code{pageDesign[opts]} & Design libre & Page sur mesure sans en-tête ni logo, restauration auto \\
+    \code{\textbackslash geometrieLibre\{...\}} & Marges libres & Marges personnalisées synchronisées avec KOMA \\
     \code{\textbackslash geometrieLarge} & Marges \qty{1.5}{\centi\meter} & Pleine page pour grands tableaux ou couverture \\
     \code{\textbackslash geometrieWord}  & Marges \qty{2.5}{\centi\meter} & Profil de révision avec marge latérale pour notes \\
     \code{\textbackslash geometrieStandard} & DIV=12 & Restauration de la géométrie canonique KOMA \\
     \code{\textbackslash afficherLogo}, \code{\textbackslash masquerLogo} & Logo scrlayer & Contrôle du calque flottant institutionnel \\
-    \code{\textbackslash todoH[st][col]\{n\}\{txt\}} & Note marge & Troncature, infobulle et lien vers la table \\
+    \code{\textbackslash noteMarge[off]\{txt\}} & Manchette & Note de marge éditoriale pérenne (conservée en \code{print}) \\
+    \code{\textbackslash todoH[st][col]\{n\}\{txt\}} & Note révision & Troncature, infobulle et lien vers le sommaire (option \code{todos}) \\
     \code{\textbackslash missingfigure[opts]\{txt\}} & Réservation & Espace réservé sans bloquer la chaîne \\
     \code{\textbackslash thesistodolist} & Sommaire & Tableau de bord dynamique des tâches de révision \\
     \bottomrule
@@ -69,18 +75,19 @@ via la macro \code{\textbackslash setkomafont\{élément\}\{spécification\}} :
 
 \begin{table}[htbp]
   \centering
+  \footnotesize
   \caption{Principaux éléments typographiques configurables dans \code{mythesis.cls}}
   \label{tab:koma-elements}
-  \begin{tabularx}{\textwidth}{@{} l l >{\raggedright\arraybackslash}X @{}}
+  \begin{tabularx}{\textwidth}{@{} l L{6.2cm} Y @{}}
     \toprule
     \textbf{Élément KOMA} & \textbf{Réglage par défaut} & \textbf{Partie du document affectée} \\
     \midrule
     \code{disposition}      & \code{\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisPrimary\}} & Tous les titres (chapitres, sections) \\
     \code{chapter}          & \code{\textbackslash Huge\textbackslash bfseries\textbackslash sffamily}                   & Titre principal de chapitre \\
     \code{section}          & \code{\textbackslash Large\textbackslash bfseries\textbackslash sffamily}                  & Titre de section de niveau 1 \\
-    \code{subsection}       & \code{\textbackslash large\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisSecondary\}} & Titre de sous-section \\
-    \code{pageheadfoot}     & \code{\textbackslash small\textbackslash sffamily\textbackslash color\{ThesisMuted\}}     & Texte des en-têtes et pieds de page \\
-    \code{pagination}       & \code{\textbackslash small\textbackslash sffamily\textbackslash bfseries}                 & Numéro de page (folio) \\
+    \code{subsection}       & \code{\textbackslash large\textbackslash bfseries\textbackslash sffamily\allowbreak\textbackslash color\{ThesisSecondary\}} & Titre de sous-section \\
+    \code{pageheadfoot}     & \code{\textbackslash footnotesize\textbackslash sffamily\allowbreak\textbackslash color\{ThesisMuted\}} & Texte des en-têtes et pieds de page \\
+    \code{pagenumber}       & \code{\textbackslash footnotesize\textbackslash sffamily\textbackslash bfseries}           & Numéro de page (folio) \\
     \code{captionlabel}     & \code{\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisPrimary\}} & Libellé des légendes (« Figure 1 ») \\
     \code{descriptionlabel} & \code{\textbackslash bfseries\textbackslash sffamily\textbackslash color\{ThesisPrimary\}} & Entrées des listes de description \\
     \bottomrule

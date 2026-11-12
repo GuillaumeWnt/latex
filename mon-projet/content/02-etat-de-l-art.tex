@@ -95,7 +95,7 @@ Le~\cref{tab:comparaison-profils} résume les divergences de comportement entre 
   \centering
   \caption{Spécifications comparatives des profils d'options \code{.clo}}
   \label{tab:comparaison-profils}
-  \begin{tabularx}{\textwidth}{@{} l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X @{}}
+  \begin{tabularx}{\textwidth}{@{} l Y Y @{}}
     \toprule
     \textbf{Caractéristique} & \textbf{Profil Écran (\code{mythesis-screen.clo})} & \textbf{Profil Impression (\code{mythesis-print.clo})} \\
     \midrule
@@ -106,6 +106,84 @@ Le~\cref{tab:comparaison-profils} résume les divergences de comportement entre 
     Couleur des liens      & Palette interactive contrastée & Monochrome noir (\code{hidelinks=true}) \\
     En-têtes et folios     & Symétriques (\code{\textbackslash ihead}, \code{\textbackslash ohead}) & Alternés versos/rectos (\code{\textbackslash lehead}, \code{\textbackslash rohead}) \\
     Usage privilégié       & Lecture PDF, soumission en ligne & Reliure thermique, spirale ou cousue \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Charte Chromatique et Spécimens Typographiques}
+\label{sec:charte-couleurs-polices}
+
+\subsection{Palette chromatique sémantique (\code{Thesis*} \& alias \code{ClasseGuillaume})}
+Afin de dissocier radicalement le code des chapitres de l'esthétique visuelle, la classe définit neuf couleurs sémantiques principales dans les fichiers \code{.clo} (ainsi que les alias de compatibilité \code{primaryColor}, \code{secondaryColor}, \code{accentColor} et \code{mdtRed}).
+La~\cref{fig:nuancier-chromatique} présente en direct le nuancier actif du document.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{cadreFigure}
+    \centering
+    \sffamily\footnotesize
+    \newcommand{\nuancierBloc}[3]{%
+      \begin{minipage}[t]{0.31\linewidth}
+        \begin{tcolorbox}[
+          enhanced,
+          colback=#1,
+          colframe=ThesisPrimary!25,
+          boxrule=0.5pt,
+          arc=3pt,
+          height=1.15cm,
+          valign=center,
+          halign=center,
+          nobeforeafter
+        ]
+          \textbf{\textcolor{#3}{\texttt{#2}}}
+        \end{tcolorbox}
+        \vspace{1mm}
+        \centering{\scriptsize\color{ThesisMuted}\texttt{#1}}
+      \end{minipage}%
+    }
+    \nuancierBloc{ThesisPrimary}{ThesisPrimary}{white}\hfill
+    \nuancierBloc{ThesisSecondary}{ThesisSecondary}{white}\hfill
+    \nuancierBloc{ThesisAccent}{ThesisAccent}{white}\par\vspace{3mm}
+    \nuancierBloc{ThesisLink}{ThesisLink}{white}\hfill
+    \nuancierBloc{ThesisCite}{ThesisCite}{white}\hfill
+    \nuancierBloc{ThesisUrl}{ThesisUrl}{white}\par\vspace{3mm}
+    \nuancierBloc{ThesisText}{ThesisText}{white}\hfill
+    \nuancierBloc{ThesisMuted}{ThesisMuted}{white}\hfill
+    \nuancierBloc{ThesisBackground}{ThesisBackground}{ThesisPrimary}
+  \end{cadreFigure}
+  \caption[Nuancier chromatique sémantique de la classe]{Nuancier chromatique sémantique actif (défini dans \code{mythesis-screen.clo} et \code{mythesis-print.clo})}
+  \label{fig:nuancier-chromatique}
+\end{figure}
+
+\subsection{Système de polices OpenType et option \code{font=...}}
+Sous Lua\LaTeX{} et Xe\LaTeX{}, la classe permet de sélectionner la police principale du corps de texte dès l'appel de \code{\textbackslash documentclass} via l'option clé-valeur \code{font=...}, tout en exposant des sélecteurs de familles dédiés pour des compositions locales (\cref{tab:specimens-polices}) :
+\begin{itemize}
+  \item \code{font=libertinus} \textit{(défaut)} : active la police humaniste avec empattements \textbf{Libertinus Serif} associée à \textbf{TeX Gyre Heros} pour les titres et \textbf{TeX Gyre Cursor} pour le code informatique.
+  \item \code{font=heros} : compose l'intégralité de l'ouvrage en linéale néo-grotesque \textbf{TeX Gyre Heros} (métriquement équivalente à Helvetica), chargée directement depuis le dossier local \code{fonts/}.
+  \item \code{font=calibri} : active la linéale humaniste \textbf{Calibri} (avec repli automatique sur Carlito ou Heros sur les systèmes Linux dépourvus des polices Microsoft).
+  \item \code{font=standard} : conserve la famille historique \textbf{Latin Modern Roman}.
+\end{itemize}
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Démonstration en direct des familles typographiques embarquées dans le template}
+  \label{tab:specimens-polices}
+  \begin{tabularx}{\textwidth}{@{} l l Y @{}}
+    \toprule
+    \textbf{Option / Macro} & \textbf{Famille OpenType} & \textbf{Spécimen de rendu en direct (Romain, \textit{Italique}, \textbf{Gras})} \\
+    \midrule
+    \code{\textbackslash LibertinusFont} & Libertinus Serif &
+    {\LibertinusFont Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis. \textit{Italique} \& \textbf{Gras}. 0123456789} \\
+    \addlinespace
+    \code{\textbackslash HerosFont} & TeX Gyre Heros &
+    {\HerosFont Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis. \textit{Italique} \& \textbf{Gras}. 0123456789} \\
+    \addlinespace
+    \code{\textbackslash CalibriFont} & Calibri / Carlito &
+    {\CalibriFont Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis. \textit{Italique} \& \textbf{Gras}. 0123456789} \\
+    \addlinespace
+    \code{\textbackslash CursorFont} & TeX Gyre Cursor &
+    {\CursorFont def optimize(x\_0, tol=1e-6): return norm(A @ x\_0 - b)} \\
     \bottomrule
   \end{tabularx}
 \end{table}

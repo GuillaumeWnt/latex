@@ -157,10 +157,10 @@ def generate_3d_surface_pdf() -> Path:
         label="Trajectoire de descente",
     )
 
-    ax.set_xlabel("Paramètre $\\theta_1$", labelpad=4)
-    ax.set_ylabel("Paramètre $\\theta_2$", labelpad=4)
-    ax.set_zlabel("Coût $\\mathcal{L}(\\theta)$", labelpad=4)
-    ax.view_init(elev=32, azim=-55)
+    ax.set_xlabel("Paramètre $\\theta_1$", labelpad=6)
+    ax.set_ylabel("Paramètre $\\theta_2$", labelpad=6)
+    ax.set_zlabel("Coût $\\mathcal{L}(\\theta)$", labelpad=8)
+    ax.view_init(elev=30, azim=-52)
 
     # Fond transparent et sobre
     ax.xaxis.pane.fill = False
@@ -170,12 +170,12 @@ def generate_3d_surface_pdf() -> Path:
     ax.yaxis.pane.set_edgecolor(HEX_MUTED)
     ax.zaxis.pane.set_edgecolor(HEX_MUTED)
 
-    # Barre de couleur discrète
-    cbar = fig.colorbar(surf, ax=ax, shrink=0.55, aspect=12, pad=0.08)
-    cbar.set_label("Densité d'énergie", rotation=270, labelpad=12)
+    # Barre de couleur discrète suffisamment décalée pour ne pas chevaucher l'axe Z
+    cbar = fig.colorbar(surf, ax=ax, shrink=0.58, aspect=14, pad=0.16)
+    cbar.set_label("Densité d'énergie", rotation=270, labelpad=14)
 
-    plt.tight_layout()
-    fig.savefig(target_pdf, bbox_inches="tight")
+    fig.subplots_adjust(left=0.02, right=0.86, bottom=0.05, top=0.96)
+    fig.savefig(target_pdf, bbox_inches="tight", pad_inches=0.12)
     plt.close(fig)
 
     print(f"[OK] Cas 2 - Surface 3D vectorielle PDF générée : {target_pdf}")

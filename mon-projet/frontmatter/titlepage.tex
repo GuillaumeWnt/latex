@@ -1,74 +1,108 @@
 %% ==============================================================================
 %% frontmatter/titlepage.tex
-%% Page de titre moderne et épurée pour le manuel tutoriel
+%% Page de titre architecturale et épurée pour le manuel tutoriel
 %% ==============================================================================
 \begin{titlepage}
   \sffamily
-  
+
+  % Décoration latérale architecturale (bandeau fin en marge gauche)
+  \noindent\begin{tikzpicture}[remember picture, overlay]
+    \fill[ThesisPrimary] (current page.north west) rectangle ([xshift=4.5mm]current page.south west);
+    \fill[ThesisAccent] ([yshift=-6.5cm]current page.north west) rectangle ([xshift=4.5mm, yshift=-11.5cm]current page.north west);
+  \end{tikzpicture}%
+
   % En-tête : Institution, composante et logo vectoriel
   \noindent
-  \begin{minipage}[t]{0.72\textwidth}
-    {\fontsize{13}{16}\bfseries\color{ThesisPrimary}\getinstitution}\par
-    \vspace{2mm}
-    {\fontsize{10}{13}\color{ThesisSecondary}\getfaculty}\par
-    {\fontsize{9}{12}\color{ThesisMuted}\getdepartment}\par
+  \begin{minipage}[c]{0.74\textwidth}
+    {\fontsize{13}{16}\selectfont\bfseries\color{ThesisPrimary}\getinstitution}\par
+    \vspace{1.5mm}
+    {\fontsize{10}{13}\selectfont\bfseries\color{ThesisSecondary}\getfaculty}\par
+    \vspace{0.8mm}
+    {\fontsize{9}{12}\selectfont\color{ThesisMuted}\getdepartment}\par
   \end{minipage}%
   \hfill
-  \begin{minipage}[t]{0.25\textwidth}
+  \begin{minipage}[c]{0.22\textwidth}
     \raggedleft
     \IfFileExists{figures/logo.pdf}{%
-      \includegraphics[height=1.8cm]{logo.pdf}%
+      \includegraphics[height=2.0cm]{logo.pdf}%
     }{%
-      \rule{1.8cm}{1.8cm}%
+      \rule{2.0cm}{2.0cm}%
     }
   \end{minipage}
 
-  \vspace{1.5cm}
+  \vspace{4mm}
+  \noindent{\color{ThesisSecondary!35}\rule{\textwidth}{0.6pt}}
+
+  \vspace{1.2cm}
 
   % Mention du document et de la discipline
   \begin{center}
-    {\fontsize{11}{14}\bfseries\color{ThesisSecondary}\MakeUppercase{\getdegree}}\par
-    \vspace{3mm}
-    {\fontsize{10}{13}\color{ThesisMuted}Discipline : \textbf{\getspecialty}}\par
-    
-    \vspace{1.2cm}
+    \tcbox[
+      enhanced,
+      nobeforeafter,
+      colback=ThesisPrimary!6,
+      colframe=ThesisPrimary!25,
+      boxrule=0.6pt,
+      arc=3pt,
+      left=10pt, right=10pt, top=4pt, bottom=4pt
+    ]{%
+      \fontsize{10}{12}\selectfont\bfseries\color{ThesisPrimary}\MakeUppercase{\getdegree}%
+    }\par
+    \vspace{3.5mm}
+    {\fontsize{10}{13}\selectfont\color{ThesisMuted}Spécialité : \textbf{\color{ThesisSecondary}\getspecialty}}\par
 
-    % Titre principal et sous-titre
-    \hrule height 1.5pt \relax
-    \vspace{6mm}
-    {\fontsize{20.74}{26}\selectfont\bfseries\color{ThesisPrimary}\gettitle}\par
-    \ifdefempty{\getsubtitle}{}{%
-      \vspace{4mm}
-      {\fontsize{12}{15}\selectfont\color{ThesisSecondary}\getsubtitle}\par
-    }
-    \vspace{6mm}
-    \hrule height 0.5pt \relax
+    \vspace{0.9cm}
 
-    \vspace{1.2cm}
+    % Titre principal et sous-titre dans un cartouche architectural
+    \begin{tcolorbox}[
+      enhanced,
+      colback=ThesisBackground,
+      colframe=ThesisPrimary,
+      boxrule=0pt,
+      toprule=2pt,
+      bottomrule=1pt,
+      sharp corners,
+      left=12pt, right=12pt, top=14pt, bottom=14pt,
+      borderline north={2pt}{0pt}{ThesisPrimary},
+      borderline north={2pt}{2pt}{ThesisAccent}
+    ]
+      \centering
+      {\fontsize{21}{26}\selectfont\bfseries\color{ThesisPrimary}\gettitle}\par
+      \ifdefempty{\getsubtitle}{}{%
+        \vspace{4mm}
+        {\fontsize{12}{15}\selectfont\color{ThesisSecondary}\getsubtitle}\par
+      }
+    \end{tcolorbox}
+
+    \vspace{1.0cm}
 
     % Auteur et date
-    {\fontsize{11}{14}\selectfont\color{ThesisMuted}Rédigé et composé par}\par
+    {\fontsize{10}{13}\selectfont\color{ThesisMuted}Rédigé et composé par}\par
+    \vspace{2.5mm}
+    {\fontsize{15}{19}\selectfont\bfseries\color{ThesisPrimary}\getauthor}\par
     \vspace{3mm}
-    {\fontsize{14.4}{18}\selectfont\bfseries\color{ThesisPrimary}\getauthor}\par
-    \vspace{4mm}
-    {\fontsize{10}{13}\selectfont\color{ThesisMuted}Version mise à jour le \getdate{} -- \getlocation}\par
+    {\fontsize{9}{12}\selectfont\color{ThesisMuted}Version de référence mise à jour le \textbf{\color{ThesisText}\getdate} --- \getlocation}\par
   \end{center}
 
   \vfill
 
   % Comité d'évaluation typographique / Lecteurs référents
   \noindent
-  {\small\bfseries\color{ThesisPrimary}Comité de relecture et références fondatrices :}\par
-  \vspace{3mm}
+  {\small\bfseries\color{ThesisPrimary}Comité de relecture et références fondatrices}\par
+  \vspace{2mm}
   \noindent
-  \begin{tabularx}{\textwidth}{@{} >{\bfseries}p{4.2cm} >{\raggedright\arraybackslash}X >{\raggedleft\arraybackslash}p{4.0cm} @{}}
+  \begingroup
+  \footnotesize
+  \renewcommand{\arraystretch}{1.18}
+  \begin{tabularx}{\textwidth}{@{} >{\bfseries\color{ThesisPrimary}}p{3.9cm} Y >{\raggedleft\arraybackslash\color{ThesisSecondary}\bfseries}p{3.5cm} @{}}
     \toprule
-    Pr. Robert Bringhurst & Typographe, auteur de \textit{Elements of Typographic Style} & Expert Typographie \\
-    Dr. Leslie Lamport    & Créateur de \LaTeX{}, Prix Turing 2013                       & Fondateur Logiciel \\
-    Pr. Donald E. Knuth   & Créateur de \TeX{} et Metafont, Stanford University          & Fondateur Moteur \\
-    Markus Kohm           & Concepteur de l'écosystème KOMA-Script                       & Expert Architecture \\
-    Frank Mittelbach      & Responsable du projet \LaTeX3, auteur du \textit{\LaTeX{} Companion} & Référent Standard \\
+    Pr. Robert Bringhurst & Typographe, auteur de \textit{Elements of Typographic Style}          & Expert Typographie \\
+    Dr. Leslie Lamport    & Créateur de \LaTeX{}, lauréat du Prix Turing 2013                     & Fondateur Logiciel \\
+    Pr. Donald E. Knuth   & Créateur de \TeX{} et Metafont, Stanford University                   & Fondateur Moteur   \\
+    Markus Kohm           & Concepteur et mainteneur de l'écosystème KOMA-Script                  & Expert Architecture \\
+    Frank Mittelbach      & Architecte du projet \LaTeX3, co-auteur du \textit{\LaTeX{} Companion} & Référent Standard  \\
     \bottomrule
   \end{tabularx}
+  \endgroup
 
 \end{titlepage}

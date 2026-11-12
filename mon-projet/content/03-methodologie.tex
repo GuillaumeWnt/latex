@@ -72,14 +72,21 @@ Pour éviter de ressaisir de longues commandes verbeuses, le fichier fournit :
 \end{itemize}
 
 \subsection{Environnements encadrés avec \code{tcolorbox}}
-Trois types d'encadrés personnalisés sont pré-paramétrés :
+Cinq types d'encadrés personnalisés sont pré-paramétrés dans \code{config/macros.sty} :
 \begin{enumerate}
   \item \code{\textbackslash begin\{callout\}[Titre]...} : encadré d'information générale ou de remarque méthodologique.
-  \item \code{\textbackslash begin\{hypothesis\}[Titre]...} : boîte d'hypothèse scientifique, numérotée par chapitre.
-  \item \code{\textbackslash begin\{definitionbox\}[Titre]...} : boîte de définition formelle avec en-tête plein.
+  \item \code{\textbackslash begin\{attentionbox\}[Titre]...} : encadré d'alerte ou de point de vigilance critique (bordure corail \code{ThesisAccent}).
+  \item \code{\textbackslash begin\{hypothesis\}[Titre]...} : boîte d'hypothèse scientifique, numérotée automatiquement par chapitre (\code{3.1}, \code{3.2}...).
+  \item \code{\textbackslash begin\{definitionbox\}[Titre]...} : boîte de définition formelle numérotée par chapitre, compatible avec \code{\textbackslash cref}.
+  \item \code{\textbackslash begin\{boiteSynthese\}\{Titre\}...} : boîte de synthèse didactique avec cartouche flottant décalé.
 \end{enumerate}
 
-Voici une illustration en situation réelle de la boîte d'hypothèse :
+Voici une démonstration en situation réelle des boîtes numérotées et d'alerte :
+
+\begin{definitionbox}[Invariance d'échelle typographique]
+\label{def:invariance-echelle}
+Un système documentaire est dit \term{invariant d'échelle} lorsque ses composants visuels (schémas, tableaux, encadrés) s'adaptent dynamiquement à \code{\textbackslash linewidth} sans intervention manuelle lors d'un changement de géométrie.
+\end{definitionbox}
 
 \begin{hypothesis}[Découplage architectural strict]
 \label{hyp:decouplage}
@@ -87,8 +94,12 @@ Tout composant graphique ou typographique peut être modifié ou remplacé
 sans qu'aucune ligne des chapitres de contenu (\code{content/*.tex}) ne doive être éditée.
 \end{hypothesis}
 
-Grâce à l'intégration de \code{cleveref}, vous pouvez référencer automatiquement cet encadré dans le texte
-via \code{\textbackslash cref\{hyp:decouplage\}}, ce qui produit automatiquement : \cref{hyp:decouplage}.
+\begin{attentionbox}[Point de vigilance : Compteurs et références croisées]
+Placez toujours l'instruction \code{\textbackslash label\{...\}} à l'intérieur du corps de l'environnement (\code{hypothesis} ou \code{definitionbox}) pour que \code{cleveref} résolve automatiquement le type et le numéro complet.
+\end{attentionbox}
+
+Grâce à l'intégration de \code{cleveref}, vous pouvez référencer automatiquement ces encadrés dans le texte
+via \code{\textbackslash cref\{def:invariance-echelle\}} et \code{\textbackslash cref\{hyp:decouplage\}}, ce qui produit : \cref{def:invariance-echelle} et \cref{hyp:decouplage}.
 
 \section{Gestion des Figures Vectorielles : Standalone vs Externalisation TikZ}
 \label{sec:figures-tikz}
@@ -100,7 +111,7 @@ Sur un manuscrit de thèse comprenant 30 à 50 figures élaborées,
 ce traitement peut ajouter plusieurs minutes à chaque cycle de compilation,
 même si vous avez simplement corrigé une coquille typographique dans un paragraphe textuel.
 
-\subsection{Pourquoi l'externalisation classique plante avec \code{out\_dir = 'build'} ?}
+\subsection[Limites de l'externalisation TikZ avec un dossier \code{build/}]{Pourquoi l'externalisation classique plante avec \code{out\_dir = 'build'} ?}
 Pour accélérer ce processus, la bibliothèque native \code{\textbackslash usetikzlibrary\{external\}} propose
 d'isoler chaque schéma dans un sous-processus d'arrière-plan via l'option \code{-shell-escape},
 générant un PDF d'image réutilisé aux compilations ultérieures.
@@ -123,7 +134,7 @@ notre architecture adopte le paquet \code{standalone}.
 
 Chaque figure devient un fichier \LaTeX{} autonome dans le dossier \code{figures/tikz/} :
 \begin{enumerate}
-  \item \textbf{Édition ultra-rapide :} vous pouvez ouvrir \code{figures/tikz/schema-principe.tex}
+  \item \textbf{Édition ultra-rapide :} vous pouvez ouvrir le fichier \code{schema-principe.tex} (situé sous \code{figures/tikz/})
   et le compiler isolément en moins d'une seconde dans votre éditeur pour ajuster vos n\oe{}uds.
   \item \textbf{Inclusion fluide :} dans le chapitre,
   l'instruction \code{\textbackslash includestandalone} extrait le tracé sans réexécuter de préambule :
@@ -131,14 +142,53 @@ Chaque figure devient un fichier \LaTeX{} autonome dans le dossier \code{figures
 
 \begin{figure}[htbp]
   \centering
-  \includestandalone[width=\textwidth]{figures/tikz/schema-principe}
-  \caption[Schéma d'orchestration modulaire]{Schéma d'orchestration modulaire inclus via le paquet \code{standalone}}
+  \begin{cadreFigure}
+    \centering
+    \includestandalone[width=0.96\linewidth]{figures/tikz/schema-principe}
+  \end{cadreFigure}
+  \caption[Schéma d'orchestration modulaire]{Schéma d'orchestration modulaire inclus via \code{standalone} et encadré par \code{cadreFigure}}
   \label{fig:architecture-projet}
 \end{figure}
 
-Comme démontré sur le~\cref{fig:architecture-projet},
+Comme démontré sur la~\cref{fig:architecture-projet},
 le schéma hérite fidèlement de la palette chromatique de la thèse (\code{ThesisPrimary}, \code{ThesisSecondary})
 grâce à la directive \code{\textbackslash providecolor} déclarée dans l'en-tête du fichier autonome.
+
+\subsection{Sous-figures multi-panneaux (\code{subcaption}) et flottant \code{illustration}}
+Pour juxtaposer plusieurs vues expérimentales au sein d'un même flottant, \code{packages.sty} configure \code{subcaption} avec une numérotation alphabétique parenthésée (\code{(a)}, \code{(b)}).
+La~\cref{fig:demo-subfigures} illustre cette composition combinée au conteneur esthétique \code{cadreFigure}, permettant de référencer aussi bien l'ensemble (\cref{fig:demo-subfigures}) qu'un panneau précis (\cref{subfig:panel-a} ou \cref{subfig:panel-b}).
+De plus, un flottant dédié \code{\textbackslash begin\{illustration\}...\textbackslash end\{illustration\}} est déclaré via \code{\textbackslash DeclareNewTOC} pour distinguer, si nécessaire, les planches iconographiques des figures scientifiques.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{cadreFigure}
+    \centering
+    \begin{subfigure}[b]{0.47\linewidth}
+      \centering
+      \begin{tikzpicture}[scale=0.85]
+        \draw[fill=ThesisPrimary!10, draw=ThesisPrimary, line width=0.9pt, rounded corners=3pt] (0,0) rectangle (4.2,2.0);
+        \node[font=\sffamily\footnotesize\bfseries, text=ThesisPrimary] at (2.1,1.3) {Mode Écran (\texttt{screen})};
+        \node[font=\sffamily\scriptsize, text=ThesisSecondary] at (2.1,0.65) {Marges symétriques, \texttt{BCOR=0mm}};
+      \end{tikzpicture}
+      \caption{Empagement centré pour lecture numérique}
+      \label{subfig:panel-a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\linewidth}
+      \centering
+      \begin{tikzpicture}[scale=0.85]
+        \draw[fill=ThesisAccent!12, draw=ThesisAccent, line width=0.9pt] (0,0) rectangle (0.45,2.0);
+        \draw[fill=ThesisSecondary!10, draw=ThesisSecondary, line width=0.9pt, rounded corners=3pt] (0.45,0) rectangle (4.2,2.0);
+        \node[font=\sffamily\footnotesize\bfseries, text=ThesisPrimary] at (2.32,1.3) {Mode Impression (\texttt{print})};
+        \node[font=\sffamily\scriptsize, text=ThesisSecondary] at (2.32,0.65) {Recto-verso, reliure \texttt{BCOR=10mm}};
+      \end{tikzpicture}
+      \caption{Empagement asymétrique avec réserve de reliure}
+      \label{subfig:panel-b}
+    \end{subfigure}
+  \end{cadreFigure}
+  \caption[Comparaison visuelle des panneaux via \code{subfigure}]{Composition multi-panneaux avec \code{subfigure} et encadrement \code{cadreFigure}}
+  \label{fig:demo-subfigures}
+\end{figure}
 
 \begin{callout}[Alternative : Précompilation en PDF]
 Pour un temps de compilation de thèse strictement nul sur les figures stabilisées,
@@ -250,8 +300,8 @@ et du paquet \code{geometry}, notre architecture fournit trois commandes directe
   et \qty{1.8}{\centi\meter} en haut et bas. Elle maximise la surface utile (\qty{18}{\centi\meter} de largeur)
   sans modifier le style des en-têtes.
   \item \code{\textbackslash geometrieWord} (ou \code{\textbackslash geometrieAnnotation}) :
-  instaure des marges symétriques de \qty{2.5}{\centi\meter} tout en allouant une marge marginale dédiée
-  de \qty{2.5}{\centi\meter} (\code{marginparwidth}) avec un séparateur de \qty{3}{\milli\meter}.
+  instaure des marges symétriques de \qty{2.5}{\centi\meter} tout en allouant une zone marginale dédiée
+  de \qty{2.0}{\centi\meter} (\code{marginparwidth}) avec un séparateur de \qty{3}{\milli\meter}.
   C'est le profil idéal lors des phases de relecture active avec \code{\textbackslash todoH}.
   \item \code{\textbackslash geometrieStandard} : restaure immédiatement la géométrie canonique KOMA-Script (\code{DIV=12}).
 \end{itemize}
@@ -278,11 +328,20 @@ Le pilotage est immédiat grâce à deux commandes :
 \end{itemize}
 Vous pouvez personnaliser l'image cible via \code{\textbackslash thesislogo\{chemin/vers/logo.pdf\}}.
 
-\section{Système d'Annotations Collaboratives \texttt{\textbackslash todoH} et Mode Publication}
+\section{Notes de Marge Éditoriales (\texttt{\textbackslash noteMarge}) et Annotations Collaboratives (\texttt{\textbackslash todoH})}
 \label{sec:collaboration-todoh}
 
-La relecture entre doctorant, directeurs de thèse et rapporteurs est un moment décisif.
-Si le paquet standard \code{todonotes} est répandu, il souffre de trois limitations majeures :
+Un manuscrit scientifique moderne distingue deux usages complémentaires de la marge extérieure :
+\begin{enumerate}
+  \item \textbf{La manchette éditoriale pérenne (\code{\textbackslash noteMarge\{...\}}) :}
+  inspirée des ouvrages de référence à la \textit{Bringhurst} ou \textit{Tufte}, elle accompagne le lecteur final jusque dans la version imprimée (\code{print}) pour signaler un concept clé, un repère historique ou un rappel de notation.
+  \noteMarge{\textbf{Manchette éditoriale :} composée avec \texttt{\textbackslash noteMarge}, cette note persiste en mode publication finale (\texttt{print}).}
+  Sa mise en forme sobre (filet latéral \code{ThesisSecondary}, corps réduit sans empattement) s'intègre harmonieusement à la marge KOMA-Script via \code{marginnote}.
+  \item \textbf{L'annotation de révision temporaire (\code{\textbackslash todoH}) :}
+  destinée aux échanges entre doctorant, directeurs de thèse et rapporteurs pendant la phase d'écriture, elle disparaît intégralement dès que l'option \code{todos} est retirée.
+\end{enumerate}
+
+Si le paquet standard \code{todonotes} est répandu pour ce second usage, il souffre de trois limitations majeures :
 les commentaires longs débordent sous la page,
 les caractères accentués sous les paquets de soulignement traditionnels provoquent des erreurs,
 et le texte surligné dans le corps n'offre aucun lien direct vers la liste récapitulative.

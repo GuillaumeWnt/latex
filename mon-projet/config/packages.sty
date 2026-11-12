@@ -3,14 +3,15 @@
 %% Appel et configuration centralisée des packages tiers
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{config/packages}[2026/10/17 v1.0 Packages Configuration for mythesis]
+\ProvidesPackage{config/packages}[2026/11/12 v2.0 Packages Configuration for mythesis]
 
 % --- Détection du moteur et polices de caractères ---
 \RequirePackage{iftex}
 \ifluatex
   \RequirePackage{fontspec}
   \defaultfontfeatures{Ligatures=TeX}
-  % Chargement des polices locales figées dans fonts/ (reproductibilité 100 % CI/CD et Overleaf)
+
+  % 1. Police sans-serif locale figée dans fonts/ (reproductibilité 100 % CI/CD et Overleaf)
   \IfFileExists{fonts/texgyreheros-regular.otf}{%
     \setsansfont{texgyreheros}[
       Path = fonts/,
@@ -18,8 +19,87 @@
       UprightFont = *-regular,
       BoldFont = *-bold,
       ItalicFont = *-italic,
-      BoldItalicFont = *-bolditalic
+      BoldItalicFont = *-bolditalic,
+      Scale = MatchLowercase
     ]%
+    \newfontfamily{\HerosFont}{texgyreheros}[
+      Path = fonts/,
+      Extension = .otf,
+      UprightFont = *-regular,
+      BoldFont = *-bold,
+      ItalicFont = *-italic,
+      BoldItalicFont = *-bolditalic,
+      Scale = MatchLowercase
+    ]%
+  }{%
+    \setsansfont{TeX Gyre Heros}[Scale=MatchLowercase]%
+    \newfontfamily{\HerosFont}{TeX Gyre Heros}[Scale=MatchLowercase]%
+  }%
+
+  % 2. Police à chasse fixe OpenType complète (avec vrai gras et italique, sans warning lmtt)
+  \IfFontExistsTF{TeX Gyre Cursor}{%
+    \setmonofont{TeX Gyre Cursor}[Scale=MatchLowercase]%
+    \newfontfamily{\CursorFont}{TeX Gyre Cursor}[Scale=MatchLowercase]%
+  }{%
+    \newfontfamily{\CursorFont}{Latin Modern Mono}[Scale=MatchLowercase]%
+  }%
+
+  % 3. Familles de polices de démonstration (compatibles ClasseGuillaume)
+  \IfFontExistsTF{Libertinus Serif}{%
+    \newfontfamily{\LibertinusFont}{Libertinus Serif}[Scale=MatchLowercase]%
+  }{%
+    \let\LibertinusFont\rmfamily
+  }%
+  \IfFontExistsTF{Fira Sans}{%
+    \newfontfamily{\FiraFont}{Fira Sans}[Scale=MatchLowercase]%
+  }{%
+    \let\FiraFont\HerosFont
+  }%
+  \IfFontExistsTF{Calibri}{%
+    \newfontfamily{\CalibriFont}{Calibri}[Scale=MatchLowercase]%
+  }{%
+    \let\CalibriFont\HerosFont
+  }%
+
+  % 4. Application de la police principale selon l'option de classe (font=...)
+  \ifdefstring{\mythesis@font}{libertinus}{%
+    \IfFontExistsTF{Libertinus Serif}{%
+      \setmainfont{Libertinus Serif}%
+    }{}%
+  }{}%
+  \ifdefstring{\mythesis@font}{heros}{%
+    \IfFileExists{fonts/texgyreheros-regular.otf}{%
+      \setmainfont{texgyreheros}[
+        Path = fonts/,
+        Extension = .otf,
+        UprightFont = *-regular,
+        BoldFont = *-bold,
+        ItalicFont = *-italic,
+        BoldItalicFont = *-bolditalic
+      ]%
+    }{%
+      \setmainfont{TeX Gyre Heros}%
+    }%
+  }{}%
+  \ifdefstring{\mythesis@font}{calibri}{%
+    \IfFontExistsTF{Calibri}{%
+      \setmainfont{Calibri}%
+      \setsansfont{Calibri}%
+    }{%
+      \IfFileExists{fonts/texgyreheros-regular.otf}{%
+        \setmainfont{texgyreheros}[
+          Path = fonts/,
+          Extension = .otf,
+          UprightFont = *-regular,
+          BoldFont = *-bold,
+          ItalicFont = *-italic,
+          BoldItalicFont = *-bolditalic
+        ]%
+      }{}%
+    }%
+  }{}%
+  \ifdefstring{\mythesis@font}{standard}{%
+    % Conserve Latin Modern Roman par défaut
   }{}%
 \else\ifxetex
   \RequirePackage{fontspec}
@@ -34,19 +114,30 @@
       BoldItalicFont = *-bolditalic
     ]%
   }{}%
+  \providecommand{\LibertinusFont}{\rmfamily}
+  \providecommand{\HerosFont}{\sffamily}
+  \providecommand{\CalibriFont}{\sffamily}
+  \providecommand{\FiraFont}{\sffamily}
+  \providecommand{\CursorFont}{\ttfamily}
 \else
   \RequirePackage[T1]{fontenc}
   \RequirePackage[utf8]{inputenc}
   \RequirePackage{lmodern}
+  \providecommand{\LibertinusFont}{\rmfamily}
+  \providecommand{\HerosFont}{\sffamily}
+  \providecommand{\CalibriFont}{\sffamily}
+  \providecommand{\FiraFont}{\sffamily}
+  \providecommand{\CursorFont}{\ttfamily}
 \fi\fi
 
 % Micro-typographie (crénage optique, saillie des marges)
 \RequirePackage{microtype}
 
-% --- Géométrie de page dynamique et assouplie (compatible KOMA usegeometry) ---
+% --- Symbiose native KOMA-Script (typearea) & geometry ---
+% 1. Chargement de geometry (alimenté par usegeometry=true de KOMA-Script)
 \RequirePackage{geometry}
+% 2. Calibrage de la gouttière des notes marginales sans altérer le bloc de texte KOMA
 \geometry{
-  headheight=26pt,
   footskip=30pt,
   marginparsep=3mm,
   marginparwidth=2.0cm
@@ -60,6 +151,9 @@
 
 % --- Composition multi-colonnes dynamique et équilibrée ---
 \RequirePackage{multicol}
+
+% --- Notes marginales éditoriales persistantes ---
+\RequirePackage{marginnote}
 
 % Troncature sécurisée des en-têtes et textes longs
 \RequirePackage[breakall]{truncate}
@@ -77,10 +171,28 @@
 % --- Langues et typographie internationale ---
 % Le français est déclaré en dernier pour être la langue par défaut
 \RequirePackage[english, french]{babel}
-% Neutralisation de l'avertissement informatif de babel-french sur les listes expérimentales
-\makeatletter
 \global\let\warning@FBlegacylists\relax
-\makeatother
+\@ifundefined{frenchsetup}{}{%
+  \frenchsetup{
+    StandardLists=true,
+    TocPartNameFull=false,
+    SuppressWarning=true
+  }%
+}
+
+\AtBeginDocument{%
+  % Harmonisation francophone : "Tableau" au lieu de l'anglicisme "Table"
+  \@ifundefined{captionsfrench}{}{%
+    \addto\captionsfrench{%
+      \renewcommand*{\tablename}{Tableau}%
+      \renewcommand*{\listtablename}{Liste des tableaux}%
+    }%
+  }%
+  \iflanguage{french}{%
+    \renewcommand*{\tablename}{Tableau}%
+    \renewcommand*{\listtablename}{Liste des tableaux}%
+  }{}%
+}
 
 % Guillemets automatiques et adaptés à la langue active
 \RequirePackage[autostyle=true]{csquotes}
@@ -91,15 +203,26 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 
-% --- Tableaux professionnels (règles strictes booktabs) ---
+% --- Tableaux professionnels (règles strictes booktabs & colonnes drapeau droit) ---
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
+\RequirePackage{longtable}
 \RequirePackage{array}
 \RequirePackage{makecell}
 \RequirePackage{multirow}
+\RequirePackage{ragged2e}
+
+% Types de colonnes intelligents pour éviter les Underfull/Overfull \hbox en tableau
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
 
 % Espacement vertical accru dans les cellules de tableau
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.18}
+
+% Listes personnalisables
+\RequirePackage{enumitem}
 
 % --- Grandeurs physiques et unités SI ---
 \RequirePackage{siunitx}
@@ -107,13 +230,50 @@
   locale = FR,
   detect-all = true,
   group-minimum-digits = 4,
-  uncertainty-mode = separate
+  uncertainty-mode = separate,
+  range-phrase = { à },
+  range-units = single
 }
 \DeclareSIUnit\iter{it}
+\DeclareSIUnit\bar{bar}
 
-% --- Graphiques et figures vectorielles TikZ & Standalone ---
+% --- Graphiques, sous-figures et figures vectorielles TikZ & Standalone ---
 \RequirePackage{graphicx}
 \graphicspath{{figures/}{figures/tikz/}}
+
+% Légendes et sous-figures scientifiques (a), (b)
+\RequirePackage{caption}
+\captionsetup{
+  format = plain,
+  justification = centerlast,
+  singlelinecheck = true,
+  font = {small},
+  labelfont = {bf, sf, color=ThesisPrimary},
+  labelsep = colon,
+  skip = 8pt
+}
+\captionsetup[table]{position = above, skip = 6pt}
+
+\RequirePackage{subcaption}
+\captionsetup[sub]{
+  font = {footnotesize, sf},
+  labelfont = {bf, sf, color=ThesisSecondary},
+  labelformat = brace,
+  justification = centering,
+  skip = 4pt
+}
+
+% --- Flottant personnalisé KOMA-Script : Illustration (compatible ClasseGuillaume) ---
+\DeclareNewTOC[%
+  type=illustration,
+  types=illustrations,
+  float,
+  counterwithin=chapter,
+  name=Illustration,
+  listname={Liste des illustrations},
+  tocentrystyle=tocline,
+  tocentrydynnumwidth=true
+]{loi}
 
 % --- Insertion propre de documents PDF multipages externes ---
 \RequirePackage{pdfpages}
@@ -133,19 +293,6 @@
   shadows
 }
 
-% --- Option B (Alternative) : Externalisation automatique TikZ avec dossier build/ ---
-% Si vous préférez \usetikzlibrary{external} au lieu du paquet standalone :
-% 1. Activez -shell-escape et make_path dans latexmkrc.
-% 2. Décommentez les lignes suivantes :
-% \usetikzlibrary{external}
-% \tikzsetexternalprefix{tikz-cache/}
-% \tikzset{external/system call={%
-%   lualatex \tikzexternalcheckshellescape -halt-on-error
-%   -interaction=batchmode -output-directory=build
-%   -jobname "\image" "\texsource"%
-% }}
-% \tikzexternalize
-
 % Boîtes d'enrichissement visuel (callouts, encadrés)
 \RequirePackage[skins, breakable]{tcolorbox}
 
@@ -157,15 +304,11 @@
   \setuptodonotes{size=\tiny, color=ThesisPrimary!20}
   % Chargement sécurisé de soul & pdfcomment sans avertissement de package obsolète
   \RequirePackage{soul}
-  \makeatletter
   \@namedef{ver@soulutf8.sty}{3000/01/01}
-  \makeatother
   \RequirePackage{pdfcomment}
 \else
   \RequirePackage[colorinlistoftodos, disable]{todonotes}
-  \makeatletter
   \providecommand{\ulp@afterend}{}
-  \makeatother
 \fi
 
 % --- Courbes scientifiques de données brutes (data/*.csv) ---
@@ -176,8 +319,25 @@
 \RequirePackage{listings}
 
 % --- En-têtes et pieds de page KOMA-Script ---
-\RequirePackage[headsepline=0.5pt]{scrlayer-scrpage}
-\addtokomafont{headsepline}{\color{ThesisSecondary!40}}
+% autooneside=false permet de conserver simultanément \leftmark (chapitre) et \rightmark (section)
+% même en mode recto simple (screen), évitant toute corruption lors des bascules de style !
+\RequirePackage[
+  automark,
+  autooneside=false,
+  headsepline=0.5pt,
+  footsepline=false,
+  markcase=used
+]{scrlayer-scrpage}
+\addtokomafont{headsepline}{\color{ThesisSecondary!45}}
+\addtokomafont{footsepline}{\color{ThesisSecondary!35}}
+
+% Synchronisation automatique de KOMA-Script et scrlayer-scrpage à chaque changement de géométrie
+\newcommand{\syncKomaGeometry}{%
+  \csname par@updaterelative\endcsname
+  \KOMAoptions{headwidth=text, footwidth=text}%
+}
+\apptocmd{\newgeometry}{\syncKomaGeometry}{}{}
+\apptocmd{\restoregeometry}{\syncKomaGeometry}{}{}
 
 % --- Bibliographie BibLaTeX ---
 % Le style fait appel à biblio/custom-style.bbx et biblio/custom-style.cbx
@@ -197,5 +357,9 @@
 
 % Référencement croisé intelligent (doit impérativement être chargé après hyperref)
 \RequirePackage[capitalise, noabbrev, french]{cleveref}
+\crefname{appendix}{annexe}{annexes}
+\Crefname{appendix}{Annexe}{Annexes}
+% Bascule automatique du compteur chapter vers appendix dans cleveref lors de \appendix
+\AddToHook{cmd/appendix/after}{\crefalias{chapter}{appendix}}
 
 \endinput

@@ -1,9 +1,9 @@
 %% ==============================================================================
 %% config/macros.sty
-%% Commandes métier, raccourcis mathématiques et environnements personnalisés
+%% Commandes métier, raccourcis mathématiques, boîtes et géométries dynamiques
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{config/macros}[2026/10/17 v1.0 Custom Macros for mythesis]
+\ProvidesPackage{config/macros}[2026/11/12 v2.0 Custom Macros for mythesis]
 
 % --- Notations mathématiques sémantiques ---
 % Vecteurs et matrices en gras droit / italique
@@ -31,161 +31,257 @@
 \DeclareMathOperator{\diag}{\mathrm{diag}}
 
 % --- Balisage textuel sémantique ---
+% Bascule automatique de contraste pour \code{...} dans les bandeaux sombres
+\newif\ifmythesis@darkbanner
+\mythesis@darkbannerfalse
+
 % Terme technique introduit pour la première fois
 \newcommand{\term}[1]{\textbf{\textcolor{ThesisPrimary}{#1}}}
 
-% Fragment de code en ligne
-\newcommand{\code}[1]{\texttt{\textcolor{ThesisPrimary!90}{#1}}}
+% Fragment de code en ligne (adaptatif clair/sombre)
+\newcommand{\code}[1]{%
+  \ifmythesis@darkbanner
+    \texttt{\textcolor{white}{#1}}%
+  \else
+    \texttt{\textcolor{ThesisPrimary!92!black}{#1}}%
+  \fi
+}
+
+% --- Notes marginales éditoriales persistantes (publiées dans l'ouvrage final) ---
+% Contrairement à \todoH (réservé à la relecture collaborative), \noteMarge produit
+% une note typographique pérenne dans la marge extérieure (inspirée de Bringhurst/Tufte).
+\NewDocumentCommand{\noteMarge}{O{0pt} +m}{%
+  \marginnote{%
+    \noindent{\color{ThesisAccent}\rule{0.45\linewidth}{1.2pt}}{\color{ThesisSecondary!30}\rule{0.55\linewidth}{0.5pt}}\par\vspace{2pt}%
+    \RaggedRight\scriptsize\sffamily\color{ThesisMuted}#2\par%
+  }[#1]%
+}
 
 % --- Environnements visuels (tcolorbox) ---
 
-% Boîte d'information / Remarque
+% 1. Boîte d'information / Remarque (Contraste optimal : titre foncé sur bandeau clair + liseré gauche)
 \newtcolorbox{callout}[1][Remarque]{%
   enhanced,
   breakable,
-  colback=ThesisPrimary!4,
-  colframe=ThesisPrimary!70,
+  colback=ThesisPrimary!3,
+  colframe=ThesisPrimary!28,
+  colbacktitle=ThesisPrimary!11,
   coltitle=ThesisPrimary,
+  borderline west={3.2pt}{0pt}{ThesisPrimary},
   fonttitle=\bfseries\sffamily\small,
   title={#1},
   left=10pt,
   right=10pt,
   top=6pt,
   bottom=6pt,
-  arc=3pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  arc=2.5pt,
+  boxrule=0.6pt,
+  before skip=12pt,
+  after skip=12pt
+}
+
+% 2. Boîte d'attention / Point critique (Mettant en valeur la couleur ThesisAccent)
+\newtcolorbox{attentionbox}[1][Point d'attention]{%
+  enhanced,
+  breakable,
+  colback=ThesisAccent!4,
+  colframe=ThesisAccent!35,
+  colbacktitle=ThesisAccent!13,
+  coltitle=ThesisAccent!85!black,
+  borderline west={3.2pt}{0pt}{ThesisAccent},
+  fonttitle=\bfseries\sffamily\small,
+  title={#1},
+  left=10pt,
+  right=10pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  arc=2.5pt,
+  boxrule=0.6pt,
+  before skip=12pt,
+  after skip=12pt
+}
+
+% 3. Boîte d'hypothèse scientifique numérotée par chapitre (compatible \label + \cref)
+\newcounter{hypocounter}[chapter]
+\renewcommand{\thehypocounter}{\thechapter.\arabic{hypocounter}}
+
+\newtcolorbox{hypothesis}[1][]{%
+  enhanced,
+  breakable,
+  code={\refstepcounter{hypocounter}},
+  colback=ThesisSecondary!4,
+  colframe=ThesisSecondary!80,
+  colbacktitle=ThesisSecondary,
+  coltitle=white,
+  fonttitle=\bfseries\sffamily\small\mythesis@darkbannertrue,
+  title={Hypothèse~\thehypocounter\ifstrempty{#1}{}{ --- #1}},
+  left=10pt,
+  right=10pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  arc=2.5pt,
   boxrule=0.8pt,
   before skip=12pt,
   after skip=12pt
 }
 
-% Boîte d'hypothèse scientifique numérotée
-\newcounter{hypocounter}[chapter]
-\renewcommand{\thehypocounter}{\thechapter.\arabic{hypocounter}}
-
-\newtcolorbox[use counter=hypocounter]{hypothesis}[1][]{%
-  enhanced,
-  breakable,
-  colback=ThesisSecondary!4,
-  colframe=ThesisSecondary!80,
-  coltitle=ThesisSecondary,
-  fonttitle=\bfseries\sffamily\small,
-  title={Hypothèse~\thehypocounter\ifstrempty{#1}{}{ : #1}},
-  left=10pt,
-  right=10pt,
-  top=6pt,
-  bottom=6pt,
-  arc=3pt,
-  boxrule=0.9pt,
-  before skip=12pt,
-  after skip=12pt
-}
-
-% Boîte de définition formelle
+% 4. Boîte de définition formelle numérotée par chapitre (compatible \label + \cref)
 \newcounter{deficounter}[chapter]
 \renewcommand{\thedeficounter}{\thechapter.\arabic{deficounter}}
 
-\newtcolorbox[use counter=deficounter]{definitionbox}[1][]{%
+\newtcolorbox{definitionbox}[1][]{%
   enhanced,
   breakable,
+  code={\refstepcounter{deficounter}},
   colback=ThesisBackground,
-  colframe=ThesisPrimary!90,
-  coltitle=white,
+  colframe=ThesisPrimary!85,
   colbacktitle=ThesisPrimary!90,
-  fonttitle=\bfseries\sffamily\small,
+  coltitle=white,
+  fonttitle=\bfseries\sffamily\small\mythesis@darkbannertrue,
   title={Définition~\thedeficounter\ifstrempty{#1}{}{ --- #1}},
   left=10pt,
   right=10pt,
   top=6pt,
   bottom=6pt,
-  arc=2pt,
+  toptitle=3pt,
+  bottomtitle=3pt,
+  arc=2.5pt,
   boxrule=0.8pt,
   before skip=12pt,
   after skip=12pt
 }
 
-% Boîte de synthèse mise en valeur (inspirée de ClasseGuillaume)
+% 5. Boîte de synthèse mise en valeur (compatible ClasseGuillaume)
 \newtcolorbox{boiteSynthese}[2][]{%
   enhanced,
   breakable,
-  colback=ThesisPrimary!5,
+  colback=ThesisPrimary!4,
   colframe=ThesisPrimary,
-  coltitle=white,
   colbacktitle=ThesisPrimary,
-  fonttitle=\bfseries\sffamily\small,
+  coltitle=white,
+  borderline west={3.2pt}{0pt}{ThesisAccent},
+  fonttitle=\bfseries\sffamily\small\mythesis@darkbannertrue,
   title={#2},
-  arc=3pt,
-  boxrule=0.9pt,
+  left=10pt,
+  right=10pt,
+  top=6pt,
+  bottom=6pt,
+  toptitle=3.5pt,
+  bottomtitle=3.5pt,
+  arc=2.5pt,
+  boxrule=0.8pt,
   before skip=12pt,
   after skip=12pt,
   #1
 }
 
-% Cadre pour figure / schéma vectoriel centré
+% 6. Cadre pour figure / schéma vectoriel centré (compatible ClasseGuillaume)
 \newtcolorbox{cadreFigure}[1][]{%
   enhanced,
-  colframe=ThesisPrimary!70,
+  colframe=ThesisSecondary!45,
   colback=white,
-  boxrule=1pt,
-  arc=6pt,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt,
   halign=center,
-  before skip=10pt,
-  after skip=10pt,
+  before skip=8pt,
+  after skip=6pt,
   #1
 }
 
-% Déclaration des alias cleveref pour nos compteurs personnalisés
+% Déclaration des alias cleveref dans le préambule (avant le hook \AtBeginDocument de cleveref)
 \crefname{hypocounter}{hypothèse}{hypothèses}
 \Crefname{hypocounter}{Hypothèse}{Hypothèses}
 \crefname{deficounter}{définition}{définitions}
 \Crefname{deficounter}{Définition}{Définitions}
+\crefname{lstlisting}{listing}{listings}
+\Crefname{lstlisting}{Listing}{Listings}
+\crefname{illustration}{illustration}{illustrations}
+\Crefname{illustration}{Illustration}{Illustrations}
+% Surcharge post-babel pour remplacer la traduction par défaut "Liste" de lstlisting par "Listing"
+\AddToHook{begindocument/end}{%
+  \crefname{lstlisting}{listing}{listings}%
+  \Crefname{lstlisting}{Listing}{Listings}%
+}
 
 % --- Alternance dynamique des géométries de page (KOMA natif + geometry) ---
-% 1. Restauration de la géométrie canonique KOMA par défaut (DIV=12)
+% Suivi de la géométrie courante pour restauration intelligente après une pageDesign
+\newcommand{\currentGeometryCmd}{\geometrieStandard}
+
+% 1. Restauration de la géométrie canonique KOMA par défaut (DIV=12 + BCOR)
 \newcommand{\geometrieStandard}{%
   \cleardoublepage%
+  \renewcommand{\currentGeometryCmd}{\geometrieStandard}%
   \restoregeometry%
-  \setlength{\marginparwidth}{2.0cm}%
-  \setlength{\marginparsep}{3mm}%
 }
 
 % 2. Géométrie Large / Pleine Page (Style B - geometry) : marges réduites à 1.5 cm pour grands tableaux
+%    Préserve automatiquement le décalage de reliure (\mythesis@bcor) en mode print !
 \newcommand{\geometrieLarge}{%
   \cleardoublepage%
+  \renewcommand{\currentGeometryCmd}{\geometrieLarge}%
   \newgeometry{
     left=1.5cm, right=1.5cm,
-    top=1.8cm, bottom=1.8cm,
-    headheight=26pt, headsep=10pt,
+    top=2.0cm, bottom=2.0cm,
+    bindingoffset=\mythesis@bcor,
+    headheight=20pt, headsep=14pt,
     footskip=26pt, footnotesep=8pt,
     marginparwidth=0mm, marginparsep=0mm
   }%
 }
+\let\geometrieExemple\geometrieLarge
 
 % 3. Géométrie Traitement de Texte / Word (Style C - geometry) : marges symétriques de 2.5 cm partout
 %    Conforme aux instructions universitaires et aux grilles de relecture académiques.
 \newcommand{\geometrieWord}{%
   \cleardoublepage%
+  \renewcommand{\currentGeometryCmd}{\geometrieWord}%
   \newgeometry{
     left=2.5cm, right=2.5cm,
     top=2.5cm, bottom=2.5cm,
-    headheight=26pt, headsep=10pt,
-    footskip=26pt, footnotesep=10pt,
-    marginparwidth=2.0cm, marginparsep=3mm
+    bindingoffset=\mythesis@bcor,
+    headheight=20pt, headsep=16pt,
+    footskip=28pt, footnotesep=10pt,
+    marginparwidth=2.0cm, marginparsep=2.5mm
   }%
 }
-\newcommand{\geometrieAnnotation}{\geometrieWord}
+\let\geometrieAnnotation\geometrieWord
 
 % 4. Géométrie spécifique pour couverture ou page de garde sans en-tête
 \newcommand{\geometrieCouverture}{%
   \cleardoublepage%
   \newgeometry{
-    left=2.0cm, right=2.0cm,
-    top=2.0cm, bottom=2.0cm,
+    left=1.8cm, right=1.8cm,
+    top=1.8cm, bottom=1.8cm,
+    bindingoffset=0mm,
     headheight=0pt, headsep=0pt,
-    footskip=0pt
+    footskip=0pt,
+    marginparwidth=0mm, marginparsep=0mm
   }%
 }
 
-% 5. Environnements autonomes avec restauration automatique en fin de bloc
+% 5. Géométrie libre sur-mesure à la volée (compatible ClasseGuillaume)
+\newcommand{\geometrieLibre}[1]{%
+  \cleardoublepage%
+  \newgeometry{
+    headheight=20pt, headsep=16pt,
+    footskip=28pt, footnotesep=8pt,
+    marginparwidth=0mm, marginparsep=0mm,
+    bindingoffset=0mm,
+    #1
+  }%
+}
+
+% 6. Environnements autonomes avec restauration automatique en fin de bloc
 \newenvironment{WideGeometry}{%
   \geometrieLarge%
 }{%
@@ -204,37 +300,76 @@
   \geometrieStandard%
 }
 
+% 7. Environnement pageDesign (hérité de ClasseGuillaume et perfectionné) :
+%    Offre une liberté totale pour designer des pages spécifiques (couverture, planche
+%    graphique, poster, synthèse exécutive) sans en-tête ni logo, puis restaure
+%    automatiquement la géométrie, l'état du logo et le style de page à la sortie !
+\NewDocumentEnvironment{pageDesign}{O{left=1.5cm, right=1.5cm, top=1.6cm, bottom=1.6cm}}{%
+  \cleardoublepage%
+  \let\savedGeometryCmd\currentGeometryCmd%
+  \iflogoactive\savedlogotrue\else\savedlogofalse\fi%
+  \masquerLogo%
+  \geometrieLibre{#1}%
+  \pagestyle{empty}%
+  \thispagestyle{empty}%
+}{%
+  \cleardoublepage%
+  \ifsavedlogo\afficherLogo\fi%
+  \savedGeometryCmd%
+  \pagestyle{scrheadings}%
+}
+
 % --- Système d'annotations collaboratives \todoH ---
 \ifusetodos
   % Profils de relecteurs préconfigurés avec signature et couleur
-  \todostyle{AuthorStyle}{author=Auteur, color=ThesisPrimary!20, shadow}
-  \todostyle{DirectorStyle}{author=Directeur, color=ThesisSecondary!30, shadow}
-  \todostyle{ReviewerStyle}{author=Rapporteur, color=ThesisAccent!30, shadow}
+  \todostyle{AuthorStyle}{author=Auteur, color=ThesisPrimary!20, bordercolor=ThesisPrimary!60, shadow}
+  \todostyle{DirectorStyle}{author=Directeur, color=ThesisSecondary!25, bordercolor=ThesisSecondary!70, shadow}
+  \todostyle{ReviewerStyle}{author=Rapporteur, color=ThesisAccent!25, bordercolor=ThesisAccent!70, shadow}
+  % Alias de compatibilité ClasseGuillaume
+  \todostyle{GuillaumeStyle}{author=Guillaume, color=ThesisPrimary!20, bordercolor=ThesisPrimary!60, shadow}
+  \todostyle{MarieStyle}{author=Marie, color=ThesisSecondary!25, bordercolor=ThesisSecondary!70, shadow}
+  \todostyle{FloraStyle}{author=Flora, color=ThesisAccent!25, bordercolor=ThesisAccent!70, shadow}
+  \todostyle{TestStyle}{author=Test, color=ThesisMuted!25}
+  \todostyle{BlancStyle}{color=ThesisBackground}
 
-  \makeatletter
-  \NewDocumentCommand{\todoH}{O{} O{ThesisAccent!30} m +m}{%
+  % Détermination automatique de la couleur de surlignage assortie au profil si [couleur] est omis
+  \newcommand{\mythesis@resolve@todocolor}[1]{%
+    \def\mythesis@hlcolor{ThesisPrimary!22}%
+    \IfSubStr{#1}{Director}{\def\mythesis@hlcolor{ThesisSecondary!25}}{}%
+    \IfSubStr{#1}{Marie}{\def\mythesis@hlcolor{ThesisSecondary!25}}{}%
+    \IfSubStr{#1}{Reviewer}{\def\mythesis@hlcolor{ThesisAccent!25}}{}%
+    \IfSubStr{#1}{Flora}{\def\mythesis@hlcolor{ThesisAccent!25}}{}%
+  }
+
+  \NewDocumentCommand{\todoH}{O{AuthorStyle} o m +m}{%
     \if@todonotes@disabled
       #4%
     \else
+      \IfNoValueTF{#2}{%
+        \mythesis@resolve@todocolor{#1}%
+        \def\mythesis@todoopts{#1}%
+      }{%
+        \def\mythesis@hlcolor{#2}%
+        \def\mythesis@todoopts{#1, color=#2}%
+      }%
       \IfSubStr{\detokenize{#3}}{\@backslashchar}{%
         % Commande LaTeX détectée (ex: \url) : pas de troncature, caption propre pour .tdo
-        \todo[#1, color=#2, caption={\detokenize{#3}}]{#3}%
+        \expandafter\todo\expandafter[\mythesis@todoopts, caption={\detokenize{#3}}]{#3}%
       }{%
         % Texte simple : troncature dynamique si > 30 caractères + infobulle interactive
         \StrLen{#3}[\longueurTexte]%
         \ifnum\longueurTexte>30
           \StrLeft{#3}{30}[\apercu]%
-          \todo[#1, color=#2, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
+          \expandafter\todo\expandafter[\mythesis@todoopts, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
         \else
-          \todo[#1, color=#2, caption={#3}]{\pdftooltip{#3}{#3}}%
+          \expandafter\todo\expandafter[\mythesis@todoopts, caption={#3}]{\pdftooltip{#3}{#3}}%
         \fi
       }%
-      \hyperref[table_todos]{\highLight[#2]{#4}}%
+      \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\mythesis@hlcolor]{#4}}%
     \fi
   }
-  \makeatother
 
-  % Tableau de bord des révisions sécurisé
+  % Tableau de bord des révisions sécurisé (avec alias \tableDesTodos de ClasseGuillaume)
   \NewDocumentCommand{\thesistodolist}{O{Tableau de Bord des Révisions et Tâches de Rédaction}}{%
     \cleardoublepage
     \phantomsection
@@ -243,10 +378,12 @@
       \listoftodos[#1]%
     \endgroup
   }
+  \let\tableDesTodos\thesistodolist
 \else
   % En mode publication finale ou print sans l'option todos : neutralisation totale
-  \NewDocumentCommand{\todoH}{O{} O{} m +m}{#4}
+  \NewDocumentCommand{\todoH}{O{} o m +m}{#4}
   \NewDocumentCommand{\thesistodolist}{O{}}{\relax}
+  \let\tableDesTodos\thesistodolist
 \fi
 
 % --- Configuration du style de code source externe (listings/) ---
@@ -256,13 +393,13 @@
   keywordstyle=\color{ThesisPrimary}\bfseries,
   commentstyle=\color{ThesisMuted}\itshape,
   stringstyle=\color{ThesisAccent},
-  numberstyle=\tiny\color{ThesisMuted},
+  numberstyle=\tiny\sffamily\color{ThesisMuted},
   numbers=left,
   numbersep=8pt,
   stepnumber=1,
   frame=single,
   rulecolor=\color{ThesisSecondary!30},
-  framesep=4pt,
+  framesep=5pt,
   breaklines=true,
   breakatwhitespace=true,
   tabsize=2,
@@ -271,9 +408,6 @@
   keepspaces=true
 }
 \lstset{style=mythesiscode}
-
-\crefname{lstlisting}{listing}{listings}
-\Crefname{lstlisting}{Listing}{Listings}
 
 % --- Macros d'interactivité PDF intelligente : profil écran vs profil impression ---
 
@@ -313,24 +447,36 @@
   % ============================================================================
   % PROFIL ÉCRAN NUMÉRIQUE (screen) :
   % - Calques PDF interactifs dynamiques (paquet ocgx2)
-  % - Boutons cliquables de bascule instantanée
+  % - Boutons cliquables de bascule instantanée stylisés
   % - Superposition géométrique parfaite TikZ à l'ancrage (north west à 0,0)
   % ============================================================================
   \newcommand{\ocgbutton}[2]{%
     \switchocg{#1}{%
-      \setlength{\fboxsep}{3.5pt}%
-      \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
-        \small\sffamily\bfseries\textcolor{ThesisPrimary}{#2}%
-      }%
+      \tcbox[
+        enhanced,
+        on line,
+        arc=3pt,
+        boxrule=0.7pt,
+        colframe=ThesisSecondary!65,
+        colback=ThesisSecondary!8,
+        boxsep=0pt,
+        left=6pt, right=6pt, top=3.5pt, bottom=3.5pt
+      ]{\footnotesize\sffamily\bfseries\textcolor{ThesisPrimary}{\textcolor{ThesisAccent}{$\blacktriangleright$}\enspace #2}}%
     }%
   }
 
   \newcommand{\ocgselectbutton}[3]{%
     \actionsocg{}{#1}{#2}{%
-      \setlength{\fboxsep}{3.5pt}%
-      \fcolorbox{ThesisSecondary!30}{ThesisBackground}{%
-        \small\sffamily\bfseries\textcolor{ThesisPrimary}{#3}%
-      }%
+      \tcbox[
+        enhanced,
+        on line,
+        arc=3pt,
+        boxrule=0.7pt,
+        colframe=ThesisSecondary!65,
+        colback=ThesisSecondary!8,
+        boxsep=0pt,
+        left=6pt, right=6pt, top=3.5pt, bottom=3.5pt
+      ]{\footnotesize\sffamily\bfseries\textcolor{ThesisPrimary}{#3}}%
     }%
   }
 
@@ -373,4 +519,3 @@
 }
 
 \endinput
-

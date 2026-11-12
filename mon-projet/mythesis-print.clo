@@ -2,26 +2,32 @@
 %% mythesis-print.clo
 %% Option de classe : Configuration optimisée pour l'impression papier et la reliure
 %% ==============================================================================
-\ProvidesFile{mythesis-print.clo}[2026/10/17 v1.0 Print Layout Configuration for mythesis]
+\ProvidesFile{mythesis-print.clo}[2026/11/12 v2.0 Print Layout Configuration for mythesis]
 
 % --- Géométrie et mise en page KOMA-Script ---
 % Recto-verso avec décalage de reliure (BCOR) et début des chapitres sur page impaire
+\newcommand{\mythesis@bcor}{10mm}
 \KOMAoptions{
   twoside=true,
   open=right,
   BCOR=10mm,
   DIV=12
 }
-\recalctypearea
 \raggedbottom
 
 % --- Palette chromatique pour impression (Économie de toner & Contraste) ---
-\definecolor{ThesisPrimary}{RGB}{20, 20, 25}      % Noir chaud / graphite très profond
-\definecolor{ThesisSecondary}{RGB}{60, 65, 75}    % Gris foncé texturé
+\definecolor{ThesisPrimary}{RGB}{20, 22, 28}      % Noir chaud / graphite très profond
+\definecolor{ThesisSecondary}{RGB}{55, 62, 72}    % Gris ardoise foncé
 \definecolor{ThesisAccent}{RGB}{80, 85, 95}       % Gris moyen soutenu
 \definecolor{ThesisText}{RGB}{0, 0, 0}            % Noir pur pour une netteté maximale à l'impression
-\definecolor{ThesisMuted}{RGB}{110, 115, 120}    % Gris intermédiaire
-\definecolor{ThesisBackground}{RGB}{245, 245, 245}% Fond gris très pâle
+\definecolor{ThesisMuted}{RGB}{105, 110, 115}     % Gris intermédiaire
+\definecolor{ThesisBackground}{RGB}{245, 245, 246}% Fond gris très pâle
+
+% Alias de compatibilité directe avec ClasseGuillaume
+\colorlet{primaryColor}{ThesisPrimary}
+\colorlet{secondaryColor}{ThesisSecondary}
+\colorlet{accentColor}{ThesisAccent}
+\colorlet{mdtRed}{ThesisAccent}
 
 % Liens hypertexte discrets (pas de couleur criarde sur papier)
 \definecolor{ThesisLink}{RGB}{0, 0, 0}
@@ -40,4 +46,3 @@
 }{hyperref}
 
 \endinput
-

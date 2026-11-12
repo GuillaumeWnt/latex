@@ -121,56 +121,59 @@ Il matérialise deux flux d'ingénierie distincts selon la densité et la nature
 Pour des courbes 2D (quelques dizaines à quelques centaines de points),
 la méthode d'excellence consiste à exporter un fichier CSV compact dans \code{data/benchmark-results.csv}.
 Le tracé est ensuite entièrement composé par le paquet \code{pgfplots} dans le manuscrit,
-comme illustré sur le~\cref{fig:courbe-csv} :
+comme illustré sur la~\cref{fig:courbe-csv} :
 
 \begin{figure}[htbp]
   \centering
-  \begin{tikzpicture}
-    \begin{axis}[
-      width=0.88\textwidth,
-      height=6.2cm,
-      grid=major,
-      grid style={line width=0.4pt, draw=ThesisMuted!30},
-      xlabel={Itérations d'entraînement},
-      ylabel={Précision (\%)},
-      xmin=1, xmax=20,
-      ymin=50, ymax=102,
-      legend pos=south east,
-      legend cell align={left},
-      legend style={
-        draw=ThesisSecondary!35,
-        line width=0.6pt,
-        fill=white,
-        fill opacity=0.92,
-        text opacity=1,
-        rounded corners=2pt,
-        font=\footnotesize\sffamily,
-        inner sep=4.5pt
-      }
-    ]
-      \addplot[
-        color=ThesisPrimary,
-        line width=1.3pt,
-        mark=*,
-        mark size=1.8pt
-      ] table[x=Iteration, y=AccuracyProposed, col sep=comma] {data/benchmark-results.csv};
-      \addlegendentry{Architecture modulaire proposée}
+  \begin{cadreFigure}
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        width=0.88\linewidth,
+        height=6.2cm,
+        grid=major,
+        grid style={line width=0.4pt, draw=ThesisMuted!30},
+        xlabel={Itérations d'entraînement},
+        ylabel={Précision (\%)},
+        xmin=1, xmax=20,
+        ymin=50, ymax=102,
+        legend pos=south east,
+        legend cell align={left},
+        legend style={
+          draw=ThesisSecondary!35,
+          line width=0.6pt,
+          fill=white,
+          fill opacity=0.92,
+          text opacity=1,
+          rounded corners=2pt,
+          font=\footnotesize\sffamily,
+          inner sep=4.5pt
+        }
+      ]
+        \addplot[
+          color=ThesisPrimary,
+          line width=1.3pt,
+          mark=*,
+          mark size=1.8pt
+        ] table[x=Iteration, y=AccuracyProposed, col sep=comma] {data/benchmark-results.csv};
+        \addlegendentry{Architecture modulaire proposée}
 
-      \addplot[
-        color=ThesisAccent,
-        line width=1.1pt,
-        dashed,
-        mark=square*,
-        mark size=1.6pt
-      ] table[x=Iteration, y=AccuracyBaseline, col sep=comma] {data/benchmark-results.csv};
-      \addlegendentry{Modèle standard de référence}
-    \end{axis}
-  \end{tikzpicture}
+        \addplot[
+          color=ThesisAccent,
+          line width=1.1pt,
+          dashed,
+          mark=square*,
+          mark size=1.6pt
+        ] table[x=Iteration, y=AccuracyBaseline, col sep=comma] {data/benchmark-results.csv};
+        \addlegendentry{Modèle standard de référence}
+      \end{axis}
+    \end{tikzpicture}
+  \end{cadreFigure}
   \caption[Courbes comparatives de précision générées depuis un CSV]{Convergence comparée de la précision (\%) générée en temps réel par \code{pgfplots} depuis \code{data/benchmark-results.csv}}
   \label{fig:courbe-csv}
 \end{figure}
 
-Comme visible sur le~\cref{fig:courbe-csv}, les deux dynamiques partagent la même échelle verticale :
+Comme visible sur la~\cref{fig:courbe-csv}, les deux dynamiques partagent la même échelle verticale :
 l'architecture proposée franchit le seuil des \qty{98}{\percent} dès la douzième itération,
 tandis que le modèle de référence plafonne à \qty{83}{\percent}.
 L'harmonie typographique est totale : les fontes, graisses et espacements sont rigoureusement identiques à ceux du corps de texte.
@@ -186,7 +189,10 @@ dont l'intégration dans \LaTeX{} est immédiate (\cref{fig:python-benchmark}) :
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.82\textwidth]{figures/python-benchmark}
+  \begin{cadreFigure}
+    \centering
+    \includegraphics[width=0.86\linewidth]{figures/python-benchmark}
+  \end{cadreFigure}
   \caption[Évolution des fonctions de perte générée par Python]{Convergence comparée des fonctions de perte (\textit{Loss}) générée en PDF vectoriel par Matplotlib via l'environnement \code{uv}}
   \label{fig:python-benchmark}
 \end{figure}
@@ -208,7 +214,10 @@ Le document \LaTeX{} se contente de l'inclure instantanément via \code{\textbac
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.84\textwidth]{figures/python-3d-surface}
+  \begin{cadreFigure}
+    \centering
+    \includegraphics[width=0.88\linewidth]{figures/python-3d-surface}
+  \end{cadreFigure}
   \caption[Paysage d'optimisation 3D généré par Python et \code{uv}]{Paysage de coût tridimensionnel non-convexe et trajectoire de descente générés par Matplotlib via l'environnement \code{uv} (\code{scripts/generate\_plots.py})}
   \label{fig:surface-3d}
 \end{figure}
@@ -321,16 +330,10 @@ Le fichier \code{.chktexrc} fourni configure les règles métier :
 Le passage d'une version numérique interactive à une version papier prête pour l'imprimeur
 ne demande \textbf{aucune modification} dans vos chapitres ou vos tableaux.
 Ouvrez simplement le fichier maître \code{main.tex} et modifiez la toute première ligne :
-
-\begin{itemize}
-  \item \textbf{Pour la lecture sur écran :}
-  \begin{center}
-    \code{\textbackslash documentclass[screen]\{mythesis\}}
-  \end{center}
-  \item \textbf{Pour l'impression papier reliée :}
-  \begin{center}
-    \code{\textbackslash documentclass[print]\{mythesis\}}
-  \end{center}
+\begin{itemize}[nosep]
+  \item \textbf{Pour la lecture sur écran :} \code{\textbackslash documentclass[screen]\{mythesis\}}
+  \item \textbf{Pour l'impression papier reliée :} \code{\textbackslash documentclass[print]\{mythesis\}}
 \end{itemize}
+\vspace{4pt}
 Relancez \code{latexmk} : votre document reconfigure instantanément sa pagination, ses marges,
 son décalage de pliure \code{BCOR} et le traitement chromatique de ses liens hypertextes.

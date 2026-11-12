@@ -30,69 +30,67 @@ la classe KOMA-Script \code{scrbook} intègre l'algorithme de calcul \term{typea
   car les deux pages ouvertes en regard fusionnent visuellement leurs petits fonds en une bande d'égale largeur.
 \end{enumerate}
 
-\subsection{Le défi des livrables modernes : au-delà de la géométrie unique}
+\subsection{Le défi des livrables modernes : faire cohabiter KOMA-Script et \code{geometry}}
 Bien que cette rigueur typographique soit idéale pour la prose continue,
-les travaux d'ingénierie contemporains se heurtent à une rigidité historique :
-comment insérer une matrice comparative de 12 colonnes,
-un tableau synoptique de synthèse de 180\,mm de large,
-ou aménager des marges généreuses pour les révisions collaboratives,
-sans rompre la cohérence globale du volume ?
+les travaux d'ingénierie contemporains se heurtent à une difficulté classique :
+comment conserver la propreté sémantique de \code{scrbook} (\code{typearea}, \code{scrlayer-scrpage}, \code{BCOR})
+tout en s'octroyant une liberté totale avec \code{geometry} pour designer certaines pages sur mesure,
+insérer un tableau de 180\,mm de large ou respecter un gabarit imposé ?
 
-La réponse conventionnelle consiste souvent à bricoler des valeurs globales dans \code{geometry},
-au détriment de l'harmonie des 250 autres pages.
-Dans notre architecture, nous combinons la puissance sémantique de KOMA-Script
-avec le pilote géométrique de \code{geometry} grâce à l'option \code{\textbackslash KOMAoptions\{usegeometry=true\}}.
-Cette symbiose permet de métamorphoser la géométrie d'une page à l'autre
-avec une fluidité absolue.
+Lorsqu'on appelle naïvement \code{\textbackslash newgeometry} ou \code{\textbackslash restoregeometry} au sein d'un document KOMA-Script, trois problèmes surviennent habituellement :
+\begin{enumerate}
+  \item \textbf{Désynchronisation des bandeaux (\code{scrlayer-scrpage}) :}
+  la largeur des en-têtes et pieds de page reste figée sur l'ancienne géométrie et déborde ou flotte par rapport au nouveau bloc de texte.
+  \item \textbf{Corruption des paragraphes et notes marginales :}
+  les registres internes de KOMA-Script (\code{\textbackslash par@updaterelative}) ne sont pas avertis du changement de \code{\textbackslash textwidth}.
+  \item \textbf{Perte de la réserve de reliure (\code{BCOR}) :}
+  en mode impression (\code{[print]}), un appel à \code{\textbackslash newgeometry} écrase le décalage de reliure si \code{bindingoffset} n'est pas transmis dynamiquement.
+\end{enumerate}
 
-\begin{boiteSynthese}{Philosophie d'Empagement : KOMA par Défaut et Dérogations Contrôlées}
-Notre architecture repose sur un principe fondamental de rigueur typographique :
+Dans notre architecture, ce conflit est résolu à la racine dans \code{config/packages.sty} grâce à la macro \code{\textbackslash syncKomaGeometry}, branchée automatiquement sur les hooks \LaTeX{} de \code{\textbackslash newgeometry} et \code{\textbackslash restoregeometry}.
+À chaque changement de géométrie, la classe recalcule instantanément l'alignement des en-têtes (\code{headwidth=text, footwidth=text}), préserve \code{bindingoffset=\textbackslash mythesis@bcor} et synchronise KOMA-Script.
+
+\begin{boiteSynthese}{Philosophie d'Empagement : KOMA par Défaut et Liberté Totale via \code{geometry}}
+Notre architecture repose sur un équilibre clair :
 \begin{itemize}
   \item \textbf{Mise en page KOMA par défaut :}
   l'ensemble du document est gouverné par le calcul canonique de KOMA-Script (\code{DIV=12}),
-  garantissant des marges symétriques équilibrées et une longueur de ligne idéale pour la lecture.
-  \item \textbf{Les trois dérogations maîtrisées avec \code{geometry} :}
-  l'intervention de \code{geometry} n'intervient que dans trois situations exceptionnelles bien délimitées :
+  garantissant des marges harmonieuses et une longueur de ligne idéale (65--75 caractères).
+  \item \textbf{Quatre modes de dérogation géométrique synchronisés :}
   \begin{enumerate}
-    \item \textbf{Page de garde :} marges ajustées pour la composition graphique de la couverture (\code{\textbackslash geometrieCouverture}).
+    \item \textbf{Page de design libre (\code{pageDesign} / \code{\textbackslash geometrieLibre}) :} liberté totale sur les marges, suppression temporaire des en-têtes et du logo pour composer une planche graphique ou un tableau de bord exécutif (\cref{sec:demo-page-design}).
     \item \textbf{Grands tableaux / figures pleine page (\code{WideGeometry}) :} marges réduites à 15\,mm
     pour offrir 180\,mm de largeur utile (\cref{sec:demo-geometrie-large}).
     \item \textbf{Conformité traitement de texte (\code{WordGeometry}) :} marges symétriques de 2.5\,cm sur les 4 côtés
-    pour satisfaire aux exigences administratives ou professorales calquées sur Word (\cref{sec:demo-geometrie-word}).
+    pour satisfaire aux exigences administratives calquées sur Word (\cref{sec:demo-geometrie-word}).
+    \item \textbf{Page de garde (\code{\textbackslash geometrieCouverture}) :} marges dédiées à la couverture.
   \end{enumerate}
   \item \textbf{Styles de page KOMA purs (sans modifier la géométrie) :}
-  pour les en-têtes et pieds de page spécialisés (style épuré \code{\textbackslash activerStyleFocus}
-  ou style de diagnostic éditorial \code{\textbackslash activerStyleDebug}),
-  KOMA-Script via \code{scrlayer-scrpage} modifie les métadonnées et filets
-  sans jamais altérer ni déformer les marges physiques du feuillet.
+  pour les en-têtes spécialisés (\code{\textbackslash activerStyleFocus}
+  ou \code{\textbackslash activerStyleDebug}),
+  \code{scrlayer-scrpage} adapte les bandeaux sans toucher aux marges physiques.
 \end{itemize}
 \end{boiteSynthese}
 
 % ==============================================================================
 % 4.2 Démonstration en Direct de la Géométrie Large (WideGeometry)
 % ==============================================================================
+\begin{WideGeometry}
+\activerStyleFocus
+
 \section{Démonstration en Direct : Géométrie Pleine Page (\code{WideGeometry})}
 \label{sec:demo-geometrie-large}
 
 Pour illustrer cette plasticité, nous ouvrons ici même un bloc de géométrie large
 à l'aide de l'environnement \code{WideGeometry}.
-Remarquez le comportement sur les pages suivantes :
-les marges latérales se réduisent instantanément à 15\,mm,
-libérant une largeur d'empagement de plus de 180\,mm.
-Simultanément, nous activons le style d'en-tête épuré \code{\textbackslash activerStyleFocus}
-pour supprimer tout filet parasite et maximiser la concentration du lecteur.
-
-\begin{WideGeometry}
-\activerStyleFocus
+Les marges latérales se réduisent instantanément à 15\,mm,
+libérant une largeur d'empagement de plus de 180\,mm, tandis que le style d'en-tête épuré \code{\textbackslash activerStyleFocus}
+supprime tout filet parasite pour maximiser la concentration du lecteur.
 
 \subsection{Espace élargi et style d'en-tête minimaliste \code{StyleFocus}}
-Nous sommes actuellement dans l'environnement \code{WideGeometry}.
 Observez l'en-tête supérieur : la ligne de séparation habituelle a disparu,
 le titre courant de chapitre est masqué,
 et seul un folio centré (\code{---\,\thepage\,---}) subsiste en bas de page.
-Cette disposition est particulièrement recommandée lors de la présentation
-de grands tableaux de bord de données ou de comparaisons exhaustives d'architectures.
-
 Le~\cref{tab:comparatif-architectures-large} exploite l'intégralité des 180\,mm disponibles
 sans provoquer le moindre débordement (\textit{overfull hbox})
 et sans devoir réduire la taille de police en corps microscopique.
@@ -142,16 +140,12 @@ L'utilisation de la géométrie large permet de concevoir des blocs récapitulat
   garantissant qu'aucune page bâtarde ne présente des marges asymétriques au milieu d'un feuillet.
   \item Le moteur de calcul \LaTeX{} réévalue \code{\textbackslash linewidth} et \code{\textbackslash textwidth}
   à l'intérieur du bloc, assurant la compatibilité totale avec les boîtes \code{tcolorbox}.
+  \item Dès la fermeture du bloc \code{WideGeometry}, la commande \code{\textbackslash restoregeometry} (enrichie par \code{\textbackslash syncKomaGeometry}) rétablit automatiquement les proportions canoniques de la classe.
 \end{itemize}
 \end{boiteSynthese}
 
 \end{WideGeometry}
 \activerStyleStandard
-
-Dès la fermeture du bloc \code{WideGeometry},
-la commande \code{\textbackslash restoregeometry} rétablit les proportions canoniques de la classe.
-Les en-têtes réguliers avec logo sont quant à eux réactivés par la commande
-\code{\textbackslash activerStyleStandard}.
 
 % ==============================================================================
 % 4.3 Démonstration en Direct : Style C — Conformité Traitement de Texte (WordGeometry)
@@ -167,8 +161,7 @@ notamment une marge uniforme de 2.5\,cm sur l'ensemble des quatre côtés du feu
 
 Pour satisfaire à cette exigence sans altérer la rigueur du moteur \LaTeX{},
 notre classe met à disposition l'environnement \code{WordGeometry}.
-Cette géométrie applique des marges parfaitement symétriques de 25\,mm tout en préservant
-l'alignement des corps de texte.
+Cette géométrie applique des marges parfaitement symétriques de 25\,mm tout en synchronisant automatiquement l'en-tête KOMA-Script sur la nouvelle largeur du bloc de texte.
 
 \subsection{Empagement symétrique de 2.5~cm et intégration des annotations}
 Observez la mise en page de la présente page :
@@ -184,7 +177,7 @@ Observez la mise en page de la présente page :
   prouvant qu'un gabarit imposé demeure compatible avec une chaîne de relecture interactive.
 \end{enumerate}
 
-Voici un exemple de passage soumis à relecture collégiale dans ce gabarit :
+Voici un exemple de passage soumis à relecture collégiale dans ce gabarit (remarquez que la couleur du surlignage s'accorde automatiquement au profil de relecteur : bleu pour l'auteur, corail pour le rapporteur) :
 
 Dans les architectures documentaires classiques et les chaînes de publication patrimoniales,
 \todoH[AuthorStyle]{Préciser la norme ISO relative à la structure des documents XML/PDF}{la rigidité des formats}
@@ -203,11 +196,143 @@ accessible en tête de document.
 
 \begin{callout}[Comportement en mode publication (\code{print} ou sans option \code{todos})]
 Lorsque l'option de classe \code{todos} est désactivée pour la publication finale,
-toutes les boîtes jaunes de marge et les surlignages disparaissent instantanément du texte,
+toutes les boîtes de marge et les surlignages disparaissent instantanément du texte,
 sans laisser la moindre trace ni altérer la justification des lignes.
 \end{callout}
 
 \end{WordGeometry}
+
+% ==============================================================================
+% 4.4 Démonstration en Direct : Page de Design Libre (pageDesign)
+% ==============================================================================
+\begin{pageDesign}[left=1.4cm, right=1.4cm, top=1.6cm, bottom=1.6cm]
+
+\section{Démonstration en Direct : Page de Design Sur-Mesure (\code{pageDesign})}
+\label{sec:demo-page-design}
+
+\noindent
+L'environnement \code{\textbackslash begin\{pageDesign\}[options geometry]...\textbackslash end\{pageDesign\}} offre une liberté de création absolue sur une ou plusieurs pages dédiées :
+il suspend temporairement les en-têtes KOMA-Script et le calque du logo, applique n'importe quelle géométrie personnalisée (ici des marges de 14\,mm à gauche/droite et 16\,mm en haut/bas), puis restaure automatiquement le calcul KOMA (\code{DIV=12}), l'en-tête courant et l'état du logo dès la fermeture du bloc.
+
+\vspace{3mm}
+
+\begin{tcolorbox}[
+  enhanced,
+  colback=ThesisPrimary,
+  colframe=ThesisPrimary,
+  arc=4pt,
+  boxrule=0pt,
+  left=12pt, right=12pt, top=10pt, bottom=10pt,
+  borderline south={2.5pt}{0pt}{ThesisAccent}
+]
+  \sffamily
+  {\Large\bfseries\color{white}PLANCHE ARCHITECTURALE --- TABLEAU DE BORD EXÉCUTIF}\par\vspace{1.5mm}
+  {\small\color{ThesisBackground!90}Exemple de composition graphique libre en pleine page (\texttt{\textcolor{white}{pageDesign}}) combinant cartes d'indicateurs, synoptique vectoriel et grille multi-blocs sans aucune contrainte d'en-tête.}
+\end{tcolorbox}
+
+\vspace{2mm}
+
+\noindent
+\begin{minipage}[t]{0.32\linewidth}
+  \begin{tcolorbox}[
+    enhanced,
+    colback=ThesisBackground,
+    colframe=ThesisPrimary!25,
+    boxrule=0.6pt,
+    arc=3pt,
+    borderline north={3pt}{0pt}{ThesisPrimary},
+    top=10pt, bottom=8pt, left=8pt, right=8pt
+  ]
+    \sffamily\centering
+    {\scriptsize\bfseries\color{ThesisMuted}\MakeUppercase{Couplage KOMA + Geometry}}\par\vspace{2mm}
+    {\fontsize{20}{24}\selectfont\bfseries\color{ThesisPrimary}100\,\%}\par\vspace{1.5mm}
+    {\footnotesize\color{ThesisText}Synchronisation automatique de \code{scrlayer-scrpage} et \code{BCOR} via \code{\textbackslash syncKomaGeometry}.}
+  \end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}
+  \begin{tcolorbox}[
+    enhanced,
+    colback=ThesisBackground,
+    colframe=ThesisSecondary!30,
+    boxrule=0.6pt,
+    arc=3pt,
+    borderline north={3pt}{0pt}{ThesisSecondary},
+    top=10pt, bottom=8pt, left=8pt, right=8pt
+  ]
+    \sffamily\centering
+    {\scriptsize\bfseries\color{ThesisMuted}\MakeUppercase{Surface Utile Maximale}}\par\vspace{2mm}
+    {\fontsize{20}{24}\selectfont\bfseries\color{ThesisSecondary}182\,mm}\par\vspace{1.5mm}
+    {\footnotesize\color{ThesisText}Largeur de ligne disponible sur cette planche pour déployer des infographies complexes.}
+  \end{tcolorbox}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}
+  \begin{tcolorbox}[
+    enhanced,
+    colback=ThesisBackground,
+    colframe=ThesisAccent!35,
+    boxrule=0.6pt,
+    arc=3pt,
+    borderline north={3pt}{0pt}{ThesisAccent},
+    top=10pt, bottom=8pt, left=8pt, right=8pt
+  ]
+    \sffamily\centering
+    {\scriptsize\bfseries\color{ThesisMuted}\MakeUppercase{Isolation d'État}}\par\vspace{2mm}
+    {\fontsize{20}{24}\selectfont\bfseries\color{ThesisAccent}0 Conflit}\par\vspace{1.5mm}
+    {\footnotesize\color{ThesisText}Restauration transparente du style de page et du logo dès \code{\textbackslash end\{pageDesign\}}.}
+  \end{tcolorbox}
+\end{minipage}
+
+\vspace{2mm}
+
+\begin{tcolorbox}[
+  enhanced,
+  colback=white,
+  colframe=ThesisSecondary!35,
+  boxrule=0.7pt,
+  arc=3pt,
+  title={\sffamily\bfseries\small Cycle de Vie d'une Dérogation Géométrique dans \texttt{mythesis.cls}},
+  colbacktitle=ThesisSecondary,
+  coltitle=white,
+  toptitle=4pt, bottomtitle=4pt
+]
+  \centering
+  \begin{tikzpicture}[
+    node distance=0.6cm,
+    etape/.style={
+      rectangle,
+      rounded corners=3pt,
+      draw=ThesisPrimary,
+      line width=0.8pt,
+      fill=ThesisBackground,
+      text width=3.1cm,
+      align=center,
+      font=\sffamily\footnotesize,
+      inner sep=5pt
+    },
+    fleche/.style={->, >=latex, line width=1.1pt, color=ThesisAccent}
+  ]
+    \node[etape] (n1) {\textbf{1. Grille KOMA}\\\scriptsize \texttt{DIV=12} \& \texttt{scrheadings}\\(Prose courante)};
+    \node[etape, right=0.55cm of n1, fill=ThesisPrimary!8] (n2) {\textbf{2. Ouverture Bloc}\\\scriptsize \texttt{\textbackslash newgeometry\{...\}}\\+ \texttt{bindingoffset}};
+    \node[etape, right=0.55cm of n2, fill=ThesisSecondary!10] (n3) {\textbf{3. Hook Automatique}\\\scriptsize \texttt{\textbackslash syncKomaGeometry}\\Recalcul \texttt{headwidth}};
+    \node[etape, right=0.55cm of n3, fill=ThesisAccent!10] (n4) {\textbf{4. Fermeture Bloc}\\\scriptsize \texttt{\textbackslash restoregeometry}\\Retour KOMA natif};
+
+    \draw[fleche] (n1) -- (n2);
+    \draw[fleche] (n2) -- (n3);
+    \draw[fleche] (n3) -- (n4);
+  \end{tikzpicture}
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{boiteSynthese}{Usage de \code{pageDesign} et \code{\textbackslash geometrieLibre}}
+Pour créer une page au design libre où vous contrôlez chaque millimètre :
+\begin{itemize}
+  \item Enveloppez votre contenu dans l'environnement \code{pageDesign} en passant vos marges en argument optionnel (\code{[left=1.5cm, right=1.5cm, top=1.5cm, bottom=1.5cm]}).
+  \item Si vous souhaitez conserver les en-têtes courants tout en spécifiant des marges sur mesure, appelez directement \code{\textbackslash geometrieLibre\{...\}} puis \code{\textbackslash geometrieStandard}.
+\end{itemize}
+\end{boiteSynthese}
+
+\end{pageDesign}
 
 % ==============================================================================
 % 4.4 Démonstration en Direct : Style D — Diagnostic et Révision KOMA Pur (ThesisDebug)
@@ -382,40 +507,39 @@ tout en préservant le sens d'impression naturel pour le relieur papier.
 
 \subsection{Matrice synoptique multiparamétrique en orientation paysage}
 Observez l'orientation de cette page dans votre visionneuse PDF :
-le format A4 est basculé automatiquement en orientation paysage ($297 \times 210$\,mm).
-Nous pouvons déployer un tableau synoptique de grande envergure comparant sept moteurs et technologies de composition :
+le format A4 est basculé automatiquement en orientation paysage ($297 \times 210$\,mm), permettant de déployer un tableau synoptique et son encadré méthodologique sur un feuillet unique :
 
 \begin{table}[htbp]
   \centering
-  \small
+  \footnotesize
+  \renewcommand{\arraystretch}{1.1}
   \caption[Benchmarking technique comparatif des moteurs de composition scientifique]{Benchmarking technique comparatif des technologies de composition scientifique (page paysage dynamique \code{pdflscape})}
   \label{tab:benchmark-paysage}
-  \begin{tabularx}{\linewidth}{l c c c c c >{\raggedright\arraybackslash}X}
+  \begin{tabularx}{\linewidth}{@{} l c c c c c Y @{}}
     \toprule
     \textbf{Technologie} & \textbf{Moteur} & \textbf{Unicode/UTF-8} & \textbf{Microtype} & \textbf{Polices OTF} & \textbf{Vitesse} & \textbf{Verdict en Thèse Doctorale \& Ingénierie} \\
     \midrule
     \textbf{\LaTeXe{} Historique} & pdf\TeX{} & Partiel & Oui & Non (Type 1) & Très rapide & Obsolète pour nouveaux projets ; encodage fragile. \\
-    \addlinespace
+    \addlinespace[2pt]
     \textbf{Xe\LaTeX{}} & Xe\TeX{} & Natif & Partiel & Oui (système) & Rapide & Bon support des fontes, mais microtypographie limitée. \\
-    \addlinespace
+    \addlinespace[2pt]
     \textbf{Lua\LaTeX{}} & Lua\TeX{} & Natif & Complet & Oui (direct/relatif) & Modérée & \textbf{Standard d'excellence recommandé} : programmabilité totale, polices locales figées, UTF-8 robuste. \\
-    \addlinespace
+    \addlinespace[2pt]
     \textbf{Typst} & Rust & Natif & En cours & Oui (système) & Ultra-rapide & Écosystème émergent prometteur, mais support biblio et éditeurs encore jeune pour une thèse d'État. \\
-    \addlinespace
-    \textbf{MS Word / LibreOffice} & Propriétaire & Natif & Non & Oui & Temps réel & Réprouvé : rupture de reproductibilité, gestion catastrophique des équations et des références croisées. \\
+    \addlinespace[2pt]
+    \textbf{MS Word / LibreOffice} & Propriétaire & Natif & Non & Oui & Temps réel & Réprouvé : rupture de reproductibilité, gestion fragile des équations et des références croisées. \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
+\vspace{-2mm}
+
 \begin{boiteSynthese}{Règles d'Or pour les Pages en Mode Paysage}
-Trois principes garantissent une intégration sans bavure des pages tournées :
-\begin{enumerate}
-  \item \textbf{Encapsulation stricte :} l'environnement \code{landscape} doit toujours être ouvert
-  immédiatement après un saut de page propre et refermé avant de poursuivre la prose courante.
-  \item \textbf{Adaptation des en-têtes :} combiner \code{landscape} avec \code{\textbackslash activerStyleFocus}
-  permet de masquer les en-têtes horizontaux qui viendraient encombrer inutilement le bord long.
-  \item \textbf{Largeur universelle :} utilisez toujours \code{\textbackslash linewidth} dans les environnements \code{tabularx}
-  pour occuper exactement la largeur disponible sans calcul manuel hasardeux.
+\footnotesize
+\begin{enumerate}[nosep]
+  \item \textbf{Encapsulation stricte :} l'environnement \code{landscape} doit toujours être ouvert après un saut de page propre et refermé avant de poursuivre la prose courante.
+  \item \textbf{Adaptation des en-têtes :} combiner \code{landscape} avec \code{\textbackslash activerStyleFocus} masque les en-têtes horizontaux qui encombreraient le bord long.
+  \item \textbf{Largeur universelle :} utilisez toujours \code{\textbackslash linewidth} dans les environnements \code{tabularx} pour occuper exactement la largeur disponible.
 \end{enumerate}
 \end{boiteSynthese}
 
@@ -423,7 +547,7 @@ Trois principes garantissent une intégration sans bavure des pages tournées :
 \activerStyleStandard
 
 % ==============================================================================
-% 4.6 Bonnes Pratiques et Synthèse Opérationnelle
+% 4.7 Bonnes Pratiques et Synthèse Opérationnelle
 % ==============================================================================
 \section{Checklist de l'Architecte : Gestion des Géométries et des En-têtes}
 \label{sec:checklist-geometrie}
@@ -437,43 +561,53 @@ les commandes, les contextes d'application et les précautions associées
   \small
   \caption[Synthèse opérationnelle des commandes de géométrie et d'en-tête]{Synthèse opérationnelle des commandes de modification d'empagement et d'en-tête}
   \label{tab:checklist-geometries}
-  \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.7cm}}
+  \begin{tabularx}{\linewidth}{@{} >{\raggedright\arraybackslash}p{3.6cm} Y Y >{\raggedright\arraybackslash}p{2.7cm} @{}}
     \toprule
-    \textbf{Commande / Bloc} & \textbf{Effet produit sur le document} & \textbf{Précautions obligatoires} & \textbf{Paquet requis} \\
+    \textbf{Commande / Bloc} & \textbf{Effet produit sur le document} & \textbf{Synchronisation automatique} & \textbf{Module source} \\
     \midrule
     \code{\textbackslash geometrieStandard} &
     Restaure la géométrie KOMA-Script (\code{DIV=12}). &
-    Exécute automatiquement \code{\textbackslash cleardoublepage}. &
-    \code{geometry} \\
+    Exécute \code{\textbackslash restoregeometry} + \code{\textbackslash syncKomaGeometry}. &
+    \code{config/macros} \\
+    \addlinespace
+    \code{pageDesign[opts]} &
+    Page de design libre sur mesure sans en-tête ni logo. &
+    Sauvegarde et restaure l'état du logo et le style KOMA. &
+    \code{config/macros} \\
+    \addlinespace
+    \code{\textbackslash geometrieLibre\{...\}} &
+    Marges personnalisées tout en conservant les en-têtes. &
+    Injecte \code{bindingoffset} et recalcule \code{headwidth}. &
+    \code{config/macros} \\
     \addlinespace
     \code{WideGeometry} &
     Marges réduites à 15\,mm pour données horizontales denses. &
-    Associer à \code{\textbackslash activerStyleFocus} pour éviter les surcharges. &
+    Combiner avec \code{\textbackslash activerStyleFocus} si souhaité. &
     \code{config/macros} \\
     \addlinespace
     \code{WordGeometry} &
     Marges symétriques de 25\,mm pour conformité Word/enseignant. &
-    Notes de marge réduites à 20\,mm avec \code{\textbackslash todoH}. &
+    Notes de marge calibrées à 20\,mm avec \code{\textbackslash todoH}. &
     \code{config/macros} \\
     \addlinespace
     \code{\textbackslash activerStyle}\allowbreak\code{Focus} &
     En-tête épuré sans filet, folio centré discret. &
     À rétablir via \code{\textbackslash activerStyle}\allowbreak\code{Standard} en fin de bloc. &
-    \code{scrlayer-scrpage} \\
+    \code{mythesis.cls} \\
     \addlinespace
     \code{\textbackslash activerStyle}\allowbreak\code{Debug} &
     Affiche le fichier source, le statut révision et le folio X/Y. &
-    Utilise la référence \code{LastPage} (nécessite deux passes). &
-    \code{scrlayer-scrpage} \\
+    Utilise la référence \code{LastPage} sans altérer \code{\textbackslash automark}. &
+    \code{mythesis.cls} \\
     \addlinespace
     \code{multicols\{N\}} &
     Composition fluide sur $N$ colonnes sans saut de page. &
-    Les flottants \code{figure} standards ne sont pas autorisés dans le bloc. &
+    Équilibrage automatique de la hauteur des colonnes. &
     \code{multicol} \\
     \addlinespace
     \code{landscape} &
     Rotation physique de la page avec balise PDF \code{/Rotate 90}. &
-    Isoler entièrement le tableau entre l'ouverture et la fermeture. &
+    Isoler le tableau entre l'ouverture et la fermeture. &
     \code{pdflscape} \\
     \bottomrule
   \end{tabularx}
