@@ -483,8 +483,8 @@
 \apptocmd{\restoregeometry}{\syncKomaGeometry}{}{}
 
 % --- Bibliographie BibLaTeX ---
-% Par défaut (bibstyle=custom) : biblio/custom-style.bbx et biblio/custom-style.cbx
-% Option bibstyle=vancouver : style numérique Vancouver
+% Par défaut (bibstyle=custom) : biblio/custom-style.{bbx,cbx} si présent (sinon authoryear)
+% Option bibstyle=vancouver : style numérique Vancouver (avec adaptation française complète)
 \ifdefstring{\ClasseGuillaume@bibstyle}{vancouver}{%
   \RequirePackage[
     backend=biber,
@@ -498,9 +498,37 @@
   \ifClasseGuillaume@english\else
     \DefineBibliographyStrings{french}{%
       urlseen = {consulté le},
-      urlfrom = {disponible sur}
+      urlfrom = {Disponible sur}
     }%
-    \DeclareFieldFormat{urldate}{\mkbibbrackets{\bibstring{urlseen}\space#1}}%
+    % Traduction française des mois abrégés codés en dur en anglais par biblatex-vancouver
+    \renewcommand*{\shortmonth}[1]{%
+      \ifstrempty{#1}{}{%
+        \ifcase#1\relax
+        \or janv\adddot%
+        \or fév\adddot%
+        \or mars%
+        \or avr\adddot%
+        \or mai%
+        \or juin%
+        \or juil\adddot%
+        \or août%
+        \or sept\adddot%
+        \or oct\adddot%
+        \or nov\adddot%
+        \or déc\adddot%
+        \fi
+      }%
+    }%
+    \DeclareFieldFormat*{date}{%
+      \thefield{year}%
+      \iffieldundef{month}{}{\addspace\shortmonth{\thefield{month}}\iffieldundef{day}{}{\addspace\thefield{day}}}%
+      \isdot
+    }%
+    \DeclareFieldFormat{urldate}{%
+      \iffieldundef{urlday}%
+        {\mkbibbrackets{Consulté en\space#1}}%
+        {\mkbibbrackets{\bibstring{urlseen}\space#1}}%
+    }%
     \DeclareFieldFormat{url}{\bibstring{urlfrom}\addcolon\space\url{#1}}%
     \renewbibmacro*{url+urldate}{%
       \usebibmacro{urldate}%
@@ -509,10 +537,17 @@
     }%
   \fi
 }{%
-  \RequirePackage[
-    backend=biber,
-    style=biblio/custom-style
-  ]{biblatex}%
+  \IfFileExists{biblio/custom-style.bbx}{%
+    \RequirePackage[
+      backend=biber,
+      style=biblio/custom-style
+    ]{biblatex}%
+  }{%
+    \RequirePackage[
+      backend=biber,
+      style=authoryear
+    ]{biblatex}%
+  }%
 }
 
 % Césure irréprochable de toutes les URL (notes de marge, bibliographie)

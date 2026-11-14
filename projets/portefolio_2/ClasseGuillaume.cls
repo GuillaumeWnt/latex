@@ -431,6 +431,7 @@
   \let\code\@firstofone
   \let\term\@firstofone
   \let\textbullet\space
+  \let\textsc\@firstofone
 }
 
 \endinput

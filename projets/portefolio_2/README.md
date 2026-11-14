@@ -8,16 +8,16 @@ Migration architecturale du projet `portefolio_1` vers le socle modulaire [`temp
 
 ## Arborescence
 
-- `main.tex` : point d'entrée compilable (`screen, french, todos, font=calibri, bibstyle=vancouver, spacing=double`)
+- `main.tex` : point d'entrée compilable (`screen, french, todos, font=calibri, bibstyle=vancouver, spacing=onehalf`)
 - `ClasseGuillaume.cls`, `ClasseGuillaume-*.clo` : classe générique issue de `template_officiel`
-- `config/` : `packages.sty`, `macros.sty`, et `portefolio-style.sty` (surcharge visuelle dédiée à l'esthétique exacte du portfolio)
+- `config/` : `packages.sty`, `macros.sty`, et `portefolio-style.sty` (charte éditoriale harmonisée sur les pages de garde)
 - `frontmatter/` : pages de garde modulaire (`cover-main.tex`, `cover-chap1.tex` à `cover-chap4.tex`)
 - `content/` : chapitres `01-*.tex` à `06-*.tex`, sous-sections découpées et `tables/` (`archives/` inclus)
 - `backmatter/` : `appendix-a.tex`
-- `biblio/` : `references.bib` et styles `custom-style.*`
+- `biblio/` : `references.bib` (18 entrées UTF-8 BibLaTeX/Biber sous style `vancouver`)
 - `figures/` : `covers/`, `logos/`, figures actives et orphelines classées par chapitre
 - `fonts/` : polices figées (`CalibriFontFiles/`, `AsapFontFiles/`, `ComicSansMSFontFiles/`, `texgyreheros-*.otf`)
-- `docs/` : notes et documents annexes conservés (`note.txt`, `Cas_polypathologique_M3.pdf`)
+- `docs/` : notes conservées et fiches explicatives (`diagnostic-avertissements-compilation.md`, `refonte-styles-et-bibliographie.md`, `note.txt`, `Cas_polypathologique_M3.pdf`)
 
 ## Compilation
 

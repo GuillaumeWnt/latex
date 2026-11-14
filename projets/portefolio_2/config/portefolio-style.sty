@@ -1,75 +1,101 @@
 %% ==============================================================================
 %% config/portefolio-style.sty
-%% Surcharge visuelle fidèle à l'esthétique historique du portfolio médical
-%% tout en conservant la symbiose propre KOMA-Script + geometry + lua-ul
+%% Refonte visuelle éditoriale harmonisée avec les pages de garde (figures/covers)
+%% sans redondance avec ClasseGuillaume.cls / packages.sty / macros.sty
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{config/portefolio-style}[2026/11/14 v1.0 Visual Fidelity Style for portefolio_2]
+\ProvidesPackage{config/portefolio-style}[2026/11/14 v2.0 Editorial Style Aligned with Covers]
 
-% --- 1. Palette chromatique exacte (rouge bordeaux mdtRed) ---
-\colorlet{mdtRed}{red!50!black}
-\colorlet{ThesisPrimary}{mdtRed}
-\colorlet{ThesisSecondary}{mdtRed}
-\colorlet{ThesisAccent}{mdtRed}
+% --- 1. Palette institutionnelle extraite des pages de garde (figures/covers/) ---
+\definecolor{CoverNavy}{HTML}{15213A}      % Bleu nuit profond (couverture 1)
+\definecolor{CoverPlum}{HTML}{80175C}      % Prune / magenta médical (accent fort)
+\definecolor{CoverSky}{HTML}{6EB6E7}       % Bleu ciel UCLouvain (filets & repères)
+\definecolor{CoverSlate}{HTML}{9DB6D6}     % Bleu acier doux (filets secondaires)
+\definecolor{CoverSlateDark}{HTML}{4A6382} % Ardoise contrastée sur fond blanc
+\definecolor{CoverTint}{HTML}{F4F7FB}      % Voile glacé doux dérivé de CoverSlate
+
+\colorlet{ThesisPrimary}{CoverPlum}
+\colorlet{ThesisSecondary}{CoverNavy}
+\colorlet{ThesisAccent}{CoverSky}
 \colorlet{ThesisText}{black}
-\colorlet{ThesisMuted}{gray}
+\colorlet{ThesisMuted}{CoverSlateDark}
+\colorlet{ThesisBackground}{CoverTint}
+\colorlet{mdtRed}{CoverPlum}              % Rétrocompatibilité des encadrés du contenu
 
-% --- 2. Calibrage géométrique KOMA + geometry sans avertissement ---
+% --- 2. Géométrie factorisée et rythme typographique des paragraphes ---
 \KOMAoptions{parskip=half}
+\setstretch{1.32}
 \setlength{\footheight}{29pt}
+\raggedbottom
+
+% Helper unique évitant la répétition des clés communes entre gabarits de page
+\newcommand{\portfolio@applygeometry}[7]{%
+  \cleardoublepage%
+  \newgeometry{
+    left=#1, right=#1,
+    top=#2, bottom=#3,
+    headheight=#4, headsep=#5,
+    footskip=#4, footnotesep=#6,
+    marginparwidth=#7, marginparsep=3mm,
+    twoside=false, bindingoffset=0cm, twocolumn=false
+  }%
+}
+
 \geometry{
   headheight=29pt,
-  footskip=29pt,
+  footskip=28pt,
   marginparwidth=2.0cm,
   marginparsep=3mm
 }
-\raggedbottom
 
-% Redéfinition de \geometrieWord (2.5 cm) et \geometrieLarge (1 cm) fidèles à portefolio_1
 \renewcommand{\geometrieWord}{%
-  \cleardoublepage%
   \renewcommand{\currentGeometryCmd}{\geometrieWord}%
-  \newgeometry{
-    left=2.5cm, right=2.5cm,
-    top=2.5cm, bottom=2.5cm,
-    headheight=29pt, headsep=5mm,
-    footskip=29pt, footnotesep=5mm,
-    marginparwidth=2cm, marginparsep=3mm,
-    twoside=false, bindingoffset=0cm, twocolumn=false
-  }%
+  \portfolio@applygeometry{2.5cm}{2.6cm}{2.5cm}{29pt}{7mm}{6mm}{2.0cm}%
 }
 \let\geometrieAnnotation\geometrieWord
 
 \renewcommand{\geometrieLarge}{%
-  \cleardoublepage%
   \renewcommand{\currentGeometryCmd}{\geometrieLarge}%
-  \newgeometry{
-    left=1cm, right=1cm,
-    top=1cm, bottom=1cm,
-    headheight=23pt, headsep=5pt,
-    footskip=23pt, footnotesep=5pt,
-    marginparwidth=0mm, marginparsep=0mm,
-    twoside=false, bindingoffset=0cm, twocolumn=false
-  }%
+  \portfolio@applygeometry{1.0cm}{1.0cm}{1.0cm}{24pt}{5pt}{5pt}{0mm}%
 }
 \let\geometrieExemple\geometrieLarge
 
-% --- 3. En-têtes et pieds de page (en-tête uniquement, sans pied de page ni logo) ---
+% --- 3. En-têtes et pieds de page (scrlayer-scrpage) ---
 \masquerLogo
 \clearpairofpagestyles
-\automark{chapter}
+\automark[section]{chapter}
 
-\setkomafont{pagehead}{\normalfont\sffamily\itshape\color{gray}}
-\setkomafont{pagenumber}{\normalfont\sffamily\bfseries\color{black}}
-\addtokomafont{headsepline}{\color{black}}
+\setkomafont{pagehead}{\normalfont\sffamily\footnotesize\color{CoverNavy}}
+\setkomafont{pagefoot}{\normalfont\sffamily\footnotesize\color{CoverSlateDark}}
+\setkomafont{pagenumber}{\normalfont\AsapFont\bfseries\fontsize{9.5}{11}\selectfont\color{CoverNavy}}
+\addtokomafont{headsepline}{\color{CoverSky!70!CoverSlate}}
+\addtokomafont{footsepline}{\color{CoverSlate!70}}
 
-\ohead[\pagemark]{\pagemark}
-\ihead[]{\headmark}
-\cfoot[]{}
+% Rappel folio sobre (barre verticale prune + numéro bleu nuit)
+\newcommand{\portfolio@foliobadge}{%
+  \textcolor{CoverPlum}{\rule[-0.15em]{1.8pt}{0.9em}}\enskip\pagemark%
+}
+
+\ihead[]{%
+  \Ifstr{\leftmark}{}{}{%
+    \textcolor{CoverPlum}{\rule[0.12ex]{0.42em}{0.42em}}\enskip%
+    \textbf{\truncate{0.46\linewidth}{\leftmark}}%
+  }%
+}
+\ohead[]{%
+  \Ifstr{\leftmark}{\rightmark}{}{%
+    \normalfont\sffamily\footnotesize\itshape\color{CoverSlateDark}%
+    \truncate{0.45\linewidth}{\rightmark}%
+  }%
+}
+\ifoot[]{%
+  \getauthor\enspace\textcolor{CoverSky}{\textbullet}\enspace\textit{\gettitle\ --- \getinstitution}%
+}
+\ofoot[\portfolio@foliobadge]{\portfolio@foliobadge}
 
 \AddToLayerPageStyleOptions{scrheadings}{%
   onselect={%
-    \KOMAoptions{headsepline=0.5pt, footsepline=false}%
+    \KOMAoptions{headsepline=0.6pt, footsepline=0.45pt}%
   }%
 }
 \AddToLayerPageStyleOptions{plain.scrheadings}{%
@@ -78,7 +104,7 @@
   }%
 }
 
-% --- 4. Hiérarchie des titres (Asap Condensed rouge, chapitres centrés romains) ---
+% --- 4. Hiérarchie typographique des chapitres, sections et paragraphes ---
 \KOMAoptions{
   chapterprefix=true,
   appendixprefix=true,
@@ -90,56 +116,117 @@
   numbers=noenddot
 }
 
-\setkomafont{disposition}{\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
-\setkomafont{chapter}{\Huge\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
-\setkomafont{section}{\Large\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
-\setkomafont{subsection}{\large\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
-\setkomafont{subsubsection}{\normalsize\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
-\setkomafont{paragraph}{\normalsize\bfseries}
-\setkomafont{captionlabel}{\bfseries\sffamily\color{black}}
-\setkomafont{caption}{\small\sffamily}
-\setkomafont{descriptionlabel}{\bfseries\sffamily\color{black}}
-
-% Restauration des gabarits KOMA-Script natifs de titre de chapitre centré
-\renewcommand*{\raggedchapter}{\centering}
-\renewcommand*{\chapterformat}{%
-  \mbox{\chapappifchapterprefix{\nobreakspace}\thechapter\autodot\IfUsePrefixLine{}{\enskip}}%
-}
-\renewcommand*{\chapterlinesformat}[3]{%
-  \@hangfrom{#2}{#3}%
-}
-\renewcommand*{\chapterlineswithprefixformat}[3]{%
-  #2#3%
-}
-
-\RedeclareSectionCommand[
-  font={\Huge\AsapFont\color{mdtRed}\setstretch{1}\selectfont},
-  beforeskip=-2cm,
-  afterskip=1cm,
-  innerskip=0.5em
-]{chapter}
-
-\RedeclareSectionCommand[
-  beforeskip=-3.5ex \@plus -1ex \@minus -.2ex,
-  afterskip=2.3ex \@plus .2ex
-]{section}
-
-\RedeclareSectionCommands[
-  beforeskip=-15pt,
-  afterskip=10pt
-]{subsection, subsubsection}
-
-\RedeclareSectionCommand[
-  indent=5mm,
-  afterskip=-1em,
-  font={\color{black}\bfseries\textbullet~}
-]{paragraph}
+\setkomafont{disposition}{\bfseries\AsapFont\color{CoverNavy}\setstretch{1}}
+\setkomafont{chapter}{\fontsize{25}{30}\selectfont\bfseries\AsapFont\color{CoverNavy}\setstretch{1}}
+\setkomafont{chapterprefix}{\fontsize{10.5}{13}\selectfont\bfseries\AsapFont\color{CoverPlum}\setstretch{1}}
+\setkomafont{section}{\fontsize{15}{19}\selectfont\bfseries\AsapFont\color{CoverNavy}\setstretch{1}}
+\setkomafont{subsection}{\fontsize{12.5}{16}\selectfont\bfseries\AsapFont\color{CoverPlum}\setstretch{1}}
+\setkomafont{subsubsection}{\fontsize{11}{14}\selectfont\bfseries\AsapFont\color{CoverSlateDark}\setstretch{1}}
+\setkomafont{paragraph}{\normalsize\bfseries\color{CoverNavy}}
+\setkomafont{captionlabel}{\bfseries\sffamily\color{CoverPlum}}
+\setkomafont{caption}{\small\sffamily\color{CoverNavy}}
+\setkomafont{descriptionlabel}{\bfseries\sffamily\color{CoverPlum}}
 
 \renewcommand{\thechapter}{\Roman{chapter}}
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
 
-% --- 5. Figures, légendes, tableaux et listes ---
+% Signature des chapitres (carré prune + filet ciel/acier en écho aux couvertures)
+\renewcommand*{\raggedchapter}{\raggedright}
+\renewcommand*{\chapterformat}{%
+  \textcolor{CoverPlum}{\fontsize{10.5}{13}\selectfont\bfseries\AsapFont\MakeUppercase{\chapapp}\enskip\thechapter\autodot}%
+}
+
+\newcommand{\portfolio@chapterrule}{%
+  \vspace{0.45em}\nobreak%
+  \noindent%
+  {\color{CoverPlum}\rule{0.14\linewidth}{2.4pt}}%
+  {\color{CoverSky}\rule{0.10\linewidth}{2.4pt}}%
+  {\color{CoverSlate!70}\rule{0.76\linewidth}{0.7pt}}\par%
+}
+
+\renewcommand*{\chapterlinesformat}[3]{%
+  \Ifstr{#1}{chapter}{%
+    \Ifstr{#2}{}{%
+      {\raggedchapter\interlinepenalty \@M #3\par}\nobreak%
+      \portfolio@chapterrule%
+    }{%
+      \noindent%
+      \textcolor{CoverPlum}{\rule[0.05em]{0.62em}{0.62em}}\enspace%
+      #2\enspace%
+      {\color{CoverSlate}\leaders\hrule height 0.55pt\hfill}\par\nobreak%
+      \vspace{0.35em}\nobreak%
+      {\raggedchapter\interlinepenalty \@M #3\par}\nobreak%
+      \portfolio@chapterrule%
+    }%
+  }{%
+    \@hangfrom{#2}{#3}%
+  }%
+}
+\renewcommand*{\chapterlineswithprefixformat}[3]{\chapterlinesformat{#1}{#2}{#3}}
+
+% Mise en scène des sections, sous-sections et sous-sous-sections (support multi-lignes)
+\renewcommand*{\sectionformat}{%
+  \textcolor{CoverPlum}{\rule[-0.12em]{2.6pt}{0.92em}}\enskip%
+  \textcolor{CoverPlum}{\thesection\autodot}\enskip%
+}
+\renewcommand*{\subsectionformat}{%
+  \textcolor{CoverNavy}{\thesubsection\autodot}\enskip%
+}
+\renewcommand*{\subsubsectionformat}{%
+  \textcolor{CoverSky}{\rule[0.12ex]{0.38em}{0.38em}}\enskip%
+  \textcolor{CoverSlateDark}{\thesubsubsection\autodot}\enskip%
+}
+
+\renewcommand*{\sectionlinesformat}[4]{%
+  \Ifstr{#1}{section}{%
+    {\@hangfrom{\hskip #2#3}{#4}\par}\nobreak%
+    \vspace{-0.2em}\nobreak%
+    \noindent%
+    {\color{CoverSky}\rule{0.09\linewidth}{1.3pt}}%
+    {\color{CoverSlate!55}\rule{0.91\linewidth}{0.5pt}}\par%
+  }{%
+    \@hangfrom{\hskip #2#3}{#4}%
+  }%
+}
+
+\RedeclareSectionCommand[
+  beforeskip=-0.8cm,
+  afterskip=1.1cm
+]{chapter}
+
+\RedeclareSectionCommand[
+  beforeskip=-1.5em \@plus -0.3em \@minus -0.2em,
+  afterskip=0.7em \@plus 0.15em
+]{section}
+
+\RedeclareSectionCommand[
+  beforeskip=-1.15em \@plus -0.2em \@minus -0.1em,
+  afterskip=0.45em \@plus 0.1em
+]{subsection}
+
+\RedeclareSectionCommand[
+  beforeskip=-0.85em \@plus -0.15em \@minus -0.1em,
+  afterskip=0.3em \@plus 0.08em
+]{subsubsection}
+
+\RedeclareSectionCommand[
+  indent=0pt,
+  beforeskip=0.6em \@plus 0.1em,
+  afterskip=-0.8em,
+  font={\normalsize\bfseries\color{CoverNavy}}
+]{paragraph}
+
+\renewcommand*{\sectioncatchphraseformat}[4]{%
+  \Ifstr{#1}{paragraph}{%
+    \hskip #2\textcolor{CoverPlum}{\rule[0.1ex]{0.42em}{0.42em}}\enskip#3#4%
+  }{%
+    \hskip #2#3#4%
+  }%
+}
+
+% --- 5. Listes, figures, tableaux et bibliographie ---
 \graphicspath{{figures/}{./}}
 \KOMAoptions{captions=tableheading}
 
@@ -147,10 +234,10 @@
   format = hang,
   justification = centerlast,
   singlelinecheck = true,
-  font = {small, sf},
-  labelfont = {bf, sf, color=black},
+  font = {small, sf, color=CoverNavy},
+  labelfont = {bf, sf, color=CoverPlum},
   labelsep = period,
-  margin = {1cm, 1cm},
+  margin = {0.8cm, 0.8cm},
   skip = 10pt
 }
 \captionsetup[table]{
@@ -159,70 +246,37 @@
 }
 \captionsetup[sub]{
   font = {footnotesize, sf},
-  labelfont = {bf, sf, color=black},
+  labelfont = {bf, sf, color=CoverPlum},
   labelformat = simple,
   justification = centering
 }
 \renewcommand\thesubfigure{(\alph{subfigure})}
 
-% Neutraliser l'interligne majoré (1.18) sur les tableaux hérités s'il modifie la hauteur,
-% ou préserver la valeur standard de LaTeX (1.0) pour éviter tout débordement de colonne p{}
-\renewcommand{\arraystretch}{1.0}
+% Préserve la compacité interne des tableaux cliniques existants
+\renewcommand{\arraystretch}{1.05}
 
-\setlist{noitemsep}
+% Listes aérées et repères colorés aux teintes des couvertures
+\setlist{topsep=0.35em, parsep=0.15em, itemsep=0.35em}
+\setlist[itemize,1]{label=\textcolor{CoverPlum}{\small\textbullet}}
+\setlist[itemize,2]{label=\textcolor{CoverSlateDark}{\footnotesize$\triangleright$}}
+\setlist[enumerate,1]{label=\textcolor{CoverPlum}{\bfseries\arabic*.}}
 
-% --- 6. Notes collaboratives \todoH fidèles (troncature 30 car., URL cliquable, lua-ul UTF-8) ---
+% Espacement équilibré de la bibliographie Vancouver
+\setlength{\bibitemsep}{0.55\baselineskip plus 0.15\baselineskip minus 0.1\baselineskip}
+\AtBeginBibliography{\setstretch{1.15}}
+
+% --- 6. Harmonisation des styles de notes \todoH (mécanique fournie par macros.sty) ---
 \ifusetodos
-  \setuptodonotes{size=\tiny, color=red!30}
-  \todostyle{BlancStyle}{}
-  \todostyle{TestStyle}{author=test}
-  \todostyle{GuillaumeStyle}{author=Guillaume}
-  \todostyle{FloraStyle}{}
-
-  \RenewDocumentCommand{\todoH}{O{AuthorStyle} o m +m}{%
-    \if@todonotes@disabled
-      #4%
-    \else
-      \IfNoValueTF{#2}{%
-        \ClasseGuillaume@resolve@todocolor{#1}%
-        \def\ClasseGuillaume@todoopts{#1}%
-      }{%
-        \def\ClasseGuillaume@hlcolor{#2}%
-        \def\ClasseGuillaume@todoopts{#1, color=#2}%
-      }%
-      \IfSubStr{\detokenize{#3}}{\@backslashchar}{%
-        % Préserve les commandes LaTeX actives (\url, espace \, etc.) dans la note et la TODO list
-        \expandafter\todo\expandafter[\ClasseGuillaume@todoopts]{#3}%
-      }{%
-        \StrLeft{#3}{30}[\apercu]%
-        \expandafter\todo\expandafter[\ClasseGuillaume@todoopts]{\pdftooltip{\apercu...}{#3}}%
-      }%
-      \ifstrempty{#4}{}{%
-        \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\ClasseGuillaume@hlcolor]{#4}}%
-      }%
-    \fi
-  }
+  \setuptodonotes{size=\tiny, color=CoverPlum!15, bordercolor=CoverPlum!55}
+  \todostyle{BlancStyle}{color=white, bordercolor=CoverSlate}
+  \todostyle{TestStyle}{author=test, bordercolor=CoverSlateDark}
+  \todostyle{GuillaumeStyle}{author=Guillaume, color=CoverSky!25, bordercolor=CoverNavy!55}
+  \todostyle{FloraStyle}{color=CoverPlum!15, bordercolor=CoverPlum!55}
 \fi
 
-% --- 7. Hyperliens discrets (hidelinks) et métadonnées PDF conformes à portefolio_1 ---
+% --- 7. Hyperliens discrets (sans cadres colorés) ---
 \AtEndPreamble{%
-  \hypersetup{
-    hidelinks,
-    colorlinks = false,
-    linkcolor = black,
-    citecolor = magenta,
-    urlcolor = mdtRed
-  }%
-}
-\AtBeginDocument{%
-  \hypersetup{
-    pdfsubject = {portefolio},
-    pdfkeywords = {portefolio},
-    pdfcreator = {GW}
-  }%
-}
-\pdfstringdefDisableCommands{%
-  \let\textsc\@firstofone
+  \hypersetup{hidelinks}%
 }
 
 \endinput

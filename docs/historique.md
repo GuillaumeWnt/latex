@@ -11,27 +11,26 @@ flowchart LR
   P7 --> P89["Phases 8-9<br/>FR/EN, .ignore & Slides v1"]
   P89 --> P10["Phase 10<br/>Slides v2.0 & Règle Plan/Hist"]
   P10 --> P11["Phase 11<br/>portefolio_2 & Rétroportage"]
+  P11 --> P12["Phase 12<br/>Refonte Styles & Biblio portefolio_2"]
 ```
 
 ---
 
 ## 1. Socle Ancien *(compacté)*
-- **Phases 1–2 :** Refonte de `AGENTS.md` et `.agents/` (suppression du MCP `memory` et modèles obsolètes), script `sync-mcp.ps1` corrigé en UTF-8 sans BOM.
-- **Phases 3–4 :** Création du skill `markdown-to-latex`, workflows associés, et déduplication/alignement de `.vscode/` sur la configuration globale.
-- **Phases 5–6 :** Renommage de la classe en `ClasseGuillaume.cls`, sécurisation de `clean.ps1` (préservation du PDF et des logs) et assouplissement des citations.
-- **Phase 7 :** Ajout de la règle globale de proposition visible (`> [!CAUTION]`) et audits linguistique / extensions / `.ignore`.
+- **Phases 1–4 :** Refonte `.agents/` & `AGENTS.md`, `sync-mcp.ps1`, skill `markdown-to-latex` et alignement `.vscode/`.
+- **Phases 5–7 :** Renommage `ClasseGuillaume.cls`, `clean.ps1`, citation libre, règle `> [!CAUTION]` et audits FR/`.ignore`.
+- **Phase 8–9 :** Option `french`/`english`, `.chktexrc-en`, exclusions globales et création de `ClasseGuillaumeSlides v1`.
 
 ---
 
 ## 2. Évolution Récente *(synthétique)*
-- **Phase 8 — Support bilingue FR/EN & `.ignore` :** option `french`/`english` dans `ClasseGuillaume`, `.chktexrc-en`, option `-Language` dans `lint-latex.ps1` et conservation des artefacts `*.pdf`/`*.log`/`*.bbl`/`*.blg`.
-- **Phase 9 — Exclusions globales & `ClasseGuillaumeSlides v1` :** transfert des exclusions génériques vers les réglages globaux, création de `templates/template_slides/` et `<projet>/slides/` (`integrated`).
-- **Phase 10 — Gouvernance Plan/Hist & `ClasseGuillaumeSlides v2.0` :** règle globale `docs/plan.md` éphémère + `docs/historique.md` compact, archivage visuel [`templates/exemples-slides/`](file:///c:/Users/guill/dev/perso/latex/general/templates/exemples-slides), refonte 4 palettes / 3 styles / composants ouverts de `ClasseGuillaumeSlides v2.0` et veille MCP présentation ([`docs/compte-rendu-et-reponses.md`](file:///c:/Users/guill/dev/perso/latex/general/docs/compte-rendu-et-reponses.md)).
+- **Phase 10 — Gouvernance Plan/Hist & `ClasseGuillaumeSlides v2.0` :** règle globale `docs/plan.md` éphémère + `docs/historique.md` compact, archivage [`templates/exemples-slides/`](file:///c:/Users/guill/dev/perso/latex/general/templates/exemples-slides) et refonte 4 palettes / 3 styles de `ClasseGuillaumeSlides v2.0`.
+- **Phase 11 — Création modulaire de [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) & rétroportage :** migration de `portefolio_1` vers `ClasseGuillaume v2.0` (`font=comicsans`, `bibstyle=custom|vancouver`, `spacing=*`, `lua-ul`, `\todoH` sécurisé) avec parité rédactionnelle stricte et diagnostic `build/` ([`diagnostic-avertissements-compilation.md`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/diagnostic-avertissements-compilation.md)).
 
 ---
 
 ## 3. Session Courante *(détaillée — sera compactée au prochain changement majeur)*
-- **Phase 11 — Refonte modulaire de `portefolio_1` en [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) & rétroportage :**
-  - **Rétroportage `templates/template_officiel/` :** ajout des options publiques `font=comicsans`, `bibstyle=custom|vancouver` (chaînes FR *consulté le* / *disponible sur*) et `spacing=single|onehalf|double` (`setspace` sans affecter titres/TOC), détection locale dans `fonts/` (`\CalibriFont`, `\AsapFont`, `\ComicSansMSFont`), paquets `rotating`/`xltabular`/`float`, garde `\ifstrempty` sur `\todoH` et `\singlespacing` sur `\thesistodolist`, documentés dans `README.md` et `appendix-a.tex`.
-  - **Architecture [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/main.tex) :** séparation stricte selon `template_officiel`, style dédié [`config/portefolio-style.sty`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/config/portefolio-style.sty) (`mdtRed`, `Calibri` + `Asap Condensed`, `Chapitre I` romain centré, en-tête seul sans logo/pied de page, `\geometrieWord` 2,5 cm / `\geometrieLarge` 1 cm synchronisés sans alerte `typearea`, `hidelinks`, `\todoH` sous `lua-ul` UTF-8 avec URL cliquables), rapatriement intégral des pages de garde, polices, figures, archives de tableaux et fichiers orphelins (`docs/`) sans modifier un seul mot du texte rédactionnel.
-  - **Validation :** compilation à froid LuaLaTeX + Biber (`portefolio_2` : 70 p., 0 erreur fatale, 0 `Overfull \hbox`, 1 seul avertissement `Marginpar on page 16 moved` ; non-régression `template_officiel` : 56 p., 0 erreur fatale, 1 avertissement préexistant) et contrôle visuel PNG comparatif.
+- **Phase 12 — Refonte éditoriale & bibliographie Vancouver de [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) ([fiche détaillée](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/refonte-styles-et-bibliographie.md)) :**
+  - **Charte des pages de garde & mise en page ([`portefolio-style.sty`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/config/portefolio-style.sty)) :** palette `CoverNavy` `#15213A` / `CoverPlum` `#80175C` / `CoverSky` `#6EB6E7` / `CoverSlate` `#9DB6D6`, `spacing=onehalf` + `\setstretch{1.32}` + `parskip=half`, chapitres à filet conducteur + barre tricolore, sections/sous-sections/`\paragraph` structurés, en-têtes/pieds de page avec badge folio, factorisation `\portfolio@applygeometry` et déduplication avec `ClasseGuillaume.cls`.
+  - **Bibliographie Vancouver & rétroportage `template_officiel` :** suppression des `custom-style.{bbx,cbx}` inutilisés avec repli sûr dans [`packages.sty`](file:///c:/Users/guill/dev/perso/latex/general/templates/template_officiel/config/packages.sty), mois abrégés FR et `[Consulté en AAAA]`, nettoyage UTF-8 / BibLaTeX de [`references.bib`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/biblio/references.bib) (suppression 8 URL doublons de DOI, `@misc` → `@online` pour `ema_azacitidine_accord`) et ajout `\let\textsc\@firstofone` dans `ClasseGuillaume.cls`.
+  - **Validation :** compilation à froid (`64` p., `0` erreur, `0` `Overfull \hbox`, `1` avertissement `Marginpar on page 15 moved`), `0` avertissement ChkTeX sur config, `0` mot modifié dans `content/`/`backmatter/` et non-régression `template_officiel`.
