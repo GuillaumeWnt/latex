@@ -1,0 +1,62 @@
+%% ==============================================================================
+%% slides/sections/02-resultats.tex — Données CSV et code source du parent
+%% ==============================================================================
+\section{Résultats \& Code}
+
+\begin{frame}{Exploitation directe des données expérimentales}
+  \framesubtitle{Traçage vectoriel synchronisé depuis \code{../data/benchmark-results.csv}}
+
+  \begin{columns}[c, totalwidth=\textwidth]
+    \begin{column}{0.55\textwidth}
+      \begin{cadreFigure}
+        \begin{tikzpicture}
+          \begin{axis}[
+            width=0.96\linewidth,
+            height=3.65cm,
+            xlabel={Itération},
+            ylabel={Précision (\%)},
+            xmin=1, xmax=20,
+            ymin=55, ymax=102,
+            grid=major,
+            grid style={dashed, ThesisMuted!25},
+            legend pos=south east,
+            legend style={font=\scriptsize, draw=ThesisMuted!40, fill=white},
+            label style={font=\scriptsize\sffamily, text=ThesisText},
+            tick label style={font=\scriptsize\sffamily, text=ThesisMuted}
+          ]
+            \addplot[color=ThesisPrimary, line width=1.4pt]
+              table[x=Iteration, y=AccuracyProposed, col sep=comma] {\slideasset{data/benchmark-results.csv}};
+            \addlegendentry{Approche proposée}
+            \addplot[color=ThesisAccent, line width=1.1pt, dashed]
+              table[x=Iteration, y=AccuracyBaseline, col sep=comma] {\slideasset{data/benchmark-results.csv}};
+            \addlegendentry{Référence}
+          \end{axis}
+        \end{tikzpicture}
+      \end{cadreFigure}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \metriccard{\qty{99.7}{\percent}}{Précision à l'itération 20}[+17,0 pts vs \code{Baseline}]
+      \vspace*{0.18cm}
+      \begin{slidecard}{Traçabilité scientifique}
+        Les séries numériques proviennent du même CSV brut que le chapitre Résultats~\autocite{lehman2024biblatex}.
+      \end{slidecard}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Insertion directe du code source externe}
+  \framesubtitle{Extraits sélectionnés depuis \code{../listings/algorithm-pipeline.py} sans copier-coller}
+
+  \begin{columns}[T, totalwidth=\textwidth]
+    \begin{column}{0.64\textwidth}
+      \lstinputlisting[language=Python, firstline=13, lastline=20]{\slideasset{listings/algorithm-pipeline.py}}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{alertcard}{Code vérifié}
+        Le script Python externe reste exécutable et testé par \code{pytest} dans le projet parent.
+      \end{alertcard}
+    \end{column}
+  \end{columns}
+
+  \takeaway{Le sous-projet \code{slides/} hérite de toutes les mises à jour du rapport principal sans désynchronisation.}
+\end{frame}

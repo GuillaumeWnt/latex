@@ -1,0 +1,29 @@
+%% ==============================================================================
+%% slides/sections/01-presentation.tex — Partage direct des schémas parents
+%% ==============================================================================
+\section{Architecture Partagée}
+
+\begin{frame}{Source unique de vérité entre mémoire et diapositives}
+  \framesubtitle{Le schéma vectoriel \code{schema-principe} est inclus directement depuis \code{../figures/tikz/}}
+
+  \begin{columns}[c, totalwidth=\textwidth]
+    \begin{column}{0.59\textwidth}
+      \begin{cadreFigure}
+        \includestandalone[width=0.96\linewidth, height=3.85cm, keepaspectratio]{\slideasset{figures/tikz/schema-principe}}
+      \end{cadreFigure}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \begin{slidecard}{Zéro duplication}
+        \begin{itemize}
+          \item Figures et TikZ lus dans \code{../figures/}
+          \item Bibliographie partagée (\code{../biblio/})
+          \item Sortie isolée dans \code{slides/build/}
+        \end{itemize}
+      \end{slidecard}
+      \vspace*{0.06cm}
+      \begin{callout}[Cohérence garantie]
+        Toute mise à jour du parent se répercute ici~\autocite{kohm2024koma}.
+      \end{callout}
+    \end{column}
+  \end{columns}
+\end{frame}

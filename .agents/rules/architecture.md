@@ -28,20 +28,26 @@ projets/<nom_projet>/
 ├── figures/                  # Médias vectoriels, figures Python/Matplotlib et sous-dossier tikz/
 ├── fonts/                    # Polices locales OpenType (portabilité CI/CD & Overleaf)
 ├── scripts/                  # Scripts locaux (ex. generate_plots.py via uv)
+├── slides/                   # Sous-projet de présentation lié (option integrated, partage ../figures|biblio|data|listings|fonts)
 └── build/                    # Sorties de compilation (généré automatiquement, gitignored)
 ```
+
+### Présentations Autonomes (`templates/template_slides/`)
+
+Pour un jeu de diapositives indépendant d'un rapport, utiliser `templates/template_slides/` vers `projets/<nom_slides>/` (`main.tex`, `ClasseGuillaumeSlides.cls`, `config/slides-packages.sty`, `config/slides-macros.sty`, `sections/*.tex`, `figures/`, `biblio/`, `data/`, `listings/`, `fonts/`, `latexmkrc`, `.chktexrc*`, `build/`).
 
 ---
 
 ## 2. Création de Projet & Règle de Rétroportage
 
 1. **Initialisation :**
-   - Copier `templates/template_officiel/` (hors dossier `build/`) vers `projets/<nom_projet>/`.
-   - Adapter les métadonnées dans `main.tex` et les textes de `frontmatter/`, `content/`, `backmatter/`, `biblio/references.bib`.
+   - **Document complet :** copier `templates/template_officiel/` (hors dossier `build/` et `slides/build/`) vers `projets/<nom_projet>/`.
+   - **Diaporama autonome :** copier `templates/template_slides/` (hors `build/`) vers `projets/<nom_slides>/` ; **diaporama lié à un rapport :** utiliser directement `projets/<nom_projet>/slides/` avec l'option `integrated`.
+   - Adapter les métadonnées dans `main.tex` et les textes de `frontmatter/`, `content/`, `backmatter/`, `biblio/references.bib` (ou `sections/`).
    - Ne jamais créer un nouveau projet en partant de zéro ou d'un ancien modèle (`template_principal/`, `BE_mecanique/`, `labo_PID/`), sauf demande explicite de l'utilisateur.
-2. **Rétroportage continu vers `templates/template_officiel/` :**
-   - Dès qu'une fonctionnalité générique (nouvelle macro dans `config/macros.sty`, environnement `tcolorbox`, amélioration de `ClasseGuillaume.cls`/`.clo`, nouveau réglage `config/packages.sty`, correction de bug ou d'avertissement TeX, amélioration de `latexmkrc`/`.chktexrc`) est ajoutée ou corrigée dans un projet, **elle doit également être rétroportée dans `templates/template_officiel/`**.
-   - Vérifier que l'ajout rétroporté reste générique, compatible `screen` et `print`, et compile sans erreur dans `templates/template_officiel/`.
+2. **Rétroportage continu vers `templates/template_officiel/` et `templates/template_slides/` :**
+   - Dès qu'une fonctionnalité générique (nouvelle macro dans `config/macros.sty` ou `config/slides-macros.sty`, environnement `tcolorbox`, amélioration de `ClasseGuillaume*.cls`/`.clo`, nouveau réglage `config/*packages.sty`, correction de bug ou d'avertissement TeX, amélioration de `latexmkrc`/`.chktexrc*`) est ajoutée ou corrigée dans un projet, **elle doit également être rétroportée dans `templates/template_officiel/`** (et synchronisée entre `templates/template_slides/` et `templates/template_officiel/slides/` pour le socle de présentation).
+   - Vérifier que l'ajout rétroporté reste générique, compatible `screen`/`print` (ou `light`/`dark`/`integrated` pour les slides), et compile sans erreur dans les templates.
 
 ---
 
@@ -63,10 +69,11 @@ projets/<nom_projet>/
 ├── mcp_config.json            # Serveurs MCP métier du workspace (synchronisés via sync-mcp.ps1)
 ├── rules/                     # Règles locales (architecture, general, coding-style, testing, security)
 ├── scripts/sync-mcp.ps1       # Synchronisation MCP vers .vscode, .claude, .gemini
-├── workflows/                 # Procédures pas-à-pas (new-project, markdown-to-latex, build-and-verify)
+├── workflows/                 # Procédures pas-à-pas (new-project, new-slides, markdown-to-latex, latex-to-slides, build-and-verify)
 ├── subagents/                 # Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille)
 └── skills/                    # Skills modulaires :
     ├── markdown-to-latex/     # Conversion Markdown -> LaTeX enrichi (ClasseGuillaume)
+    ├── latex-slides/          # Diaporamas modernes 16:9 (ClasseGuillaumeSlides, autonome ou integrated)
     ├── latex-document-manager/# Gestion documentaire, KOMA+geometry, erreurs courantes
     ├── latex-quality-auditor/ # Audit typographique, booktabs, lint-latex.ps1 + chktex
     ├── visual-diagrams/       # Draw.io MCP & TikZ / cadreFigure

@@ -1,0 +1,266 @@
+%% ==============================================================================
+%% config/slides-packages.sty
+%% Paquets et polices centralisés pour ClasseGuillaumeSlides (LuaLaTeX)
+%% ==============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config/slides-packages}[2026/11/14 v1.0 Packages for ClasseGuillaumeSlides]
+
+% --- Détection moteur & gestion moderne des polices OpenType ---
+\RequirePackage{fix-cm}
+\RequirePackage{iftex}
+\RequirePackage{xstring}
+
+\ifluatex
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX}
+
+  % Famille sans-serif de secours locale (reproductible en mode autonome et intégré)
+  \IfFileExists{fonts/texgyreheros-regular.otf}{%
+    \newfontfamily{\HerosFont}{texgyreheros}[
+      Path = fonts/,
+      Extension = .otf,
+      UprightFont = *-regular,
+      BoldFont = *-bold,
+      ItalicFont = *-italic,
+      BoldItalicFont = *-bolditalic,
+      Scale = MatchLowercase
+    ]%
+  }{%
+    \IfFileExists{../fonts/texgyreheros-regular.otf}{%
+      \newfontfamily{\HerosFont}{texgyreheros}[
+        Path = ../fonts/,
+        Extension = .otf,
+        UprightFont = *-regular,
+        BoldFont = *-bold,
+        ItalicFont = *-italic,
+        BoldItalicFont = *-bolditalic,
+        Scale = MatchLowercase
+      ]%
+    }{%
+      \newfontfamily{\HerosFont}{TeX Gyre Heros}[Scale=MatchLowercase]%
+    }%
+  }%
+
+  % Fonction utilitaire pour activer TeX Gyre Heros comme police principale des slides
+  \newcommand{\ClasseGuillaumeSlides@useheros}{%
+    \IfFileExists{fonts/texgyreheros-regular.otf}{%
+      \setsansfont{texgyreheros}[
+        Path = fonts/,
+        Extension = .otf,
+        UprightFont = *-regular,
+        BoldFont = *-bold,
+        ItalicFont = *-italic,
+        BoldItalicFont = *-bolditalic
+      ]%
+      \setmainfont{texgyreheros}[
+        Path = fonts/,
+        Extension = .otf,
+        UprightFont = *-regular,
+        BoldFont = *-bold,
+        ItalicFont = *-italic,
+        BoldItalicFont = *-bolditalic
+      ]%
+    }{%
+      \IfFileExists{../fonts/texgyreheros-regular.otf}{%
+        \setsansfont{texgyreheros}[
+          Path = ../fonts/,
+          Extension = .otf,
+          UprightFont = *-regular,
+          BoldFont = *-bold,
+          ItalicFont = *-italic,
+          BoldItalicFont = *-bolditalic
+        ]%
+        \setmainfont{texgyreheros}[
+          Path = ../fonts/,
+          Extension = .otf,
+          UprightFont = *-regular,
+          BoldFont = *-bold,
+          ItalicFont = *-italic,
+          BoldItalicFont = *-bolditalic
+        ]%
+      }{%
+        \setsansfont{TeX Gyre Heros}%
+        \setmainfont{TeX Gyre Heros}%
+      }%
+    }%
+  }
+
+  % Application de l'option font=...
+  \ifdefstring{\ClasseGuillaumeSlides@font}{fira}{%
+    \IfFontExistsTF{Fira Sans}{%
+      \setsansfont{Fira Sans}[Scale=MatchLowercase]%
+      \setmainfont{Fira Sans}[Scale=MatchLowercase]%
+    }{%
+      \ClasseGuillaumeSlides@useheros%
+    }%
+  }{}%
+  \ifdefstring{\ClasseGuillaumeSlides@font}{plex}{%
+    \IfFontExistsTF{IBM Plex Sans}{%
+      \setsansfont{IBM Plex Sans}[Scale=MatchLowercase]%
+      \setmainfont{IBM Plex Sans}[Scale=MatchLowercase]%
+    }{%
+      \ClasseGuillaumeSlides@useheros%
+    }%
+  }{}%
+  \ifdefstring{\ClasseGuillaumeSlides@font}{calibri}{%
+    \IfFontExistsTF{Calibri}{%
+      \setsansfont{Calibri}[Scale=MatchLowercase]%
+      \setmainfont{Calibri}[Scale=MatchLowercase]%
+    }{%
+      \ClasseGuillaumeSlides@useheros%
+    }%
+  }{}%
+  \ifdefstring{\ClasseGuillaumeSlides@font}{libertinus}{%
+    \IfFontExistsTF{Libertinus Sans}{%
+      \setsansfont{Libertinus Sans}[Scale=MatchLowercase]%
+    }{%
+      \ClasseGuillaumeSlides@useheros%
+    }%
+    \IfFontExistsTF{Libertinus Serif}{%
+      \setmainfont{Libertinus Serif}[Scale=MatchLowercase]%
+    }{}%
+  }{}%
+  \ifdefstring{\ClasseGuillaumeSlides@font}{heros}{%
+    \ClasseGuillaumeSlides@useheros%
+  }{}%
+
+  % Police à chasse fixe OpenType (avec vrai gras/italique pour listings)
+  \IfFontExistsTF{Fira Mono}{%
+    \setmonofont{Fira Mono}[Scale=0.88]%
+  }{%
+    \IfFontExistsTF{TeX Gyre Cursor}{%
+      \setmonofont{TeX Gyre Cursor}[Scale=0.90]%
+    }{}%
+  }%
+
+  % Support Unicode et kerning typographique des logos LaTeX sous LuaLaTeX sans-serif
+  \RequirePackage{newunicodechar}
+  \RequirePackage{metalogo}
+  \setlogokern{La}{-.14em}
+  \setlogokern{aT}{-.07em}
+  \setlogokern{Te}{-.08em}
+  \setlogokern{eX}{-.06em}
+  \setlogodrop{.34ex}
+\fi
+
+% --- Couleurs enrichies & soulignement moderne ---
+\RequirePackage{luacolor}
+\RequirePackage[soul]{lua-ul}
+
+% --- Langues et typographie (french par défaut, english si option active) ---
+\ifClasseGuillaumeSlides@english
+  \RequirePackage[french, english]{babel}
+\else
+  \RequirePackage[english, french]{babel}
+\fi
+\@ifundefined{frenchsetup}{}{%
+  \frenchsetup{
+    StandardLists=true,
+    SuppressWarning=true
+  }%
+}
+\AtBeginDocument{%
+  \@ifundefined{captionsfrench}{}{%
+    \addto\captionsfrench{%
+      \renewcommand*{\tablename}{Tableau}%
+    }%
+  }%
+  \iflanguage{french}{%
+    \renewcommand*{\tablename}{Tableau}%
+  }{}%
+}
+
+\RequirePackage[autostyle=true]{csquotes}
+
+% --- Mathématiques modernes ---
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+\RequirePackage{amssymb}
+
+% --- Tableaux modernes (booktabs sans filets verticaux) ---
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\RequirePackage{makecell}
+\RequirePackage{multirow}
+\RequirePackage{ragged2e}
+
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\renewcommand{\arraystretch}{1.15}
+
+% --- Unités SI (siunitx v3 adapté FR/EN) ---
+\RequirePackage{siunitx}
+\ifClasseGuillaumeSlides@english
+  \sisetup{
+    locale = US,
+    detect-all = true,
+    group-minimum-digits = 4,
+    uncertainty-mode = separate,
+    range-phrase = { to },
+    range-units = single
+  }
+\else
+  \sisetup{
+    locale = FR,
+    detect-all = true,
+    group-minimum-digits = 4,
+    uncertainty-mode = separate,
+    range-phrase = { à },
+    range-units = single
+  }
+\fi
+\DeclareSIUnit\iter{it}
+\DeclareSIUnit\bar{bar}
+
+% --- Graphiques, TikZ, pgfplots & cartes éditoriales ---
+\RequirePackage{graphicx}
+\ifClasseGuillaumeSlides@integrated
+  \graphicspath{{figures/}{figures/tikz/}{../figures/}{../figures/tikz/}{../}}
+\else
+  \graphicspath{{figures/}{figures/tikz/}}
+\fi
+
+\RequirePackage{standalone}
+\RequirePackage{tikz}
+\usetikzlibrary{
+  arrows.meta,
+  positioning,
+  calc,
+  fit,
+  backgrounds,
+  shapes.geometric
+}
+
+\RequirePackage[skins]{tcolorbox}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Icônes vectorielles modernes (FontAwesome 5)
+\RequirePackage{fontawesome5}
+
+% --- Code source externe ---
+\RequirePackage{listings}
+
+% --- Bibliographie (style partagé du template officiel avec bascule propre) ---
+\IfFileExists{biblio/custom-style.bbx}{%
+  \RequirePackage[backend=biber, style=biblio/custom-style]{biblatex}%
+}{%
+  \IfFileExists{../biblio/custom-style.bbx}{%
+    \RequirePackage[backend=biber, style=../biblio/custom-style]{biblatex}%
+  }{%
+    \RequirePackage[backend=biber, style=numeric-comp]{biblatex}%
+  }%
+}
+\RequirePackage{xurl}
+
+% Exclusion automatique des diapositives d'annexe (\appendix) du compteur total
+\RequirePackage{appendixnumberbeamer}
+
+% Légendes Beamer sobres et localisées
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{ : }
+
+\endinput

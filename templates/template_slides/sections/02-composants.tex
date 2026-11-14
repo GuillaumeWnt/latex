@@ -1,0 +1,59 @@
+%% ==============================================================================
+%% sections/02-composants.tex — Composants sémantiques et indicateurs
+%% ==============================================================================
+\section{Composants Visuels}
+
+\begin{frame}{Indicateurs clés, cartes et badges sémantiques}
+  \framesubtitle{Mettre en valeur les ordres de grandeur avant les détails}
+
+  \begin{columns}[T, totalwidth=\textwidth]
+    \begin{column}{0.31\textwidth}
+      \metriccard{\qty{99.7}{\percent}}{Précision finale mesurée}[+17,0 pts vs référence]
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \metriccard{0 erreur}{Contrôle post-compilation}[Log + \code{chktex} validés]
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \metriccard{\qty{16}{\centi\meter}\times\qty{9}{\centi\meter}}{Format natif 16:9}[Rendu adaptatif clair/sombre]
+    \end{column}
+  \end{columns}
+
+  \vspace*{0.22cm}
+
+  \begin{columns}[T, totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{boiteSynthese}{Portabilité document $\leftrightarrow$ slides}
+        Les macros \code{\textbackslash term}, \code{\textbackslash code}, \code{\textbackslash vect}, \code{boiteSynthese} et \code{cadreFigure} fonctionnent à l'identique~\autocite{mittelbach2023latex}.
+      \end{boiteSynthese}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{slidecard}{Badges de statut et priorisation}
+        Enchaînement structuré par badges en ligne :\\[4pt]
+        \kpibadge{Validé}\enspace
+        \kpibadge[SlidePrimary]{Architecture}\enspace
+        \kpibadge[SlideAccent]{Priorité haute}
+      \end{slidecard}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Tableaux épurés selon les standards \code{booktabs}}
+  \framesubtitle{Aucun filet vertical, chiffres alignés et comparaison immédiate}
+
+  \begin{table}
+    \centering
+    \begin{tabularx}{\textwidth}{Y c c L{5.5cm}}
+      \toprule
+      \textbf{Configuration} & \textbf{Ratio} & \textbf{Thème} & \textbf{Usage recommandé} \\
+      \midrule
+      \code{theme=light, ratio=169} & 16:9 & Clair & Soutenances, salles éclairées \\
+      \code{theme=dark, font=fira} & 16:9 & Sombre & Conférences, écrans OLED \\
+      \code{integrated, english} & 16:9 & Mixte & Soutenance reliée à un projet existant \\
+      \code{handout} & 16:9 & Print & Support distribué sans animations \\
+      \bottomrule
+    \end{tabularx}
+    \caption{Options de classe principales de \code{ClasseGuillaumeSlides}.}\label{tab:options-slides}
+  \end{table}
+
+  \sourcenote{Compilé sous \LuaLaTeX{} + Biber ; typographie sans empattement calibrée pour la projection.}
+\end{frame}

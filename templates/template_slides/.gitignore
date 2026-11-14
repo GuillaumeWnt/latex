@@ -1,0 +1,28 @@
+# ==============================================================================
+# .gitignore — Fichiers temporaires et auxiliaires Beamer / LaTeX
+# ==============================================================================
+
+build/
+
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/

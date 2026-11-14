@@ -1,0 +1,54 @@
+%% ==============================================================================
+%% sections/01-contexte.tex — Principes éditoriaux et architecture
+%% ==============================================================================
+\section{Principes Éditoriaux}
+
+\begin{frame}{Rupture volontaire avec le rendu Beamer traditionnel}
+  \framesubtitle{Privilégier la hiérarchie visuelle, l'air typographique et la lisibilité}
+
+  \begin{columns}[T, totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{alertcard}{\faTimesCircle\enspace À proscrire}
+        \begin{itemize}
+          \item Bandeaux pleins sombres et bordures lourdes
+          \item Ombres portées datées des années 2000
+          \item Paragraphes denses ($> 50$ mots par vue)
+          \item Symboles de navigation superflus en pied de page
+        \end{itemize}
+      \end{alertcard}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{slidecard}{\faCheckCircle\enspace Approche éditoriale 16:9}
+        \begin{itemize}
+          \item Toile blanche pure (ou ardoise en \code{theme=dark})
+          \item Titre-action affirmé et surtitre discret
+          \item Palette unifiée avec \code{ClasseGuillaume}~\autocite{bringhurst2004elements}
+          \item Barre de progression fine et pagination sobre
+        \end{itemize}
+      \end{slidecard}
+    \end{column}
+  \end{columns}
+
+  \takeaway{\textbf{Idée directrice :} chaque diapositive transmet un seul message clair, vérifié en moins de \qty{5}{\second} de lecture.}
+\end{frame}
+
+\begin{frame}{Deux modes de déploiement sans duplication des sources}
+  \framesubtitle{De la présentation autonome à la soutenance adossée au mémoire}
+
+  \begin{columns}[c, totalwidth=\textwidth]
+    \begin{column}{0.58\textwidth}
+      \begin{cadreFigure}
+        \includestandalone[width=0.98\linewidth]{figures/tikz/architecture-slides}
+      \end{cadreFigure}
+    \end{column}
+    \begin{column}{0.39\textwidth}
+      \begin{slidecard}{Mode autonome}
+        Copie dédiée dans \code{projets/<deck>/} pour séminaires ou cours indépendants.
+      \end{slidecard}
+      \vspace*{0.25cm}
+      \begin{slidecard}{Mode \code{integrated}}
+        Placé dans \code{<projet>/slides/} : réutilise directement \code{../figures/}, \code{../biblio/} et \code{../data/}.
+      \end{slidecard}
+    \end{column}
+  \end{columns}
+\end{frame}

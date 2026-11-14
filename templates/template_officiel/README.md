@@ -71,6 +71,13 @@ mon-projet/
     └── tikz/
         ├── schema-principe.tex # Schéma d'architecture TikZ vectoriel autonome (standalone)
         └── schema-principe.pdf # Précompilation PDF haute performance
+
+└── slides/                  # OPTIONNEL (mode intégré) : présentation 16:9 adossée au document
+    ├── main.tex             # Point d'entrée \documentclass[integrated]{ClasseGuillaumeSlides}
+    ├── latexmkrc            # Détecte ../ et résout figures/, biblio/, data/, listings/, fonts/
+    ├── ClasseGuillaumeSlides.cls
+    ├── config/              # slides-packages.sty & slides-macros.sty
+    └── sections/            # Diapositives découpées par partie (01-*.tex, 99-backup.tex)
 ```
 
 ---
@@ -137,3 +144,11 @@ La langue par défaut de la classe est le français (`french`). Pour un document
    ```
    Cela inverse automatiquement la langue principale dans `babel` (`[french, english]`), passe `siunitx` en `locale = US` (`range-phrase = { to }`), bascule `cleveref` et les libellés des boîtes (`callout`, `attentionbox`, `hypothesis`, `definitionbox`, `Illustration`, `todonotes` et pied de page debug) en anglais.
 2. Remplacez `.chktexrc` par `.chktexrc-en` (ou lancez `lint-latex.ps1 -RunChkTeX` qui détecte `english` dans `main.tex`) afin que `chktex` vérifie l'absence d'espace avant `: ; ? !`.
+
+---
+
+## 6. Présentations Liées (`slides/`) et Autonomes (`template_slides/`)
+
+Ce modèle inclut un sous-projet prêt à l'emploi dans [`slides/`](slides/main.tex) bâti sur **`ClasseGuillaumeSlides`** (Beamer + thème minimal **Moloch**, format 16:9, thèmes `light`/`dark`, support `french`/`english`) :
+- **Mode intégré (`\documentclass[french, integrated]{ClasseGuillaumeSlides}`) :** depuis `slides/`, `latexmkrc` et la classe résolvent automatiquement `../figures/`, `../biblio/`, `../data/`, `../listings/` et `../fonts/` sans aucune duplication, tout en isolant les sorties dans `slides/build/`.
+- **Mode autonome :** pour une présentation indépendante d'un rapport, utilisez le modèle dédié [`templates/template_slides/`](../template_slides/README.md).

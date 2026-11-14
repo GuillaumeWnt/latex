@@ -36,3 +36,4 @@ Concevoir des figures vectorielles nettes, lisibles et homogènes avec la charte
    \end{figure}
    ```
 3. **Contrôle visuel :** vérifier l'absence d'`Overfull \hbox`, la lisibilité des labels (`\small` / `\footnotesize`) et la citation dans le texte via `~\cref{fig:mon-schema}`.
+4. **Adaptation aux diapositives (`ClasseGuillaumeSlides`) :** limiter la hauteur utile des graphiques TikZ/PGFPlots à `3.6 cm`–`4.1 cm` sur un ratio 16:9 (sans `Overfull \vbox`), conserver `cadreFigure` (qui force un fond blanc lisible même en `theme=dark`), et référencer les sources externes via `\slideasset{data/...}` / `\slideasset{figures/...}` pour la portabilité `integrated`.

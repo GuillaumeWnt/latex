@@ -1,0 +1,73 @@
+%% ==============================================================================
+%% sections/03-donnees-et-tikz.tex — Graphiques vectoriels, maths et code
+%% ==============================================================================
+\section{Données, Équations \& Code}
+
+\begin{frame}{Visualisation vectorielle et formulation mathématique}
+  \framesubtitle{Courbes \code{pgfplots} natives respectant exactement la charte chromatique}
+
+  \begin{columns}[c, totalwidth=\textwidth]
+    \begin{column}{0.51\textwidth}
+      \begin{cadreFigure}
+        \begin{tikzpicture}
+          \begin{axis}[
+            width=0.96\linewidth,
+            height=4.0cm,
+            xlabel={Itération $k$},
+            ylabel={Précision (\%)},
+            xmin=0, xmax=20,
+            ymin=55, ymax=102,
+            grid=major,
+            grid style={dashed, ThesisMuted!25},
+            legend pos=south east,
+            legend style={font=\scriptsize, draw=ThesisMuted!40, fill=white},
+            label style={font=\scriptsize\sffamily, text=ThesisText},
+            tick label style={font=\scriptsize\sffamily, text=ThesisMuted}
+          ]
+            \addplot[color=ThesisPrimary, line width=1.4pt, smooth]
+              coordinates {(1,68.5) (4,84.7) (8,94.1) (12,97.8) (16,99.1) (20,99.7)};
+            \addlegendentry{Méthode proposée}
+            \addplot[color=ThesisAccent, line width=1.1pt, dashed, smooth]
+              coordinates {(1,56.7) (4,67.1) (8,75.1) (12,79.3) (16,81.5) (20,82.7)};
+            \addlegendentry{Référence}
+          \end{axis}
+        \end{tikzpicture}
+      \end{cadreFigure}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{slidecard}{Critère d'optimisation}
+        Minimisation régularisée à chaque étape~\autocite{tantau2023tikz} :
+        \[
+          \vect{\theta}_{k+1} = \argmin_{\vect{\theta} \in \setR^d}
+          \bigl\{ \mathcal{L}(\vect{\theta}) + \tfrac{\lambda}{2}\norm{\vect{\theta}}_2^2 \bigr\}
+        \]
+      \end{slidecard}
+      \vspace*{0.15cm}
+      \begin{callout}[Apparition progressive]
+        Les overlays natifs Beamer (\code{\textbackslash pause}, \code{<2->}) guident le regard sans surcharger l'écran.
+      \end{callout}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Extrait de code lisible et isolé du contenu}
+  \framesubtitle{Coloration syntaxique cohérente et police monospace dédiée}
+
+  \begin{columns}[T, totalwidth=\textwidth]
+    \begin{column}{0.62\textwidth}
+\begin{lstlisting}[language=Python]
+def build_deck(source: str, ratio: str = "169") -> str:
+  """Compile et audite un support éditorial LuaLaTeX."""
+  options = ["french", f"ratio={ratio}", "theme=light"]
+  return f"\\documentclass[{', '.join(options)}]{{ClasseGuillaumeSlides}}"
+\end{lstlisting}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \begin{alertcard}{Règle \code{fragile}}
+        Ajouter impérativement \code{[fragile]} sur toute \code{frame} contenant un bloc \code{lstlisting} ou \code{verbatim}.
+      \end{alertcard}
+    \end{column}
+  \end{columns}
+
+  \takeaway{Les extraits longs sont placés dans \code{listings/*.py} et importés via \code{\textbackslash lstinputlisting}.}
+\end{frame}

@@ -7,7 +7,7 @@
 2. **Exiger zéro erreur de compilation** (code retour `0`, `build/main.pdf` produit et non vide).
 3. **Analyser `build/main.log` et réduire les avertissements au minimum :**
    - Vérifier l'absence de `There were undefined references`, `Citation ... undefined`, `Missing character: There is no ... in font`, `scrlayer-scrpage Warning` (`\headheight`), `typearea Warning`, ou erreur Biber (`WARN`).
-   - Traquer et corriger les `Overfull \hbox` et `Underfull \hbox` évitables (reformulation, colonnes `L`/`Y`/`X` de `tabularx`, `\allowbreak`, `xurl`).
+   - Traquer et corriger les `Overfull \hbox`, `Overfull \vbox` (critiques sur diapositives 16:9) et `Underfull \hbox` évitables (reformulation, colonnes `L`/`Y`/`X` de `tabularx`, `\allowbreak`, `xurl`).
 4. **Exécuter le linting statique** (`chktex` avec `.chktexrc` et/ou `lint-latex.ps1`).
 
 ---
@@ -51,8 +51,12 @@ Select-String -Path "build\main.log" -Pattern "^!|LaTeX Warning:|Package .* Warn
 # Contrôle ChkTeX (s'appuie automatiquement sur .chktexrc, ou .chktexrc-en -w26 en anglais)
 chktex -q -v0 main.tex content\*.tex backmatter\*.tex frontmatter\*.tex
 
-# Audit typographique du dépôt (.agents)
+# Audit typographique du dépôt (.agents) — document ou diaporama
 .\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>" -RunChkTeX
+.\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>\slides" -RunChkTeX
+
+# Contrôle visuel recommandé sur diapositives 16:9 (rendu PNG pour vérifier alignements et débordements)
+pdftoppm -png -r 150 "projets\<nom_projet>\slides\build\main.pdf" "build\page"
 
 # Formatage automatique (2 espaces)
 latexindent -w -s <fichier.tex>

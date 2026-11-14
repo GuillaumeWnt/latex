@@ -22,27 +22,5 @@
     "**/.venv/**",
     "**/node_modules/**"
   ],
-  "files.exclude": {
-    "**/.git": false,
-    "**/.svn": false,
-    "**/.hg": false,
-    "**/.jj": false,
-    "**/.DS_Store": false,
-    "**/Thumbs.db": false,
-    "**/.agents": false,
-    "**/.claude": false,
-    "**/.gemini": false,
-    "**/.github": false,
-    "**/.venv": false,
-    "**/.vscode": false,
-    "**/.aiexclude": false,
-    "**/.claudeignore": false,
-    "**/.geminiignore": false,
-    "**/.gitignore": false,
-    "**/.mcp.json": false,
-    "**/AGENTS.md": false,
-    "**/pyproject.toml": false,
-    "**/uv.lock": false,
-    "**/.python-version": false
-  }
+  "files.exclude": {}
 }

@@ -1,0 +1,269 @@
+%% ==============================================================================
+%% config/slides-macros.sty
+%% Macros partagées avec ClasseGuillaume + composants éditoriaux pour diapositives
+%% ==============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config/slides-macros}[2026/11/14 v1.0 Macros for ClasseGuillaumeSlides]
+
+% --- Logos moteurs complémentaires ---
+\providecommand{\LuaLaTeX}{Lua\LaTeX}
+
+% --- Notations mathématiques sémantiques (compatibles ClasseGuillaume) ---
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\mathbf{#1}}}
+
+\newcommand{\setR}{\mathbb{R}}
+\newcommand{\setN}{\mathbb{N}}
+\newcommand{\setZ}{\mathbb{Z}}
+\newcommand{\setC}{\mathbb{C}}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiterX{\scal}[2]{\langle}{\rangle}{#1 , #2}
+
+\newcommand{\diff}{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\DeclareMathOperator{\trace}{\mathrm{Tr}}
+\DeclareMathOperator{\diag}{\mathrm{diag}}
+
+% --- Balisage textuel sémantique adaptatif ---
+\newif\ifClasseGuillaumeSlides@darkcontext
+\ClasseGuillaumeSlides@darkcontextfalse
+
+\newcommand{\term}[1]{\textbf{\textcolor{SlidePrimary}{#1}}}
+
+\newcommand{\code}[1]{%
+  \ifbool{moloch@standout}{%
+    \texttt{\textcolor{white}{#1}}%
+  }{%
+    \ifClasseGuillaumeSlides@darkcontext%
+      \texttt{\textcolor{white}{#1}}%
+    \else%
+      \ifdarktheme%
+        \texttt{\textcolor{SlideSecondary}{#1}}%
+      \else%
+        \texttt{\textcolor{ThesisPrimary!92!black}{#1}}%
+      \fi%
+    \fi%
+  }%
+}
+
+% --- Libellés localisés ---
+\ifenglishversion
+  \newcommand{\ClasseGuillaumeSlides@callout@default}{Note}
+  \newcommand{\ClasseGuillaumeSlides@attention@default}{Key Takeaway}
+\else
+  \newcommand{\ClasseGuillaumeSlides@callout@default}{Remarque}
+  \newcommand{\ClasseGuillaumeSlides@attention@default}{Point clé}
+\fi
+
+% --- Cartes et boîtes éditoriales modernes (tcolorbox sans lourdeur) ---
+
+% 1. Carte éditoriale neutre avec filet supérieur ou gauche discret
+\newtcolorbox{slidecard}[2][]{%
+  enhanced,
+  colback=SlideCardBg,
+  colframe=SlideBorder,
+  coltext=SlideFg,
+  coltitle=SlideTitleFg,
+  colbacktitle=SlideCardBg,
+  borderline north={2pt}{0pt}{SlidePrimary},
+  fonttitle=\bfseries\sffamily\small,
+  title={#2},
+  before upper=\RaggedRight\small,
+  boxrule=0.6pt,
+  arc=3pt,
+  left=7pt, right=7pt, top=4pt, bottom=4pt,
+  toptitle=3.5pt, bottomtitle=1.5pt,
+  before skip=3pt, after skip=3pt,
+  #1
+}
+
+% 2. Carte d'accentuation / Point critique / Alerte
+\newtcolorbox{alertcard}[2][]{%
+  enhanced,
+  colback=SlideAccent!7!SlideBg,
+  colframe=SlideAccent!45!SlideBorder,
+  coltext=SlideFg,
+  coltitle=SlideAccent,
+  colbacktitle=SlideAccent!12!SlideBg,
+  borderline west={3pt}{0pt}{SlideAccent},
+  fonttitle=\bfseries\sffamily\small,
+  title={#2},
+  before upper=\RaggedRight\small,
+  boxrule=0.6pt,
+  arc=3pt,
+  left=7pt, right=7pt, top=4pt, bottom=4pt,
+  toptitle=2.5pt, bottomtitle=2.5pt,
+  before skip=3pt, after skip=3pt,
+  #1
+}
+
+% 3. Carte KPI / Chiffre clé fort : \metriccard[largeur]{valeur}{libellé}[tendance]
+\NewDocumentCommand{\metriccard}{O{\linewidth} m m o}{%
+  \begin{tcolorbox}[
+    enhanced,
+    width=#1,
+    colback=SlideCardBg,
+    colframe=SlideBorder,
+    coltext=SlideFg,
+    borderline west={3pt}{0pt}{SlideAccent},
+    before upper=\RaggedRight,
+    boxrule=0.6pt,
+    arc=3pt,
+    left=7pt, right=7pt, top=5pt, bottom=5pt,
+    before skip=2pt, after skip=2pt
+  ]%
+    {\fontsize{16}{18}\selectfont\bfseries\sffamily\color{SlidePrimary}#2\par}%
+    \vspace*{1.5pt}%
+    {\footnotesize\sffamily\color{SlideMuted}#3\par}%
+    \IfNoValueF{#4}{%
+      \vspace*{2pt}%
+      {\scriptsize\bfseries\sffamily\color{SlideAccent}#4\par}%
+    }%
+  \end{tcolorbox}%
+}
+
+% 4. Pastille / Badge en ligne : \kpibadge[couleur]{texte}
+\NewDocumentCommand{\kpibadge}{O{SlideSecondary} m}{%
+  \tcbox[
+    enhanced,
+    on line,
+    arc=2.5pt,
+    boxrule=0.6pt,
+    colframe=#1!65,
+    colback=#1!12!SlideBg,
+    boxsep=0pt,
+    left=5pt, right=5pt, top=2.5pt, bottom=2.5pt
+  ]{\scriptsize\sffamily\bfseries\textcolor{#1}{#2}}%
+}
+
+% 5. Bandeau de conclusion / message clé en bas de diapositive
+\NewDocumentCommand{\takeaway}{m}{%
+  \par\vspace*{0.12cm}%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=SlidePrimary!10!SlideBg,
+    colframe=SlidePrimary!35!SlideBorder,
+    coltext=SlideFg,
+    borderline west={3pt}{0pt}{SlidePrimary},
+    before upper=\RaggedRight,
+    boxrule=0.5pt,
+    arc=2.5pt,
+    left=8pt, right=8pt, top=3.5pt, bottom=3.5pt,
+    before skip=0pt, after skip=0pt
+  ]%
+    \footnotesize\sffamily #1%
+  \end{tcolorbox}%
+}
+
+% 6. Note de source discrète en bas de diapositive
+\newcommand{\sourcenote}[1]{%
+  \par\vspace*{2pt}%
+  {\tiny\sffamily\color{SlideMuted}#1\par}%
+}
+
+% 7. Boîtes compatibles ClasseGuillaume (portabilité directe rapport <-> slides)
+\newtcolorbox{callout}[1][\ClasseGuillaumeSlides@callout@default]{%
+  enhanced,
+  colback=SlidePrimary!6!SlideBg,
+  colframe=SlideBorder,
+  coltext=SlideFg,
+  coltitle=SlideTitleFg,
+  colbacktitle=SlidePrimary!12!SlideBg,
+  borderline west={2.8pt}{0pt}{SlidePrimary},
+  fonttitle=\bfseries\sffamily\footnotesize,
+  title={#1},
+  before upper=\RaggedRight\footnotesize,
+  left=7pt, right=7pt, top=3.5pt, bottom=3.5pt,
+  toptitle=2pt, bottomtitle=2pt,
+  arc=2.5pt, boxrule=0.5pt,
+  before skip=3pt, after skip=3pt
+}
+
+\newtcolorbox{attentionbox}[1][\ClasseGuillaumeSlides@attention@default]{%
+  enhanced,
+  colback=SlideAccent!6!SlideBg,
+  colframe=SlideAccent!40!SlideBorder,
+  coltext=SlideFg,
+  coltitle=SlideAccent,
+  colbacktitle=SlideAccent!12!SlideBg,
+  borderline west={2.8pt}{0pt}{SlideAccent},
+  fonttitle=\bfseries\sffamily\footnotesize,
+  title={#1},
+  before upper=\RaggedRight\footnotesize,
+  left=7pt, right=7pt, top=3.5pt, bottom=3.5pt,
+  toptitle=2pt, bottomtitle=2pt,
+  arc=2.5pt, boxrule=0.5pt,
+  before skip=3pt, after skip=3pt
+}
+
+\newtcolorbox{boiteSynthese}[2][]{%
+  enhanced,
+  colback=SlideCardBg,
+  colframe=SlidePrimary,
+  coltext=SlideFg,
+  colbacktitle=ThesisPrimary,
+  coltitle=white,
+  borderline west={3pt}{0pt}{ThesisAccent},
+  fonttitle=\bfseries\sffamily\footnotesize\ClasseGuillaumeSlides@darkcontexttrue,
+  title={#2},
+  before upper=\RaggedRight\footnotesize,
+  left=7pt, right=7pt, top=4pt, bottom=4pt,
+  toptitle=2.5pt, bottomtitle=2.5pt,
+  arc=2.5pt, boxrule=0.7pt,
+  before skip=3pt, after skip=3pt,
+  #1
+}
+
+% Fond blanc garanti dans cadreFigure pour préserver la lisibilité des schémas TikZ en mode sombre
+\newtcolorbox{cadreFigure}[1][]{%
+  enhanced,
+  colframe=SlideBorder,
+  colback=white,
+  coltext=ThesisText,
+  boxrule=0.7pt,
+  arc=3pt,
+  left=5pt, right=5pt, top=5pt, bottom=5pt,
+  halign=center,
+  before skip=3pt, after skip=3pt,
+  #1
+}
+
+% 8. Diapositive standout explicite (transition forte ou message final)
+\NewDocumentCommand{\standoutslide}{O{} +m}{%
+  \begin{frame}[standout, #1]
+    #2
+  \end{frame}
+}
+
+% --- Style listings adapté aux diapositives ---
+\lstdefinestyle{ClasseGuillaumeSlidescode}{
+  basicstyle=\ttfamily\scriptsize\color{SlideFg},
+  backgroundcolor=\color{SlideCardBg},
+  keywordstyle=\color{SlidePrimary}\bfseries,
+  commentstyle=\color{SlideMuted}\itshape,
+  stringstyle=\color{SlideAccent},
+  numberstyle=\tiny\sffamily\color{SlideMuted},
+  numbers=left,
+  numbersep=6pt,
+  stepnumber=1,
+  xleftmargin=14pt,
+  framexleftmargin=14pt,
+  frame=single,
+  rulecolor=\color{SlideBorder},
+  framesep=4pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2,
+  showstringspaces=false,
+  keepspaces=true
+}
+\lstset{style=ClasseGuillaumeSlidescode}
+
+% --- Résolution portable et 100% développable des chemins (mode autonome vs intégré) ---
+\newcommand{\slideasset}[1]{\ifintegratedslides../#1\else#1\fi}
+
+\endinput

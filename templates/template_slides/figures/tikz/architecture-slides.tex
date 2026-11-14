@@ -1,0 +1,95 @@
+%% ==============================================================================
+%% figures/tikz/architecture-slides.tex
+%% Schéma d'architecture du socle modulaire ClasseGuillaumeSlides (standalone)
+%% ==============================================================================
+\documentclass[tikz, border=2mm]{standalone}
+
+\usepackage{xcolor}
+\providecolor{ThesisPrimary}{RGB}{15, 60, 110}
+\providecolor{ThesisSecondary}{RGB}{20, 110, 120}
+\providecolor{ThesisAccent}{RGB}{190, 75, 40}
+\providecolor{ThesisText}{RGB}{30, 35, 42}
+\providecolor{ThesisMuted}{RGB}{95, 105, 118}
+\providecolor{ThesisBackground}{RGB}{246, 248, 251}
+
+\usetikzlibrary{
+  arrows.meta,
+  positioning,
+  fit,
+  backgrounds
+}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Stealth,
+  every node/.style={font=\footnotesize\sffamily},
+  box/.style={
+    draw=ThesisPrimary!70,
+    line width=0.8pt,
+    rounded corners=3pt,
+    fill=white,
+    text=ThesisText,
+    align=center,
+    minimum height=0.72cm,
+    minimum width=2.4cm,
+    inner sep=4pt
+  },
+  core/.style={
+    draw=ThesisPrimary,
+    line width=1.1pt,
+    rounded corners=4pt,
+    fill=ThesisPrimary!10,
+    text=ThesisPrimary,
+    align=center,
+    minimum height=0.95cm,
+    minimum width=2.9cm,
+    inner sep=5pt,
+    font=\footnotesize\bfseries\sffamily
+  },
+  mode/.style={
+    draw=ThesisSecondary,
+    line width=0.9pt,
+    rounded corners=3pt,
+    fill=ThesisSecondary!8,
+    text=ThesisText,
+    align=center,
+    minimum height=0.78cm,
+    minimum width=2.7cm,
+    inner sep=4pt
+  },
+  arrow/.style={
+    ->,
+    line width=0.9pt,
+    draw=ThesisText!80
+  }
+]
+
+  \node[box] (content) {\textbf{Contenu épuré}\\sections/*.tex};
+  \node[box, below=0.35cm of content] (assets) {\textbf{Ressources}\\figures, biblio, data};
+  \node[box, below=0.35cm of assets] (theme) {\textbf{Options}\\light/dark, FR/EN};
+
+  \node[core, right=0.95cm of assets] (cls) {ClasseGuillaumeSlides\\Beamer + Moloch};
+
+  \node[mode, right=0.95cm of cls, yshift=0.62cm] (standalone) {\textbf{Mode Autonome}\\projets/mon-deck/};
+  \node[mode, right=0.95cm of cls, yshift=-0.62cm] (integrated) {\textbf{Mode Intégré}\\projet/slides/ (../*)};
+
+  \draw[arrow] (content.east) -- (cls.west);
+  \draw[arrow] (assets.east) -- (cls.west);
+  \draw[arrow] (theme.east) -- (cls.west);
+
+  \draw[arrow, draw=ThesisSecondary] (cls.east) -- (standalone.west);
+  \draw[arrow, draw=ThesisAccent] (cls.east) -- (integrated.west);
+
+  \begin{scope}[on background layer]
+    \node[
+      fit=(content)(assets)(theme),
+      draw=ThesisMuted!40,
+      dashed,
+      rounded corners=5pt,
+      fill=ThesisBackground,
+      inner sep=6pt
+    ] (grp) {};
+  \end{scope}
+
+\end{tikzpicture}
+\end{document}

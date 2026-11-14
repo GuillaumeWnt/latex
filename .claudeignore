@@ -1,21 +1,14 @@
 # ==========================================
-# Claude Code Exclusion Rules
+# Claude Code Exclusion Rules (Workspace LaTeX)
 # ==========================================
+# Note: Secrets (.env, *.key, *.pem, *.secret, *.local.json) are denied globally in
+# C:\Users\guill\.claude\settings.json (permissions.deny), and OS/Python caches are
+# excluded globally in C:\Users\guill\.gitignore_global + VS Code search.exclude.
 
-# Secrets & Environment
-.env
-.env.*
-*.key
-*.pem
-*.secret
-*.local.json
-
-# Python
+# Python Virtualenv
 .venv/
-__pycache__/
-*.pyc
 
-# Heavy Binary & Internal Build Artifacts
+# LaTeX Disposable Build Artifacts
 # Note: *.pdf, *.log, *.blg and *.bbl are purposely ALLOWED so the AI can
 # visually inspect compiled PDFs and diagnose LaTeX/Biber compilation errors!
 *.aux
@@ -40,12 +33,5 @@ __pycache__/
 *.nav
 *.snm
 *.vrb
-
-# Build directories
-dist/
 _minted-*/
 auto/
-
-# OS Artifacts
-.DS_Store
-Thumbs.db

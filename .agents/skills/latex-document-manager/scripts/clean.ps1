@@ -26,8 +26,8 @@ if (-not (Test-Path $ProjectDir)) {
 Push-Location $ProjectDir
 try {
     $disposableExtensions = @(
-        "*.aux", "*.bbl", "*.bcf", "*.lof", "*.lot", "*.out",
-        "*.run.xml", "*.toc", "*.tdo", "*.idx", "*.ilg", "*.ind", "*.upa", "*.upb"
+        "*.aux", "*.bbl", "*.bcf", "*.lof", "*.lot", "*.nav", "*.out",
+        "*.run.xml", "*.snm", "*.toc", "*.tdo", "*.idx", "*.ilg", "*.ind", "*.upa", "*.upb", "*.vrb"
     )
     $debugAndTrackingExtensions = @("*.synctex.gz", "*.log", "*.blg", "*.fdb_latexmk", "*.fls")
 

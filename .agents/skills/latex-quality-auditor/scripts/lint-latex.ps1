@@ -47,10 +47,10 @@ foreach ($file in $texFiles) {
         if ($line -match '\\end\{(lstlisting|verbatim|Verbatim|minted)\b') { $inVerbatim = $false; continue }
         if ($inVerbatim) { continue }
 
-        if ($line -match '\\begin\{(tabular|tabularx|longtable|align|align\*|gather|gather\*|multline|multline\*|split|array|matrix|pmatrix|bmatrix|cases|minipage|flushleft|flushright|center|titlepage)\b') {
+        if ($line -match '\\begin\{(tabular|tabularx|longtable|align|align\*|gather|gather\*|multline|multline\*|split|array|matrix|pmatrix|bmatrix|cases|minipage|flushleft|flushright|center|titlepage|tikzpicture|tikzcd|pgfonlayer|columns|column|block|alertblock|exampleblock)\b') {
             $multilineDepth++
         }
-        if ($line -match '\\end\{(tabular|tabularx|longtable|align|align\*|gather|gather\*|multline|multline\*|split|array|matrix|pmatrix|bmatrix|cases|minipage|flushleft|flushright|center|titlepage)\b') {
+        if ($line -match '\\end\{(tabular|tabularx|longtable|align|align\*|gather|gather\*|multline|multline\*|split|array|matrix|pmatrix|bmatrix|cases|minipage|flushleft|flushright|center|titlepage|tikzpicture|tikzcd|pgfonlayer|columns|column|block|alertblock|exampleblock)\b') {
             if ($multilineDepth -gt 0) { $multilineDepth-- }
         }
 

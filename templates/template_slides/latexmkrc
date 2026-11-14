@@ -1,0 +1,30 @@
+# ==============================================================================
+# latexmkrc — Compilation LuaLaTeX + Biber (mode autonome et mode intégré)
+# ==============================================================================
+
+$pdf_mode = 4;
+$lualatex = 'lualatex --interaction=nonstopmode --synctex=1 %O %S';
+
+$bibtex_use = 2;
+$biber = 'biber %O %B';
+
+$out_dir = 'build';
+
+use File::Path qw(make_path);
+make_path("$out_dir/sections");
+
+# Détection automatique du mode sous-projet lié (dossier slides/ dans un document parent) :
+# ajoute uniquement les répertoires de ressources partagées (jamais .. ni ../build)
+# afin d'éviter toute collision sur build/main.bbl ou build/main.aux.
+if (-d '../biblio' || -d '../figures' || -d '../fonts') {
+  my $sep = ($^O eq 'MSWin32') ? ';' : ':';
+  $ENV{TEXINPUTS}     = '.' . $sep . join($sep, '../figures', '../figures/tikz', '../listings', '../data', '../fonts') . $sep . ($ENV{TEXINPUTS} // '');
+  $ENV{BIBINPUTS}     = '.' . $sep . '../biblio' . $sep . ($ENV{BIBINPUTS} // '');
+  $ENV{OPENTYPEFONTS} = '.' . $sep . '../fonts' . $sep . ($ENV{OPENTYPEFONTS} // '');
+  $ENV{TTFONTS}       = '.' . $sep . '../fonts' . $sep . ($ENV{TTFONTS} // '');
+}
+
+push @generated_exts, 'run.xml', 'nav', 'snm', 'vrb';
+
+$clean_ext = 'aux bbl bcf run.xml toc out nav snm vrb';
+$clean_full_ext = 'synctex.gz';

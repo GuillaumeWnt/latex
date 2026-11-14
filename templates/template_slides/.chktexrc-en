@@ -1,0 +1,41 @@
+# ==============================================================================
+# .chktexrc-en — Configuration ChkTeX pour diapositives en anglais
+# ==============================================================================
+
+TabSize = 2
+
+CmdLine
+{
+  -n1 -n12 -n20 -n24 -n36 -n46
+}
+
+Linker
+{
+  \autocite \parencite \supercite
+}
+
+Silent
+{
+  \LaTeX \LuaLaTeX \TeX
+  \toprule \midrule \bottomrule \addlinespace
+  \maketitle \appendix \tableofcontents \printbibliography
+}
+
+WipeArg
+{
+  \code:{}
+  \term:{}
+  \kpibadge:[]{}
+  \metriccard:[]{}{}[]
+  \sourcenote:{}
+  \takeaway:{}
+  \category:{}
+  \event:{}
+  \footertext:{}
+  \slideasset:{}
+  \url:{}
+  \nolinkurl:{}
+  \href:{}{}
+  \lstinline:[]{}
+  \includestandalone:[]{}
+}

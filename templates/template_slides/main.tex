@@ -1,0 +1,47 @@
+%% ==============================================================================
+%% main.tex — Modèle officiel de présentation (ClasseGuillaumeSlides)
+%% ==============================================================================
+%% Options disponibles :
+%%   - french (défaut) / english
+%%   - theme=light (défaut) / theme=dark
+%%   - font=fira (défaut) / heros / calibri / plex / libertinus
+%%   - ratio=169 (défaut) / 1610 / 43
+%%   - progressbar=foot (défaut) / head / frametitle / none
+%%   - sectionpage=on (défaut) / off
+%%   - integrated (active la résolution automatique vers ../* dans un dossier slides/)
+%%   - handout / notes
+\documentclass[french, theme=light, ratio=169]{ClasseGuillaumeSlides}
+
+% --- Métadonnées de la présentation ---
+\title[Architecture Slides LaTeX Moderne]{Présentations Éditoriales Modernes sous \texorpdfstring{\LaTeX{}}{LaTeX}}
+\subtitle{Design 16:9 épuré, palettes adaptatives et couplage natif avec \code{ClasseGuillaume}}
+\author[G. Winant]{Guillaume \textsc{Winant}}
+\institute{Atelier Typographique \& Ingénierie Documentaire}
+\date{14 Novembre 2026}
+\category{Modèle Officiel}
+\event{Soutenance \& Séminaire}
+\location{Paris}
+
+% Optionnel : décommenter pour afficher le logo discret en haut à droite des diapositives
+% \afficherLogoSlides
+
+% --- Base bibliographique ---
+\addbibresource{biblio/references.bib}
+
+% ==============================================================================
+% Corps de la présentation
+% ==============================================================================
+\begin{document}
+
+\maketitle
+
+\input{sections/01-contexte}
+\input{sections/02-composants}
+\input{sections/03-donnees-et-tikz}
+\input{sections/04-conclusion}
+
+% --- Diapositives de réserve / bibliographie (exclues du compteur total) ---
+\appendix
+\input{sections/99-backup}
+
+\end{document}

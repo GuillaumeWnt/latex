@@ -2,8 +2,9 @@
 # .gitignore — Fichiers temporaires et auxiliaires de compilation LaTeX
 # ==============================================================================
 
-# Répertoire de sortie de compilation
+# Répertoire de sortie de compilation (document principal et sous-projet slides/)
 build/
+slides/build/
 
 # Fichiers auxiliaires TeX standards
 *.aux

@@ -1,8 +1,11 @@
 # ==========================================
-# Gemini CLI Exclusion Rules
+# Gemini CLI Exclusion Rules (Workspace LaTeX)
 # ==========================================
+# Note: OS/Python noise (__pycache__, *.pyc, dist/, .DS_Store, Thumbs.db) is moved
+# to global VS Code search.exclude & C:\Users\guill\.gitignore_global.
+# Secrets remain listed locally because Gemini CLI reads .geminiignore at workspace root.
 
-# Secrets & Environment
+# Secrets & Environment variables
 .env
 .env.*
 *.key
@@ -10,12 +13,10 @@
 *.secret
 *.local.json
 
-# Python
+# Python Virtualenv
 .venv/
-__pycache__/
-*.pyc
 
-# Heavy Binary & Internal Build Artifacts
+# LaTeX Disposable Build Artifacts
 # Note: *.pdf, *.log, *.blg and *.bbl are purposely ALLOWED so the AI can
 # visually inspect compiled PDFs and diagnose LaTeX/Biber compilation errors!
 *.aux
@@ -40,12 +41,5 @@ __pycache__/
 *.nav
 *.snm
 *.vrb
-
-# Build directories
-dist/
 _minted-*/
 auto/
-
-# OS Artifacts
-.DS_Store
-Thumbs.db

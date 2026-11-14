@@ -18,14 +18,14 @@
 - **Packages/commandes bannis :**
   - Jamais `soul` sous LuaLaTeX pour surligner $\rightarrow$ utiliser `luacolor` + `lua-ul` (`\highLight`).
   - Jamais `fancyhdr` avec KOMA-Script $\rightarrow$ utiliser `scrlayer-scrpage`.
-  - Jamais `subfig` ni `subfigure` $\rightarrow$ utiliser `subcaption`.
+  - Jamais `subfig` ni `subfigure` $\rightarrow$ utiliser `subcaption` *(et sous `ClasseGuillaumeSlides`/Beamer, éviter `geometry`, `enumitem`, `caption` et `subcaption` : utiliser `columns`)*.
   - Jamais `\frenchbsetup` $\rightarrow$ utiliser `\frenchsetup{StandardLists=true, TocPartNameFull=false, SuppressWarning=true}`.
 
 ---
 
 ## 3. Standards Typographiques (Français par Défaut / Anglais via `[english]`)
 
-- **Langue du projet :** `ClasseGuillaume` utilise le français par défaut (`french`). L'option `\documentclass[english]{ClasseGuillaume}` bascule automatiquement `babel`, `siunitx` (`locale = US`, `range-phrase = { to }`), `cleveref`, les titres des boîtes, la liste des illustrations et `todonotes` en anglais (utiliser alors `.chktexrc-en` sans `-n26`).
+- **Langue du projet :** `ClasseGuillaume` (et `ClasseGuillaumeSlides`) utilise le français par défaut (`french`). L'option `english` dans `\documentclass[english]{...}` bascule automatiquement `babel`, `siunitx` (`locale = US`, `range-phrase = { to }`), `cleveref` (hors Beamer), les titres des boîtes, la liste des illustrations et `todonotes` en anglais (utiliser alors `.chktexrc-en` sans `-n26`).
 - **Guillemets :** Utiliser `\enquote{...}` (`csquotes`, option `autostyle=true` adaptée à la langue active), jamais de guillemets droits `"..."`.
 - **Tirets :** `-` (trait d'union), `--` (plages numériques `12--15`), `---` (incises).
 - **Espaces insécables (`~`) :** Recommandées avant les citations en ligne (`~\autocite{...}`, `~\parencite{...}`, `~\cite{...}`, `~\supercite{...}` ; inutile devant `\textcite{...}` utilisé comme sujet), obligatoires avant les renvois croisés (`~\cref{...}`, `~\Cref{...}`, `~\cpageref{...}`), et gérées automatiquement entre nombres et unités par `\qty{...}{...}`.

@@ -1,0 +1,40 @@
+# ==============================================================================
+# .editorconfig — Règles universelles d'indentation et de formatage
+# Pris en charge par VS Code, Vim, Emacs, Neovim, JetBrains et latexindent
+# ==============================================================================
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Fichiers sources LaTeX (Classe, styles, chapitres, biblio)
+[*.{tex,cls,sty,clo,bbx,cbx,bib}]
+indent_style = space
+indent_size = 2
+tab_width = 2
+
+# Fichiers de code externe
+[*.py]
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# Fichiers de données tabulaires
+[*.{csv,tsv}]
+indent_style = space
+indent_size = 2
+
+# Documentation Markdown (préserve les 2 espaces de saut de ligne)
+[*.md]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+# Fichiers de configuration JSON et YAML
+[*.{json,yaml,yml}]
+indent_style = space
+indent_size = 2
+

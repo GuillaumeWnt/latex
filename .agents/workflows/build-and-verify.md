@@ -30,4 +30,4 @@ description: Compiler un projet LaTeX avec latexmk (LuaLaTeX), auditer le log et
    - Corriger les causes racines jusqu'à obtenir un log propre (et **aucune** référence/citation indéfinie).
 
 4. **Vérification de rétro-portage :**
-   - Si un avertissement ou bug corrigé provenait d'un fichier socle (`ClasseGuillaume.cls`, `config/*.sty`, `latexmkrc`, `.chktexrc`), appliquer aussi le correctif dans `templates/template_officiel/` et re-tester.
+   - Si un avertissement ou bug corrigé provenait d'un fichier socle (`ClasseGuillaume*.cls`, `config/*.sty`, `latexmkrc`, `.chktexrc*`), appliquer aussi le correctif dans `templates/template_officiel/` (et synchroniser `templates/template_slides/` + `templates/template_officiel/slides/` si cela concerne les présentations) puis re-tester.

@@ -1,0 +1,17 @@
+%% ==============================================================================
+%% sections/99-backup.tex — Diapositives de réserve (hors compteur principal)
+%% ==============================================================================
+\begin{frame}{Annexe — Références bibliographiques}
+  \framesubtitle{Diapositive exclue du décompte total grâce à \code{appendixnumberbeamer}}
+  \printbibliography[heading=none]
+\end{frame}
+
+\begin{frame}{Annexe — Paramètres techniques de compilation}
+  \begin{slidecard}{Chaîne d'outils recommandée}
+    \begin{itemize}
+      \item Moteur : \LuaLaTeX{} (\code{\$pdf\_mode = 4} dans \code{latexmkrc})
+      \item Bibliographie : \code{biber} avec style \code{biblio/custom-style}
+      \item Vérification statique : \code{chktex} (\code{.chktexrc} FR / \code{.chktexrc-en} EN)
+    \end{itemize}
+  \end{slidecard}
+\end{frame}

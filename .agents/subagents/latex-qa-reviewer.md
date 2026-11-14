@@ -21,6 +21,7 @@ Auditer les fichiers `.tex` et `.bib` vis-à-vis des règles du workspace ([`cod
    - **Sémantique `template_officiel` :** usage effectif de `\term`, `\code`, `\enquote`, `\qty`/`\num`, `callout`, `attentionbox`, `definitionbox`, `hypothesis`, `boiteSynthese`, `cadreFigure`, `tabularx` (`L`/`C`/`R`/`Y`), `~\cref`/`\Cref`, citations BibLaTeX (`\autocite`, `\parencite`, `\cite`, `\textcite`, `\supercite`).
    - **Typographie française & Git :** espace insécable `~` devant les citations en ligne (hors `\textcite` sujet) et devant `\cref` (hors début de phrase `\Cref`), sauts de ligne sémantiques, indentation 2 espaces, `\caption` au-dessus des tableaux et sous les figures.
    - **Hygiène finale :** repérer les `\todoH{...}` ou `\noteMarge{...}` oubliés avant livraison.
+   - **Contrôles spécifiques `ClasseGuillaumeSlides` (diaporamas) :** densité maîtrisée (~35–50 mots/slide hors code/graphe), `0` `Overfull \vbox`, option `[fragile]` présente dès qu'une `frame` utilise `lstlisting`/verbatim, usage de `\slideasset{...}` en mode `integrated` (sans duplication ni `../build`), et inspection visuelle des pages clés si besoin.
 
 ---
 
@@ -28,4 +29,4 @@ Auditer les fichiers `.tex` et `.bib` vis-à-vis des règles du workspace ([`cod
 1. **Verdict :** Conforme / Révisions requises (avec comptage erreurs + avertissements `chktex` / `.log`).
 2. **Points bloquants :** erreurs de compilation ou entorses critiques.
 3. **Améliorations typographiques :** corrections ciblées (ligne / extrait / patch prêt à appliquer).
-4. **Suggestions de rétro-portage :** macros ou réglages réutilisables à remonter vers `templates/template_officiel/`.
+4. **Suggestions de rétro-portage :** macros ou réglages réutilisables à remonter vers `templates/template_officiel/` et/ou `templates/template_slides/`.
