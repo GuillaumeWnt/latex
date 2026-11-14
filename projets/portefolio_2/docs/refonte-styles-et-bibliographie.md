@@ -1,6 +1,7 @@
 # Refonte Visuelle, Déduplication & Assainissement Bibliographique (`portefolio_2`)
 
 > **Règle d'intégrité respectée :** Aucun mot du contenu rédactionnel (`content/` et `backmatter/`) n'a été ajouté, supprimé ou modifié, et `projets/portefolio_1/` n'a subi aucune modification.
+> **Complément ultérieur :** voir [`questions-typographie-et-latex.md`](questions-typographie-et-latex.md) pour le passage final à `spacing=double` (avec listes en `\singlespacing`), la modernisation des nombres/unités via `siunitx`, les explications techniques détaillées et l'ajout des 2 notes de marge vertes (`guillaume`).
 
 ---
 

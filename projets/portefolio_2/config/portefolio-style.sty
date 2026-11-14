@@ -23,8 +23,9 @@
 \colorlet{mdtRed}{CoverPlum}              % Rétrocompatibilité des encadrés du contenu
 
 % --- 2. Géométrie factorisée et rythme typographique des paragraphes ---
+% L'interligne double (spacing=double -> \doublespacing = 1.618, soit 22 pt en 11 pt)
+% est géré en amont par ClasseGuillaume/packages.sty (pour 2.0 littéral Word : \setstretch{1.97})
 \KOMAoptions{parskip=half}
-\setstretch{1.32}
 \setlength{\footheight}{29pt}
 \raggedbottom
 
@@ -255,8 +256,20 @@
 % Préserve la compacité interne des tableaux cliniques existants
 \renewcommand{\arraystretch}{1.05}
 
-% Listes aérées et repères colorés aux teintes des couvertures
-\setlist{topsep=0.35em, parsep=0.15em, itemsep=0.35em}
+% Grandeurs cliniques siunitx v3 (police du texte courant Calibri + notation fractionnaire)
+\sisetup{
+  mode = text,
+  detect-all = false,
+  per-mode = symbol,
+  product-units = single
+}
+\DeclareSIUnit\bpm{bpm}
+\DeclareSIUnit\SA{SA}
+\DeclareSIUnit\enzymU{U}
+\DeclareSIUnit\dL{\deci\liter}
+
+% Listes aérées en interligne simple (\singlespacing) et repères aux teintes des couvertures
+\setlist{before=\singlespacing, topsep=0.35em, parsep=0.15em, itemsep=0.35em}
 \setlist[itemize,1]{label=\textcolor{CoverPlum}{\small\textbullet}}
 \setlist[itemize,2]{label=\textcolor{CoverSlateDark}{\footnotesize$\triangleright$}}
 \setlist[enumerate,1]{label=\textcolor{CoverPlum}{\bfseries\arabic*.}}
@@ -271,6 +284,7 @@
   \todostyle{BlancStyle}{color=white, bordercolor=CoverSlate}
   \todostyle{TestStyle}{author=test, bordercolor=CoverSlateDark}
   \todostyle{GuillaumeStyle}{author=Guillaume, color=CoverSky!25, bordercolor=CoverNavy!55}
+  \todostyle{GuillaumeVertStyle}{author=guillaume, color=green!25, bordercolor=green!60!black}
   \todostyle{FloraStyle}{color=CoverPlum!15, bordercolor=CoverPlum!55}
 \fi
 
