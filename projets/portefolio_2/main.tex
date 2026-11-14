@@ -1,0 +1,66 @@
+%% ==============================================================================
+%% main.tex — Portfolio Médical (Architecture Modulaire ClasseGuillaume v2.0)
+%% ==============================================================================
+\documentclass[
+  screen,
+  french,
+  todos,
+  font=calibri,
+  bibstyle=vancouver,
+  spacing=double
+]{ClasseGuillaume}
+
+% Surcharge visuelle fidèle au portfolio d'origine
+\usepackage{config/portefolio-style}
+
+% Ressource bibliographique BibLaTeX / Biber
+\addbibresource{biblio/references.bib}
+
+% Métadonnées du document
+\title{PortefolioTitre}
+\author{Flora \textsc{Piron}}
+\date{\today}
+\keywords{portefolio}
+
+\begin{document}
+
+% ==============================================================================
+% 1. LIMINAIRE (frontmatter) : Liste des TODO, Page de garde, Table des matières
+% ==============================================================================
+\frontmatter
+
+\geometrieWord
+\thesistodolist[TODO list]
+
+% Page de garde principale
+\input{frontmatter/cover-main}
+
+% Table des matières
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+% ==============================================================================
+% 2. CORPS PRINCIPAL (mainmatter) : Chapitres I à VI
+% ==============================================================================
+\mainmatter
+
+\include{content/01-cas-diagnostique}
+\include{content/02-activite-exterieure}
+\include{content/03-cas-therapeutique}
+\include{content/04-incident-medical}
+\include{content/05-cas-polypathologique-complexe}
+\include{content/06-auto-evaluation}
+
+% ==============================================================================
+% 3. ANNEXES ET LISTES FINALES (appendix & backmatter)
+% ==============================================================================
+\appendix
+\include{backmatter/appendix-a}
+
+\backmatter
+\listoffigures
+\listofillustrations
+\listoftables
+\printbibliography[title={Bibliographie}]
+
+\end{document}

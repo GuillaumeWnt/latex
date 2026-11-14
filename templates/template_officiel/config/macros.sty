@@ -393,7 +393,9 @@
           \expandafter\todo\expandafter[\ClasseGuillaume@todoopts, caption={#3}]{\pdftooltip{#3}{#3}}%
         \fi
       }%
-      \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\ClasseGuillaume@hlcolor]{#4}}%
+      \ifstrempty{#4}{}{%
+        \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\ClasseGuillaume@hlcolor]{#4}}%
+      }%
     \fi
   }
 
@@ -403,6 +405,7 @@
     \phantomsection
     \label{table_todos}%
     \begingroup
+      \ifdef{\singlespacing}{\singlespacing}{}%
       \listoftodos[#1]%
     \endgroup
   }

@@ -135,6 +135,13 @@ Dans `main.tex`, modifiez simplement la première ligne :
   \documentclass[print]{ClasseGuillaume}   % Recto-verso, décalage BCOR=10mm, liens monochromes
   ```
 
+### Options complémentaires disponibles
+- **Polices (`font=...`) :** `font=libertinus` (défaut), `font=heros`, `font=calibri`, `font=comicsans`, `font=standard` (avec résolution prioritaire dans `fonts/` pour `CalibriFontFiles/`, `AsapFontFiles/` et `ComicSansMSFontFiles/`).
+- **Style bibliographique (`bibstyle=...`) :** `bibstyle=custom` (défaut, `biblio/custom-style`) ou `bibstyle=vancouver` (style numérique Vancouver avec libellés français automatiques).
+- **Interligne (`spacing=...`) :** `spacing=single` (défaut), `spacing=onehalf` ou `spacing=double` (via `setspace`, tout en gardant les titres KOMA-Script et sommaires en simple interligne).
+- **Annotations collaboratives :** `todos` / `todoNote` pour activer `\todoH` et `\thesistodolist`.
+- **Tableaux & flottants étendus :** `xltabular`, `rotating` (`sidewaystable` / `sidewaysfigure`) et `float` (`[H]`) chargés en standard dans `config/packages.sty`.
+
 ## 5. Rédiger un Projet en Anglais (`english`)
 
 La langue par défaut de la classe est le français (`french`). Pour un document principal en anglais :

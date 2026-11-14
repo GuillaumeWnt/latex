@@ -10,6 +10,7 @@ flowchart LR
   P56 --> P7["Phase 7<br/>Règle !CAUTION & Audits"]
   P7 --> P89["Phases 8-9<br/>FR/EN, .ignore & Slides v1"]
   P89 --> P10["Phase 10<br/>Slides v2.0 & Règle Plan/Hist"]
+  P10 --> P11["Phase 11<br/>portefolio_2 & Rétroportage"]
 ```
 
 ---
@@ -23,15 +24,14 @@ flowchart LR
 ---
 
 ## 2. Évolution Récente *(synthétique)*
-- **Phase 8 — Support bilingue FR/EN & `.ignore` :** option `french`/`english` dans `ClasseGuillaume`, `.chktexrc-en`, option `-Language` dans `lint-latex.ps1` et accès conservé aux `*.pdf`/`*.log`/`*.bbl`/`*.blg`.
-- **Phase 9 — Exclusions globales & `ClasseGuillaumeSlides v1` :** transfert des exclusions génériques vers les réglages globaux, création de `templates/template_slides/` et `<projet>/slides/` (`integrated`), et premier prototype `plan.md` / `historique.md`.
+- **Phase 8 — Support bilingue FR/EN & `.ignore` :** option `french`/`english` dans `ClasseGuillaume`, `.chktexrc-en`, option `-Language` dans `lint-latex.ps1` et conservation des artefacts `*.pdf`/`*.log`/`*.bbl`/`*.blg`.
+- **Phase 9 — Exclusions globales & `ClasseGuillaumeSlides v1` :** transfert des exclusions génériques vers les réglages globaux, création de `templates/template_slides/` et `<projet>/slides/` (`integrated`).
+- **Phase 10 — Gouvernance Plan/Hist & `ClasseGuillaumeSlides v2.0` :** règle globale `docs/plan.md` éphémère + `docs/historique.md` compact, archivage visuel [`templates/exemples-slides/`](file:///c:/Users/guill/dev/perso/latex/general/templates/exemples-slides), refonte 4 palettes / 3 styles / composants ouverts de `ClasseGuillaumeSlides v2.0` et veille MCP présentation ([`docs/compte-rendu-et-reponses.md`](file:///c:/Users/guill/dev/perso/latex/general/docs/compte-rendu-et-reponses.md)).
 
 ---
 
 ## 3. Session Courante *(détaillée — sera compactée au prochain changement majeur)*
-- **Phase 10 — Règle globale validée, archivage visuel & refonte `ClasseGuillaumeSlides v2.0` :**
-  - **Gouvernance globale :** Règle 2 (`docs/plan.md` éphémère + `docs/historique.md` à compaction progressive) inscrite dans `C:\Users\guill\.agents\` et synchronisée via `deploy-and-sync-global.ps1`.
-  - **Références visuelles :** 23 planches d'exemple inspectées et archivées dans [`templates/exemples-slides/`](file:///c:/Users/guill/dev/perso/latex/general/templates/exemples-slides) (exclu de Git via `.gitignore` sans ignorer `*.png` ; `exemple/` supprimé).
-  - **Refonte `ClasseGuillaumeSlides v2.0` :** 4 palettes (`navy`, `forest`, `sage`, `vibrant`) clair/sombre, 3 styles (`editorial`, `organic`, `minimal`), 4 couvertures (`diagonal`, `organic`, `framed`, `editorial`), composants ouverts sans boîtes lourdes (`\minimalstat`, `railpoints`, `processline`, `timelineflow`, `funnelchart`, `cyclechart`, `\floatingcard`, `\tiltframe`, `\usebandcanvas`, `\userailcanvas`, `ClasseGuillaumeAxis`), canevas indépendant de `remember picture` et correction de l'espacement `frametitle`.
-  - **Documentation & Veille MCP :** mise à jour du skill `latex-slides`, `README.md`, `appendix-a.tex`, et rédaction de [`docs/compte-rendu-et-reponses.md`](file:///c:/Users/guill/dev/perso/latex/general/docs/compte-rendu-et-reponses.md) (analyse Marketplace/GitHub sur les MCP de présentation).
-  - **Validation :** compilation à froid LuaLaTeX + `ChkTeX` sans erreur (`0` erreur, `0` avert., `0` Overfull) et contrôle visuel PNG sur `template_slides` (18 p.), `template_officiel/slides` (9 p.) et un test `english + theme=dark + vibrant + organic` (7 p.), plus non-régression `template_officiel` (56 p.).
+- **Phase 11 — Refonte modulaire de `portefolio_1` en [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) & rétroportage :**
+  - **Rétroportage `templates/template_officiel/` :** ajout des options publiques `font=comicsans`, `bibstyle=custom|vancouver` (chaînes FR *consulté le* / *disponible sur*) et `spacing=single|onehalf|double` (`setspace` sans affecter titres/TOC), détection locale dans `fonts/` (`\CalibriFont`, `\AsapFont`, `\ComicSansMSFont`), paquets `rotating`/`xltabular`/`float`, garde `\ifstrempty` sur `\todoH` et `\singlespacing` sur `\thesistodolist`, documentés dans `README.md` et `appendix-a.tex`.
+  - **Architecture [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/main.tex) :** séparation stricte selon `template_officiel`, style dédié [`config/portefolio-style.sty`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/config/portefolio-style.sty) (`mdtRed`, `Calibri` + `Asap Condensed`, `Chapitre I` romain centré, en-tête seul sans logo/pied de page, `\geometrieWord` 2,5 cm / `\geometrieLarge` 1 cm synchronisés sans alerte `typearea`, `hidelinks`, `\todoH` sous `lua-ul` UTF-8 avec URL cliquables), rapatriement intégral des pages de garde, polices, figures, archives de tableaux et fichiers orphelins (`docs/`) sans modifier un seul mot du texte rédactionnel.
+  - **Validation :** compilation à froid LuaLaTeX + Biber (`portefolio_2` : 70 p., 0 erreur fatale, 0 `Overfull \hbox`, 1 seul avertissement `Marginpar on page 16 moved` ; non-régression `template_officiel` : 56 p., 0 erreur fatale, 1 avertissement préexistant) et contrôle visuel PNG comparatif.

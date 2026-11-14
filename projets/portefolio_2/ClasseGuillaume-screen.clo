@@ -1,0 +1,52 @@
+%% ==============================================================================
+%% ClasseGuillaume-screen.clo
+%% Option de classe : Configuration optimisée pour la lecture sur écran / tablette
+%% ==============================================================================
+\ProvidesFile{ClasseGuillaume-screen.clo}[2026/11/12 v2.0 Screen Layout Configuration for ClasseGuillaume]
+
+% --- Géométrie et mise en page KOMA-Script ---
+% Marges symétriques pour lecture continue sur écran, sans décalage de reliure
+\newcommand{\ClasseGuillaume@bcor}{0mm}
+\KOMAoptions{
+  twoside=false,
+  open=any,
+  BCOR=0mm,
+  DIV=12
+}
+\raggedbottom
+
+% --- Palette chromatique pour écran (Accessible, Moderne & Haute Lisibilité) ---
+\definecolor{ThesisPrimary}{RGB}{15, 60, 110}     % Bleu marine profond (titres, accents majeurs)
+\definecolor{ThesisSecondary}{RGB}{20, 110, 120}  % Sarcelle / Teal (sous-titres, cadres)
+\definecolor{ThesisAccent}{RGB}{190, 75, 40}      % Corail / Terracotta (attentions, décisions)
+\definecolor{ThesisText}{RGB}{30, 35, 42}         % Gris anthracite profond pour la lecture
+\definecolor{ThesisMuted}{RGB}{95, 105, 118}      % Gris ardoise (notes, en-têtes, légendes)
+\definecolor{ThesisBackground}{RGB}{246, 248, 251}% Fond très léger pour blocs et code
+
+% Alias chromatiques historiques
+\colorlet{primaryColor}{ThesisPrimary}
+\colorlet{secondaryColor}{ThesisSecondary}
+\colorlet{accentColor}{ThesisAccent}
+\colorlet{mdtRed}{ThesisAccent}
+
+% Liens hypertexte colorés pour navigation interactive
+\definecolor{ThesisLink}{RGB}{18, 90, 150}        % Liens internes
+\definecolor{ThesisCite}{RGB}{22, 115, 70}        % Citations bibliographiques
+\definecolor{ThesisUrl}{RGB}{115, 45, 140}        % URLs externes
+
+% Configuration Hyperref spécifique à l'écran
+\PassOptionsToPackage{
+  colorlinks=true,
+  linkcolor=ThesisLink,
+  citecolor=ThesisCite,
+  urlcolor=ThesisUrl,
+  filecolor=ThesisLink,
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  bookmarksnumbered=true,
+  pdfpagemode=UseOutlines,
+  pdfstartview=FitH,
+  pdfdisplaydoctitle=true
+}{hyperref}
+
+\endinput

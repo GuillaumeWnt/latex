@@ -99,12 +99,14 @@ via la macro \code{\textbackslash setkomafont\{élément\}\{spécification\}} :
 \section{Options Publiques de \code{ClasseGuillaume}}
 \label{sec:options-classe}
 
-Les options suivantes peuvent être combinées entre crochets dans \code{\textbackslash documentclass[...]\{ClasseGuillaume\}} :
+Dans \code{\textbackslash documentclass[...]\{ClasseGuillaume\}}, les options suivantes peuvent être combinées :
 \begin{description}
   \item[\code{screen} (défaut) / \code{print}] Bascule entre le profil de lecture numérique (marges symétriques, palette colorée) et le profil d'impression reliée (recto-verso, \code{BCOR=10mm}, liens monochromes).
   \item[\code{french} (défaut) / \code{english}] Sélectionne la langue principale du document (\code{babel}, \code{siunitx}, \code{cleveref}, titres par défaut des boîtes \code{callout}, \code{attentionbox}, \code{hypothesis}, \code{definitionbox}, liste des illustrations et \code{todonotes}). Le conditionnel public \code{\textbackslash ifenglishversion} permet aussi d'adapter du contenu conditionnel.
   \item[\code{todos} / \code{todoNote}] Active les annotations marginales collaboratives \code{\textbackslash todoH} et \code{\textbackslash thesistodolist} (désactivées en mode publication finale).
-  \item[\code{font=libertinus} (défaut) / \code{heros} / \code{calibri} / \code{standard}] Sélectionne le jeu de polices OpenType configuré dans \code{config/packages.sty}.
+  \item[\code{font=libertinus} (défaut) / \code{heros} / \code{calibri} / \code{comicsans} / \code{standard}] Sélectionne le jeu de polices OpenType configuré dans \code{config/packages.sty} (avec détection locale automatique dans \code{fonts/} pour \code{\textbackslash HerosFont}, \code{\textbackslash CalibriFont}, \code{\textbackslash AsapFont} et \code{\textbackslash ComicSansMSFont}).
+  \item[\code{bibstyle=custom} (défaut) / \code{vancouver}] Choisit entre le style modulaire \code{biblio/custom-style} et le style numérique Vancouver (avec adaptation française \emph{consulté le} / \emph{disponible sur}).
+  \item[\code{spacing=single} (défaut) / \code{onehalf} / \code{double}] Règle l'interligne du corps de texte via \code{setspace} tout en préservant l'interligne simple des titres et tables des matières.
   \item[Sous-projet \code{slides/} (\code{ClasseGuillaumeSlides v2.0})] Permet de générer une présentation 16:9 (\code{theme=light}/\code{dark}, \code{palette=navy|forest|sage|vibrant}, \code{style=editorial|organic|minimal}, \code{cover=diagonal|organic|framed|editorial}, option \code{integrated}) partageant directement \code{../figures/}, \code{../biblio/}, \code{../data/} et \code{../listings/}.
 \end{description}
 

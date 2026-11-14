@@ -1,0 +1,228 @@
+%% ==============================================================================
+%% config/portefolio-style.sty
+%% Surcharge visuelle fidèle à l'esthétique historique du portfolio médical
+%% tout en conservant la symbiose propre KOMA-Script + geometry + lua-ul
+%% ==============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{config/portefolio-style}[2026/11/14 v1.0 Visual Fidelity Style for portefolio_2]
+
+% --- 1. Palette chromatique exacte (rouge bordeaux mdtRed) ---
+\colorlet{mdtRed}{red!50!black}
+\colorlet{ThesisPrimary}{mdtRed}
+\colorlet{ThesisSecondary}{mdtRed}
+\colorlet{ThesisAccent}{mdtRed}
+\colorlet{ThesisText}{black}
+\colorlet{ThesisMuted}{gray}
+
+% --- 2. Calibrage géométrique KOMA + geometry sans avertissement ---
+\KOMAoptions{parskip=half}
+\setlength{\footheight}{29pt}
+\geometry{
+  headheight=29pt,
+  footskip=29pt,
+  marginparwidth=2.0cm,
+  marginparsep=3mm
+}
+\raggedbottom
+
+% Redéfinition de \geometrieWord (2.5 cm) et \geometrieLarge (1 cm) fidèles à portefolio_1
+\renewcommand{\geometrieWord}{%
+  \cleardoublepage%
+  \renewcommand{\currentGeometryCmd}{\geometrieWord}%
+  \newgeometry{
+    left=2.5cm, right=2.5cm,
+    top=2.5cm, bottom=2.5cm,
+    headheight=29pt, headsep=5mm,
+    footskip=29pt, footnotesep=5mm,
+    marginparwidth=2cm, marginparsep=3mm,
+    twoside=false, bindingoffset=0cm, twocolumn=false
+  }%
+}
+\let\geometrieAnnotation\geometrieWord
+
+\renewcommand{\geometrieLarge}{%
+  \cleardoublepage%
+  \renewcommand{\currentGeometryCmd}{\geometrieLarge}%
+  \newgeometry{
+    left=1cm, right=1cm,
+    top=1cm, bottom=1cm,
+    headheight=23pt, headsep=5pt,
+    footskip=23pt, footnotesep=5pt,
+    marginparwidth=0mm, marginparsep=0mm,
+    twoside=false, bindingoffset=0cm, twocolumn=false
+  }%
+}
+\let\geometrieExemple\geometrieLarge
+
+% --- 3. En-têtes et pieds de page (en-tête uniquement, sans pied de page ni logo) ---
+\masquerLogo
+\clearpairofpagestyles
+\automark{chapter}
+
+\setkomafont{pagehead}{\normalfont\sffamily\itshape\color{gray}}
+\setkomafont{pagenumber}{\normalfont\sffamily\bfseries\color{black}}
+\addtokomafont{headsepline}{\color{black}}
+
+\ohead[\pagemark]{\pagemark}
+\ihead[]{\headmark}
+\cfoot[]{}
+
+\AddToLayerPageStyleOptions{scrheadings}{%
+  onselect={%
+    \KOMAoptions{headsepline=0.5pt, footsepline=false}%
+  }%
+}
+\AddToLayerPageStyleOptions{plain.scrheadings}{%
+  onselect={%
+    \KOMAoptions{headsepline=false, footsepline=false}%
+  }%
+}
+
+% --- 4. Hiérarchie des titres (Asap Condensed rouge, chapitres centrés romains) ---
+\KOMAoptions{
+  chapterprefix=true,
+  appendixprefix=true,
+  toc=listof,
+  toc=index,
+  toc=bibliography,
+  listof=totoc,
+  listof=entryprefix,
+  numbers=noenddot
+}
+
+\setkomafont{disposition}{\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
+\setkomafont{chapter}{\Huge\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
+\setkomafont{section}{\Large\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
+\setkomafont{subsection}{\large\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
+\setkomafont{subsubsection}{\normalsize\bfseries\AsapFont\color{mdtRed}\setstretch{1}}
+\setkomafont{paragraph}{\normalsize\bfseries}
+\setkomafont{captionlabel}{\bfseries\sffamily\color{black}}
+\setkomafont{caption}{\small\sffamily}
+\setkomafont{descriptionlabel}{\bfseries\sffamily\color{black}}
+
+% Restauration des gabarits KOMA-Script natifs de titre de chapitre centré
+\renewcommand*{\raggedchapter}{\centering}
+\renewcommand*{\chapterformat}{%
+  \mbox{\chapappifchapterprefix{\nobreakspace}\thechapter\autodot\IfUsePrefixLine{}{\enskip}}%
+}
+\renewcommand*{\chapterlinesformat}[3]{%
+  \@hangfrom{#2}{#3}%
+}
+\renewcommand*{\chapterlineswithprefixformat}[3]{%
+  #2#3%
+}
+
+\RedeclareSectionCommand[
+  font={\Huge\AsapFont\color{mdtRed}\setstretch{1}\selectfont},
+  beforeskip=-2cm,
+  afterskip=1cm,
+  innerskip=0.5em
+]{chapter}
+
+\RedeclareSectionCommand[
+  beforeskip=-3.5ex \@plus -1ex \@minus -.2ex,
+  afterskip=2.3ex \@plus .2ex
+]{section}
+
+\RedeclareSectionCommands[
+  beforeskip=-15pt,
+  afterskip=10pt
+]{subsection, subsubsection}
+
+\RedeclareSectionCommand[
+  indent=5mm,
+  afterskip=-1em,
+  font={\color{black}\bfseries\textbullet~}
+]{paragraph}
+
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+
+% --- 5. Figures, légendes, tableaux et listes ---
+\graphicspath{{figures/}{./}}
+\KOMAoptions{captions=tableheading}
+
+\captionsetup{
+  format = hang,
+  justification = centerlast,
+  singlelinecheck = true,
+  font = {small, sf},
+  labelfont = {bf, sf, color=black},
+  labelsep = period,
+  margin = {1cm, 1cm},
+  skip = 10pt
+}
+\captionsetup[table]{
+  position = above,
+  skip = 10pt
+}
+\captionsetup[sub]{
+  font = {footnotesize, sf},
+  labelfont = {bf, sf, color=black},
+  labelformat = simple,
+  justification = centering
+}
+\renewcommand\thesubfigure{(\alph{subfigure})}
+
+% Neutraliser l'interligne majoré (1.18) sur les tableaux hérités s'il modifie la hauteur,
+% ou préserver la valeur standard de LaTeX (1.0) pour éviter tout débordement de colonne p{}
+\renewcommand{\arraystretch}{1.0}
+
+\setlist{noitemsep}
+
+% --- 6. Notes collaboratives \todoH fidèles (troncature 30 car., URL cliquable, lua-ul UTF-8) ---
+\ifusetodos
+  \setuptodonotes{size=\tiny, color=red!30}
+  \todostyle{BlancStyle}{}
+  \todostyle{TestStyle}{author=test}
+  \todostyle{GuillaumeStyle}{author=Guillaume}
+  \todostyle{FloraStyle}{}
+
+  \RenewDocumentCommand{\todoH}{O{AuthorStyle} o m +m}{%
+    \if@todonotes@disabled
+      #4%
+    \else
+      \IfNoValueTF{#2}{%
+        \ClasseGuillaume@resolve@todocolor{#1}%
+        \def\ClasseGuillaume@todoopts{#1}%
+      }{%
+        \def\ClasseGuillaume@hlcolor{#2}%
+        \def\ClasseGuillaume@todoopts{#1, color=#2}%
+      }%
+      \IfSubStr{\detokenize{#3}}{\@backslashchar}{%
+        % Préserve les commandes LaTeX actives (\url, espace \, etc.) dans la note et la TODO list
+        \expandafter\todo\expandafter[\ClasseGuillaume@todoopts]{#3}%
+      }{%
+        \StrLeft{#3}{30}[\apercu]%
+        \expandafter\todo\expandafter[\ClasseGuillaume@todoopts]{\pdftooltip{\apercu...}{#3}}%
+      }%
+      \ifstrempty{#4}{}{%
+        \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\ClasseGuillaume@hlcolor]{#4}}%
+      }%
+    \fi
+  }
+\fi
+
+% --- 7. Hyperliens discrets (hidelinks) et métadonnées PDF conformes à portefolio_1 ---
+\AtEndPreamble{%
+  \hypersetup{
+    hidelinks,
+    colorlinks = false,
+    linkcolor = black,
+    citecolor = magenta,
+    urlcolor = mdtRed
+  }%
+}
+\AtBeginDocument{%
+  \hypersetup{
+    pdfsubject = {portefolio},
+    pdfkeywords = {portefolio},
+    pdfcreator = {GW}
+  }%
+}
+\pdfstringdefDisableCommands{%
+  \let\textsc\@firstofone
+}
+
+\endinput

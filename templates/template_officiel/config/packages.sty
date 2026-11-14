@@ -55,10 +55,48 @@
   }{%
     \let\FiraFont\HerosFont
   }%
-  \IfFontExistsTF{Calibri}{%
-    \newfontfamily{\CalibriFont}{Calibri}[Scale=MatchLowercase]%
+  \IfFileExists{fonts/CalibriFontFiles/calibri-regular.ttf}{%
+    \newfontfamily{\CalibriFont}{calibri}[
+      Path = fonts/CalibriFontFiles/,
+      Extension = .ttf,
+      UprightFont = *-regular,
+      BoldFont = *-bold,
+      ItalicFont = *-italic,
+      BoldItalicFont = *-bold-italic,
+      Scale = MatchLowercase
+    ]%
   }{%
-    \let\CalibriFont\HerosFont
+    \IfFontExistsTF{Calibri}{%
+      \newfontfamily{\CalibriFont}{Calibri}[Scale=MatchLowercase]%
+    }{%
+      \let\CalibriFont\HerosFont
+    }%
+  }%
+  \IfFileExists{fonts/AsapFontFiles/Asap-Condensed-Regular.ttf}{%
+    \newfontfamily{\AsapFont}{Asap-Condensed}[
+      Path = fonts/AsapFontFiles/,
+      Extension = .ttf,
+      UprightFont = *-Regular,
+      BoldFont = *-Bold,
+      ItalicFont = *-Italic,
+      BoldItalicFont = *-BoldItalic,
+      Scale = MatchLowercase
+    ]%
+  }{%
+    \let\AsapFont\HerosFont
+  }%
+  \IfFileExists{fonts/ComicSansMSFontFiles/ComicSansMS.ttf}{%
+    \newfontfamily{\ComicSansMSFont}{ComicSansMS}[
+      Path = fonts/ComicSansMSFontFiles/,
+      Extension = .ttf,
+      UprightFont = ComicSansMS,
+      BoldFont = ComicSansMS-Bold,
+      ItalicFont = ComicSansMS-Italic,
+      BoldItalicFont = ComicSansMS-BoldItalic,
+      Scale = MatchLowercase
+    ]%
+  }{%
+    \let\ComicSansMSFont\HerosFont
   }%
 
   % 4. Application de la police principale selon l'option de classe (font=...)
@@ -82,20 +120,75 @@
     }%
   }{}%
   \ifdefstring{\ClasseGuillaume@font}{calibri}{%
-    \IfFontExistsTF{Calibri}{%
-      \setmainfont{Calibri}%
-      \setsansfont{Calibri}%
+    \IfFileExists{fonts/CalibriFontFiles/calibri-regular.ttf}{%
+      \setmainfont{calibri}[
+        Path = fonts/CalibriFontFiles/,
+        Extension = .ttf,
+        UprightFont = *-regular,
+        BoldFont = *-bold,
+        ItalicFont = *-italic,
+        BoldItalicFont = *-bold-italic
+      ]%
+      \setsansfont{calibri}[
+        Path = fonts/CalibriFontFiles/,
+        Extension = .ttf,
+        UprightFont = *-regular,
+        BoldFont = *-bold,
+        ItalicFont = *-italic,
+        BoldItalicFont = *-bold-italic
+      ]%
     }{%
-      \IfFileExists{fonts/texgyreheros-regular.otf}{%
-        \setmainfont{texgyreheros}[
-          Path = fonts/,
-          Extension = .otf,
-          UprightFont = *-regular,
-          BoldFont = *-bold,
-          ItalicFont = *-italic,
-          BoldItalicFont = *-bolditalic
-        ]%
-      }{}%
+      \IfFontExistsTF{Calibri}{%
+        \setmainfont{Calibri}%
+        \setsansfont{Calibri}%
+      }{%
+        \IfFileExists{fonts/texgyreheros-regular.otf}{%
+          \setmainfont{texgyreheros}[
+            Path = fonts/,
+            Extension = .otf,
+            UprightFont = *-regular,
+            BoldFont = *-bold,
+            ItalicFont = *-italic,
+            BoldItalicFont = *-bolditalic
+          ]%
+        }{}%
+      }%
+    }%
+  }{}%
+  \ifdefstring{\ClasseGuillaume@font}{comicsans}{%
+    \IfFileExists{fonts/ComicSansMSFontFiles/ComicSansMS.ttf}{%
+      \setmainfont{ComicSansMS}[
+        Path = fonts/ComicSansMSFontFiles/,
+        Extension = .ttf,
+        UprightFont = ComicSansMS,
+        BoldFont = ComicSansMS-Bold,
+        ItalicFont = ComicSansMS-Italic,
+        BoldItalicFont = ComicSansMS-BoldItalic
+      ]%
+      \setsansfont{ComicSansMS}[
+        Path = fonts/ComicSansMSFontFiles/,
+        Extension = .ttf,
+        UprightFont = ComicSansMS,
+        BoldFont = ComicSansMS-Bold,
+        ItalicFont = ComicSansMS-Italic,
+        BoldItalicFont = ComicSansMS-BoldItalic
+      ]%
+    }{%
+      \IfFontExistsTF{Comic Sans MS}{%
+        \setmainfont{Comic Sans MS}%
+        \setsansfont{Comic Sans MS}%
+      }{%
+        \IfFileExists{fonts/texgyreheros-regular.otf}{%
+          \setmainfont{texgyreheros}[
+            Path = fonts/,
+            Extension = .otf,
+            UprightFont = *-regular,
+            BoldFont = *-bold,
+            ItalicFont = *-italic,
+            BoldItalicFont = *-bolditalic
+          ]%
+        }{}%
+      }%
     }%
   }{}%
   \ifdefstring{\ClasseGuillaume@font}{standard}{%
@@ -117,6 +210,8 @@
   \providecommand{\LibertinusFont}{\rmfamily}
   \providecommand{\HerosFont}{\sffamily}
   \providecommand{\CalibriFont}{\sffamily}
+  \providecommand{\AsapFont}{\sffamily}
+  \providecommand{\ComicSansMSFont}{\sffamily}
   \providecommand{\FiraFont}{\sffamily}
   \providecommand{\CursorFont}{\ttfamily}
 \else
@@ -126,12 +221,27 @@
   \providecommand{\LibertinusFont}{\rmfamily}
   \providecommand{\HerosFont}{\sffamily}
   \providecommand{\CalibriFont}{\sffamily}
+  \providecommand{\AsapFont}{\sffamily}
+  \providecommand{\ComicSansMSFont}{\sffamily}
   \providecommand{\FiraFont}{\sffamily}
   \providecommand{\CursorFont}{\ttfamily}
 \fi\fi
 
 % Micro-typographie (crénage optique, saillie des marges)
 \RequirePackage{microtype}
+
+% --- Interligne global piloté par l'option spacing=... (avant geometry/captions/hyperref) ---
+\RequirePackage{setspace}
+\ifdefstring{\ClasseGuillaume@spacing}{onehalf}{%
+  \onehalfspacing
+  \BeforeStartingTOC{\singlespacing}%
+  \addtokomafont{disposition}{\setstretch{1}}%
+}{}%
+\ifdefstring{\ClasseGuillaume@spacing}{double}{%
+  \doublespacing
+  \BeforeStartingTOC{\singlespacing}%
+  \addtokomafont{disposition}{\setstretch{1}}%
+}{}%
 
 % --- Symbiose native KOMA-Script (typearea) & geometry ---
 % 1. Chargement de geometry (alimenté par usegeometry=true de KOMA-Script)
@@ -146,8 +256,9 @@
 % Totalisation des pages (pour styles de débogage et folios X sur Y)
 \RequirePackage{lastpage}
 
-% --- Rotation dynamique de pages en mode paysage avec orientation PDF ---
+% --- Rotation dynamique de pages en mode paysage avec orientation PDF et tableaux pivotés ---
 \RequirePackage{pdflscape}
+\RequirePackage{rotating}
 
 % --- Composition multi-colonnes dynamique et équilibrée ---
 \RequirePackage{multicol}
@@ -211,6 +322,7 @@
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
 \RequirePackage{longtable}
+\RequirePackage{xltabular}
 \RequirePackage{array}
 \RequirePackage{makecell}
 \RequirePackage{multirow}
@@ -257,6 +369,9 @@
 \graphicspath{{figures/}{figures/tikz/}}
 
 % Légendes et sous-figures scientifiques (a), (b)
+% Placement strict de flottants ([H]) en cohabitation propre avec scrhack
+\RequirePackage{float}
+
 \RequirePackage{caption}
 \captionsetup{
   format = plain,
@@ -368,11 +483,37 @@
 \apptocmd{\restoregeometry}{\syncKomaGeometry}{}{}
 
 % --- Bibliographie BibLaTeX ---
-% Le style fait appel à biblio/custom-style.bbx et biblio/custom-style.cbx
-\RequirePackage[
-  backend=biber,
-  style=biblio/custom-style
-]{biblatex}
+% Par défaut (bibstyle=custom) : biblio/custom-style.bbx et biblio/custom-style.cbx
+% Option bibstyle=vancouver : style numérique Vancouver
+\ifdefstring{\ClasseGuillaume@bibstyle}{vancouver}{%
+  \RequirePackage[
+    backend=biber,
+    style=vancouver,
+    url=true,
+    urldate=long,
+    doi=true,
+    hyperref=auto,
+    backref=true
+  ]{biblatex}%
+  \ifClasseGuillaume@english\else
+    \DefineBibliographyStrings{french}{%
+      urlseen = {consulté le},
+      urlfrom = {disponible sur}
+    }%
+    \DeclareFieldFormat{urldate}{\mkbibbrackets{\bibstring{urlseen}\space#1}}%
+    \DeclareFieldFormat{url}{\bibstring{urlfrom}\addcolon\space\url{#1}}%
+    \renewbibmacro*{url+urldate}{%
+      \usebibmacro{urldate}%
+      \setunit{\adddot\space}%
+      \usebibmacro{url}%
+    }%
+  \fi
+}{%
+  \RequirePackage[
+    backend=biber,
+    style=biblio/custom-style
+  ]{biblatex}%
+}
 
 % Césure irréprochable de toutes les URL (notes de marge, bibliographie)
 \RequirePackage{xurl}

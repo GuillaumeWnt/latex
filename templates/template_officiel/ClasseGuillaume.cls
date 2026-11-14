@@ -53,6 +53,36 @@
   \renewcommand{\ClasseGuillaume@font}{standard}%
   \@expandtwoargs\@removeelement{font=standard}\@classoptionslist\@classoptionslist
 }
+\DeclareOption{font=comicsans}{%
+  \renewcommand{\ClasseGuillaume@font}{comicsans}%
+  \@expandtwoargs\@removeelement{font=comicsans}\@classoptionslist\@classoptionslist
+}
+
+% Option de sélection du style bibliographique (custom par défaut, ou vancouver)
+\newcommand{\ClasseGuillaume@bibstyle}{custom}
+\DeclareOption{bibstyle=custom}{%
+  \renewcommand{\ClasseGuillaume@bibstyle}{custom}%
+  \@expandtwoargs\@removeelement{bibstyle=custom}\@classoptionslist\@classoptionslist
+}
+\DeclareOption{bibstyle=vancouver}{%
+  \renewcommand{\ClasseGuillaume@bibstyle}{vancouver}%
+  \@expandtwoargs\@removeelement{bibstyle=vancouver}\@classoptionslist\@classoptionslist
+}
+
+% Option d'interligne global (single par défaut, onehalf ou double via setspace)
+\newcommand{\ClasseGuillaume@spacing}{single}
+\DeclareOption{spacing=single}{%
+  \renewcommand{\ClasseGuillaume@spacing}{single}%
+  \@expandtwoargs\@removeelement{spacing=single}\@classoptionslist\@classoptionslist
+}
+\DeclareOption{spacing=onehalf}{%
+  \renewcommand{\ClasseGuillaume@spacing}{onehalf}%
+  \@expandtwoargs\@removeelement{spacing=onehalf}\@classoptionslist\@classoptionslist
+}
+\DeclareOption{spacing=double}{%
+  \renewcommand{\ClasseGuillaume@spacing}{double}%
+  \@expandtwoargs\@removeelement{spacing=double}\@classoptionslist\@classoptionslist
+}
 
 % Option de langue principale (french par défaut, ou english pour un document en anglais)
 \newif\ifClasseGuillaume@english
