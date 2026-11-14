@@ -28,10 +28,10 @@ la classe \code{scrbook} intègre en son c\oe{}ur :
   \item et des commandes directes d'ajustement des polices (\code{\textbackslash setkomafont}).
 \end{itemize}
 
-\section{Anatomie de la Classe Personnalisée : \code{mythesis.cls}}
+\section{Anatomie de la Classe Personnalisée : \code{ClasseGuillaume.cls}}
 \label{sec:anatomie-cls}
 
-Notre classe racine \code{mythesis.cls} encapsule ces fonctionnalités
+Notre classe racine \code{ClasseGuillaume.cls} encapsule ces fonctionnalités
 pour offrir une interface claire et épurée.
 Elle prend en charge :
 
@@ -47,7 +47,7 @@ Elle prend en charge :
   les styles des titres sont définis globalement avec \code{\textbackslash setkomafont\{chapter\}} et \code{\textbackslash setkomafont{disposition}},
   garantissant une cohérence visuelle sans modifier le corps du texte.
   \item \textbf{Le chargement conditionnel de l'option de classe (\code{.clo}) :}
-  selon le mode choisi, la classe injecte soit \code{mythesis-screen.clo}, soit \code{mythesis-print.clo}.
+  selon le mode choisi, la classe injecte soit \code{ClasseGuillaume-screen.clo}, soit \code{ClasseGuillaume-print.clo}.
 \end{enumerate}
 
 \section{Le Rôle Déterminant des Fichiers \code{.clo}}
@@ -59,7 +59,7 @@ C'est exactement le mécanisme qu'utilise le système \LaTeX{} pour charger les 
 Dans notre projet, nous détournons élégamment cette fonctionnalité standard
 pour définir les profils d'affichage sans alourdir le fichier principal.
 
-\subsection{Le profil écran : \code{mythesis-screen.clo}}
+\subsection{Le profil écran : \code{ClasseGuillaume-screen.clo}}
 Ce profil est pensé pour la lecture numérique interactive (sur écran d'ordinateur, tablette ou smartphone) :
 \begin{itemize}
   \item \textbf{Marges symétriques :} réglage de \code{twoside=false} et \code{BCOR=0mm}.
@@ -73,7 +73,7 @@ Ce profil est pensé pour la lecture numérique interactive (sur écran d'ordina
   \item \textbf{Signets PDF ouverts :} les panneaux de navigation du lecteur PDF s'ouvrent automatiquement dès l'ouverture du document.
 \end{itemize}
 
-\subsection{Le profil impression : \code{mythesis-print.clo}}
+\subsection{Le profil impression : \code{ClasseGuillaume-print.clo}}
 Ce profil est optimisé pour la fabrication physique d'un livre ou d'un mémoire relié :
 \begin{itemize}
   \item \textbf{Mise en page recto-verso :} réglage de \code{twoside=true} et \code{open=right}.
@@ -97,7 +97,7 @@ Le~\cref{tab:comparaison-profils} résume les divergences de comportement entre 
   \label{tab:comparaison-profils}
   \begin{tabularx}{\textwidth}{@{} l Y Y @{}}
     \toprule
-    \textbf{Caractéristique} & \textbf{Profil Écran (\code{mythesis-screen.clo})} & \textbf{Profil Impression (\code{mythesis-print.clo})} \\
+    \textbf{Caractéristique} & \textbf{Profil Écran (\code{ClasseGuillaume-screen.clo})} & \textbf{Profil Impression (\code{ClasseGuillaume-print.clo})} \\
     \midrule
     Mode de page           & Recto seul (\code{twoside=false}) & Recto-verso véritable (\code{twoside=true}) \\
     Départ des chapitres   & Page suivante quelconque & Page impaire obligatoire (\code{open=right}) \\
@@ -113,7 +113,7 @@ Le~\cref{tab:comparaison-profils} résume les divergences de comportement entre 
 \section{Charte Chromatique et Spécimens Typographiques}
 \label{sec:charte-couleurs-polices}
 
-\subsection{Palette chromatique sémantique (\code{Thesis*} \& alias \code{ClasseGuillaume})}
+\subsection{Palette chromatique sémantique (\code{Thesis*} \& alias historiques)}
 Afin de dissocier radicalement le code des chapitres de l'esthétique visuelle, la classe définit neuf couleurs sémantiques principales dans les fichiers \code{.clo} (ainsi que les alias de compatibilité \code{primaryColor}, \code{secondaryColor}, \code{accentColor} et \code{mdtRed}).
 La~\cref{fig:nuancier-chromatique} présente en direct le nuancier actif du document.
 
@@ -151,7 +151,7 @@ La~\cref{fig:nuancier-chromatique} présente en direct le nuancier actif du docu
     \nuancierBloc{ThesisMuted}{ThesisMuted}{white}\hfill
     \nuancierBloc{ThesisBackground}{ThesisBackground}{ThesisPrimary}
   \end{cadreFigure}
-  \caption[Nuancier chromatique sémantique de la classe]{Nuancier chromatique sémantique actif (défini dans \code{mythesis-screen.clo} et \code{mythesis-print.clo})}
+  \caption[Nuancier chromatique sémantique de la classe]{Nuancier chromatique sémantique actif (défini dans \code{ClasseGuillaume-screen.clo} et \code{ClasseGuillaume-print.clo})}
   \label{fig:nuancier-chromatique}
 \end{figure}
 
@@ -189,10 +189,10 @@ Sous Lua\LaTeX{} et Xe\LaTeX{}, la classe permet de sélectionner la police prin
 \end{table}
 
 \begin{callout}[Recette : Créer un nouveau profil de classe]
-Pour ajouter une nouvelle variante (par exemple un profil brouillon \code{mythesis-draft.clo} ou un profil grand format) :
+Pour ajouter une nouvelle variante (par exemple un profil brouillon \code{ClasseGuillaume-draft.clo} ou un profil grand format) :
 \begin{enumerate}
-  \item Créez un fichier \code{mythesis-nom.clo} à la racine.
-  \item Déclarez l'option dans \code{mythesis.cls} via \code{\textbackslash DeclareOption\{nom\}\{...\}}.
-  \item Activez-le simplement dans \code{main.tex} avec \code{\textbackslash documentclass[nom]\{mythesis\}}.
+  \item Créez un fichier \code{ClasseGuillaume-nom.clo} à la racine.
+  \item Déclarez l'option dans \code{ClasseGuillaume.cls} via \code{\textbackslash DeclareOption\{nom\}\{...\}}.
+  \item Activez-le simplement dans \code{main.tex} avec \code{\textbackslash documentclass[nom]\{ClasseGuillaume\}}.
 \end{enumerate}
 \end{callout}

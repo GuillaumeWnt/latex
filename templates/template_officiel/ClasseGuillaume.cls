@@ -1,57 +1,69 @@
 %% ==============================================================================
-%% mythesis.cls
+%% ClasseGuillaume.cls
 %% Classe LaTeX modulaire de référence pour mémoires, thèses et rapports
 %% Fondée sur KOMA-Script scrbook + cohabitation native geometry (LuaLaTeX)
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2020/01/01]
-\ProvidesClass{mythesis}[2026/11/12 v2.0 Modern Modular Academic Book Class]
+\ProvidesClass{ClasseGuillaume}[2026/11/12 v2.0 Modern Modular Academic Book Class]
 
 % --- Correction préventive des avertissements de packages tiers avec KOMA-Script ---
 \RequirePackage{scrhack}
 \RequirePackage{etoolbox}
 
 % --- Gestion des options de classe ---
-\newif\ifmythesis@print
-\mythesis@printfalse
+\newif\ifClasseGuillaume@print
+\ClasseGuillaume@printfalse
 
 \DeclareOption{print}{%
-  \mythesis@printtrue
+  \ClasseGuillaume@printtrue
   \@expandtwoargs\@removeelement{print}\@classoptionslist\@classoptionslist
 }
 \DeclareOption{screen}{%
-  \mythesis@printfalse
+  \ClasseGuillaume@printfalse
   \@expandtwoargs\@removeelement{screen}\@classoptionslist\@classoptionslist
 }
 
 % Option pour activer les notes marginales collaboratives (todonotes)
-\newif\ifmythesis@todos
-\mythesis@todosfalse
+\newif\ifClasseGuillaume@todos
+\ClasseGuillaume@todosfalse
 \DeclareOption{todos}{%
-  \mythesis@todostrue
+  \ClasseGuillaume@todostrue
   \@expandtwoargs\@removeelement{todos}\@classoptionslist\@classoptionslist
 }
 \DeclareOption{todoNote}{%
-  \mythesis@todostrue
+  \ClasseGuillaume@todostrue
   \@expandtwoargs\@removeelement{todoNote}\@classoptionslist\@classoptionslist
 }
 
-% Option de sélection de la police principale (compatible ClasseGuillaume)
-\newcommand{\mythesis@font}{libertinus}
+% Option de sélection de la police principale
+\newcommand{\ClasseGuillaume@font}{libertinus}
 \DeclareOption{font=libertinus}{%
-  \renewcommand{\mythesis@font}{libertinus}%
+  \renewcommand{\ClasseGuillaume@font}{libertinus}%
   \@expandtwoargs\@removeelement{font=libertinus}\@classoptionslist\@classoptionslist
 }
 \DeclareOption{font=heros}{%
-  \renewcommand{\mythesis@font}{heros}%
+  \renewcommand{\ClasseGuillaume@font}{heros}%
   \@expandtwoargs\@removeelement{font=heros}\@classoptionslist\@classoptionslist
 }
 \DeclareOption{font=calibri}{%
-  \renewcommand{\mythesis@font}{calibri}%
+  \renewcommand{\ClasseGuillaume@font}{calibri}%
   \@expandtwoargs\@removeelement{font=calibri}\@classoptionslist\@classoptionslist
 }
 \DeclareOption{font=standard}{%
-  \renewcommand{\mythesis@font}{standard}%
+  \renewcommand{\ClasseGuillaume@font}{standard}%
   \@expandtwoargs\@removeelement{font=standard}\@classoptionslist\@classoptionslist
+}
+
+% Option de langue principale (french par défaut, ou english pour un document en anglais)
+\newif\ifClasseGuillaume@english
+\ClasseGuillaume@englishfalse
+\DeclareOption{english}{%
+  \ClasseGuillaume@englishtrue
+  \@expandtwoargs\@removeelement{english}\@classoptionslist\@classoptionslist
+}
+\DeclareOption{french}{%
+  \ClasseGuillaume@englishfalse
+  \@expandtwoargs\@removeelement{french}\@classoptionslist\@classoptionslist
 }
 
 % Transmettre toute autre option à la classe de base scrbook
@@ -61,7 +73,7 @@
 \ProcessOptions\relax
 
 % --- Pré-configuration du profil pour éviter les recalculs multiples de typearea ---
-\ifmythesis@print
+\ifClasseGuillaume@print
   \PassOptionsToClass{twoside=true, open=right, BCOR=10mm, DIV=12}{scrbook}
 \else
   \PassOptionsToClass{twoside=false, open=any, BCOR=0mm, DIV=12}{scrbook}
@@ -93,15 +105,15 @@
 \RequirePackage[table, dvipsnames]{xcolor}
 
 % --- Chargement du fichier d'options spécifique (.clo) ---
-\ifmythesis@print
-  \input{mythesis-print.clo}
+\ifClasseGuillaume@print
+  \input{ClasseGuillaume-print.clo}
 \else
-  \input{mythesis-screen.clo}
+  \input{ClasseGuillaume-screen.clo}
 \fi
 
 % --- Conditionnels publics de profil de document (accessibles aux auteurs) ---
 \newif\ifprintversion
-\ifmythesis@print
+\ifClasseGuillaume@print
   \printversiontrue
 \else
   \printversionfalse
@@ -113,10 +125,18 @@
 
 % Conditionnel public pour les notes de révision et tâches collaboratives
 \newif\ifusetodos
-\ifmythesis@todos
+\ifClasseGuillaume@todos
   \usetodostrue
 \else
   \usetodosfalse
+\fi
+
+% Conditionnel public de langue principale (false = french par défaut, true = english)
+\newif\ifenglishversion
+\ifClasseGuillaume@english
+  \englishversiontrue
+\else
+  \englishversionfalse
 \fi
 
 % --- Pénalités typographiques strictes (élimination des lignes veuves et orphelines) ---
@@ -129,16 +149,16 @@
 \emergencystretch=1.5em
 
 % --- Définition des métadonnées du document ---
-\newcommand{\institution}[1]{\def\mythesis@institution{#1}}
-\newcommand{\faculty}[1]{\def\mythesis@faculty{#1}}
-\newcommand{\department}[1]{\def\mythesis@department{#1}}
-\newcommand{\degree}[1]{\def\mythesis@degree{#1}}
-\newcommand{\specialty}[1]{\def\mythesis@specialty{#1}}
-\newcommand{\supervisor}[1]{\def\mythesis@supervisor{#1}}
-\newcommand{\cosupervisor}[1]{\def\mythesis@cosupervisor{#1}}
-\newcommand{\jury}[1]{\def\mythesis@jury{#1}}
-\newcommand{\location}[1]{\def\mythesis@location{#1}}
-\newcommand{\keywords}[1]{\def\mythesis@keywords{#1}}
+\newcommand{\institution}[1]{\def\ClasseGuillaume@institution{#1}}
+\newcommand{\faculty}[1]{\def\ClasseGuillaume@faculty{#1}}
+\newcommand{\department}[1]{\def\ClasseGuillaume@department{#1}}
+\newcommand{\degree}[1]{\def\ClasseGuillaume@degree{#1}}
+\newcommand{\specialty}[1]{\def\ClasseGuillaume@specialty{#1}}
+\newcommand{\supervisor}[1]{\def\ClasseGuillaume@supervisor{#1}}
+\newcommand{\cosupervisor}[1]{\def\ClasseGuillaume@cosupervisor{#1}}
+\newcommand{\jury}[1]{\def\ClasseGuillaume@jury{#1}}
+\newcommand{\location}[1]{\def\ClasseGuillaume@location{#1}}
+\newcommand{\keywords}[1]{\def\ClasseGuillaume@keywords{#1}}
 
 % Valeurs par défaut pour éviter les erreurs si non renseignées
 \institution{Université / École d'Ingénieurs}
@@ -152,17 +172,17 @@
 \jury{}
 \keywords{LaTeX, KOMA-Script, modularité, reproductibilité}
 
-% Accesseurs publics pour les pages de titre et le corps (compatibles mythesis & ClasseGuillaume)
-\newcommand{\getinstitution}{\mythesis@institution}
-\newcommand{\getfaculty}{\mythesis@faculty}
-\newcommand{\getdepartment}{\mythesis@department}
-\newcommand{\getdegree}{\mythesis@degree}
-\newcommand{\getspecialty}{\mythesis@specialty}
-\newcommand{\getsupervisor}{\mythesis@supervisor}
-\newcommand{\getcosupervisor}{\mythesis@cosupervisor}
-\newcommand{\getjury}{\mythesis@jury}
-\newcommand{\getlocation}{\mythesis@location}
-\newcommand{\getkeywords}{\mythesis@keywords}
+% Accesseurs publics pour les pages de titre et le corps
+\newcommand{\getinstitution}{\ClasseGuillaume@institution}
+\newcommand{\getfaculty}{\ClasseGuillaume@faculty}
+\newcommand{\getdepartment}{\ClasseGuillaume@department}
+\newcommand{\getdegree}{\ClasseGuillaume@degree}
+\newcommand{\getspecialty}{\ClasseGuillaume@specialty}
+\newcommand{\getsupervisor}{\ClasseGuillaume@supervisor}
+\newcommand{\getcosupervisor}{\ClasseGuillaume@cosupervisor}
+\newcommand{\getjury}{\ClasseGuillaume@jury}
+\newcommand{\getlocation}{\ClasseGuillaume@location}
+\newcommand{\getkeywords}{\ClasseGuillaume@keywords}
 \newcommand{\gettitle}{\@title}
 \newcommand{\getauthor}{\@author}
 \newcommand{\getdate}{\@date}
@@ -246,13 +266,13 @@
 \newif\ifsavedlogo
 \savedlogofalse
 
-\newcommand{\mythesis@logo}{figures/logo.pdf}
-\newcommand{\mythesis@logowidth}{1.05cm}
+\newcommand{\ClasseGuillaume@logo}{figures/logo.pdf}
+\newcommand{\ClasseGuillaume@logowidth}{1.05cm}
 
-\newcommand{\thesislogo}[1]{\renewcommand{\mythesis@logo}{#1}}
+\newcommand{\thesislogo}[1]{\renewcommand{\ClasseGuillaume@logo}{#1}}
 \NewDocumentCommand{\definirLogo}{m O{1.05cm}}{%
-  \renewcommand{\mythesis@logo}{#1}%
-  \renewcommand{\mythesis@logowidth}{#2}%
+  \renewcommand{\ClasseGuillaume@logo}{#1}%
+  \renewcommand{\ClasseGuillaume@logowidth}{#2}%
 }
 
 \DeclareNewLayer[
@@ -264,9 +284,9 @@
   height=1.2cm,
   contents={%
     \iflogoactive
-      \ifdefempty{\mythesis@logo}{}{%
-        \IfFileExists{\mythesis@logo}{%
-          \hfill\includegraphics[width=\mythesis@logowidth, height=\mythesis@logowidth, keepaspectratio]{\mythesis@logo}%
+      \ifdefempty{\ClasseGuillaume@logo}{}{%
+        \IfFileExists{\ClasseGuillaume@logo}{%
+          \hfill\includegraphics[width=\ClasseGuillaume@logowidth, height=\ClasseGuillaume@logowidth, keepaspectratio]{\ClasseGuillaume@logo}%
         }{}%
       }%
     \fi
@@ -280,7 +300,7 @@
 \clearpairofpagestyles
 \automark[section]{chapter}
 
-\ifmythesis@print
+\ifClasseGuillaume@print
   % Configuration recto-verso pour impression reliée :
   % - Pages paires (versos) : Chapitre à gauche en haut, folio à gauche en bas
   % - Pages impaires (rectos) : Section à droite en haut, folio à droite en bas
@@ -324,16 +344,16 @@
   \KOMAoptions{headsepline=0.8pt, footsepline=0.4pt}
   \clearpairofpagestyles
   \ihead{\normalfont\ttfamily\footnotesize\textcolor{ThesisPrimary}{[\jobname.tex]}}
-  \chead{\normalfont\sffamily\scriptsize\bfseries\textcolor{ThesisAccent}{[DEBUG / RÉVISION]}}
+  \chead{\normalfont\sffamily\scriptsize\bfseries\textcolor{ThesisAccent}{[DEBUG / \ifClasseGuillaume@english REVISION\else RÉVISION\fi]}}
   \ohead{\parbox[b]{0.36\linewidth}{\raggedleft\normalfont\sffamily\footnotesize\textcolor{ThesisSecondary}{\truncate{\linewidth}{\rightmark}}}}
-  \ifmythesis@print
+  \ifClasseGuillaume@print
     \lefoot[\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}]{\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}}
     \rofoot[\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}]{\normalfont\ttfamily\footnotesize p.\thepage/\pageref{LastPage}}
-    \cefoot[]{\normalfont\ttfamily\scriptsize\textcolor{ThesisMuted}{Profil: print (BCOR=\mythesis@bcor)}}
-    \cofoot[]{\normalfont\ttfamily\scriptsize\textcolor{ThesisMuted}{Profil: print (BCOR=\mythesis@bcor)}}
+    \cefoot[]{\normalfont\ttfamily\scriptsize\textcolor{ThesisMuted}{\ifClasseGuillaume@english Profile\else Profil\fi: print (BCOR=\ClasseGuillaume@bcor)}}
+    \cofoot[]{\normalfont\ttfamily\scriptsize\textcolor{ThesisMuted}{\ifClasseGuillaume@english Profile\else Profil\fi: print (BCOR=\ClasseGuillaume@bcor)}}
   \else
-    \ifoot[]{\normalfont\ttfamily\scriptsize\textcolor{ThesisMuted}{Profil: screen | Police: \mythesis@font}}
-    \ofoot[\normalfont\ttfamily\footnotesize Page \thepage{} / \pageref{LastPage}]{\normalfont\ttfamily\footnotesize Page \thepage{} sur \pageref{LastPage}}
+    \ifoot[]{\normalfont\ttfamily\scriptsize\textcolor{ThesisMuted}{\ifClasseGuillaume@english Profile\else Profil\fi: screen | \ifClasseGuillaume@english Font\else Police\fi: \ClasseGuillaume@font}}
+    \ofoot[\normalfont\ttfamily\footnotesize Page \thepage{} / \pageref{LastPage}]{\normalfont\ttfamily\footnotesize Page \thepage{} \ifClasseGuillaume@english of\else sur\fi{} \pageref{LastPage}}
   \fi
 }
 
@@ -369,9 +389,9 @@
   \hypersetup{
     pdftitle={\@title},
     pdfauthor={\@author},
-    pdfsubject={\mythesis@degree{} -- \mythesis@specialty},
-    pdfkeywords={\mythesis@keywords},
-    pdfcreator={LuaLaTeX with KOMA-Script scrbook and mythesis v2.0}
+    pdfsubject={\ClasseGuillaume@degree{} -- \ClasseGuillaume@specialty},
+    pdfkeywords={\ClasseGuillaume@keywords},
+    pdfcreator={LuaLaTeX with KOMA-Script scrbook and ClasseGuillaume v2.0}
   }
 }
 

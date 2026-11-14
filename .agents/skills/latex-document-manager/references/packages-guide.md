@@ -25,7 +25,7 @@ Inventaire des packages configurés par défaut dans `templates/template_officie
 - **`graphicx` + `caption` + `subcaption`** : Figures et sous-figures `(a)`, `(b)` (remplace `subfig`/`subfigure`).
 - **`tikz` + `standalone` + `pgfplots` (`compat=1.18`)** : Schémas vectoriels et courbes tracées depuis `data/*.csv`.
 - **`tcolorbox` (`[skins, breakable]`)** : Boîtes `callout`, `attentionbox`, `hypothesis`, `definitionbox`, `boiteSynthese`, `cadreFigure`.
-- **`listings`** : Inclusion de codes sources testables depuis `listings/` via `\lstinputlisting` (style `mythesiscode`, sans `-shell-escape`).
+- **`listings`** : Inclusion de codes sources testables depuis `listings/` via `\lstinputlisting` (style `ClasseGuillaumecode`, sans `-shell-escape`).
 - **`pdfpages` + `ocgx2`** : Insertion d'annexes PDF (`\includepdfpaper`) et calques interactifs écran/impression (`\ocgbutton`, `\ocgstack`).
 
 ## 5. Révisions, Bibliographie & Liens

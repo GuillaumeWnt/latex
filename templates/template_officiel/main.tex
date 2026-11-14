@@ -1,15 +1,16 @@
 %% ==============================================================================
 %% main.tex
 %% Point d'entrée unique et chef d'orchestre du document tutoriel
-%% Classe : mythesis (bâtie sur KOMA-Script scrbook)
+%% Classe : ClasseGuillaume (bâtie sur KOMA-Script scrbook)
 %% ==============================================================================
 
 % Bascule instantanée de profil de document :
 %   - screen : version lecture numérique (marges symétriques, palette interactive)
 %   - print  : version impression papier reliée (recto-verso, décalage BCOR, liens neutres)
 % Options complémentaires :
-%   - todos (ou todoNote) : active les annotations collaboratives (\todoH, profils de relecteurs, \missingfigure)
-\documentclass[screen, todos]{mythesis}
+%   - french (défaut) / english : langue principale du document (babel, siunitx, cleveref, boîtes)
+%   - todos (ou todoNote)       : active les annotations collaboratives (\todoH, \missingfigure)
+\documentclass[screen, todos]{ClasseGuillaume}
 
 % --- Métadonnées du document tutoriel ---
 \title{Guide d'Architecture \texorpdfstring{\LaTeX{}}{LaTeX} Modulaire}

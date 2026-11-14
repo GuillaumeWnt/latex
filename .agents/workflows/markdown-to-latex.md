@@ -13,9 +13,9 @@ Ce workflow orchestre la transformation d'un brouillon Markdown rapide (notes, p
 1. **Charger la compétence de référence :**
    - Lire [`.agents/skills/markdown-to-latex/SKILL.md`](../skills/markdown-to-latex/SKILL.md) et [`mapping-syntaxe.md`](../skills/markdown-to-latex/references/mapping-syntaxe.md).
 
-2. **Identifier la source Markdown et la cible LaTeX :**
+2. **Identifier la source Markdown et préparer l'arborescence conforme au modèle officiel :**
    - Localiser le brouillon `.md` (ou le texte fourni par l'utilisateur).
-   - Vérifier le projet cible dans `projets/<nom_projet>/` (conforme à `templates/template_officiel/`). S'il n'existe pas, exécuter d'abord [`new-project.md`](./new-project.md).
+   - **Obligation d'arborescence :** si la conversion aboutit à un nouveau document LaTeX, le dossier de travail sous `projets/<nom_projet>/` **doit reproduire intégralement l'arborescence de `templates/template_officiel/`** (`main.tex`, `ClasseGuillaume.cls`, `ClasseGuillaume-screen.clo`, `ClasseGuillaume-print.clo`, `config/`, `content/`, `frontmatter/`, `backmatter/`, `biblio/`, `figures/`, `listings/`, `fonts/`, `latexmkrc`, `.chktexrc`, `.editorconfig`, `.gitignore`) via [`new-project.md`](./new-project.md). Ne jamais créer de fichier `.tex` isolé hors de cette structure.
    - Déterminer le fichier de destination (`content/XX-titre.tex`, sous-fichier `\input{...}`, ou `backmatter/appendix-x.tex`).
 
 3. **Convertir et enrichir sémantiquement :**
@@ -24,7 +24,7 @@ Ce workflow orchestre la transformation d'un brouillon Markdown rapide (notes, p
    - Transformer alertes et encadrés Markdown (`> [!NOTE]`, `> [!WARNING]`, `> [!TIP]`, `> [!IMPORTANT]`) en boîtes `callout`, `attentionbox`, `boiteSynthese`, `definitionbox`, `hypothesis`.
    - Convertir les tableaux Markdown en `table` + `\caption` au-dessus + `tabularx` + `booktabs` (`L`, `C`, `R`, `Y`, `S`), sans aucun filet vertical `|`.
    - Convertir les blocs de code en `lstlisting` (`listings/` + `\lstinputlisting` au-delà de ~35 lignes) et les blocs Mermaid en TikZ (`figures/tikz/`) ou Draw.io encapsulés dans `figure` + `cadreFigure`.
-   - Remplacer les citations `[@cle]` par `~\parencite{cle}` ou `\textcite{cle}`, et les renvois par `~\cref{...}` / `\Cref{...}`.
+   - Convertir les citations `[@cle]` en commandes BibLaTeX adaptées au style du projet (`~\autocite{cle}`, `~\parencite{cle}`, `~\cite{cle}`, `\textcite{cle}`...), et les renvois par `~\cref{...}` / `\Cref{...}`.
    - Respecter les sauts de ligne sémantiques (une phrase par ligne) et l'indentation de 2 espaces.
 
 4. **Raccorder et compiler sans erreur :**

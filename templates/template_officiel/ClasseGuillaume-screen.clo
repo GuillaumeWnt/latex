@@ -1,12 +1,12 @@
 %% ==============================================================================
-%% mythesis-screen.clo
+%% ClasseGuillaume-screen.clo
 %% Option de classe : Configuration optimisée pour la lecture sur écran / tablette
 %% ==============================================================================
-\ProvidesFile{mythesis-screen.clo}[2026/11/12 v2.0 Screen Layout Configuration for mythesis]
+\ProvidesFile{ClasseGuillaume-screen.clo}[2026/11/12 v2.0 Screen Layout Configuration for ClasseGuillaume]
 
 % --- Géométrie et mise en page KOMA-Script ---
 % Marges symétriques pour lecture continue sur écran, sans décalage de reliure
-\newcommand{\mythesis@bcor}{0mm}
+\newcommand{\ClasseGuillaume@bcor}{0mm}
 \KOMAoptions{
   twoside=false,
   open=any,
@@ -23,7 +23,7 @@
 \definecolor{ThesisMuted}{RGB}{95, 105, 118}      % Gris ardoise (notes, en-têtes, légendes)
 \definecolor{ThesisBackground}{RGB}{246, 248, 251}% Fond très léger pour blocs et code
 
-% Alias de compatibilité directe avec ClasseGuillaume
+% Alias chromatiques historiques
 \colorlet{primaryColor}{ThesisPrimary}
 \colorlet{secondaryColor}{ThesisSecondary}
 \colorlet{accentColor}{ThesisAccent}

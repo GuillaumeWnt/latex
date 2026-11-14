@@ -1,4 +1,4 @@
-# Aide-Mémoire TikZ & `tcolorbox` (`mythesis.cls`)
+# Aide-Mémoire TikZ & `tcolorbox` (`ClasseGuillaume.cls`)
 
 ---
 

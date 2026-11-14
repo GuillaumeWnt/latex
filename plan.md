@@ -29,3 +29,26 @@
 - [x] Valider la syntaxe JSON et l'encodage UTF-8 sans BOM de tous les fichiers de configuration
 - [x] Tester les scripts PowerShell (`sync-mcp.ps1`, `lint-latex.ps1`, `audit-bib.ps1`)
 - [x] Compiler `templates/template_officiel/main.tex` via `latexmk` et vérifier l'absence d'erreurs et la maîtrise des avertissements (`chktex`, `.log`)
+
+## Phase 6 — Ajustements Post-Revue (`ClasseGuillaume.cls`), Citations, `clean.ps1`, `memory` et FAQ
+- [x] Renommer `mythesis.cls` / `mythesis-*.clo` en `ClasseGuillaume.cls` / `ClasseGuillaume-*.clo` dans `templates/template_officiel/`, `AGENTS.md`, `.agents/` et `explication-changements.md`
+- [x] Préciser l'arborescence obligatoire conforme à `templates/template_officiel/` dans le workflow et le skill `markdown-to-latex`
+- [x] Assouplir les règles, options et skills de citation (conserver les bonnes pratiques BibLaTeX/Biber sans imposer de style ni de commande rigide)
+- [x] Mettre à jour `clean.ps1` et `templates/template_officiel/latexmkrc` pour préserver le `.pdf` généré ainsi que les fichiers de compilation/débogage (`.synctex.gz`, `.log`, `.blg`, `.fdb_latexmk`, `.fls`) lors d'un nettoyage standard
+- [x] Supprimer le MCP `memory` (superflu) au niveau global/local et adapter `.agents/subagents/knowledge-curator.md` (suppression de `.agents/skills/project-memory/`)
+- [x] Rédiger le guide complet des réponses et explications détaillées dans `docs/faq-agents-vscode-latex.md`
+- [x] Recompiler à froid `templates/template_officiel/main.tex` et relancer `lint-latex.ps1 -RunChkTeX` et `audit-bib.ps1` après renommage `ClasseGuillaume.cls` (zéro erreur fatale)
+
+## Phase 7 — Règle Globale de Validation Visible, Audit Anglais/Extensions/Ignore & Consolidation `.md`
+- [x] Inscrire la nouvelle règle globale d'amélioration/obsolescence avec mise en évidence obligatoire en tête de réponse dans `C:\Users\guill\.agents\AGENTS.md` et `C:\Users\guill\.agents\rules\04-gouvernance-et-securite.md`, puis synchroniser via `deploy-and-sync-global.ps1`
+- [x] Auditer les dépendances linguistiques français/anglais dans `templates/template_officiel/`, `.chktexrc`, `lint-latex.ps1` et `.agents/`
+- [x] Documenter la gestion des extensions par profil VS Code et dans le socle de base (`create-vscode-profiles.ps1`, CLI, UI)
+- [x] Inspecter tous les fichiers `.ignore` / `.exclude` du dépôt (`.aiexclude`, `.claudeignore`, `.geminiignore`, `.gitignore`, `.git/info/exclude`)
+- [x] Supprimer `explication-changements.md` et `docs/faq-agents-vscode-latex.md`, créer le nouveau document explicatif unique dans `docs/compte-rendu-et-reponses.md` et vérifier l'absence d'erreurs
+
+## Phase 8 — Support bilingue `english`/`french` & Finalisation des fichiers `.ignore` (PDF accessible)
+- [x] Implémenter l'option de classe `english` / `french` (défaut `french`) dans `templates/template_officiel/` (`ClasseGuillaume.cls`, `config/packages.sty`, `config/macros.sty`, `frontmatter/abstract.tex`, `.chktexrc-en`, `README.md`, `backmatter/appendix-a.tex`)
+- [x] Adapter `.agents/` (`rules/general.md`, `skills/latex-quality-auditor/scripts/lint-latex.ps1`, `skills/latex-quality-auditor/SKILL.md`, `workflows/new-project.md`) pour le support natif des projets en anglais
+- [x] Mettre à jour `.aiexclude`, `.claudeignore` et `.geminiignore` (et les inclure dans `templates/template_officiel/`) avec les auxiliaires LaTeX jetables tout en gardant `*.pdf`, `*.log`, `*.blg` et `*.bbl` accessibles
+- [x] Enrichir `docs/compte-rendu-et-reponses.md` avec l'explication sur `**/build/*.pdf` et la documentation des changements effectués
+- [x] Vérifier la compilation LuaLaTeX et le lint (`lint-latex.ps1 -RunChkTeX`) en mode `french` par défaut et en mode `english`, sans régression ni avertissement superflu

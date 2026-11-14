@@ -70,13 +70,13 @@ les boîtes visuelles et les commandes d'orchestration définis dans \code{confi
 \label{sec:koma-font-keys}
 
 Pour adapter l'esthétique générale de votre ouvrage sans toucher au code des chapitres,
-vous pouvez modifier les polices attribuées aux éléments KOMA-Script dans \code{mythesis.cls}
+vous pouvez modifier les polices attribuées aux éléments KOMA-Script dans \code{ClasseGuillaume.cls}
 via la macro \code{\textbackslash setkomafont\{élément\}\{spécification\}} :
 
 \begin{table}[htbp]
   \centering
   \footnotesize
-  \caption{Principaux éléments typographiques configurables dans \code{mythesis.cls}}
+  \caption{Principaux éléments typographiques configurables dans \code{ClasseGuillaume.cls}}
   \label{tab:koma-elements}
   \begin{tabularx}{\textwidth}{@{} l L{6.2cm} Y @{}}
     \toprule
@@ -95,6 +95,17 @@ via la macro \code{\textbackslash setkomafont\{élément\}\{spécification\}} :
 \end{table}
 
 \clearpage
+
+\section{Options Publiques de \code{ClasseGuillaume}}
+\label{sec:options-classe}
+
+Les options suivantes peuvent être combinées entre crochets dans \code{\textbackslash documentclass[...]\{ClasseGuillaume\}} :
+\begin{description}
+  \item[\code{screen} (défaut) / \code{print}] Bascule entre le profil de lecture numérique (marges symétriques, palette colorée) et le profil d'impression reliée (recto-verso, \code{BCOR=10mm}, liens monochromes).
+  \item[\code{french} (défaut) / \code{english}] Sélectionne la langue principale du document (\code{babel}, \code{siunitx}, \code{cleveref}, titres par défaut des boîtes \code{callout}, \code{attentionbox}, \code{hypothesis}, \code{definitionbox}, liste des illustrations et \code{todonotes}). Le conditionnel public \code{\textbackslash ifenglishversion} permet aussi d'adapter du contenu conditionnel.
+  \item[\code{todos} / \code{todoNote}] Active les annotations marginales collaboratives \code{\textbackslash todoH} et \code{\textbackslash thesistodolist} (désactivées en mode publication finale).
+  \item[\code{font=libertinus} (défaut) / \code{heros} / \code{calibri} / \code{standard}] Sélectionne le jeu de polices OpenType configuré dans \code{config/packages.sty}.
+\end{description}
 
 \section{Commandes Terminal Utiles pour la Compilation}
 \label{sec:commandes-terminal}

@@ -1,0 +1,51 @@
+# ==========================================
+# Claude Code Exclusion Rules
+# ==========================================
+
+# Secrets & Environment
+.env
+.env.*
+*.key
+*.pem
+*.secret
+*.local.json
+
+# Python Virtualenv & Cache
+.venv/
+__pycache__/
+*.pyc
+
+# Heavy Binary & Internal Build Artifacts
+# Note: *.pdf, *.log, *.blg and *.bbl are purposely ALLOWED so the AI can
+# visually inspect compiled PDFs and diagnose LaTeX/Biber compilation errors!
+*.aux
+*.bcf
+*.run.xml
+*.toc
+*.lof
+*.lot
+*.loi
+*.out
+*.tdo
+*.idx
+*.ilg
+*.ind
+*.upa
+*.upb
+*.synctex.gz
+*.synctex
+*.fls
+*.fdb_latexmk
+*.xdv
+*.nav
+*.snm
+*.vrb
+
+# Build directories
+dist/
+_minted-*/
+auto/
+
+# OS Artifacts
+.DS_Store
+Thumbs.db

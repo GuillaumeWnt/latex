@@ -1,27 +1,21 @@
-# Guide BibLaTeX : Style `custom-style` & Option `vancouver`
+# Guide BibLaTeX : Styles Libres & Bonnes Pratiques `.bib`
 
-Ce guide décrit l'intégration BibLaTeX/Biber dans `templates/template_officiel/` et ses déclinaisons.
+Ce guide présente l'architecture **BibLaTeX + Biber** de `templates/template_officiel/` tout en laissant le choix du style bibliographique et des commandes de citation totalement libre selon les besoins de chaque document.
 
 ---
 
-## 1. Configuration par défaut dans `template_officiel`
+## 1. Configuration modulable dans `config/packages.sty`
 
-Dans `config/packages.sty`, BibLaTeX est configuré avec `backend=biber` et s'appuie sur les fichiers locaux :
-- `biblio/custom-style.bbx` (formatage de la bibliographie auteur-année)
-- `biblio/custom-style.cbx` (formatage des citations `\parencite` et `\textcite`)
-- `\addbibresource{biblio/references.bib}`
+Par défaut, `templates/template_officiel/config/packages.sty` charge `biblatex` avec `backend=biber` et pointe vers les fichiers `biblio/custom-style.bbx`/`.cbx` à titre d'exemple prêt à compiler (`biblio/references.bib`).
 
-### Variante numérique (style Vancouver)
-Si un livrable exige des citations numériques séquentielles, adapter le chargement dans `config/packages.sty` du projet (et documenter si pertinent dans `template_officiel` via une option de classe) :
+Rien n'est figé : dans tout projet, tu peux conserver cette base ou la remplacer par le style standard de ton choix (`authoryear`, `numeric`, `ieee`, `vancouver`, `alphabetic`, etc.), par exemple :
 
 ```latex
 \usepackage[
   backend=biber,
-  style=vancouver,
+  style=numeric,    % ou authoryear, ieee, vancouver, alphabetic...
   sorting=none,
   giveninits=true,
-  maxcitenames=2,
-  maxbibnames=6,
   doi=true,
   url=true,
   isbn=false
@@ -31,20 +25,21 @@ Si un livrable exige des citations numériques séquentielles, adapter le charge
 
 ---
 
-## 2. Syntaxe de citation dans le texte
+## 2. Commandes de citation courantes (souples selon le style)
 
-| Commande | Rendu `custom-style` (défaut) | Exemple d'usage |
+| Commande | Usage typique | Exemple d'usage |
 | :--- | :--- | :--- |
-| `~\parencite{cle}` | `(Dupont, 2024)` | `La méthode converge rapidement~\parencite{dupont2024}.` |
-| `\textcite{cle}` | `Dupont (2024)` | `Comme le montre \textcite{dupont2024}, le modèle...` |
-| `~\parencite[p.~12]{cle}` | `(Dupont, 2024, p. 12)` | `Voir la démonstration complète~\parencite[p.~12]{dupont2024}.` |
-| `~\autocite{cle}` *(vancouver)* | `[1]` ou `(1)` | `Des travaux récents~\autocite{dupont2024} confirment...` |
+| `~\autocite{cle}` | Commande polyvalente (s'adapte au style actif) | `La méthode converge rapidement~\autocite{dupont2024}.` |
+| `~\parencite{cle}` | Citation entre parenthèses (auteur-année / parenthétique) | `Voir la démonstration complète~\parencite[p.~12]{dupont2024}.` |
+| `\textcite{cle}` | Citation narrative intégrée comme sujet/nom | `Comme le montre \textcite{dupont2024}, le modèle...` |
+| `~\cite{cle}` | Appel direct (utile en style numérique ou libre) | `Des travaux récents~\cite{dupont2024} confirment...` |
+| `~\supercite{cle}` | Appel en exposant (si souhaité) | `Résultat connu~\supercite{dupont2024}.` |
 
-> **Typographie :** toujours placer une espace insécable `~` devant `\parencite` et `\autocite` en milieu/fin de phrase. Ne pas insérer d'espace avant une ponctuation forte si le style la place déjà, mais en français la citation parenthétique précède le point final : `... résultat~\parencite{cle}.`.
+> **Bonnes pratiques typographiques :** placer une espace insécable `~` devant les appels en ligne (`\autocite`, `\parencite`, `\cite`, `\supercite`) pour éviter une coupure de ligne orpheline, et conserver `\textcite{...}` sans `~` lorsqu'il ouvre un groupe nominal. En français, la citation précède généralement le point final (`... résultat~\autocite{cle}.`).
 
 ---
 
-## 3. Normes de rédaction des entrées `.bib`
+## 3. Bonnes pratiques de rédaction des entrées `.bib`
 
 ```bibtex
 @article{smith2024deep,
@@ -60,10 +55,11 @@ Si un livrable exige des citations numériques séquentielles, adapter le charge
 }
 ```
 
-### Règles Biber essentielles
-1. **Casse des acronymes et noms propres :** entourer d'accolades (`{LaTeX}`, `{IEEE}`, `{PID}`, `{France}`).
-2. **Noms d'auteurs :** toujours utiliser `Nom, Prénom and Nom2, Prénom2` (séparateur `and`, jamais `&` ou `,`).
-3. **DOI sans préfixe URL :** écrire `10.1016/...` sans `https://doi.org/`.
-4. **Dates ISO :** préférer `date = {YYYY-MM-DD}` ou `year = {YYYY}` ; éviter les dates textuelles non parsables par Biber.
-5. **Plages de pages :** utiliser le double tiret `--` (`145--162`).
-6. **Échappement des caractères réservés :** protéger `%`, `&`, `#`, `_` dans les titres/résumés (hors champs `url` et `doi` gérés nativement par BibLaTeX).
+### Hygiène Biber recommandée (indépendante du style)
+1. **Format de clé libre :** conserver les clés Zotero existantes ou adopter un schéma lisible (`auteur2024mot`) — éviter simplement les doublons, espaces et accents.
+2. **Casse des acronymes et noms propres :** entourer d'accolades (`{LaTeX}`, `{IEEE}`, `{PID}`, `{France}`).
+3. **Noms d'auteurs :** utiliser `Nom, Prénom and Nom2, Prénom2` (séparateur `and`).
+4. **DOI sans préfixe URL :** écrire `10.1016/...` sans `https://doi.org/` afin que BibLaTeX construise le lien proprement.
+5. **Dates ISO :** préférer `date = {YYYY-MM-DD}` (ou `YYYY-MM`, `year = {YYYY}`).
+6. **Plages de pages :** utiliser le double tiret `--` (`145--162`).
+7. **Échappement des caractères réservés :** protéger `%`, `&`, `#`, `_` dans les titres/résumés (hors champs `url` et `doi` gérés nativement par BibLaTeX).

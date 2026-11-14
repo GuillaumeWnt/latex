@@ -17,4 +17,4 @@ Conventions d'utilisation du serveur MCP `io.draw/mcp` dans l'écosystème `temp
 2. **Export vectoriel :** Toujours exporter en `.pdf` vectoriel dans `figures/<nom>.pdf` (netteté infinie, polices vectorielles).
 3. **Harmonie visuelle :**
    - Polices neutres sans-serif (Helvetica / Arial / TeX Gyre Heros), taille relative 9–11 pt.
-   - Palette douce coordonnée à `mythesis-screen.clo` : fond `#F6F8FB`, bleu marine `#0F3C6E`, sarcelle `#146E78`, corail `#BE4B28`, bordures `#334155`.
+   - Palette douce coordonnée à `ClasseGuillaume-screen.clo` : fond `#F6F8FB`, bleu marine `#0F3C6E`, sarcelle `#146E78`, corail `#BE4B28`, bordures `#334155`.

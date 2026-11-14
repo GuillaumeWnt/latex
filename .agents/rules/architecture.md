@@ -7,13 +7,15 @@ Tout nouveau projet créé dans ce dépôt doit être placé sous `projets/<nom_
 ```text
 projets/<nom_projet>/
 ├── main.tex                  # Chef d'orchestre unique (profil screen/print, front/main/appendix/back)
-├── mythesis.cls              # Classe KOMA-Script (scrbook) + métadonnées + calque logo
-├── mythesis-screen.clo       # Profil écran (marges symétriques, palette interactive, hyperliens colorés)
-├── mythesis-print.clo        # Profil impression reliée (twoside, BCOR=10mm, liens neutres)
+├── ClasseGuillaume.cls              # Classe KOMA-Script (scrbook) + métadonnées + calque logo
+├── ClasseGuillaume-screen.clo       # Profil écran (marges symétriques, palette interactive, hyperliens colorés)
+├── ClasseGuillaume-print.clo        # Profil impression reliée (twoside, BCOR=10mm, liens neutres)
 ├── latexmkrc                 # Compilation auto LuaLaTeX + Biber + outdir=build
-├── .chktexrc                 # Linter typographique (espaces insécables ~ avant \cref/\cite)
+├── .chktexrc                 # Linter typographique français (espaces insécables ~, -n26)
+├── .chktexrc-en              # Linter typographique anglais (sans -n26)
 ├── .editorconfig             # UTF-8, LF, indentation 2 espaces (.tex/.cls/.sty/.bib)
 ├── .gitignore                # Exclusion de build/ et des auxiliaires TeX
+├── .aiexclude / .claudeignore / .geminiignore # Règles d'exclusion IA (PDF et logs lisibles)
 ├── config/
 │   ├── packages.sty          # Importation ordonnée et configuration des packages tiers
 │   └── macros.sty            # Macros maths/texte (\term, \code), boîtes tcolorbox, géométries, \todoH
@@ -38,7 +40,7 @@ projets/<nom_projet>/
    - Adapter les métadonnées dans `main.tex` et les textes de `frontmatter/`, `content/`, `backmatter/`, `biblio/references.bib`.
    - Ne jamais créer un nouveau projet en partant de zéro ou d'un ancien modèle (`template_principal/`, `BE_mecanique/`, `labo_PID/`), sauf demande explicite de l'utilisateur.
 2. **Rétroportage continu vers `templates/template_officiel/` :**
-   - Dès qu'une fonctionnalité générique (nouvelle macro dans `config/macros.sty`, environnement `tcolorbox`, amélioration de `mythesis.cls`/`.clo`, nouveau réglage `config/packages.sty`, correction de bug ou d'avertissement TeX, amélioration de `latexmkrc`/`.chktexrc`) est ajoutée ou corrigée dans un projet, **elle doit également être rétroportée dans `templates/template_officiel/`**.
+   - Dès qu'une fonctionnalité générique (nouvelle macro dans `config/macros.sty`, environnement `tcolorbox`, amélioration de `ClasseGuillaume.cls`/`.clo`, nouveau réglage `config/packages.sty`, correction de bug ou d'avertissement TeX, amélioration de `latexmkrc`/`.chktexrc`) est ajoutée ou corrigée dans un projet, **elle doit également être rétroportée dans `templates/template_officiel/`**.
    - Vérifier que l'ajout rétroporté reste générique, compatible `screen` et `print`, et compile sans erreur dans `templates/template_officiel/`.
 
 ---
@@ -62,12 +64,11 @@ projets/<nom_projet>/
 ├── rules/                     # Règles locales (architecture, general, coding-style, testing, security)
 ├── scripts/sync-mcp.ps1       # Synchronisation MCP vers .vscode, .claude, .gemini
 ├── workflows/                 # Procédures pas-à-pas (new-project, markdown-to-latex, build-and-verify)
-├── subagents/                 # Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, mémoire)
+├── subagents/                 # Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille)
 └── skills/                    # Skills modulaires :
-    ├── markdown-to-latex/     # Conversion Markdown -> LaTeX enrichi (mythesis)
+    ├── markdown-to-latex/     # Conversion Markdown -> LaTeX enrichi (ClasseGuillaume)
     ├── latex-document-manager/# Gestion documentaire, KOMA+geometry, erreurs courantes
     ├── latex-quality-auditor/ # Audit typographique, booktabs, lint-latex.ps1 + chktex
     ├── visual-diagrams/       # Draw.io MCP & TikZ / cadreFigure
-    ├── zotero-biblio/         # Zotero MCP, BibLaTeX/Biber, audit .bib
-    └── project-memory/        # Graphe Memory MCP & vérification Brave Search
+    └── zotero-biblio/         # Zotero MCP, BibLaTeX/Biber, audit .bib
 ```

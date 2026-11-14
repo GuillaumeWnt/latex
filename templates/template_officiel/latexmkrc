@@ -24,8 +24,10 @@ make_path("$out_dir/content", "$out_dir/backmatter", "$out_dir/frontmatter");
 # Fichiers générés par les extensions (évite les boucles de relance logreq / biblatex)
 push @generated_exts, 'run.xml';
 
-# Nettoyage automatique des extensions auxiliaires avec `latexmk -c` ou `-C`
-$clean_ext = 'aux bbl bcf blg run.xml toc lof lot out synctex.gz fdb_latexmk fls log tdo idx ilg ind upa upb';
+# Extensions intermédiaires nettoyables sans perte de suivi (`latexmk -c`)
+# Les fichiers utiles au débogage/reprise (synctex.gz, log, blg, fdb_latexmk, fls) restent réservés à `-C`.
+$clean_ext = 'aux bbl bcf run.xml toc lof lot out tdo idx ilg ind upa upb';
+$clean_full_ext = 'synctex.gz';
 
 # --- Optionnel : Support de l'externalisation TikZ avec build/ (Option B) ---
 # Si vous souhaitez activer \usetikzlibrary{external} au lieu du paquet standalone :

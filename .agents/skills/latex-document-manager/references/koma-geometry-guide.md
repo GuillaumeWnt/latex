@@ -1,13 +1,13 @@
 # Guide d'Architecture Hybride KOMA-Script & `geometry`
 
-Ce guide documente la cohabitation entre **KOMA-Script** (`scrbook`) et **`geometry`** dans `templates/template_officiel/` (`mythesis.cls`, `mythesis-*.clo`, `config/packages.sty`, `config/macros.sty`).
+Ce guide documente la cohabitation entre **KOMA-Script** (`scrbook`) et **`geometry`** dans `templates/template_officiel/` (`ClasseGuillaume.cls`, `ClasseGuillaume-*.clo`, `config/packages.sty`, `config/macros.sty`).
 
 ---
 
 ## 1. Principes de Synchronisation Sans Avertissement
 
 1. **Options `typearea` passées avant `\LoadClass{scrbook}` :**
-   Dans `mythesis.cls`, `twoside`, `open`, `BCOR` et `DIV` sont passés via `\PassOptionsToClass` avant `\LoadClass{scrbook}`, puis `usegeometry=true` est activé via `\KOMAoptions` (avec `headheight=20pt`, `footheight=20pt`). Appeler `\recalctypearea` après `geometry` écraserait `footskip` et produirait des avertissements `Bad type area settings`.
+   Dans `ClasseGuillaume.cls`, `twoside`, `open`, `BCOR` et `DIV` sont passés via `\PassOptionsToClass` avant `\LoadClass{scrbook}`, puis `usegeometry=true` est activé via `\KOMAoptions` (avec `headheight=20pt`, `footheight=20pt`). Appeler `\recalctypearea` après `geometry` écraserait `footskip` et produirait des avertissements `Bad type area settings`.
 2. **Hook automatique `\syncKomaGeometry` :**
    Dans `config/packages.sty`, `etoolbox` accroche `\syncKomaGeometry` à `\newgeometry` et `\restoregeometry` :
    ```latex
@@ -19,8 +19,8 @@ Ce guide documente la cohabitation entre **KOMA-Script** (`scrbook`) et **`geome
    \apptocmd{\restoregeometry}{\syncKomaGeometry}{}{}
    ```
    Ainsi, la largeur des filets d'en-tête/pied `scrlayer-scrpage` et les espacements KOMA restent toujours alignés sur `\textwidth`.
-3. **Préservation de `BCOR` (`\mythesis@bcor`) :**
-   Les profils `mythesis-print.clo` (`10mm`) et `mythesis-screen.clo` (`0mm`) définissent `\mythesis@bcor`, automatiquement réinjecté via `bindingoffset=\mythesis@bcor` dans `\geometrieWord` et `\geometrieLarge`.
+3. **Préservation de `BCOR` (`\ClasseGuillaume@bcor`) :**
+   Les profils `ClasseGuillaume-print.clo` (`10mm`) et `ClasseGuillaume-screen.clo` (`0mm`) définissent `\ClasseGuillaume@bcor`, automatiquement réinjecté via `bindingoffset=\ClasseGuillaume@bcor` dans `\geometrieWord` et `\geometrieLarge`.
 4. **Dimensions d'en-tête/pied dans `\newgeometry` :**
    Toujours conserver `headheight=20pt` et `footskip=26pt` à `30pt` pour éviter `Package scrlayer-scrpage Warning: \headheight to low`.
 

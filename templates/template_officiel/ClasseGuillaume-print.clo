@@ -1,12 +1,12 @@
 %% ==============================================================================
-%% mythesis-print.clo
+%% ClasseGuillaume-print.clo
 %% Option de classe : Configuration optimisée pour l'impression papier et la reliure
 %% ==============================================================================
-\ProvidesFile{mythesis-print.clo}[2026/11/12 v2.0 Print Layout Configuration for mythesis]
+\ProvidesFile{ClasseGuillaume-print.clo}[2026/11/12 v2.0 Print Layout Configuration for ClasseGuillaume]
 
 % --- Géométrie et mise en page KOMA-Script ---
 % Recto-verso avec décalage de reliure (BCOR) et début des chapitres sur page impaire
-\newcommand{\mythesis@bcor}{10mm}
+\newcommand{\ClasseGuillaume@bcor}{10mm}
 \KOMAoptions{
   twoside=true,
   open=right,
@@ -23,7 +23,7 @@
 \definecolor{ThesisMuted}{RGB}{105, 110, 115}     % Gris intermédiaire
 \definecolor{ThesisBackground}{RGB}{245, 245, 246}% Fond gris très pâle
 
-% Alias de compatibilité directe avec ClasseGuillaume
+% Alias chromatiques historiques
 \colorlet{primaryColor}{ThesisPrimary}
 \colorlet{secondaryColor}{ThesisSecondary}
 \colorlet{accentColor}{ThesisAccent}

@@ -92,19 +92,21 @@ if ($missingFields.Count -gt 0) {
     Write-Host "[OK] All entries have required fields (author, title)." -ForegroundColor Green
 }
 
-# Check citation key naming convention: [author][year] pattern
+# Check citation key safety (ASCII printable characters without spaces/braces/commas; format stays flexible)
 $badKeys = @()
 foreach ($key in $keys.Keys) {
-    if ($key -notmatch '^[a-z]+\d{4}') {
+    if ($key -notmatch '^[a-zA-Z0-9_:\-\.]+$') {
         $badKeys += $key
     }
 }
 
 if ($badKeys.Count -gt 0) {
-    Write-Host "`n[INFO] Keys not matching [author][year] convention:" -ForegroundColor Cyan
+    Write-Host "`n[WARN] Keys containing risky characters (spaces, accents, or punctuation):" -ForegroundColor Yellow
     foreach ($bk in $badKeys) {
-        Write-Host "  - $bk ($($keys[$bk]))" -ForegroundColor Cyan
+        Write-Host "  - $bk ($($keys[$bk]))" -ForegroundColor Yellow
     }
+} else {
+    Write-Host "[OK] All citation keys are safe for Biber." -ForegroundColor Green
 }
 
 Write-Host "`nAudit complete." -ForegroundColor Cyan

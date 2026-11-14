@@ -2,23 +2,23 @@
 name: zotero-biblio
 description: >-
   Use this skill when searching academic literature, managing citations, interacting with Zotero via MCP,
-  generating evidence tables, or maintaining BibLaTeX files (.bib) in author-year or Vancouver style.
+  generating evidence tables, or maintaining clean BibLaTeX files (.bib) across any citation style.
 ---
 
 # Compétence Zotero & Bibliographie Académique (`zotero-biblio`)
 
-Workflows et bonnes pratiques pour gérer les références scientifiques dans ce workspace via le serveur MCP `zotero-citations` et **BibLaTeX + Biber**, en cohérence avec `templates/template_officiel/`.
+Workflows et bonnes pratiques pour gérer les références scientifiques dans ce workspace via le serveur MCP `zotero-citations` et **BibLaTeX + Biber**, en s'adaptant librement aux choix du projet.
 
 ---
 
-## 1. Conventions du socle `template_officiel`
+## 1. Bonnes pratiques de base (sans style imposé)
 
 - **Fichier bibliographique :** `biblio/references.bib` (chargé via `\addbibresource{biblio/references.bib}`).
-- **Style par défaut :** style auteur-année personnalisé (`biblio/custom-style.bbx` et `biblio/custom-style.cbx`).
-- **Commandes de citation à privilégier :**
-  - Citation parenthétique en fin de proposition : `~\parencite{cle}` ou `~\parencite[p.~42]{cle}`
-  - Citation intégrée dans la phrase (sujet ou complément) : `\textcite{cle}` (précédé d'une espace normale dans la phrase, ex. `Comme l'expliquent \textcite{cle}...`)
-  - En cas de bascule sur un style numérique (`vancouver`) : `~\autocite{cle}` ou `~\cite{cle}`.
+- **Style totalement libre :** `templates/template_officiel/` embarque `biblio/custom-style.bbx`/`.cbx` à titre d'exemple de départ, mais chaque projet peut utiliser n'importe quel style BibLaTeX (`authoryear`, `numeric`, `ieee`, `vancouver`, `alphabetic`, etc.) sans contrainte imposée.
+- **Commandes de citation souples :**
+  - `\autocite{cle}`, `\parencite{cle}`, `\cite{cle}` ou `\supercite{cle}` selon les habitudes et le style du document (avec `~` devant en milieu/fin de phrase : `~\autocite{cle}`).
+  - `\textcite{cle}` lorsque l'auteur est le sujet grammatical de la phrase (`Comme l'expliquent \textcite{cle}...`).
+  - *Astuce :* `\autocite{cle}` s'adapte automatiquement si le style du document passe d'auteur-année à numérique.
 
 ---
 
@@ -27,8 +27,8 @@ Workflows et bonnes pratiques pour gérer les références scientifiques dans ce
 ### Recherche bibliographique & ajout dans `biblio/references.bib`
 1. Interroger `zotero_search_items`, `zotero_semantic_search` ou `zotero_scholar`.
 2. Inspecter les métadonnées complètes avec `zotero_get_item` (vérifier DOI nu `10.xxxx/...`, auteurs, date ISO `YYYY-MM-DD`, titre protégé par `{...}`).
-3. Ajouter l'entrée formatée dans `biblio/references.bib` (clé recommandée : `auteurAnneeMot` en minuscules, ex. `dupont2024optimisation`).
-4. Vérifier que `\textcite` / `\parencite` compile sans avertissement Biber (`WARN - ...`) lors du build `latexmk`.
+3. Ajouter l'entrée formatée dans `biblio/references.bib` (clé libre — ex. clé Zotero existante ou `auteur2024mot`, en évitant uniquement espaces, accents et doublons).
+4. Vérifier que les citations compilent sans avertissement Biber (`WARN - ...`) lors du build `latexmk`.
 
 ### Tableaux de synthèse documentaire (*Evidence Tables*)
 1. Sélectionner les clés Zotero pertinentes et appeler `zotero_evidence_table`.
@@ -44,5 +44,5 @@ Exécuter le script de contrôle avant finalisation :
 
 ## 3. Documentation et exemples associés
 - **[Guide des outils MCP Zotero](./references/zotero-mcp-guide.md)** : paramètres et usages de `zotero-citations`.
-- **[Guide BibLaTeX & styles](./references/vancouver-biblatex.md)** : configuration `custom-style` (défaut) vs `vancouver`, règles strictes `.bib`.
+- **[Guide BibLaTeX & styles libres](./references/vancouver-biblatex.md)** : exemples d'options (`custom-style`, `numeric`, `ieee`, `vancouver`) et bonnes pratiques `.bib`.
 - **[Exemple de tableau de synthèse](./examples/sample-evidence-table.tex)** et **[exemple `.bib`](./examples/sample-references.bib)**.

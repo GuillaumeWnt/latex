@@ -23,8 +23,8 @@ Assurer **zéro erreur fatale** et **le minimum d'avertissements possible** apr�
 1. **Erreurs fatales (`! `) :** repérer la première ligne `! ...` et le contexte `l.<num>`.
 2. **Avertissements prioritaires à résorber :**
    - `Package scrlayer-scrpage Warning: \headheight to small` → imposer `headheight=20pt` (ou plus si en-tête multi-lignes) et `footskip=28pt`, puis `\syncKomaGeometry` (ne jamais utiliser `geometry` sans les valeurs minimales).
-   - `! Font ... not loadable` → vérifier le chemin relatif dans `fonts/` (`texgyreheros-*.otf` ou police configurée dans `mythesis.cls`) et le moteur LuaLaTeX.
+   - `! Font ... not loadable` → vérifier le chemin relatif dans `fonts/` (`texgyreheros-*.otf` ou police configurée dans `ClasseGuillaume.cls`) et le moteur LuaLaTeX.
    - `Package biblatex Warning` / `WARN - Biber` → corriger `.bib` ou relancer `latexmk` (passe Biber complète).
    - `Reference ... undefined` / `There were undefined references` → vérifier `\label{...}` et relancer `latexmk`.
    - `Overfull \hbox` / `Overfull \vbox` → reformuler, ajuster largeur `tabularx` (`L`/`C`/`R`/`Y`), ajouter `\-` ou `\microtypesetup` si nécessaire.
-3. **Rétro-portage obligatoire :** si un bug corrigé provient de `mythesis.cls`, `config/*.sty`, `latexmkrc` ou `.chktexrc`, appliquer aussi le correctif dans `templates/template_officiel/`.
+3. **Rétro-portage obligatoire :** si un bug corrigé provient de `ClasseGuillaume.cls`, `config/*.sty`, `latexmkrc` ou `.chktexrc`, appliquer aussi le correctif dans `templates/template_officiel/`.

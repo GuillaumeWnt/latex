@@ -43,7 +43,7 @@ des projets \LaTeX{} volumineux en formalisant six piliers méthodologiques :
 \begin{enumerate}
   \item \textbf{Le découplage sémantique total :}
   le fichier maître \code{main.tex} ordonnance la structure sans être pollué par le style ;
-  la classe \code{mythesis.cls} encapsule l'identité visuelle KOMA-Script ;
+  la classe \code{ClasseGuillaume.cls} encapsule l'identité visuelle KOMA-Script ;
   et les chapitres rédactionnels (\code{content/*.tex}) se concentrent exclusivement sur le fond.
   \item \textbf{La flexibilité du support par fichiers d'options (\code{.clo}) :}
   le passage d'un format de lecture sur écran (marges symétriques, palette interactive)
@@ -78,8 +78,8 @@ Cette architecture constitue un socle extensible qui ouvre plusieurs voies d'enr
   l'exécution automatique de \code{latexmk} dans un conteneur TeX Live à chaque \code{git push}
   permet de générer et de publier les PDF d'évaluation (écran et papier) sous forme d'artefacts téléchargeables.
   \item \textbf{Variantes de profils d'options :}
-  créer de nouveaux fichiers \code{.clo}, tels qu'un profil pour liseuse à encre électronique (\code{mythesis-ereader.clo})
-  ou un profil accessible à grand corps de texte (\code{mythesis-dyslexic.clo}).
+  créer de nouveaux fichiers \code{.clo}, tels qu'un profil pour liseuse à encre électronique (\code{ClasseGuillaume-ereader.clo})
+  ou un profil accessible à grand corps de texte (\code{ClasseGuillaume-dyslexic.clo}).
   \item \textbf{Extraction automatique de données :}
   connecter des scripts Python générant automatiquement les courbes de \code{data/}
   lors de l'exécution de bancs d'essai scientifiques.

@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 FIGURES_DIR = BASE_DIR / "figures"
 
-# Palette chromatique officielle mythesis — profil screen (RGB normalisé)
+# Palette chromatique officielle ClasseGuillaume — profil screen (RGB normalisé)
 HEX_PRIMARY = "#0F3C6E"    # Bleu marine profond (ThesisPrimary: 15, 60, 110)
 HEX_SECONDARY = "#146E78"  # Sarcelle / Teal (ThesisSecondary: 20, 110, 120)
 HEX_ACCENT = "#BE4B28"     # Corail / Terracotta (ThesisAccent: 190, 75, 40)
@@ -123,7 +123,7 @@ def generate_3d_surface_pdf() -> Path:
     # Paysage non-convexe multi-puits
     Z = np.sin(2.2 * R) / (R + 0.6) + 0.15 * (X**2 - Y**2) / 3.0
 
-    # Colormap personnalisée élégante inspirée de mythesis
+    # Colormap personnalisée élégante inspirée de ClasseGuillaume
     custom_cmap = LinearSegmentedColormap.from_list(
         "ThesisCmap", [HEX_PRIMARY, HEX_SECONDARY, HEX_ACCENT, "#8BA9C4", "#E8EFF5"]
     )

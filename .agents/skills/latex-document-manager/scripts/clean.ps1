@@ -1,12 +1,12 @@
-﻿<#
+<#
 .SYNOPSIS
-    Nettoie les fichiers auxiliaires de compilation LaTeX dans build/.
+    Nettoie les fichiers intermédiaires de compilation LaTeX dans build/ en préservant le PDF et les fichiers utiles au débogage/reprise.
 .PARAMETER ProjectDir
     Répertoire racine du projet. Défaut : répertoire courant.
 .PARAMETER OutDir
     Répertoire de sortie à nettoyer. Défaut : build.
 .PARAMETER All
-    Supprime également le PDF final produit.
+    Purge complète : supprime également le PDF final et les fichiers de suivi/débogage (.log, .synctex.gz, .blg, .fdb_latexmk, .fls).
 #>
 
 [CmdletBinding()]
@@ -25,19 +25,26 @@ if (-not (Test-Path $ProjectDir)) {
 
 Push-Location $ProjectDir
 try {
-    if (Get-Command latexmk -ErrorAction SilentlyContinue) {
-        if ($All) {
-            Write-Host "==> Purge complète (auxiliaires + PDF) dans $OutDir/..." -ForegroundColor Yellow
-            latexmk -C "-outdir=$OutDir"
-        } else {
-            Write-Host "==> Nettoyage des fichiers temporaires dans $OutDir/..." -ForegroundColor Cyan
-            latexmk -c "-outdir=$OutDir"
-        }
-    }
+    $disposableExtensions = @(
+        "*.aux", "*.bbl", "*.bcf", "*.lof", "*.lot", "*.out",
+        "*.run.xml", "*.toc", "*.tdo", "*.idx", "*.ilg", "*.ind", "*.upa", "*.upb"
+    )
+    $debugAndTrackingExtensions = @("*.synctex.gz", "*.log", "*.blg", "*.fdb_latexmk", "*.fls")
 
-    if (Test-Path $OutDir) {
-        $extensions = @("*.aux", "*.bbl", "*.bcf", "*.blg", "*.fdb_latexmk", "*.fls", "*.lof", "*.lot", "*.log", "*.out", "*.run.xml", "*.synctex.gz", "*.toc", "*.tdo", "*.idx", "*.ilg", "*.ind", "*.upa", "*.upb")
-        Get-ChildItem -Path $OutDir -Include $extensions -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force
+    if ($All) {
+        Write-Host "==> Purge complète (auxiliaires + débogage + PDF) dans $OutDir/..." -ForegroundColor Yellow
+        if (Get-Command latexmk -ErrorAction SilentlyContinue) {
+            latexmk -C "-outdir=$OutDir"
+        }
+        if (Test-Path $OutDir) {
+            $allExtensions = $disposableExtensions + $debugAndTrackingExtensions + @("*.pdf")
+            Get-ChildItem -Path $OutDir -Include $allExtensions -Recurse -File -ErrorAction SilentlyContinue | Remove-Item -Force
+        }
+    } else {
+        Write-Host "==> Nettoyage ciblé dans $OutDir/ (préservation des .pdf, .synctex.gz, .log, .blg, .fdb_latexmk, .fls)..." -ForegroundColor Cyan
+        if (Test-Path $OutDir) {
+            Get-ChildItem -Path $OutDir -Include $disposableExtensions -Recurse -File -ErrorAction SilentlyContinue | Remove-Item -Force
+        }
     }
 
     Write-Host "==> Nettoyage terminé." -ForegroundColor Green

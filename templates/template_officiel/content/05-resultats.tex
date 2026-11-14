@@ -287,9 +287,9 @@ un bouton permet d'alterner entre une synthèse textuelle concise et le relevé 
 \subsubsection[Gestion intelligente Écran vs Impression]{Gestion intelligente Écran (\code{screen}) vs Impression Papier (\code{print})}
 Le traitement des calques et des boutons interactifs met en lumière la puissance du découplage de classe :
 \begin{itemize}
-  \item \textbf{En profil numérique (\code{\textbackslash documentclass[screen]\{mythesis\}})} :
+  \item \textbf{En profil numérique (\code{\textbackslash documentclass[screen]\{ClasseGuillaume\}})} :
   le bouton interactif s'affiche et permet d'alterner dynamiquement entre la synthèse et le tableau, grâce à la superposition géométrique parfaite \code{\textbackslash ocgstack} pilotée par TikZ.
-  \item \textbf{En profil imprimé (\code{\textbackslash documentclass[print]\{mythesis\}})} :
+  \item \textbf{En profil imprimé (\code{\textbackslash documentclass[print]\{ClasseGuillaume\}})} :
   \begin{enumerate}
     \item Les boutons interactifs (\code{\textbackslash ocgbutton}) sont \textbf{strictement omis} via \code{\textbackslash screenonly} : aucun bouton orphelin ou inopérant n'apparaît sur la feuille de papier.
     \item Les calques PDF (\code{ocg}) sont neutralisés pour supprimer tout objet OCG risquant de perturber les imprimantes professionnelles ou les RIP offset.
@@ -331,8 +331,8 @@ Le passage d'une version numérique interactive à une version papier prête pou
 ne demande \textbf{aucune modification} dans vos chapitres ou vos tableaux.
 Ouvrez simplement le fichier maître \code{main.tex} et modifiez la toute première ligne :
 \begin{itemize}[nosep]
-  \item \textbf{Pour la lecture sur écran :} \code{\textbackslash documentclass[screen]\{mythesis\}}
-  \item \textbf{Pour l'impression papier reliée :} \code{\textbackslash documentclass[print]\{mythesis\}}
+  \item \textbf{Pour la lecture sur écran :} \code{\textbackslash documentclass[screen]\{ClasseGuillaume\}}
+  \item \textbf{Pour l'impression papier reliée :} \code{\textbackslash documentclass[print]\{ClasseGuillaume\}}
 \end{itemize}
 \vspace{4pt}
 Relancez \code{latexmk} : votre document reconfigure instantanément sa pagination, ses marges,

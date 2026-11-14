@@ -17,14 +17,17 @@ Boîte à outils pour vérifier la conformité des sources `.tex` aux standards 
 # Audit statique seul :
 .\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>"
 
-# Audit statique + ChkTeX (utilise le .chktexrc du projet) :
+# Audit statique + ChkTeX (sélectionne automatiquement .chktexrc ou .chktexrc-en selon main.tex) :
 .\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>" -RunChkTeX
+
+# Forcer le profil anglais (retire -n26 pour vérifier l'absence d'espace avant : ; ? !) :
+.\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "projets\<nom_projet>" -RunChkTeX -Language english
 ```
 
 Le script détecte :
 - Commandes de police obsolètes (`{\bf`, `{\it`, `{\tt}`, etc.) et maths `$$ ... $$`.
 - Filets verticaux `|` et `\hline` dans les tableaux.
-- Oublis d'espace insécable `~` avant les citations (`\parencite`, `\textcite`, `\cite`, etc.) et renvois (`\cref`, `\Cref`, `\cpageref`).
+- Oublis d'espace insécable `~` avant les citations en ligne (`\autocite`, `\parencite`, `\cite`, `\supercite` — hors `\textcite` utilisé comme sujet) et les renvois (`\cref`, `\Cref`, `\cpageref`).
 - Usage manuel de `\ref{}` au lieu de `\cref{}` / `\Cref{}`.
 - Sauts de paragraphe via `\\` hors environnements tabulaires/mathématiques.
 - `\caption{...}` sans `\label{...}` associé.

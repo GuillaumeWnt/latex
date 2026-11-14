@@ -48,7 +48,7 @@ Lorsqu'on appelle naïvement \code{\textbackslash newgeometry} ou \code{\textbac
 \end{enumerate}
 
 Dans notre architecture, ce conflit est résolu à la racine dans \code{config/packages.sty} grâce à la macro \code{\textbackslash syncKomaGeometry}, branchée automatiquement sur les hooks \LaTeX{} de \code{\textbackslash newgeometry} et \code{\textbackslash restoregeometry}.
-À chaque changement de géométrie, la classe recalcule instantanément l'alignement des en-têtes (\code{headwidth=text, footwidth=text}), préserve \code{bindingoffset=\textbackslash mythesis@bcor} et synchronise KOMA-Script.
+À chaque changement de géométrie, la classe recalcule instantanément l'alignement des en-têtes (\code{headwidth=text, footwidth=text}), préserve \code{bindingoffset=\textbackslash ClasseGuillaume@bcor} et synchronise KOMA-Script.
 
 \begin{boiteSynthese}{Philosophie d'Empagement : KOMA par Défaut et Liberté Totale via \code{geometry}}
 Notre architecture repose sur un équilibre clair :
@@ -116,7 +116,7 @@ et sans devoir réduire la taille de police en corps microscopique.
     Mémoires de master, rapports techniques intermédiaires. &
     Courante \\
     \addlinespace
-    \textbf{Découplée \code{mythesis}} &
+    \textbf{Découplée \code{ClasseGuillaume}} &
     Isolation stricte (\code{.clo}, \code{config/}, \code{biblio/}, \code{listings/}). Profils écran/print instantanés. &
     Nécessite une rigueur initiale et l'utilisation de \code{latexmkrc}. &
     Thèses de doctorat, monographies, spécifications industrielles. &
@@ -290,7 +290,7 @@ il suspend temporairement les en-têtes KOMA-Script et le calque du logo, appliq
   colframe=ThesisSecondary!35,
   boxrule=0.7pt,
   arc=3pt,
-  title={\sffamily\bfseries\small Cycle de Vie d'une Dérogation Géométrique dans \texttt{mythesis.cls}},
+  title={\sffamily\bfseries\small Cycle de Vie d'une Dérogation Géométrique dans \texttt{ClasseGuillaume.cls}},
   colbacktitle=ThesisSecondary,
   coltitle=white,
   toptitle=4pt, bottomtitle=4pt
@@ -593,12 +593,12 @@ les commandes, les contextes d'application et les précautions associées
     \code{\textbackslash activerStyle}\allowbreak\code{Focus} &
     En-tête épuré sans filet, folio centré discret. &
     À rétablir via \code{\textbackslash activerStyle}\allowbreak\code{Standard} en fin de bloc. &
-    \code{mythesis.cls} \\
+    \code{ClasseGuillaume.cls} \\
     \addlinespace
     \code{\textbackslash activerStyle}\allowbreak\code{Debug} &
     Affiche le fichier source, le statut révision et le folio X/Y. &
     Utilise la référence \code{LastPage} sans altérer \code{\textbackslash automark}. &
-    \code{mythesis.cls} \\
+    \code{ClasseGuillaume.cls} \\
     \addlinespace
     \code{multicols\{N\}} &
     Composition fluide sur $N$ colonnes sans saut de page. &

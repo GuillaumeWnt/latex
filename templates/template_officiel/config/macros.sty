@@ -3,7 +3,7 @@
 %% Commandes métier, raccourcis mathématiques, boîtes et géométries dynamiques
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{config/macros}[2026/11/12 v2.0 Custom Macros for mythesis]
+\ProvidesPackage{config/macros}[2026/11/12 v2.0 Custom Macros for ClasseGuillaume]
 
 % --- Notations mathématiques sémantiques ---
 % Vecteurs et matrices en gras droit / italique
@@ -32,15 +32,15 @@
 
 % --- Balisage textuel sémantique ---
 % Bascule automatique de contraste pour \code{...} dans les bandeaux sombres
-\newif\ifmythesis@darkbanner
-\mythesis@darkbannerfalse
+\newif\ifClasseGuillaume@darkbanner
+\ClasseGuillaume@darkbannerfalse
 
 % Terme technique introduit pour la première fois
 \newcommand{\term}[1]{\textbf{\textcolor{ThesisPrimary}{#1}}}
 
 % Fragment de code en ligne (adaptatif clair/sombre)
 \newcommand{\code}[1]{%
-  \ifmythesis@darkbanner
+  \ifClasseGuillaume@darkbanner
     \texttt{\textcolor{white}{#1}}%
   \else
     \texttt{\textcolor{ThesisPrimary!92!black}{#1}}%
@@ -59,8 +59,23 @@
 
 % --- Environnements visuels (tcolorbox) ---
 
+% Libellés localisés des boîtes et outils (french par défaut, english si option active)
+\ifClasseGuillaume@english
+  \newcommand{\ClasseGuillaume@callout@default}{Note}
+  \newcommand{\ClasseGuillaume@attention@default}{Key Point}
+  \newcommand{\ClasseGuillaume@hypothesis@label}{Hypothesis}
+  \newcommand{\ClasseGuillaume@definition@label}{Definition}
+  \newcommand{\ClasseGuillaume@todolist@default}{Revision Dashboard and Writing Tasks}
+\else
+  \newcommand{\ClasseGuillaume@callout@default}{Remarque}
+  \newcommand{\ClasseGuillaume@attention@default}{Point d'attention}
+  \newcommand{\ClasseGuillaume@hypothesis@label}{Hypothèse}
+  \newcommand{\ClasseGuillaume@definition@label}{Définition}
+  \newcommand{\ClasseGuillaume@todolist@default}{Tableau de Bord des Révisions et Tâches de Rédaction}
+\fi
+
 % 1. Boîte d'information / Remarque (Contraste optimal : titre foncé sur bandeau clair + liseré gauche)
-\newtcolorbox{callout}[1][Remarque]{%
+\newtcolorbox{callout}[1][\ClasseGuillaume@callout@default]{%
   enhanced,
   breakable,
   colback=ThesisPrimary!3,
@@ -83,7 +98,7 @@
 }
 
 % 2. Boîte d'attention / Point critique (Mettant en valeur la couleur ThesisAccent)
-\newtcolorbox{attentionbox}[1][Point d'attention]{%
+\newtcolorbox{attentionbox}[1][\ClasseGuillaume@attention@default]{%
   enhanced,
   breakable,
   colback=ThesisAccent!4,
@@ -117,8 +132,8 @@
   colframe=ThesisSecondary!80,
   colbacktitle=ThesisSecondary,
   coltitle=white,
-  fonttitle=\bfseries\sffamily\small\mythesis@darkbannertrue,
-  title={Hypothèse~\thehypocounter\ifstrempty{#1}{}{ --- #1}},
+  fonttitle=\bfseries\sffamily\small\ClasseGuillaume@darkbannertrue,
+  title={\ClasseGuillaume@hypothesis@label~\thehypocounter\ifstrempty{#1}{}{ --- #1}},
   left=10pt,
   right=10pt,
   top=6pt,
@@ -143,8 +158,8 @@
   colframe=ThesisPrimary!85,
   colbacktitle=ThesisPrimary!90,
   coltitle=white,
-  fonttitle=\bfseries\sffamily\small\mythesis@darkbannertrue,
-  title={Définition~\thedeficounter\ifstrempty{#1}{}{ --- #1}},
+  fonttitle=\bfseries\sffamily\small\ClasseGuillaume@darkbannertrue,
+  title={\ClasseGuillaume@definition@label~\thedeficounter\ifstrempty{#1}{}{ --- #1}},
   left=10pt,
   right=10pt,
   top=6pt,
@@ -157,7 +172,7 @@
   after skip=12pt
 }
 
-% 5. Boîte de synthèse mise en valeur (compatible ClasseGuillaume)
+% 5. Boîte de synthèse mise en valeur
 \newtcolorbox{boiteSynthese}[2][]{%
   enhanced,
   breakable,
@@ -166,7 +181,7 @@
   colbacktitle=ThesisPrimary,
   coltitle=white,
   borderline west={3.2pt}{0pt}{ThesisAccent},
-  fonttitle=\bfseries\sffamily\small\mythesis@darkbannertrue,
+  fonttitle=\bfseries\sffamily\small\ClasseGuillaume@darkbannertrue,
   title={#2},
   left=10pt,
   right=10pt,
@@ -181,7 +196,7 @@
   #1
 }
 
-% 6. Cadre pour figure / schéma vectoriel centré (compatible ClasseGuillaume)
+% 6. Cadre pour figure / schéma vectoriel centré
 \newtcolorbox{cadreFigure}[1][]{%
   enhanced,
   colframe=ThesisSecondary!45,
@@ -199,10 +214,17 @@
 }
 
 % Déclaration des alias cleveref dans le préambule (avant le hook \AtBeginDocument de cleveref)
-\crefname{hypocounter}{hypothèse}{hypothèses}
-\Crefname{hypocounter}{Hypothèse}{Hypothèses}
-\crefname{deficounter}{définition}{définitions}
-\Crefname{deficounter}{Définition}{Définitions}
+\ifClasseGuillaume@english
+  \crefname{hypocounter}{hypothesis}{hypotheses}
+  \Crefname{hypocounter}{Hypothesis}{Hypotheses}
+  \crefname{deficounter}{definition}{definitions}
+  \Crefname{deficounter}{Definition}{Definitions}
+\else
+  \crefname{hypocounter}{hypothèse}{hypothèses}
+  \Crefname{hypocounter}{Hypothèse}{Hypothèses}
+  \crefname{deficounter}{définition}{définitions}
+  \Crefname{deficounter}{Définition}{Définitions}
+\fi
 \crefname{lstlisting}{listing}{listings}
 \Crefname{lstlisting}{Listing}{Listings}
 \crefname{illustration}{illustration}{illustrations}
@@ -225,14 +247,14 @@
 }
 
 % 2. Géométrie Large / Pleine Page (Style B - geometry) : marges réduites à 1.5 cm pour grands tableaux
-%    Préserve automatiquement le décalage de reliure (\mythesis@bcor) en mode print !
+%    Préserve automatiquement le décalage de reliure (\ClasseGuillaume@bcor) en mode print !
 \newcommand{\geometrieLarge}{%
   \cleardoublepage%
   \renewcommand{\currentGeometryCmd}{\geometrieLarge}%
   \newgeometry{
     left=1.5cm, right=1.5cm,
     top=2.0cm, bottom=2.0cm,
-    bindingoffset=\mythesis@bcor,
+    bindingoffset=\ClasseGuillaume@bcor,
     headheight=20pt, headsep=14pt,
     footskip=26pt, footnotesep=8pt,
     marginparwidth=0mm, marginparsep=0mm
@@ -248,7 +270,7 @@
   \newgeometry{
     left=2.5cm, right=2.5cm,
     top=2.5cm, bottom=2.5cm,
-    bindingoffset=\mythesis@bcor,
+    bindingoffset=\ClasseGuillaume@bcor,
     headheight=20pt, headsep=16pt,
     footskip=28pt, footnotesep=10pt,
     marginparwidth=2.0cm, marginparsep=2.5mm
@@ -269,7 +291,7 @@
   }%
 }
 
-% 5. Géométrie libre sur-mesure à la volée (compatible ClasseGuillaume)
+% 5. Géométrie libre sur-mesure à la volée
 \newcommand{\geometrieLibre}[1]{%
   \cleardoublepage%
   \newgeometry{
@@ -300,7 +322,7 @@
   \geometrieStandard%
 }
 
-% 7. Environnement pageDesign (hérité de ClasseGuillaume et perfectionné) :
+% 7. Environnement pageDesign (style ClasseGuillaume) :
 %    Offre une liberté totale pour designer des pages spécifiques (couverture, planche
 %    graphique, poster, synthèse exécutive) sans en-tête ni logo, puis restaure
 %    automatiquement la géométrie, l'état du logo et le style de page à la sortie !
@@ -322,10 +344,16 @@
 % --- Système d'annotations collaboratives \todoH ---
 \ifusetodos
   % Profils de relecteurs préconfigurés avec signature et couleur
-  \todostyle{AuthorStyle}{author=Auteur, color=ThesisPrimary!20, bordercolor=ThesisPrimary!60, shadow}
-  \todostyle{DirectorStyle}{author=Directeur, color=ThesisSecondary!25, bordercolor=ThesisSecondary!70, shadow}
-  \todostyle{ReviewerStyle}{author=Rapporteur, color=ThesisAccent!25, bordercolor=ThesisAccent!70, shadow}
-  % Alias de compatibilité ClasseGuillaume
+  \ifClasseGuillaume@english
+    \todostyle{AuthorStyle}{author=Author, color=ThesisPrimary!20, bordercolor=ThesisPrimary!60, shadow}
+    \todostyle{DirectorStyle}{author=Supervisor, color=ThesisSecondary!25, bordercolor=ThesisSecondary!70, shadow}
+    \todostyle{ReviewerStyle}{author=Reviewer, color=ThesisAccent!25, bordercolor=ThesisAccent!70, shadow}
+  \else
+    \todostyle{AuthorStyle}{author=Auteur, color=ThesisPrimary!20, bordercolor=ThesisPrimary!60, shadow}
+    \todostyle{DirectorStyle}{author=Directeur, color=ThesisSecondary!25, bordercolor=ThesisSecondary!70, shadow}
+    \todostyle{ReviewerStyle}{author=Rapporteur, color=ThesisAccent!25, bordercolor=ThesisAccent!70, shadow}
+  \fi
+  % Alias complémentaires
   \todostyle{GuillaumeStyle}{author=Guillaume, color=ThesisPrimary!20, bordercolor=ThesisPrimary!60, shadow}
   \todostyle{MarieStyle}{author=Marie, color=ThesisSecondary!25, bordercolor=ThesisSecondary!70, shadow}
   \todostyle{FloraStyle}{author=Flora, color=ThesisAccent!25, bordercolor=ThesisAccent!70, shadow}
@@ -333,12 +361,12 @@
   \todostyle{BlancStyle}{color=ThesisBackground}
 
   % Détermination automatique de la couleur de surlignage assortie au profil si [couleur] est omis
-  \newcommand{\mythesis@resolve@todocolor}[1]{%
-    \def\mythesis@hlcolor{ThesisPrimary!22}%
-    \IfSubStr{#1}{Director}{\def\mythesis@hlcolor{ThesisSecondary!25}}{}%
-    \IfSubStr{#1}{Marie}{\def\mythesis@hlcolor{ThesisSecondary!25}}{}%
-    \IfSubStr{#1}{Reviewer}{\def\mythesis@hlcolor{ThesisAccent!25}}{}%
-    \IfSubStr{#1}{Flora}{\def\mythesis@hlcolor{ThesisAccent!25}}{}%
+  \newcommand{\ClasseGuillaume@resolve@todocolor}[1]{%
+    \def\ClasseGuillaume@hlcolor{ThesisPrimary!22}%
+    \IfSubStr{#1}{Director}{\def\ClasseGuillaume@hlcolor{ThesisSecondary!25}}{}%
+    \IfSubStr{#1}{Marie}{\def\ClasseGuillaume@hlcolor{ThesisSecondary!25}}{}%
+    \IfSubStr{#1}{Reviewer}{\def\ClasseGuillaume@hlcolor{ThesisAccent!25}}{}%
+    \IfSubStr{#1}{Flora}{\def\ClasseGuillaume@hlcolor{ThesisAccent!25}}{}%
   }
 
   \NewDocumentCommand{\todoH}{O{AuthorStyle} o m +m}{%
@@ -346,31 +374,31 @@
       #4%
     \else
       \IfNoValueTF{#2}{%
-        \mythesis@resolve@todocolor{#1}%
-        \def\mythesis@todoopts{#1}%
+        \ClasseGuillaume@resolve@todocolor{#1}%
+        \def\ClasseGuillaume@todoopts{#1}%
       }{%
-        \def\mythesis@hlcolor{#2}%
-        \def\mythesis@todoopts{#1, color=#2}%
+        \def\ClasseGuillaume@hlcolor{#2}%
+        \def\ClasseGuillaume@todoopts{#1, color=#2}%
       }%
       \IfSubStr{\detokenize{#3}}{\@backslashchar}{%
         % Commande LaTeX détectée (ex: \url) : pas de troncature, caption propre pour .tdo
-        \expandafter\todo\expandafter[\mythesis@todoopts, caption={\detokenize{#3}}]{#3}%
+        \expandafter\todo\expandafter[\ClasseGuillaume@todoopts, caption={\detokenize{#3}}]{#3}%
       }{%
         % Texte simple : troncature dynamique si > 30 caractères + infobulle interactive
         \StrLen{#3}[\longueurTexte]%
         \ifnum\longueurTexte>30
           \StrLeft{#3}{30}[\apercu]%
-          \expandafter\todo\expandafter[\mythesis@todoopts, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
+          \expandafter\todo\expandafter[\ClasseGuillaume@todoopts, caption={#3}]{\pdftooltip{\apercu...}{#3}}%
         \else
-          \expandafter\todo\expandafter[\mythesis@todoopts, caption={#3}]{\pdftooltip{#3}{#3}}%
+          \expandafter\todo\expandafter[\ClasseGuillaume@todoopts, caption={#3}]{\pdftooltip{#3}{#3}}%
         \fi
       }%
-      \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\mythesis@hlcolor]{#4}}%
+      \expandafter\hyperref\expandafter[\expandafter t\expandafter a\expandafter b\expandafter l\expandafter e\expandafter _\expandafter t\expandafter o\expandafter d\expandafter o\expandafter s\expandafter]\expandafter{\expandafter\highLight\expandafter[\ClasseGuillaume@hlcolor]{#4}}%
     \fi
   }
 
-  % Tableau de bord des révisions sécurisé (avec alias \tableDesTodos de ClasseGuillaume)
-  \NewDocumentCommand{\thesistodolist}{O{Tableau de Bord des Révisions et Tâches de Rédaction}}{%
+  % Tableau de bord des révisions sécurisé (avec alias \tableDesTodos)
+  \NewDocumentCommand{\thesistodolist}{O{\ClasseGuillaume@todolist@default}}{%
     \cleardoublepage
     \phantomsection
     \label{table_todos}%
@@ -387,7 +415,7 @@
 \fi
 
 % --- Configuration du style de code source externe (listings/) ---
-\lstdefinestyle{mythesiscode}{
+\lstdefinestyle{ClasseGuillaumecode}{
   basicstyle=\ttfamily\footnotesize,
   backgroundcolor=\color{ThesisBackground},
   keywordstyle=\color{ThesisPrimary}\bfseries,
@@ -407,7 +435,7 @@
   captionpos=b,
   keepspaces=true
 }
-\lstset{style=mythesiscode}
+\lstset{style=ClasseGuillaumecode}
 
 % --- Macros d'interactivité PDF intelligente : profil écran vs profil impression ---
 

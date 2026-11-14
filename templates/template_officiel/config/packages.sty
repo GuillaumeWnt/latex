@@ -3,7 +3,7 @@
 %% Appel et configuration centralisée des packages tiers
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{config/packages}[2026/11/12 v2.0 Packages Configuration for mythesis]
+\ProvidesPackage{config/packages}[2026/11/12 v2.0 Packages Configuration for ClasseGuillaume]
 
 % --- Détection du moteur et polices de caractères ---
 \RequirePackage{iftex}
@@ -44,7 +44,7 @@
     \newfontfamily{\CursorFont}{Latin Modern Mono}[Scale=MatchLowercase]%
   }%
 
-  % 3. Familles de polices de démonstration (compatibles ClasseGuillaume)
+  % 3. Familles de polices de démonstration
   \IfFontExistsTF{Libertinus Serif}{%
     \newfontfamily{\LibertinusFont}{Libertinus Serif}[Scale=MatchLowercase]%
   }{%
@@ -62,12 +62,12 @@
   }%
 
   % 4. Application de la police principale selon l'option de classe (font=...)
-  \ifdefstring{\mythesis@font}{libertinus}{%
+  \ifdefstring{\ClasseGuillaume@font}{libertinus}{%
     \IfFontExistsTF{Libertinus Serif}{%
       \setmainfont{Libertinus Serif}%
     }{}%
   }{}%
-  \ifdefstring{\mythesis@font}{heros}{%
+  \ifdefstring{\ClasseGuillaume@font}{heros}{%
     \IfFileExists{fonts/texgyreheros-regular.otf}{%
       \setmainfont{texgyreheros}[
         Path = fonts/,
@@ -81,7 +81,7 @@
       \setmainfont{TeX Gyre Heros}%
     }%
   }{}%
-  \ifdefstring{\mythesis@font}{calibri}{%
+  \ifdefstring{\ClasseGuillaume@font}{calibri}{%
     \IfFontExistsTF{Calibri}{%
       \setmainfont{Calibri}%
       \setsansfont{Calibri}%
@@ -98,7 +98,7 @@
       }{}%
     }%
   }{}%
-  \ifdefstring{\mythesis@font}{standard}{%
+  \ifdefstring{\ClasseGuillaume@font}{standard}{%
     % Conserve Latin Modern Roman par défaut
   }{}%
 \else\ifxetex
@@ -169,8 +169,12 @@
 \providecommand{\highLight}[2][yellow!30]{#2}
 
 % --- Langues et typographie internationale ---
-% Le français est déclaré en dernier pour être la langue par défaut
-\RequirePackage[english, french]{babel}
+% La langue active est déclarée en dernier à babel (french par défaut, ou english via option de classe)
+\ifClasseGuillaume@english
+  \RequirePackage[french, english]{babel}
+\else
+  \RequirePackage[english, french]{babel}
+\fi
 \global\let\warning@FBlegacylists\relax
 \@ifundefined{frenchsetup}{}{%
   \frenchsetup{
@@ -226,14 +230,25 @@
 
 % --- Grandeurs physiques et unités SI ---
 \RequirePackage{siunitx}
-\sisetup{
-  locale = FR,
-  detect-all = true,
-  group-minimum-digits = 4,
-  uncertainty-mode = separate,
-  range-phrase = { à },
-  range-units = single
-}
+\ifClasseGuillaume@english
+  \sisetup{
+    locale = US,
+    detect-all = true,
+    group-minimum-digits = 4,
+    uncertainty-mode = separate,
+    range-phrase = { to },
+    range-units = single
+  }
+\else
+  \sisetup{
+    locale = FR,
+    detect-all = true,
+    group-minimum-digits = 4,
+    uncertainty-mode = separate,
+    range-phrase = { à },
+    range-units = single
+  }
+\fi
 \DeclareSIUnit\iter{it}
 \DeclareSIUnit\bar{bar}
 
@@ -263,17 +278,30 @@
   skip = 4pt
 }
 
-% --- Flottant personnalisé KOMA-Script : Illustration (compatible ClasseGuillaume) ---
-\DeclareNewTOC[%
-  type=illustration,
-  types=illustrations,
-  float,
-  counterwithin=chapter,
-  name=Illustration,
-  listname={Liste des illustrations},
-  tocentrystyle=tocline,
-  tocentrydynnumwidth=true
-]{loi}
+% --- Flottant personnalisé KOMA-Script : Illustration ---
+\ifClasseGuillaume@english
+  \DeclareNewTOC[%
+    type=illustration,
+    types=illustrations,
+    float,
+    counterwithin=chapter,
+    name=Illustration,
+    listname={List of Illustrations},
+    tocentrystyle=tocline,
+    tocentrydynnumwidth=true
+  ]{loi}
+\else
+  \DeclareNewTOC[%
+    type=illustration,
+    types=illustrations,
+    float,
+    counterwithin=chapter,
+    name=Illustration,
+    listname={Liste des illustrations},
+    tocentrystyle=tocline,
+    tocentrydynnumwidth=true
+  ]{loi}
+\fi
 
 % --- Insertion propre de documents PDF multipages externes ---
 \RequirePackage{pdfpages}
@@ -356,9 +384,15 @@
 \RequirePackage{bookmark}
 
 % Référencement croisé intelligent (doit impérativement être chargé après hyperref)
-\RequirePackage[capitalise, noabbrev, french]{cleveref}
-\crefname{appendix}{annexe}{annexes}
-\Crefname{appendix}{Annexe}{Annexes}
+\ifClasseGuillaume@english
+  \RequirePackage[capitalise, noabbrev, english]{cleveref}
+  \crefname{appendix}{appendix}{appendices}
+  \Crefname{appendix}{Appendix}{Appendices}
+\else
+  \RequirePackage[capitalise, noabbrev, french]{cleveref}
+  \crefname{appendix}{annexe}{annexes}
+  \Crefname{appendix}{Annexe}{Annexes}
+\fi
 % Bascule automatique du compteur chapter vers appendix dans cleveref lors de \appendix
 \AddToHook{cmd/appendix/after}{\crefalias{chapter}{appendix}}
 

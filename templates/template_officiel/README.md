@@ -13,13 +13,15 @@ mon-projet/
 ├── main.tex                 # Point d'entrée unique (le chef d'orchestre du document)
 ├── latexmkrc                # Automatisation de compilation (LuaLaTeX + Biber + outdir=build)
 ├── .editorconfig            # Standardisation de l'indentation (2 espaces) et UTF-8
-├── .chktexrc                # Linter typographique (contrôle des espaces insécables ~)
+├── .chktexrc                # Linter typographique français (espaces insécables ~, -n26)
+├── .chktexrc-en             # Linter typographique anglais (contrôle strict sans -n26)
 ├── .gitignore               # Exclusion des fichiers temporaires de compilation
+├── .aiexclude / .claudeignore / .geminiignore # Exclusions IA (PDF et logs conservés lisibles)
 ├── README.md                # Documentation architecturale et guide d'utilisation
 │
-├── mythesis.cls             # CLASSE : architecture globale, métadonnées, KOMA-Script
-├── mythesis-print.clo       # OPTION DE CLASSE : profil impression papier & reliure (BCOR, monochrome)
-├── mythesis-screen.clo      # OPTION DE CLASSE : profil écran & liseuse (marges symétriques, hyperliens)
+├── ClasseGuillaume.cls             # CLASSE : architecture globale, métadonnées, KOMA-Script
+├── ClasseGuillaume-print.clo       # OPTION DE CLASSE : profil impression papier & reliure (BCOR, monochrome)
+├── ClasseGuillaume-screen.clo      # OPTION DE CLASSE : profil écran & liseuse (marges symétriques, hyperliens)
 │
 ├── config/
 │   ├── packages.sty         # STYLE : appel et configuration fine des paquets tiers
@@ -119,9 +121,19 @@ latexmk -C    # Supprime également le fichier PDF produit dans build/
 Dans `main.tex`, modifiez simplement la première ligne :
 - **Pour la lecture numérique interactive :**
   ```latex
-  \documentclass[screen]{mythesis}  % Marges symétriques, palette contrastée, hyperliens colorés
+  \documentclass[screen]{ClasseGuillaume}  % Marges symétriques, palette contrastée, hyperliens colorés
   ```
 - **Pour l'impression papier reliée :**
   ```latex
-  \documentclass[print]{mythesis}   % Recto-verso, décalage BCOR=10mm, liens monochromes
+  \documentclass[print]{ClasseGuillaume}   % Recto-verso, décalage BCOR=10mm, liens monochromes
   ```
+
+## 5. Rédiger un Projet en Anglais (`english`)
+
+La langue par défaut de la classe est le français (`french`). Pour un document principal en anglais :
+1. Passez l'option `english` dans `main.tex` :
+   ```latex
+   \documentclass[screen, english]{ClasseGuillaume}
+   ```
+   Cela inverse automatiquement la langue principale dans `babel` (`[french, english]`), passe `siunitx` en `locale = US` (`range-phrase = { to }`), bascule `cleveref` et les libellés des boîtes (`callout`, `attentionbox`, `hypothesis`, `definitionbox`, `Illustration`, `todonotes` et pied de page debug) en anglais.
+2. Remplacez `.chktexrc` par `.chktexrc-en` (ou lancez `lint-latex.ps1 -RunChkTeX` qui détecte `english` dans `main.tex`) afin que `chktex` vérifie l'absence d'espace avant `: ; ? !`.

@@ -48,7 +48,7 @@ Select-String -Path "build\main.log" -Pattern "^!|LaTeX Warning:|Package .* Warn
 ## 4. Linting Statique & Formatage
 
 ```powershell
-# Contrôle ChkTeX (s'appuie automatiquement sur le .chktexrc local)
+# Contrôle ChkTeX (s'appuie automatiquement sur .chktexrc, ou .chktexrc-en -w26 en anglais)
 chktex -q -v0 main.tex content\*.tex backmatter\*.tex frontmatter\*.tex
 
 # Audit typographique du dépôt (.agents)

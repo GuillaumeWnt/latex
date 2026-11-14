@@ -7,7 +7,7 @@
 ## 1. Cycle de Vie des Projets & Rétroportage (`templates/template_officiel/`)
 
 1. **Modèle unique pour tout nouveau projet :**
-   - Tout nouveau projet doit être créé sous `projets/<nom_projet>/` en reprenant intégralement la structure, la classe (`mythesis.cls`, `mythesis-screen.clo`, `mythesis-print.clo`), la configuration (`config/packages.sty`, `config/macros.sty`) et l'outillage (`latexmkrc`, `.chktexrc`, `.editorconfig`, `.gitignore`) de [`templates/template_officiel/`](file:///c:/Users/guill/dev/perso/latex/general/templates/template_officiel/README.md).
+   - Tout nouveau projet doit être créé sous `projets/<nom_projet>/` en reprenant intégralement la structure, la classe (`ClasseGuillaume.cls`, `ClasseGuillaume-screen.clo`, `ClasseGuillaume-print.clo`), la configuration (`config/packages.sty`, `config/macros.sty`) et l'outillage (`latexmkrc`, `.chktexrc`, `.editorconfig`, `.gitignore`) de [`templates/template_officiel/`](file:///c:/Users/guill/dev/perso/latex/general/templates/template_officiel/README.md).
    - Les autres modèles présents dans [`templates/`](file:///c:/Users/guill/dev/perso/latex/general/templates) (`template_principal/`, `BE_mecanique/`, `labo_PID/`, etc.) sont conservés comme archives ou références ponctuelles ; ne jamais répliquer leurs pratiques obsolètes.
 2. **Rétroportage systématique vers `template_officiel` :**
    - Toute nouvelle fonctionnalité, macro générique, amélioration typographique/architecturale ou correction de bug développée sur un projet dérivé **doit également être rétroportée dans `templates/template_officiel/`** (de façon neutre et réutilisable, sans y importer de contenu propre au projet).
@@ -28,12 +28,12 @@
 
 1. **Séparation stricte contenu / présentation :**
    - Contenu rédactionnel pur dans `content/`, `frontmatter/`, `backmatter/` ; aucune configuration de géométrie, de police ou de package dans les chapitres.
-   - Packages et macros métier centralisés dans `config/packages.sty`, `config/macros.sty` et `mythesis.cls`.
+   - Packages et macros métier centralisés dans `config/packages.sty`, `config/macros.sty` et `ClasseGuillaume.cls`.
 2. **Syntaxe moderne obligatoire :**
    - Commandes sémantiques (`\textbf`, `\emph`, `\code`, `\term`) et jamais `{\bf}`, `{\it}`, `{\tt}`.
    - Maths AMS (`\[ ... \]`, `equation`, `align`), jamais `$$ ... $$`.
    - Tableaux avec `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) et `tabularx`, **sans jamais de filets verticaux `|` ni de `\hline`**.
-   - Références croisées via `cleveref` (`~\cref{}`, `\Cref{}`, `~\cpageref{}`) et citations BibLaTeX/Biber (`~\parencite{}`, `\textcite{}`) précédées d'une espace insécable `~`.
+   - Références croisées via `cleveref` (`~\cref{}`, `\Cref{}`, `~\cpageref{}`) et bibliographie BibLaTeX/Biber (style et commande libres selon le projet : `~\autocite{}`, `~\parencite{}`, `~\cite{}`, `\textcite{}`, `~\supercite{}`, avec espace insécable `~` devant les citations non-sujets).
    - Unités via `siunitx` v3 (`\qty`, `\qtyrange`, `\num`).
 3. **Formatage Git-friendly :**
    - Sauts de ligne sémantiques (une phrase ou clause par ligne) et indentation à 2 espaces.
@@ -53,5 +53,5 @@
 | [`.agents/rules/testing.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/testing.md) | Compilation LuaLaTeX, contrôle 0 erreur / avertissements minimaux, `chktex` |
 | [`.agents/rules/security.md`](file:///c:/Users/guill/dev/perso/latex/general/.agents/rules/security.md) | Restriction `-shell-escape` et hygiène des métadonnées / `.bib` |
 | [`.agents/workflows/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/workflows) | Procédures (`new-project.md`, `markdown-to-latex.md`, `build-and-verify.md`) |
-| [`.agents/skills/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/skills) | Skills spécialisés (`markdown-to-latex`, `latex-document-manager`, `latex-quality-auditor`, `visual-diagrams`, `zotero-biblio`, `project-memory`) |
-| [`.agents/subagents/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/subagents) | Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, mémoire) |
+| [`.agents/skills/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/skills) | Skills spécialisés (`markdown-to-latex`, `latex-document-manager`, `latex-quality-auditor`, `visual-diagrams`, `zotero-biblio`) |
+| [`.agents/subagents/`](file:///c:/Users/guill/dev/perso/latex/general/.agents/subagents) | Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille) |

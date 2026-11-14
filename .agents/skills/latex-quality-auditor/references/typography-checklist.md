@@ -11,7 +11,7 @@
 ---
 
 ## 2. Ponctuation, Citations & Unités
-- [ ] Espace insécable `~` avant toute citation (`~\parencite{...}`, `~\cite{...}`, `~\textcite{...}`).
+- [ ] Espace insécable `~` avant les citations en ligne (`~\autocite{...}`, `~\parencite{...}`, `~\cite{...}`, `~\supercite{...}` — hors `\textcite{...}` en position sujet).
 - [ ] Espace insécable `~` avant tout renvoi (`~\cref{...}`, `~\Cref{...}`, `~\cpageref{...}`).
 - [ ] Unités et nombres via `siunitx` v3 (`\qty{25}{\celsius}`, `\qtyrange{10}{20}{\kilo\gram}`, `\qty{10}{\percent}`).
 - [ ] Guillemets via `\enquote{...}` (`csquotes`), jamais de guillemets droits `"..."`.

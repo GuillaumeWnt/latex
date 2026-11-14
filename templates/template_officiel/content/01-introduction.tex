@@ -38,7 +38,7 @@ Chaque composant du projet se voit assigner une responsabilité unique et étanc
   \item \textbf{L'orchestration générale (\code{main.tex}) :}
   il ne définit aucun style visuel, mais se contente d'appeler les blocs dans l'ordre logique
   (préliminaires, chapitres, annexes, bibliographie).
-  \item \textbf{L'architecture et l'identité de classe (\code{mythesis.cls}) :}
+  \item \textbf{L'architecture et l'identité de classe (\code{ClasseGuillaume.cls}) :}
   elle encapsule la classe de base KOMA-Script (\code{scrbook}),
   les métadonnées institutionnelles et la hiérarchie typographique globale.
   \item \textbf{Les profils cibles de diffusion (\code{*.clo}) :}
@@ -69,10 +69,10 @@ L'arborescence qui pilote ce document est organisée de manière hiérarchique e
 \begin{description}
   \item[\code{main.tex}] Le point d'entrée unique soumis au compilateur.
   C'est le seul fichier que l'utilisateur modifie pour activer un chapitre ou basculer de profil.
-  \item[\code{mythesis.cls}] Le fichier de classe personnalisé.
+  \item[\code{ClasseGuillaume.cls}] Le fichier de classe personnalisé.
   Il hérite de \code{scrbook} et charge l'option adéquate (\code{.clo}).
-  \item[\code{mythesis-screen.clo}] Profil dédié à la lecture sur écran, tablette ou liseuse.
-  \item[\code{mythesis-print.clo}] Profil dédié à l'impression papier et à la reliure d'art.
+  \item[\code{ClasseGuillaume-screen.clo}] Profil dédié à la lecture sur écran, tablette ou liseuse.
+  \item[\code{ClasseGuillaume-print.clo}] Profil dédié à l'impression papier et à la reliure d'art.
   \item[\code{config/packages.sty}] Chargement ordonné des extensions tierces
   (détection du moteur, langues, mathématiques, tableaux, TikZ).
   \item[\code{config/macros.sty}] Bibliothèque de commandes métier, raccourcis de calcul et environnements d'enrichissement.

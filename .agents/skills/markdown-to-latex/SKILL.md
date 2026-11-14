@@ -14,9 +14,9 @@ Cette compétence permet de transformer un document ou brouillon **Markdown** (r
 
 ---
 
-## 1. Prérequis & Cible
+## 1. Prérequis, Arborescence & Cible
 
-1. Identifier le projet cible sous `projets/<nom_projet>/` (conforme à `templates/template_officiel/`). S'il n'existe pas encore, suivre le workflow [`new-project.md`](../../workflows/new-project.md).
+1. **Arborescence obligatoire conforme à `templates/template_officiel/` :** tout nouveau document issu d'une conversion Markdown doit vivre dans `projets/<nom_projet>/` avec la structure complète du modèle officiel (`main.tex`, `ClasseGuillaume.cls`, `ClasseGuillaume-screen.clo`, `ClasseGuillaume-print.clo`, `config/`, `content/`, `frontmatter/`, `backmatter/`, `biblio/`, `figures/`, `listings/`, `fonts/`, `latexmkrc`, `.chktexrc`, `.chktexrc-en`, `.editorconfig`, `.gitignore`). Si `projets/<nom_projet>/` n'existe pas encore, exécuter d'abord [`new-project.md`](../../workflows/new-project.md) ; ne jamais générer un document `.tex` autonome hors de ce socle. Si le document cible est en anglais, passer l'option `english` dans `\documentclass[screen, english]{ClasseGuillaume}` et remplacer `.chktexrc` par `.chktexrc-en`.
 2. Déterminer le niveau d'insertion :
    - **Chapitre autonome :** `projets/<nom_projet>/content/XX-titre.tex` (commençant par `\chapter{...}` + `\label{ch:...}`, inclus par `\include{...}` dans `main.tex`).
    - **Sous-partie modulaire :** `projets/<nom_projet>/content/<sous-fichier>.tex` (commençant par `\section{...}` + `\label{sec:...}`, inclus par `\input{...}`).
@@ -34,7 +34,7 @@ Cette compétence permet de transformer un document ou brouillon **Markdown** (r
 - Consulter la table complète dans [`references/mapping-syntaxe.md`](./references/mapping-syntaxe.md).
 - Distinguer l'emphase simple (`\emph{...}`) des notions clés à indexer visuellement (`\term{...}`), du code inline (`\code{...}` ou `\texttt{...}`) et des citations textuelles (`\enquote{...}`).
 - Transformer systématiquement les valeurs chiffrées et grandeurs physiques (`15 km`, `98,5 %`, `10 à 20 ms`) via `\qty{15}{\kilo\metre}`, `\qty{98.5}{\percent}`, `\qtyrange{10}{20}{\milli\second}` ou `\num{...}`.
-- Protéger les espaces insécables `~` devant les appels de citations `~\parencite{...}` et références `~\cref{...}` (sauf `\textcite{...}` et `\Cref{...}` intégrés en sujet).
+- Protéger les espaces insécables `~` devant les appels de citations en ligne (`~\autocite{...}`, `~\parencite{...}`, `~\cite{...}`, `~\supercite{...}`) et les renvois (`~\cref{...}`), hors `\textcite{...}` et `\Cref{...}` intégrés en sujet.
 - Échapper les caractères réservés (`%`, `&`, `#`, `_`, `$`) dans le texte courant ; vérifier lors de la compilation qu'aucun `_` non échappé ne provoque d'erreur mathématique.
 
 ### Étape 3 — Transformation des encadrés, alertes et synthèses
@@ -48,13 +48,13 @@ Convertir les blocs d'alerte GitHub (`> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`, `>
 ### Étape 4 — Mathématiques, Tableaux, Code & Diagrammes
 - **Mathématiques :** convertir strictement `$$ ... $$` en `\[ ... \]` (hors numérotation) ou `\begin{equation}...\label{eq:...}\end{equation}` / `align` (si référencée). Utiliser `\vect{}`, `\mat{}`, `\setR`, `\abs{}`, `\norm{}`, `\diff`, etc.
 - **Tableaux Markdown :** convertir en `\begin{table}[htbp]` + `\caption{...}` **au-dessus** + `\label{tab:...}` + `\begin{tabularx}{\textwidth}{...}` + `booktabs` (`\toprule`, `\midrule`, `\bottomrule`, `\addlinespace`), colonnes `L{w}`, `C{w}`, `R{w}`, `Y`, `S` (`siunitx`). **Aucun filet vertical `|`.**
-- **Blocs de code :** convertir en `lstlisting` (style `mythesiscode`, avec `language`, `caption`, `label={lst:...}`). Externaliser dans `listings/` via `\lstinputlisting` si > 35 lignes.
+- **Blocs de code :** convertir en `lstlisting` (style `ClasseGuillaumecode`, avec `language`, `caption`, `label={lst:...}`). Externaliser dans `listings/` via `\lstinputlisting` si > 35 lignes.
 - **Diagrammes Mermaid / ASCII :** convertir vers **TikZ natif** (`figures/tikz/<nom>.tex`) ou **Draw.io** (`figures/<nom>.drawio` + export `.pdf`), encapsulé dans `\begin{figure}[htbp]` + `\begin{cadreFigure}[width=...] ... \end{cadreFigure}` + `\caption{...}\label{fig:...}` (voir skill `visual-diagrams`).
 - **Images :** placer les fichiers dans `figures/` et utiliser `\includegraphics` dans une `figure` (avec `cadreFigure` si bordure souhaitée).
 
 ### Étape 5 — Références, Notes éditoriales & Mise en forme Git
 - Convertir les mentions `[Voir sec. X]` / `[Figure 2]` en `~\cref{...}` / `\Cref{...}`.
-- Convertir les citations `[@cle]` en `~\parencite{cle}` ou `\textcite{cle}`, et vérifier la présence des clés dans `biblio/references.bib`.
+- Convertir les citations `[@cle]` via BibLaTeX selon le style du projet (`~\autocite{cle}`, `~\parencite{cle}`, `~\cite{cle}`, `\textcite{cle}` ou `~\supercite{cle}`), et vérifier la présence des clés dans `biblio/references.bib`.
 - Transformer les commentaires de brouillon (`TODO:`, `NOTE auteur:`) en `\todoH{commentaire}{texte}` ou `\noteMarge{note}`.
 - Formater avec **sauts de ligne sémantiques** (une phrase/clause par ligne) et **indentation à 2 espaces**.
 

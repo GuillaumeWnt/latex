@@ -4,13 +4,17 @@
 .PARAMETER TargetDir
     Dossier contenant les fichiers .tex à auditer. Défaut : répertoire courant.
 .PARAMETER RunChkTeX
-    Exécute également chktex (en s'appuyant sur .chktexrc s'il existe dans TargetDir).
+    Exécute également chktex (en s'appuyant sur .chktexrc ou .chktexrc-en selon la langue du projet).
+.PARAMETER Language
+    Langue typographique pour ChkTeX : auto (détecte l'option english dans main.tex), french ou english.
 #>
 
 [CmdletBinding()]
 param (
     [string]$TargetDir = ".",
-    [switch]$RunChkTeX
+    [switch]$RunChkTeX,
+    [ValidateSet("auto", "french", "english")]
+    [string]$Language = "auto"
 )
 
 if (-not (Test-Path $TargetDir)) {
@@ -115,8 +119,27 @@ if ($RunChkTeX) {
         Write-Host "`n--- Exécution de ChkTeX ---" -ForegroundColor Cyan
         Push-Location $TargetDir
         try {
+            $detectedLanguage = $Language
+            if ($detectedLanguage -eq "auto") {
+                $detectedLanguage = "french"
+                if (Test-Path "main.tex") {
+                    $nonCommentMain = (Get-Content -Path "main.tex" -Encoding UTF8 | Where-Object { $_ -notmatch '^\s*%' }) -join "`n"
+                    if ($nonCommentMain -match '\\documentclass\[[^\]]*\benglish\b[^\]]*\]') {
+                        $detectedLanguage = "english"
+                    }
+                }
+            }
+
             $chkArgs = @("-q", "-v0")
-            if (Test-Path ".chktexrc") {
+            if ($detectedLanguage -eq "english") {
+                if (Test-Path ".chktexrc-en") {
+                    $chkArgs += @("-l", ".chktexrc-en")
+                } elseif (Test-Path ".chktexrc") {
+                    $chkArgs += @("-l", ".chktexrc")
+                }
+                # Force la détection -w26 (espace avant : ; ? !) même si .chktexrc global/local contient -n26
+                $chkArgs += "-w26"
+            } elseif (Test-Path ".chktexrc") {
                 $chkArgs += @("-l", ".chktexrc")
             }
 

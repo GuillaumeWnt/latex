@@ -125,8 +125,8 @@ def gain(kp: float) -> float:
 
 | Markdown | LaTeX (`template_officiel`) |
 | :--- | :--- |
-| `(Dupont, 2024)` / `[@dupont2024]` | `~\parencite{dupont2024}` |
-| `Dupont (2024) montre...` | `\textcite{dupont2024} montre...` |
+| `(Dupont, 2024)` / `[@dupont2024]` | `~\autocite{dupont2024}` *(ou `~\parencite`, `~\cite`, `~\supercite` selon le style)* |
+| `Dupont (2024) montre...` | `\textcite{dupont2024} montre...` *(sujet grammatical sans `~`)* |
 | `voir figure 3` / `tableau 1` | `voir~\cref{fig:schema}` / `~\cref{tab:resultats}` |
 | `La figure 3 montre...` *(début de phrase)* | `\Cref{fig:schema} montre...` |
 | `voir page 14` | `voir~\cpageref{sec:methode}` |

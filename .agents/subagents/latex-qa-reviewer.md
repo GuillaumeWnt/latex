@@ -18,8 +18,8 @@ Auditer les fichiers `.tex` et `.bib` vis-à-vis des règles du workspace ([`cod
    - Compilation `latexmk` + inspection de `build/main.log` (erreurs, `Warning`, `Overfull \hbox`).
 2. **Points de vigilance prioritaires :**
    - **Syntaxe moderne :** aucune commande obsolète (`{\bf}`, `{\it}`, `$$...$$`, `\hline` brut, filet vertical `|`).
-   - **Sémantique `template_officiel` :** usage effectif de `\term`, `\code`, `\enquote`, `\qty`/`\num`, `callout`, `attentionbox`, `definitionbox`, `hypothesis`, `boiteSynthese`, `cadreFigure`, `tabularx` (`L`/`C`/`R`/`Y`), `~\cref`/`\Cref`, `~\parencite`/`\textcite`.
-   - **Typographie française & Git :** espace insécable `~` devant `\parencite` et `\cref` (hors début de phrase `\Cref`), sauts de ligne sémantiques, indentation 2 espaces, `\caption` au-dessus des tableaux et sous les figures.
+   - **Sémantique `template_officiel` :** usage effectif de `\term`, `\code`, `\enquote`, `\qty`/`\num`, `callout`, `attentionbox`, `definitionbox`, `hypothesis`, `boiteSynthese`, `cadreFigure`, `tabularx` (`L`/`C`/`R`/`Y`), `~\cref`/`\Cref`, citations BibLaTeX (`\autocite`, `\parencite`, `\cite`, `\textcite`, `\supercite`).
+   - **Typographie française & Git :** espace insécable `~` devant les citations en ligne (hors `\textcite` sujet) et devant `\cref` (hors début de phrase `\Cref`), sauts de ligne sémantiques, indentation 2 espaces, `\caption` au-dessus des tableaux et sous les figures.
    - **Hygiène finale :** repérer les `\todoH{...}` ou `\noteMarge{...}` oubliés avant livraison.
 
 ---
