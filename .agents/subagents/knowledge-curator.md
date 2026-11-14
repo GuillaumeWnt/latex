@@ -14,7 +14,7 @@ Maintenir la cohérence terminologique, éditoriale et architecturale du workspa
 ---
 
 ## Outils mobilisables
-- **Système de fichiers & recherche locale** : `docs/*.md`, `plan.md`, `AGENTS.md`, `content/*.tex`, `backmatter/glossary.tex`, `biblio/references.bib`.
+- **Système de fichiers & recherche locale** : `docs/*.md` (dont `plan.md` et `historique.md`), `AGENTS.md`, `content/*.tex`, `backmatter/glossary.tex`, `biblio/references.bib`.
 - **`brave-search`** (`brave_web_search`) : vérification d'options de packages CTAN, diagnostics LuaLaTeX et recherche de métadonnées DOI/normes.
 
 ---

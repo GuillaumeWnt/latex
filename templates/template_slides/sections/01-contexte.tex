@@ -1,54 +1,74 @@
 %% ==============================================================================
-%% sections/01-contexte.tex — Principes éditoriaux et architecture
+%% sections/01-contexte.tex
+%% Section 1 : Vision esthétique et architecture modulaire (compositions ouvertes)
 %% ==============================================================================
-\section{Principes Éditoriaux}
 
-\begin{frame}{Rupture volontaire avec le rendu Beamer traditionnel}
-  \framesubtitle{Privilégier la hiérarchie visuelle, l'air typographique et la lisibilité}
+\section{Vision \& Architecture}
 
-  \begin{columns}[T, totalwidth=\textwidth]
-    \begin{column}{0.48\textwidth}
-      \begin{alertcard}{\faTimesCircle\enspace À proscrire}
-        \begin{itemize}
-          \item Bandeaux pleins sombres et bordures lourdes
-          \item Ombres portées datées des années 2000
-          \item Paragraphes denses ($> 50$ mots par vue)
-          \item Symboles de navigation superflus en pied de page
-        \end{itemize}
-      \end{alertcard}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{slidecard}{\faCheckCircle\enspace Approche éditoriale 16:9}
-        \begin{itemize}
-          \item Toile blanche pure (ou ardoise en \code{theme=dark})
-          \item Titre-action affirmé et surtitre discret
-          \item Palette unifiée avec \code{ClasseGuillaume}~\autocite{bringhurst2004elements}
-          \item Barre de progression fine et pagination sobre
-        \end{itemize}
-      \end{slidecard}
-    \end{column}
-  \end{columns}
-
-  \takeaway{\textbf{Idée directrice :} chaque diapositive transmet un seul message clair, vérifié en moins de \qty{5}{\second} de lecture.}
-\end{frame}
-
-\begin{frame}{Deux modes de déploiement sans duplication des sources}
-  \framesubtitle{De la présentation autonome à la soutenance adossée au mémoire}
+% ------------------------------------------------------------------------------
+% Vue 1 : Grille ouverte 2x2 sans boîtes + aperçu incliné
+% ------------------------------------------------------------------------------
+\begin{frame}{Rupture visuelle dès la première vue}
+  \framesubtitle{Remplacer les rectangles systématiques par une hiérarchie ouverte et respirante.}
 
   \begin{columns}[c, totalwidth=\textwidth]
-    \begin{column}{0.58\textwidth}
-      \begin{cadreFigure}
-        \includestandalone[width=0.98\linewidth]{figures/tikz/architecture-slides}
-      \end{cadreFigure}
+    \begin{column}{0.51\textwidth}
+      \begin{minipage}[t]{0.47\linewidth}
+        \stepitem[square][SlideFillPrimary]{01}{Zéro lourdeur}{%
+          Fin des cadres gris répétés autour de chaque bloc d'information.%
+        }
+      \end{minipage}\hfill
+      \begin{minipage}[t]{0.47\linewidth}
+        \stepitem[square][SlideFillSecondary]{02}{Respiration réelle}{%
+          Des marges généreuses et des blancs actifs qui guident la lecture.%
+        }
+      \end{minipage}
+
+      \par\vspace*{0.20cm}
+
+      \begin{minipage}[t]{0.47\linewidth}
+        \stepitem[square][SlideFillAccent]{03}{Rythme varié}{%
+          Chaque diapositive adopte un gabarit distinct selon son propos.%
+        }
+      \end{minipage}\hfill
+      \begin{minipage}[t]{0.47\linewidth}
+        \stepitem[square][SlideFillPrimary]{04}{100\,\% Vectoriel}{%
+          Schémas TikZ, courbes PGFPlots et icônes nets à toute échelle.%
+        }
+      \end{minipage}
     \end{column}
-    \begin{column}{0.39\textwidth}
-      \begin{slidecard}{Mode autonome}
-        Copie dédiée dans \code{projets/<deck>/} pour séminaires ou cours indépendants.
-      \end{slidecard}
-      \vspace*{0.25cm}
-      \begin{slidecard}{Mode \code{integrated}}
-        Placé dans \code{<projet>/slides/} : réutilise directement \code{../figures/}, \code{../biblio/} et \code{../data/}.
-      \end{slidecard}
+
+    \begin{column}{0.45\textwidth}
+      \centering
+      \tiltframe[-3.0]{\resizebox{4.55cm}{!}{\includestandalone{apercu-studio}}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Vue 2 : Colonne vertébrale verticale + panneau visuel découpé en diagonale
+% ------------------------------------------------------------------------------
+\begin{frame}{Architecture modulaire à double déploiement}
+  \framesubtitle{Un socle unique pilotant aussi bien un deck autonome qu'un sous-dossier de rapport.}
+
+  \begin{columns}[c, totalwidth=\textwidth]
+    \begin{column}{0.50\textwidth}
+      \begin{railpoints}[1.48cm]
+        \railpoint[SlideFillPrimary]{01}{Séparation fond et forme}{%
+          Le texte reste isolé dans \code{sections/*.tex}, sans aucune directive graphique invasive.%
+        }
+        \railpoint[SlideFillSecondary]{02}{Mode autonome ou intégré}{%
+          Bascule transparente vers \code{../figures/} et \code{../data/} via l'option \code{integrated}.%
+        }
+        \railpoint[SlideFillAccent]{03}{Contrôle qualité automatisé}{%
+          Compilation \LuaLaTeX{} froide, audit \code{chktex} et palettes contrastées clair/sombre.%
+        }
+      \end{railpoints}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      \centering
+      \diagonalpanel[6.1cm][4.85cm]{\resizebox{4.75cm}{!}{\includestandalone{architecture-slides}}}
     \end{column}
   \end{columns}
 \end{frame}

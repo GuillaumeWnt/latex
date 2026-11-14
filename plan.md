@@ -1,7 +1,6 @@
 # Plan d'Exécution — Demande Courante
 
-- [x] Centraliser les exclusions IA universelles dans les configurations globales (`C:\Users\guill\.claude\settings.json`, `C:\Users\guill\.gitignore_global`, VS Code `search.exclude`) et nettoyer les `.aiexclude`/`.claudeignore`/`.geminiignore` locaux sans exposer `.env` sous Antigravity/Gemini
-- [ ] Créer le socle autonome `templates/template_slides/` (`ClasseGuillaumeSlides.cls`, `config/slides-packages.sty`, `config/slides-macros.sty`, `latexmkrc`, `.chktexrc`, `.chktexrc-en`, sections de démonstration, polices/figures/biblio et `README.md`) avec rendu éditorial moderne 16:9 (`light`/`dark`, `french`/`english`, `integrated`)
-- [ ] Intégrer et tester le mode sous-projet lié `templates/template_officiel/slides/` (`integrated`, partage direct de `../figures/`, `../biblio/`, `../fonts/`, `../data/`, `../listings/` et `build/` isolé) + mettre à jour `templates/template_officiel/` (`README.md`, `appendix-a.tex`, `.gitignore`)
-- [ ] Ajouter la configuration IA complète pour les slides et la génération depuis document LaTeX (skill `.agents/skills/latex-slides/`, workflows `new-slides.md` et `latex-to-slides.md`, prompt `.github/prompts/latex-to-slides.prompt.md`, mise à jour de `AGENTS.md`, `rules/`, `lint-latex.ps1` et sous-agents)
-- [ ] Valider les compilations LuaLaTeX (`template_slides` FR/EN, `template_officiel/slides` intégré, `template_officiel` principal), `lint-latex.ps1 -RunChkTeX`, l'inspection visuelle des PDF, et mettre à jour `docs/compte-rendu-et-reponses.md` et `historique.md`
+- [x] Déplacer `docs/exemples-slides/` vers `templates/exemples-slides/`, exclure ce dossier dans `.gitignore` et mettre à jour les liens dans le skill `latex-slides` et `docs/compte-rendu-et-reponses.md`
+- [x] Modifier la règle globale (`C:\Users\guill\.agents\AGENTS.md`, `rules/01-git-et-planification.md`, `plugin.json`) pour placer `plan.md` et `historique.md` dans `docs/`, et exécuter `deploy-and-sync-global.ps1`
+- [ ] Déplacer `plan.md` → `docs/plan.md` et `historique.md` → `docs/historique.md`, et mettre à jour toutes les références locales (`AGENTS.md`, `knowledge-curator.md`, `docs/compte-rendu-et-reponses.md`)
+- [ ] Vérifier `git status --ignored` (non-suivi des exemples tout en gardant les `*.png` des projets suivis) et valider la cohérence globale des liens/règles

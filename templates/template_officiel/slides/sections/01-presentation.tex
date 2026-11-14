@@ -4,26 +4,39 @@
 \section{Architecture Partagée}
 
 \begin{frame}{Source unique de vérité entre mémoire et diapositives}
-  \framesubtitle{Le schéma vectoriel \code{schema-principe} est inclus directement depuis \code{../figures/tikz/}}
+  \framesubtitle{Le schéma \code{schema-principe} est chargé directement depuis \code{../figures/tikz/}.}
 
   \begin{columns}[c, totalwidth=\textwidth]
-    \begin{column}{0.59\textwidth}
-      \begin{cadreFigure}
-        \includestandalone[width=0.96\linewidth, height=3.85cm, keepaspectratio]{\slideasset{figures/tikz/schema-principe}}
-      \end{cadreFigure}
+    \begin{column}{0.55\textwidth}
+      \centering
+      \tiltframe[-2.2]{\resizebox{6.9cm}{!}{\includestandalone{\slideasset{figures/tikz/schema-principe}}}}
     \end{column}
-    \begin{column}{0.38\textwidth}
-      \begin{slidecard}{Zéro duplication}
-        \begin{itemize}
-          \item Figures et TikZ lus dans \code{../figures/}
-          \item Bibliographie partagée (\code{../biblio/})
-          \item Sortie isolée dans \code{slides/build/}
-        \end{itemize}
-      \end{slidecard}
-      \vspace*{0.06cm}
-      \begin{callout}[Cohérence garantie]
-        Toute mise à jour du parent se répercute ici~\autocite{kohm2024koma}.
-      \end{callout}
+    \begin{column}{0.42\textwidth}
+      \begin{railpoints}[1.36cm]
+        \railpoint[SlideFillPrimary]{01}{Figures parentes}{%
+          Lecture directe dans \code{../figures/} sans copier les sources.%
+        }
+        \railpoint[SlideFillSecondary]{02}{Bibliographie unique}{%
+          Citations synchronisées sur \code{../biblio/}~\autocite{kohm2024koma}.%
+        }
+        \railpoint[SlideFillAccent]{03}{Compilation isolée}{%
+          Fichiers auxiliaires séparés dans \code{slides/build/}.%
+        }
+      \end{railpoints}
     \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}{Chaîne de synchronisation du mode intégré}
+  \framesubtitle{Résolution transparente des ressources partagées avec le document principal.}
+
+  \vspace*{0.20cm}
+  \begin{processline}[Option integrated]
+    \processstep[SlideFillPrimary]{01}{Visuels}{Lecture directe des schémas TikZ et figures dans \code{../figures/}.}
+    \processstep[SlideFillSecondary]{02}{Données}{Courbes tracées en direct sur les CSV de \code{../data/}.}
+    \processstep[SlideFillAccent]{03}{Code source}{Extraits ciblés sur les scripts testés de \code{../listings/}.}
+  \end{processline}
+
+  \vfill
+  \sourcenote{Architecture documentaire modulaire et standards éditoriaux : \textcite{mittelbach2023latex, kohm2024koma}.}
 \end{frame}

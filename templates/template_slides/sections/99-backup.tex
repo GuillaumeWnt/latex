@@ -1,17 +1,31 @@
 %% ==============================================================================
-%% sections/99-backup.tex — Diapositives de réserve (hors compteur principal)
+%% sections/99-backup.tex
+%% Diapositives de réserve et références bibliographiques (\appendix)
 %% ==============================================================================
-\begin{frame}{Annexe — Références bibliographiques}
-  \framesubtitle{Diapositive exclue du décompte total grâce à \code{appendixnumberbeamer}}
-  \printbibliography[heading=none]
+
+\begin{frame}{Annexe — Options de \code{ClasseGuillaumeSlides v2.0}}
+  \framesubtitle{Synthèse des paramètres disponibles directement en option de classe.}
+
+  \footnotesize
+  \begin{tabularx}{\textwidth}{L{2.5cm} L{5.3cm} Y}
+    \toprule
+    \textbf{Option} & \textbf{Valeurs acceptées} & \textbf{Effet principal} \\
+    \midrule
+    Langue & \code{french} (défaut), \code{english} & Active \code{babel}, \code{siunitx} et les libellés. \\
+    Thème & \code{theme=light} (défaut), \code{theme=dark} & Adapte fond, contrastes et interface. \\
+    Palette & \code{navy}, \code{forest}, \code{sage}, \code{vibrant} & Redéfinit le nuancier clair et sombre. \\
+    Style & \code{editorial}, \code{organic}, \code{minimal} & Filet de titre, courbes de coin ou épure. \\
+    Couverture & \code{diagonal}, \code{organic}, \code{framed}, \code{editorial} & Choisit la mise en page de \code{\textbackslash maketitle}. \\
+    Habillage & \code{eyebrow=off|on}, \code{footer=minimal|full|none} & Contrôle la densité de l'en-tête et du pied. \\
+    Progression & \code{progressbar=none|foot|head}, \code{frametitle} & Affiche ou masque la barre d'avancement. \\
+    Mode & \code{integrated}, \code{ratio=169|1610|43}, \code{notes} & Résolution \code{../*}, format et notes orateur. \\
+    \bottomrule
+  \end{tabularx}
 \end{frame}
 
-\begin{frame}{Annexe — Paramètres techniques de compilation}
-  \begin{slidecard}{Chaîne d'outils recommandée}
-    \begin{itemize}
-      \item Moteur : \LuaLaTeX{} (\code{\$pdf\_mode = 4} dans \code{latexmkrc})
-      \item Bibliographie : \code{biber} avec style \code{biblio/custom-style}
-      \item Vérification statique : \code{chktex} (\code{.chktexrc} FR / \code{.chktexrc-en} EN)
-    \end{itemize}
-  \end{slidecard}
+\begin{frame}[allowframebreaks]{Annexe — Références bibliographiques}
+  \framesubtitle{Socle documentaire partagé via \code{biblatex} et \code{biber}.}
+  \nocite{*}
+  \footnotesize
+  \printbibliography[heading=none]
 \end{frame}

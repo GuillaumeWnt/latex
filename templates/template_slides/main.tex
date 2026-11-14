@@ -1,26 +1,42 @@
 %% ==============================================================================
-%% main.tex — Modèle officiel de présentation (ClasseGuillaumeSlides)
+%% main.tex — Modèle officiel de présentation (ClasseGuillaumeSlides v2.0)
 %% ==============================================================================
 %% Options disponibles :
 %%   - french (défaut) / english
 %%   - theme=light (défaut) / theme=dark
+%%   - palette=navy (défaut) / forest / sage / vibrant
+%%   - style=editorial (défaut) / organic / minimal
+%%   - cover=diagonal (défaut) / organic / framed / editorial
 %%   - font=fira (défaut) / heros / calibri / plex / libertinus
-%%   - ratio=169 (défaut) / 1610 / 43
-%%   - progressbar=foot (défaut) / head / frametitle / none
+%%   - eyebrow=off (défaut) / on
+%%   - footer=minimal (défaut) / full / none
+%%   - progressbar=none (défaut) / foot / head / frametitle
 %%   - sectionpage=on (défaut) / off
+%%   - ratio=169 (défaut) / 1610 / 43
 %%   - integrated (active la résolution automatique vers ../* dans un dossier slides/)
 %%   - handout / notes
-\documentclass[french, theme=light, ratio=169]{ClasseGuillaumeSlides}
+\documentclass[
+  french,
+  theme=light,
+  palette=navy,
+  style=editorial,
+  cover=diagonal,
+  eyebrow=off,
+  footer=minimal,
+  progressbar=none,
+  ratio=169
+]{ClasseGuillaumeSlides}
 
 % --- Métadonnées de la présentation ---
-\title[Architecture Slides LaTeX Moderne]{Présentations Éditoriales Modernes sous \texorpdfstring{\LaTeX{}}{LaTeX}}
-\subtitle{Design 16:9 épuré, palettes adaptatives et couplage natif avec \code{ClasseGuillaume}}
+\title[ClasseGuillaumeSlides v2.0]{Présentations Éditoriales Modernes sous \texorpdfstring{\LuaLaTeX{}}{LuaLaTeX}}
+\subtitle{Compositions aérées, palettes harmonisées et diagrammes vectoriels sans lourdeur}
 \author[G. Winant]{Guillaume \textsc{Winant}}
 \institute{Atelier Typographique \& Ingénierie Documentaire}
 \date{14 Novembre 2026}
 \category{Modèle Officiel}
 \event{Soutenance \& Séminaire}
 \location{Paris}
+\covervisual{\resizebox{4.7cm}{!}{\includestandalone{apercu-studio}}}
 
 % Optionnel : décommenter pour afficher le logo discret en haut à droite des diapositives
 % \afficherLogoSlides

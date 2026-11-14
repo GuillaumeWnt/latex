@@ -33,7 +33,7 @@ Ce guide détaille la méthode de distillation éditoriale pour passer d'un docu
 | Élément du document source | Transformation dans les diapositives |
 | :--- | :--- |
 | Chapitre ou grande partie | `1` section Beamer (`\section{...}`) |
-| Paragraphe explicatif (100–250 mots) | `1` diapositive : titre d'assertion + 2 à 4 points courts ou 2 cartes `slidecard` (~35–50 mots) |
+| Paragraphe explicatif (100–250 mots) | `1` diapositive : titre d'assertion + `railpoints`, `\stepitemrow`, `processline` ou `\minimalstat` (~30–45 mots, éviter de tout mettre dans des boîtes) |
 | Démonstration mathématique multi-lignes | Conserver l'hypothèse et le résultat encadré sur la slide ; déplacer la preuve complète dans `sections/99-backup.tex` |
 | Grand tableau (> 6 lignes ou > 4 colonnes) | Mettre en avant les 3–4 lignes décisives + `\metriccard` ; mettre le tableau complet en annexe backup |
 | Encadrés `callout` / `definitionbox` / `boiteSynthese` | Conserver ou convertir en `slidecard`, `alertcard` ou `\takeaway` |

@@ -27,10 +27,27 @@ WipeArg
   \term:{}
   \kpibadge:[]{}
   \metriccard:[]{}{}[]
+  \minimalstat:[]{}{}[]
+  \stepitem:[][]{}{}{}
+  \stepitemrow:[]{}{}{}
+  \floatingcard:[][]{}{}{}
+  \tiltframe:[][]{}
+  \diagonalpanel:[][]{}
+  \circlebadgevisual:[]{}
+  \usebandcanvas:[][][]
+  \userailcanvas:[][]
+  \railpoint:[]{}{}{}
+  \processstep:[]{}{}{}
+  \timelineevent:[][]{}{}{}
+  \funnellevel:[]{}{}{}
+  \cyclestep:[]{}{}{}
+  \standoutslide:[]{}
   \sourcenote:{}
   \takeaway:{}
   \category:{}
   \event:{}
+  \location:{}
+  \covervisual:{}
   \footertext:{}
   \slideasset:{}
   \url:{}

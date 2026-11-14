@@ -49,6 +49,9 @@ out/
 _minted-*/
 auto/
 
+# Reference Visual Slide Examples (keep local, do not exclude *.png globally so project figures stay tracked)
+templates/exemples-slides/
+
 # OS Artifacts
 .DS_Store
 Thumbs.db

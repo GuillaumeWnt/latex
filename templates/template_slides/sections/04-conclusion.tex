@@ -1,35 +1,57 @@
 %% ==============================================================================
-%% sections/04-conclusion.tex — Synthèse et diapositive de clôture
+%% sections/04-conclusion.tex
+%% Section 4 : Adoption rapide, exemple déclaratif et clôture
 %% ==============================================================================
-\section{Conclusion}
 
-\begin{frame}{Bilan et perspectives}
-  \framesubtitle{Une charte graphique unifiée du mémoire scientifique à la présentation orale}
+\section{Adoption Immédiate}
 
-  \begin{columns}[T, totalwidth=\textwidth]
-    \begin{column}{0.48\textwidth}
-      \begin{slidecard}{Points acquis}
-        \begin{itemize}
-          \item Design moderne 16:9 sans chrome visuel obsolète
-          \item Thèmes \code{light} / \code{dark} et support bilingue \code{french} / \code{english}
-          \item Compatibilité complète TikZ, \code{pgfplots}, \code{siunitx} et BibLaTeX
-        \end{itemize}
-      \end{slidecard}
+% ------------------------------------------------------------------------------
+% Vue 9 : Liste ouverte à icônes + snippet déclaratif [fragile]
+% ------------------------------------------------------------------------------
+\begin{frame}[fragile]{Personnalisation complète dès le préambule}
+  \framesubtitle{Basculer de palette, de style ou de couverture sans toucher au corps des diapositives.}
+
+  \begin{columns}[t, totalwidth=\textwidth]
+    \begin{column}{0.45\textwidth}
+      \stepitemrow[SlideFillPrimary]{\faPalette}{Palettes \& couvertures}{%
+        Quatre harmonies complètes (\code{navy}, \code{forest}, \code{sage}, \code{vibrant}) et quatre couvertures vectorielles.%
+      }
+      \stepitemrow[SlideFillSecondary]{\faLayerGroup}{Compatibilité ascendante}{%
+        Tous les environnements existants (\code{slidecard}, \code{callout}, \code{cadreFigure}) fonctionnent sans modification.%
+      }
+      \stepitemrow[SlideFillAccent]{\faCheckDouble}{Chaîne de vérification}{%
+        Compilation froide dans \code{build/} et audit strict via \code{lint-latex.ps1 -RunChkTeX}.%
+      }
     \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{slidecard}{Workflows IA intégrés}
-        \begin{itemize}
-          \item \code{/new-slides} : création autonome ou intégrée
-          \item \code{/latex-to-slides} : distillation d'un document complet
-          \item Audit qualité automatique (\code{lint-latex.ps1})
-        \end{itemize}
-      \end{slidecard}
+
+    \begin{column}{0.51\textwidth}
+      \begin{lstlisting}[language={[LaTeX]TeX}]
+\documentclass[
+  french, theme=light,
+  palette=forest, style=organic,
+  cover=framed, ratio=169
+]{ClasseGuillaumeSlides}
+
+\covervisual{\resizebox{4.6cm}{!}{%
+  \includestandalone{apercu-studio}}}
+      \end{lstlisting}
+      \vspace*{0.06cm}
+      \begin{callout}[Règle d'or de rétroportage]
+        Toute amélioration validée dans un projet dérivé bénéficie en retour à \code{templates/template\_slides/} et \code{template\_officiel/slides/}.
+      \end{callout}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}[standout]
-  Merci pour votre attention
-  \par\vspace*{0.4cm}
-  {\normalsize\normalfont Questions, remarques \& discussions}
-\end{frame}
+% ------------------------------------------------------------------------------
+% Vue 10 : Diapositive finale à fort impact (standout)
+% ------------------------------------------------------------------------------
+\standoutslide{%
+  {\fontsize{28}{32}\selectfont\bfseries Questions \& Échanges}%
+  \par\vspace*{0.50cm}%
+  {\normalsize\color{white!85}%
+    \code{ClasseGuillaumeSlides v2.0} \enspace\textbullet\enspace Modèle officiel \LuaLaTeX{} / Beamer}%
+  \par\vspace*{0.28cm}%
+  {\footnotesize\color{white!70}%
+    Rétrocompatible \code{ClasseGuillaume} \enspace|\enspace Audit \code{chktex} \& \code{biblatex}}%
+}

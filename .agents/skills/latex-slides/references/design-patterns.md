@@ -1,87 +1,115 @@
-# Patrons Éditoriaux 16:9 & Alternatives Modernes
+# Patrons Visuels 16:9 (`v2.0`) & Alternatives Modernes
 
-Ce document regroupe les gabarits éprouvés pour `ClasseGuillaumeSlides` ainsi qu'un comparatif objectif des écosystèmes de présentation hors Beamer classique.
+Ce document regroupe les patrons graphiques recommandés pour `ClasseGuillaumeSlides v2.0`, conçus pour obtenir des présentations légères, variées et sans empilement de boîtes grises.
 
 ---
 
-## 1. Gabarits de Diapositives Prêts à l'Emploi
+## 1. Gabarits de Diapositives Modernes (`v2.0`)
 
-### Patron A — Métrique clé + Graphique / Figure (`columns`)
-Idéal pour exposer un résultat chiffré sans noyer la courbe dans du texte :
+### Patron A — Métrique nue + Courbe `pgfplots` (`ClasseGuillaumeAxis`)
+Préférer `\minimalstat` + `\stepitemrow` à droite plutôt qu'un empilement de deux boîtes superposées :
 
 ```latex
-\begin{frame}{L'approche proposée réduit l'erreur de \qty{34}{\percent}}
-  \framesubtitle{Benchmark mesuré sur \slideasset{data/benchmark-results.csv}}
+\begin{frame}{Exploitation directe des données expérimentales}
+  \framesubtitle{Traçage vectoriel depuis \code{\slideasset{data/benchmark-results.csv}}}
 
-  \begin{columns}[T, onlytextwidth]
+  \begin{columns}[c, totalwidth=\textwidth]
     \begin{column}{0.61\textwidth}
-      \begin{cadreFigure}[before skip=0pt]
-        \centering
-        % Graphique TikZ / pgfplots hauteur ~3.7 cm à 4.0 cm max
-      \end{cadreFigure}
+      \begin{tikzpicture}
+        \begin{axis}[ClasseGuillaumeAxis, line legend, width=8.2cm, height=4.7cm,
+          xlabel={Itération}, ylabel={Précision (\%)}, ymin=55, ymax=103]
+          \addplot+[very thick, SlidePrimary, mark=*] table[x=iteration, y=accuracy_proposed]{\slideasset{data/benchmark-results.csv}};
+          \addlegendentry{Approche proposée}
+          \addplot+[thick, dashed, SlideAccent, mark=none] table[x=iteration, y=accuracy_baseline]{\slideasset{data/benchmark-results.csv}};
+          \addlegendentry{Référence}
+        \end{axis}
+      \end{tikzpicture}
     \end{column}
-    \begin{column}{0.35\textwidth}
-      \metriccard{99,7 \%}{Précision à l'itération 20}[+17,0 pts vs Baseline]
-      \vspace*{0.2cm}
-      \begin{slidecard}{Ce qu'il faut retenir}
-        Convergence atteinte deux fois plus vite, avec une variance divisée par trois.
-      \end{slidecard}
+    \begin{column}{0.36\textwidth}
+      \minimalstat[SlideAccent]{99,7\,\%}{Précision finale}[Gain de +17,0 pts vs référence.]
+      \vspace*{0.28cm}
+      \stepitemrow[SlideFillPrimary]{\faDatabase}{Traçabilité CSV}{%
+        Séries issues du même fichier brut que le rapport.%
+      }
     \end{column}
   \end{columns}
 \end{frame}
 ```
 
-### Patron B — Comparaison à deux cartes (`slidecard` vs `alertcard`)
+### Patron B — Visuel incliné (`\tiltframe`) + Rail vertical (`railpoints`)
 ```latex
-\begin{frame}{Arbitrage entre architecture A et architecture B}
-  \begin{columns}[T, onlytextwidth]
-    \begin{column}{0.48\textwidth}
-      \begin{slidecard}{Option retenue \hfill \kpibadge{Recommandée}}
-        Points forts synthétiques en 2 à 3 puces courtes.
-      \end{slidecard}
+\begin{frame}{Source unique de vérité entre mémoire et diapositives}
+  \begin{columns}[c, totalwidth=\textwidth]
+    \begin{column}{0.55\textwidth}
+      \centering
+      \tiltframe[-2.2]{\resizebox{6.9cm}{!}{\includestandalone{\slideasset{figures/tikz/schema-principe}}}}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{alertcard}{Limites de l'approche initiale}
-        Contraintes identifiées justifiant le changement d'architecture.
-      \end{alertcard}
+    \begin{column}{0.42\textwidth}
+      \begin{railpoints}[1.36cm]
+        \railpoint[SlideFillPrimary]{01}{Figures parentes}{Lecture directe dans \code{../figures/}.}
+        \railpoint[SlideFillSecondary]{02}{Bibliographie unique}{Synchronisée sur \code{../biblio/}~\autocite{kohm2024koma}.}
+        \railpoint[SlideFillAccent]{03}{Compilation isolée}{Auxiliaires séparés dans \code{slides/build/}.}
+      \end{railpoints}
     \end{column}
   \end{columns}
-  \takeaway{Décision : adoption de l'option A dès la phase pilote.}
 \end{frame}
 ```
 
-### Patron C — Extrait de code ciblé (`[fragile]`)
+### Patron C — Chaîne horizontale (`processline`) ou frise (`timelineflow`) + chiffres nus
 ```latex
-\begin{frame}[fragile]{Implémentation modulaire du noyau de calcul}
-  \framesubtitle{Extrait synchronisé depuis \code{\slideasset{listings/algorithm-pipeline.py}}}
-
-  \begin{columns}[T, onlytextwidth]
-    \begin{column}{0.61\textwidth}
-      \lstinputlisting[language=Python, firstline=10, lastline=18]{\slideasset{listings/algorithm-pipeline.py}}
-    \end{column}
-    \begin{column}{0.35\textwidth}
-      \begin{callout}[Point technique]
-        Toujours limiter les extraits à ~10–14 lignes lisibles depuis le fond d'une salle.
-      \end{callout}
-    \end{column}
+\begin{frame}{Chaîne de synchronisation en trois étapes}
+  \begin{processline}[Workflow]
+    \processstep[SlideFillPrimary]{01}{Visuels}{Lecture directe des TikZ dans \code{../figures/}.}
+    \processstep[SlideFillSecondary]{02}{Données}{Courbes tracées sur les CSV de \code{../data/}.}
+    \processstep[SlideFillAccent]{03}{Code source}{Extraits ciblés dans \code{../listings/}.}
+  \end{processline}
+  \vspace*{0.35cm}
+  \begin{columns}[T, totalwidth=\textwidth]
+    \begin{column}{0.31\textwidth}\minimalstat[SlidePrimary]{16:9}{Format natif}\end{column}
+    \begin{column}{0.31\textwidth}\minimalstat[SlideSecondary]{4}{Palettes complètes}\end{column}
+    \begin{column}{0.31\textwidth}\minimalstat[SlideAccent]{0}{Boîte imposée}\end{column}
   \end{columns}
 \end{frame}
 ```
 
-### Patron D — Diapositive `standout` et mode sombre (`theme=dark`)
-- Utiliser `\standoutslide{Question centrale ou message de clôture}` pour les ruptures fortes (2 ou 3 maximum par deck).
-- En `theme=dark`, les cartes (`SlideCardBg`), la couleur `\code{...}` et `ClasseGuillaumeSlidescode` basculent automatiquement sur fond anthracite à fort contraste ; `cadreFigure` conserve volontairement un fond blanc et du texte foncé afin que les diagrammes TikZ conçus pour le rapport imprimable restent immédiatement lisibles sans retouche.
+### Patron D — Fond bandeau bas (`\usebandcanvas` / `\userailcanvas`) + cartes flottantes (`\floatingcard`)
+Encapsuler `\usebandcanvas` (avant `\begin{frame}`) dans des accolades `{ ... }` pour limiter son effet à la diapositive courante (le jeton `SlideTextInverted` sert aussi pour tout titre posé sur un bloc ou une bande sombre) :
+
+```latex
+{
+  \usebandcanvas[SlideFillPrimary][3.70cm][1.20cm]
+  \begin{frame}{Trois piliers architecturaux}
+    \vspace*{0.40cm}
+    \begin{columns}[T, totalwidth=\textwidth]
+      \begin{column}{0.31\textwidth}
+        \floatingcard[SlideFillPrimary]{01}{Modèle unique}{Un socle partagé clair et sombre.}
+      \end{column}
+      \begin{column}{0.31\textwidth}
+        \floatingcard[SlideFillSecondary]{02}{Rythme ouvert}{Zéro accumulation de cadres.}
+      \end{column}
+      \begin{column}{0.31\textwidth}
+        \floatingcard[SlideFillAccent]{03}{Zéro dérive}{Compilation stricte + contrôle PNG.}
+      \end{column}
+    \end{columns}
+  \end{frame}
+}
+```
+
+### Patron E — Diagrammes `funnelchart`, `cyclechart` & mode sombre (`theme=dark`)
+- Utiliser `funnelchart` + `\funnellevel` pour les processus de filtrage/qualification et `cyclechart` + `\cyclestep` pour les boucles d'itération (`PDCA`, validation continue).
+- En `theme=dark` + `palette=vibrant`/`navy`/`forest`/`sage`, les couleurs sémantiques `SlideFillPrimary`, `SlideFillSecondary`, `SlideFillAccent`, `SlideCardSurface`, `SlideBg` et `SlideInk` s'adaptent automatiquement tout en gardant `cadreFigure` sur fond blanc lorsque nécessaire pour des TikZ conçus pour le papier.
+- Pour les `slidecard`, `\metriccard`, `callout` et `attentionbox`, la syntaxe reste rétrocompatible lorsque la comparaison ou l'avertissement exige un encadrement net.
 
 ---
 
 ## 2. Hauteurs Recommandées sur Format 16:9 (`16 cm × 9 cm`)
 
-| Zone | Hauteur sûre maximale | Remarque |
+| Zone | Hauteur / taille sûre | Remarque |
 | :--- | :--- | :--- |
-| Figure seule pleine largeur (`cadreFigure`) | `4.1 cm` à `4.4 cm` | Laisser de l'air sous le `frametitle` et au-dessus de la footline |
-| Figure + bandeau `\takeaway` | `3.5 cm` à `3.8 cm` | Vérifier l'absence totale d'`Overfull \vbox` dans `build/main.log` |
-| Listing `lstlisting` | 10 à 14 lignes max | Découper avec `firstline`/`lastline` au lieu de réduire sous `\scriptsize` |
-| Tableau `booktabs` | 4 à 6 lignes max | Exporter les matrices complètes vers `sections/99-backup.tex` |
+| Figure ou graphique principal (`pgfplots`, TikZ) | `4.0 cm` à `4.7 cm` | Laisser de l'air sous le `frametitle` et au-dessus du pied |
+| `processline` / `timelineflow` / `cyclechart` | `<= 4.8 cm` hors titre | Adapter `espacement` ou rayon si > 4 items |
+| Listing `lstlisting` (`[fragile]`) | 8 à 12 lignes max | Découper avec `firstline`/`lastline` au lieu de rétrécir sous `\scriptsize` |
+| Tableau `booktabs` | 4 à 6 lignes max | Renvoyer les matrices exhaustives dans `sections/99-backup.tex` |
 
 ---
 
@@ -89,7 +117,7 @@ Idéal pour exposer un résultat chiffré sans noyer la courbe dans du texte :
 
 | Solution | Moteur / Langage | Atouts principaux | Limites actuelles | Quand l'utiliser |
 | :--- | :--- | :--- | :--- | :--- |
-| **`ClasseGuillaumeSlides` (`beamer` + `moloch`)** | LuaLaTeX / TeX | Zéro réécriture de macros, TikZ/pgfplots/BibLaTeX natifs, mode `integrated` direct avec les rapports `ClasseGuillaume`, très stable | Syntaxe Beamer classique (`frame`, `[fragile]`) | **Choix par défaut** pour tout projet du dépôt et présentations scientifiques/techniques LaTeX |
-| **`ltx-talk`** | LaTeX3 / `expl3` (CTAN récent) | Classe LaTeX moderne conçue *from scratch* pour remplacer `beamer` avec Markdown/clés modernes | Écosystème jeune, documentation et compatibilité thèmes encore en évolution | Veille technique ou prototypes LaTeX expérimentaux hors contraintes de rétrocompatibilité |
-| **`Typst` + `Touying` / `Polylux`** | Typst (Rust) | Compilation quasi instantanée, syntaxe proche Markdown, design web/éditorial très fluide | Incompatible avec le partage direct de fichiers `.tex`/TikZ/`biblatex` des rapports `ClasseGuillaume` | Présentations autonomes rapides ne nécessitant ni TikZ complexe ni couplage LaTeX |
-| **`Quarto` + `Reveal.js`** | Markdown + Pandoc + HTML/CSS | Transitions web, widgets interactifs JS, génération depuis notebooks Python/Jupyter | Dépendant d'un navigateur pour le rendu natif, export PDF moins fin pour les équations/TikZ | Démonstrations data-science interactives en HTML ou supports web diffusés en ligne |
+| **`ClasseGuillaumeSlides v2.0`** (`beamer` sans chrome + TikZ/PGFPlots) | LuaLaTeX / TeX | Zéro réécriture de macros `ClasseGuillaume`, TikZ/PGFPlots/BibLaTeX natifs, mode `integrated`, palettes `light`/`dark`, compositions graphiques variées | Syntaxe Beamer (`frame`, `[fragile]`) | **Choix par défaut** pour tout projet du dépôt et présentations scientifiques/techniques LaTeX |
+| **`ltx-talk`** | LaTeX3 / `expl3` (CTAN récent) | Classe LaTeX moderne conçue *from scratch* pour remplacer `beamer` | Écosystème jeune, compatibilité thèmes encore en évolution | Veille technique ou prototypes LaTeX expérimentaux hors contraintes de rétrocompatibilité |
+| **`Typst` + `Touying` / `Polylux`** | Typst (Rust) | Compilation quasi instantanée, syntaxe proche Markdown, design web/éditorial fluide | Pas d'import direct des `.tex`/TikZ/`biblatex` `ClasseGuillaume` | Présentations autonomes rapides ne nécessitant ni TikZ complexe ni couplage LaTeX |
+| **`Quarto` + `Reveal.js`** | Markdown + Pandoc + HTML/CSS | Transitions web, widgets JS, génération depuis notebooks Jupyter | Rendu dépendant d'un navigateur, export PDF moins fin pour TikZ | Démonstrations data-science interactives en HTML ou supports web |

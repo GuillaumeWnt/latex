@@ -4,59 +4,62 @@
 \section{Résultats \& Code}
 
 \begin{frame}{Exploitation directe des données expérimentales}
-  \framesubtitle{Traçage vectoriel synchronisé depuis \code{../data/benchmark-results.csv}}
+  \framesubtitle{Traçage vectoriel synchronisé depuis \code{../data/benchmark-results.csv}.}
 
   \begin{columns}[c, totalwidth=\textwidth]
-    \begin{column}{0.55\textwidth}
-      \begin{cadreFigure}
-        \begin{tikzpicture}
-          \begin{axis}[
-            width=0.96\linewidth,
-            height=3.65cm,
-            xlabel={Itération},
-            ylabel={Précision (\%)},
-            xmin=1, xmax=20,
-            ymin=55, ymax=102,
-            grid=major,
-            grid style={dashed, ThesisMuted!25},
-            legend pos=south east,
-            legend style={font=\scriptsize, draw=ThesisMuted!40, fill=white},
-            label style={font=\scriptsize\sffamily, text=ThesisText},
-            tick label style={font=\scriptsize\sffamily, text=ThesisMuted}
-          ]
-            \addplot[color=ThesisPrimary, line width=1.4pt]
-              table[x=Iteration, y=AccuracyProposed, col sep=comma] {\slideasset{data/benchmark-results.csv}};
-            \addlegendentry{Approche proposée}
-            \addplot[color=ThesisAccent, line width=1.1pt, dashed]
-              table[x=Iteration, y=AccuracyBaseline, col sep=comma] {\slideasset{data/benchmark-results.csv}};
-            \addlegendentry{Référence}
-          \end{axis}
-        \end{tikzpicture}
-      \end{cadreFigure}
+    \begin{column}{0.58\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          ClasseGuillaumeAxis,
+          line legend,
+          width=\linewidth,
+          height=4.35cm,
+          xlabel={Itération},
+          ylabel={Précision (\unit{\percent})},
+          xmin=1, xmax=20,
+          ymin=55, ymax=103,
+          legend style={
+            at={(0.5,1.03)},
+            anchor=south,
+            legend columns=2
+          }
+        ]
+          \addplot[color=SlideFillPrimary, line width=1.6pt, mark=*, mark size=1.4pt]
+            table[x=Iteration, y=AccuracyProposed, col sep=comma] {\slideasset{data/benchmark-results.csv}};
+          \addlegendentry{Approche proposée}
+          \addplot[color=SlideFillAccent, line width=1.2pt, dashed]
+            table[x=Iteration, y=AccuracyBaseline, col sep=comma] {\slideasset{data/benchmark-results.csv}};
+          \addlegendentry{Référence}
+        \end{axis}
+      \end{tikzpicture}
     \end{column}
-    \begin{column}{0.42\textwidth}
-      \metriccard{\qty{99.7}{\percent}}{Précision à l'itération 20}[+17,0 pts vs \code{Baseline}]
-      \vspace*{0.18cm}
-      \begin{slidecard}{Traçabilité scientifique}
-        Les séries numériques proviennent du même CSV brut que le chapitre Résultats~\autocite{lehman2024biblatex}.
-      \end{slidecard}
+    \begin{column}{0.38\textwidth}
+      \minimalstat[SlideAccent]{\qty{99.7}{\percent}}{Précision finale}[Gain de +17,0\,pts face à la référence à l'itération 20.]
+      \par\vspace*{0.36cm}
+      \stepitemrow[SlideFillPrimary]{\faDatabase}{Traçabilité CSV}{%
+        Séries numériques issues du même fichier brut que le rapport~\autocite{lehman2024biblatex}.%
+      }
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Insertion directe du code source externe}
-  \framesubtitle{Extraits sélectionnés depuis \code{../listings/algorithm-pipeline.py} sans copier-coller}
+  \framesubtitle{Extraits sélectionnés depuis \code{../listings/algorithm-pipeline.py} sans copier-coller.}
 
   \begin{columns}[T, totalwidth=\textwidth]
-    \begin{column}{0.64\textwidth}
+    \begin{column}{0.61\textwidth}
       \lstinputlisting[language=Python, firstline=13, lastline=20]{\slideasset{listings/algorithm-pipeline.py}}
     \end{column}
-    \begin{column}{0.33\textwidth}
-      \begin{alertcard}{Code vérifié}
-        Le script Python externe reste exécutable et testé par \code{pytest} dans le projet parent.
-      \end{alertcard}
+    \begin{column}{0.36\textwidth}
+      \stepitemrow[SlideFillSecondary]{\faCheckCircle}{Code vérifié}{%
+        Le script Python externe reste exécutable et validé par \code{pytest} dans le parent.%
+      }
+      \stepitemrow[SlideFillAccent]{\faSync}{Synchro native}{%
+        Chaque évolution du dépôt met à jour le diaporama sans intervention manuelle.%
+      }
     \end{column}
   \end{columns}
 
-  \takeaway{Le sous-projet \code{slides/} hérite de toutes les mises à jour du rapport principal sans désynchronisation.}
+  \vspace*{0.12cm}
+  \takeaway{Le sous-projet \code{slides/} hérite automatiquement de toutes les mises à jour du document principal.}
 \end{frame}

@@ -1,6 +1,6 @@
 # AGENTS.md — Directives Locales du Workspace LaTeX
 
-> **Portée :** Ce fichier complète les directives globales (`C:\Users\guill\.agents\AGENTS.md`) pour l'écosystème LaTeX modulaire de ce dépôt. Les règles déjà définies globalement (langue française, commits Conventional Commits, suivi `plan.md`, `uv`, capitalisation `.md`, gouvernance `.agents/`, économie de tokens) ne sont pas répétées ici.
+> **Portée :** Ce fichier complète les directives globales (`C:\Users\guill\.agents\AGENTS.md`) pour l'écosystème LaTeX modulaire de ce dépôt. Les règles déjà définies globalement (langue française, commits Conventional Commits, suivi `docs/plan.md` et `docs/historique.md`, `uv`, capitalisation `.md`, gouvernance `.agents/`, économie de tokens) ne sont pas répétées ici.
 
 ---
 

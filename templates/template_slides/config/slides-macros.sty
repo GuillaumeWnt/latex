@@ -1,9 +1,9 @@
 %% ==============================================================================
 %% config/slides-macros.sty
-%% Macros partagées avec ClasseGuillaume + composants éditoriaux pour diapositives
+%% Macros compatibles ClasseGuillaume + composants ouverts Keynote / Pitch v2.0
 %% ==============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{config/slides-macros}[2026/11/14 v1.0 Macros for ClasseGuillaumeSlides]
+\ProvidesPackage{config/slides-macros}[2026/11/14 v2.0 Modern components for ClasseGuillaumeSlides]
 
 % --- Logos moteurs complémentaires ---
 \providecommand{\LuaLaTeX}{Lua\LaTeX}
@@ -59,64 +59,63 @@
   \newcommand{\ClasseGuillaumeSlides@attention@default}{Point clé}
 \fi
 
-% --- Cartes et boîtes éditoriales modernes (tcolorbox sans lourdeur) ---
+% ==============================================================================
+% 1. Cartes éditoriales allégées (compatibilité v1.0 + surface pure v2.0)
+% ==============================================================================
 
-% 1. Carte éditoriale neutre avec filet supérieur ou gauche discret
 \newtcolorbox{slidecard}[2][]{%
   enhanced,
-  colback=SlideCardBg,
+  colback=SlideCardSurface,
   colframe=SlideBorder,
   coltext=SlideFg,
   coltitle=SlideTitleFg,
-  colbacktitle=SlideCardBg,
+  colbacktitle=SlideCardSurface,
   borderline north={2pt}{0pt}{SlidePrimary},
   fonttitle=\bfseries\sffamily\small,
   title={#2},
   before upper=\RaggedRight\small,
-  boxrule=0.6pt,
-  arc=3pt,
-  left=7pt, right=7pt, top=4pt, bottom=4pt,
-  toptitle=3.5pt, bottomtitle=1.5pt,
+  boxrule=0.45pt,
+  arc=2.5pt,
+  left=8pt, right=8pt, top=5pt, bottom=5pt,
+  toptitle=4pt, bottomtitle=1.5pt,
   before skip=3pt, after skip=3pt,
   #1
 }
 
-% 2. Carte d'accentuation / Point critique / Alerte
 \newtcolorbox{alertcard}[2][]{%
   enhanced,
-  colback=SlideAccent!7!SlideBg,
-  colframe=SlideAccent!45!SlideBorder,
+  colback=SlideAccent!5!SlideCardSurface,
+  colframe=SlideAccent!35!SlideBorder,
   coltext=SlideFg,
   coltitle=SlideAccent,
-  colbacktitle=SlideAccent!12!SlideBg,
-  borderline west={3pt}{0pt}{SlideAccent},
+  colbacktitle=SlideAccent!9!SlideCardSurface,
+  borderline west={2.5pt}{0pt}{SlideAccent},
   fonttitle=\bfseries\sffamily\small,
   title={#2},
   before upper=\RaggedRight\small,
-  boxrule=0.6pt,
-  arc=3pt,
-  left=7pt, right=7pt, top=4pt, bottom=4pt,
-  toptitle=2.5pt, bottomtitle=2.5pt,
+  boxrule=0.45pt,
+  arc=2.5pt,
+  left=8pt, right=8pt, top=5pt, bottom=5pt,
+  toptitle=3pt, bottomtitle=2pt,
   before skip=3pt, after skip=3pt,
   #1
 }
 
-% 3. Carte KPI / Chiffre clé fort : \metriccard[largeur]{valeur}{libellé}[tendance]
 \NewDocumentCommand{\metriccard}{O{\linewidth} m m o}{%
   \begin{tcolorbox}[
     enhanced,
     width=#1,
-    colback=SlideCardBg,
+    colback=SlideCardSurface,
     colframe=SlideBorder,
     coltext=SlideFg,
-    borderline west={3pt}{0pt}{SlideAccent},
+    borderline west={2.5pt}{0pt}{SlideAccent},
     before upper=\RaggedRight,
-    boxrule=0.6pt,
-    arc=3pt,
-    left=7pt, right=7pt, top=5pt, bottom=5pt,
+    boxrule=0.45pt,
+    arc=2.5pt,
+    left=8pt, right=8pt, top=5pt, bottom=5pt,
     before skip=2pt, after skip=2pt
   ]%
-    {\fontsize{16}{18}\selectfont\bfseries\sffamily\color{SlidePrimary}#2\par}%
+    {\fontsize{17}{19}\selectfont\bfseries\sffamily\color{SlidePrimary}#2\par}%
     \vspace*{1.5pt}%
     {\footnotesize\sffamily\color{SlideMuted}#3\par}%
     \IfNoValueF{#4}{%
@@ -126,120 +125,674 @@
   \end{tcolorbox}%
 }
 
-% 4. Pastille / Badge en ligne : \kpibadge[couleur]{texte}
 \NewDocumentCommand{\kpibadge}{O{SlideSecondary} m}{%
   \tcbox[
     enhanced,
     on line,
     arc=2.5pt,
-    boxrule=0.6pt,
-    colframe=#1!65,
-    colback=#1!12!SlideBg,
+    boxrule=0.45pt,
+    colframe=#1!55,
+    colback=#1!10!SlideCardSurface,
     boxsep=0pt,
-    left=5pt, right=5pt, top=2.5pt, bottom=2.5pt
+    left=5.5pt, right=5.5pt, top=2.5pt, bottom=2.5pt
   ]{\scriptsize\sffamily\bfseries\textcolor{#1}{#2}}%
 }
 
-% 5. Bandeau de conclusion / message clé en bas de diapositive
 \NewDocumentCommand{\takeaway}{m}{%
   \par\vspace*{0.12cm}%
   \begin{tcolorbox}[
     enhanced,
-    colback=SlidePrimary!10!SlideBg,
-    colframe=SlidePrimary!35!SlideBorder,
+    colback=SlidePrimary!7!SlideCardSurface,
+    colframe=SlideBorder,
     coltext=SlideFg,
-    borderline west={3pt}{0pt}{SlidePrimary},
+    borderline west={2.5pt}{0pt}{SlidePrimary},
     before upper=\RaggedRight,
-    boxrule=0.5pt,
+    boxrule=0.4pt,
     arc=2.5pt,
-    left=8pt, right=8pt, top=3.5pt, bottom=3.5pt,
+    left=8pt, right=8pt, top=4pt, bottom=4pt,
     before skip=0pt, after skip=0pt
   ]%
     \footnotesize\sffamily #1%
   \end{tcolorbox}%
 }
 
-% 6. Note de source discrète en bas de diapositive
 \newcommand{\sourcenote}[1]{%
   \par\vspace*{2pt}%
   {\tiny\sffamily\color{SlideMuted}#1\par}%
 }
 
-% 7. Boîtes compatibles ClasseGuillaume (portabilité directe rapport <-> slides)
 \newtcolorbox{callout}[1][\ClasseGuillaumeSlides@callout@default]{%
   enhanced,
-  colback=SlidePrimary!6!SlideBg,
+  colback=SlidePrimary!5!SlideCardSurface,
   colframe=SlideBorder,
   coltext=SlideFg,
   coltitle=SlideTitleFg,
-  colbacktitle=SlidePrimary!12!SlideBg,
-  borderline west={2.8pt}{0pt}{SlidePrimary},
+  colbacktitle=SlidePrimary!10!SlideCardSurface,
+  borderline west={2.5pt}{0pt}{SlidePrimary},
   fonttitle=\bfseries\sffamily\footnotesize,
   title={#1},
   before upper=\RaggedRight\footnotesize,
-  left=7pt, right=7pt, top=3.5pt, bottom=3.5pt,
-  toptitle=2pt, bottomtitle=2pt,
-  arc=2.5pt, boxrule=0.5pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt,
+  toptitle=2.5pt, bottomtitle=2pt,
+  arc=2.5pt, boxrule=0.4pt,
   before skip=3pt, after skip=3pt
 }
 
 \newtcolorbox{attentionbox}[1][\ClasseGuillaumeSlides@attention@default]{%
   enhanced,
-  colback=SlideAccent!6!SlideBg,
-  colframe=SlideAccent!40!SlideBorder,
+  colback=SlideAccent!5!SlideCardSurface,
+  colframe=SlideAccent!35!SlideBorder,
   coltext=SlideFg,
   coltitle=SlideAccent,
-  colbacktitle=SlideAccent!12!SlideBg,
-  borderline west={2.8pt}{0pt}{SlideAccent},
+  colbacktitle=SlideAccent!10!SlideCardSurface,
+  borderline west={2.5pt}{0pt}{SlideAccent},
   fonttitle=\bfseries\sffamily\footnotesize,
   title={#1},
   before upper=\RaggedRight\footnotesize,
-  left=7pt, right=7pt, top=3.5pt, bottom=3.5pt,
-  toptitle=2pt, bottomtitle=2pt,
-  arc=2.5pt, boxrule=0.5pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt,
+  toptitle=2.5pt, bottomtitle=2pt,
+  arc=2.5pt, boxrule=0.4pt,
   before skip=3pt, after skip=3pt
 }
 
 \newtcolorbox{boiteSynthese}[2][]{%
   enhanced,
-  colback=SlideCardBg,
-  colframe=SlidePrimary,
+  colback=SlideCardSurface,
+  colframe=SlideBorder,
   coltext=SlideFg,
-  colbacktitle=ThesisPrimary,
+  colbacktitle=SlideFillPrimary,
   coltitle=white,
-  borderline west={3pt}{0pt}{ThesisAccent},
+  borderline north={2pt}{0pt}{SlideAccent},
   fonttitle=\bfseries\sffamily\footnotesize\ClasseGuillaumeSlides@darkcontexttrue,
   title={#2},
   before upper=\RaggedRight\footnotesize,
-  left=7pt, right=7pt, top=4pt, bottom=4pt,
-  toptitle=2.5pt, bottomtitle=2.5pt,
-  arc=2.5pt, boxrule=0.7pt,
+  left=8pt, right=8pt, top=4.5pt, bottom=4.5pt,
+  toptitle=3pt, bottomtitle=3pt,
+  arc=2.5pt, boxrule=0.45pt,
   before skip=3pt, after skip=3pt,
   #1
 }
 
-% Fond blanc garanti dans cadreFigure pour préserver la lisibilité des schémas TikZ en mode sombre
+% Fond blanc préservé pour schémas TikZ ; [borderless] ou options tcolorbox libres
 \newtcolorbox{cadreFigure}[1][]{%
   enhanced,
   colframe=SlideBorder,
   colback=white,
   coltext=ThesisText,
-  boxrule=0.7pt,
-  arc=3pt,
+  boxrule=0.45pt,
+  arc=2.5pt,
   left=5pt, right=5pt, top=5pt, bottom=5pt,
   halign=center,
-  before skip=3pt, after skip=3pt,
+  before skip=2pt, after skip=2pt,
   #1
 }
 
-% 8. Diapositive standout explicite (transition forte ou message final)
 \NewDocumentCommand{\standoutslide}{O{} +m}{%
-  \begin{frame}[standout, #1]
-    #2
+  \begin{frame}[standout, c, #1]
+    \centering\color{SlideStandoutFg}%
+    #2%
   \end{frame}
 }
 
-% --- Style listings adapté aux diapositives ---
+% ==============================================================================
+% 2. Composants ouverts et aérés (sans rectangle systématique — v2.0)
+% ==============================================================================
+
+% KPI sans boîte : \minimalstat[couleur]{valeur}{libellé}[précision]
+\NewDocumentCommand{\minimalstat}{O{SlidePrimary} m m o}{%
+  \begin{minipage}[t]{\linewidth}%
+    \raggedright%
+    {\fontsize{21}{23}\selectfont\bfseries\sffamily\color{#1}#2\par}%
+    \vspace*{2pt}%
+    {\color{#1}\rule{0.95cm}{1.5pt}\par}%
+    \vspace*{3pt}%
+    {\small\bfseries\sffamily\color{SlideTitleFg}#3\par}%
+    \IfNoValueF{#4}{%
+      \vspace*{1.5pt}%
+      {\footnotesize\sffamily\color{SlideMuted}#4\par}%
+    }%
+  \end{minipage}%
+}
+
+% Élément numéroté/icône ouvert en grille : \stepitem[square|circle|ring|pill][couleur]{badge}{titre}{desc}
+\NewDocumentCommand{\stepitem}{O{square} O{SlideFillPrimary} m m +m}{%
+  \begin{minipage}[t]{\linewidth}%
+    \raggedright%
+    \tikz[baseline=(b.base)]{%
+      \ifstrequal{#1}{circle}{%
+        \node[circle, fill=#2, text=white, font=\bfseries\sffamily\small,
+              minimum size=0.80cm, inner sep=0pt] (b) {#3};%
+      }{%
+        \ifstrequal{#1}{ring}{%
+          \node[circle, fill=SlideCardSurface, draw=#2, line width=1.6pt,
+                text=#2, font=\bfseries\sffamily\small,
+                minimum size=0.80cm, inner sep=0pt] (b) {#3};%
+        }{%
+          \ifstrequal{#1}{pill}{%
+            \node[rounded corners=5pt, fill=#2, text=white,
+                  font=\bfseries\sffamily\footnotesize, minimum width=1.20cm,
+                  minimum height=0.64cm, inner xsep=7pt] (b) {#3};%
+          }{%
+            \node[rounded corners=4pt, fill=#2, text=white,
+                  font=\bfseries\sffamily\small, minimum size=0.80cm,
+                  inner sep=0pt] (b) {#3};%
+          }%
+        }%
+      }%
+    }%
+    \par\vspace*{0.13cm}%
+    {\small\bfseries\sffamily\color{SlideTitleFg}#4\par}%
+    \vspace*{2pt}%
+    {\color{SlideBorder}\rule{0.85cm}{0.8pt}\par}%
+    \vspace*{2.5pt}%
+    {\footnotesize\sffamily\color{SlideMuted}#5\par}%
+  \end{minipage}%
+}
+
+% Ligne d'item ouverte (badge gauche + titre & description droite sans boîte)
+\NewDocumentCommand{\stepitemrow}{O{SlideFillPrimary} m m +m}{%
+  \noindent\begin{minipage}[t]{\linewidth}%
+    \begin{minipage}[t]{0.95cm}%
+      \vspace*{0pt}%
+      \tikz[baseline=(rb.north)]{%
+        \node[circle, fill=#1, text=white, font=\bfseries\sffamily\footnotesize,
+              minimum size=0.76cm, inner sep=0pt] (rb) {#2};%
+      }%
+    \end{minipage}%
+    \hspace*{0.18cm}%
+    \begin{minipage}[t]{\dimexpr\linewidth-1.15cm\relax}%
+      \vspace*{0pt}\raggedright%
+      {\small\bfseries\sffamily\color{SlideTitleFg}#3\par}%
+      \vspace*{1.5pt}%
+      {\footnotesize\sffamily\color{SlideMuted}#4\par}%
+    \end{minipage}%
+  \end{minipage}\par\vspace*{0.18cm}%
+}
+
+% Carte blanche flottante avec pastille supérieure débordante (idéale sur usebandcanvas)
+\NewDocumentCommand{\floatingcard}{O{SlideFillPrimary} O{\linewidth} m m +m}{%
+  \begin{tcolorbox}[
+    enhanced,
+    width=#2,
+    equal height group=cgsfloatcards,
+    colback=SlideCardSurface,
+    colframe=SlideBorder,
+    coltext=SlideFg,
+    attach boxed title to top center={yshift*=-0.30cm},
+    boxed title style={
+      enhanced,
+      colback=#1,
+      colframe=SlideCardSurface,
+      boxrule=1.5pt,
+      arc=4pt,
+      left=8pt, right=8pt, top=2.5pt, bottom=2.5pt
+    },
+    title={\bfseries\sffamily\small\color{white}#3},
+    before upper=\centering,
+    boxrule=0.45pt,
+    arc=4pt,
+    left=8pt, right=8pt, top=15pt, bottom=8pt,
+    before skip=10pt, after skip=2pt,
+    fuzzy shadow={0pt}{-2pt}{0pt}{0.4pt}{black!12}
+  ]%
+    {\small\bfseries\sffamily\color{SlideTitleFg}#4\par}%
+    \vspace*{4pt}%
+    {\color{#1}\rule{0.85cm}{1.2pt}\par}%
+    \vspace*{5pt}%
+    {\footnotesize\sffamily\color{SlideMuted}#5\par}%
+  \end{tcolorbox}%
+}
+
+% ==============================================================================
+% 3. Cadres visuels protégés par savebox (zéro tikzpicture imbriqué)
+% ==============================================================================
+\newsavebox{\cgs@visbox}
+
+% Cadre photo/visuel incliné avec passe-partout blanc et ombre portée
+\NewDocumentCommand{\tiltframe}{O{-3} O{1pt} +m}{%
+  \sbox{\cgs@visbox}{#3}%
+  \begin{tikzpicture}%
+    \pgfmathsetlengthmacro{\cgshw}{0.5\wd\cgs@visbox + 6pt}%
+    \pgfmathsetlengthmacro{\cgshh}{0.5\ht\cgs@visbox + 0.5\dp\cgs@visbox + 6pt}%
+    \begin{scope}[rotate=#1]%
+      \fill[SlideFillPrimary!18, rounded corners=3pt]
+        (-\cgshw+3pt, -\cgshh-3pt) rectangle (\cgshw+3pt, \cgshh-3pt);%
+      \fill[white, draw=SlideBorder, line width=0.5pt, rounded corners=3pt]
+        (-\cgshw, -\cgshh) rectangle (\cgshw, \cgshh);%
+      \node[inner sep=0pt] at (0,0) {\usebox{\cgs@visbox}};%
+    \end{scope}%
+  \end{tikzpicture}%
+}
+
+% Panneau visuel découpé en diagonale avec ruban accent parallèle
+\NewDocumentCommand{\diagonalpanel}{O{6.0cm} O{5.0cm} +m}{%
+  \sbox{\cgs@visbox}{#3}%
+  \begin{tikzpicture}%
+    \pgfmathsetlengthmacro{\cgsw}{#1}%
+    \pgfmathsetlengthmacro{\cgsh}{#2}%
+    \fill[SlideFillAccent]
+      (0, \cgsh) -- (0.16cm, \cgsh) -- (1.16cm, 0) -- (1.00cm, 0) -- cycle;%
+    \begin{scope}%
+      \clip (0.26cm, \cgsh) -- (\cgsw, \cgsh) -- (\cgsw, 0) -- (1.26cm, 0) -- cycle;%
+      \fill[SlideCardSurface] (0,0) rectangle (\cgsw, \cgsh);%
+      \node[inner sep=0pt] at ({0.5*\cgsw + 0.35cm}, {0.5*\cgsh}) {\usebox{\cgs@visbox}};%
+    \end{scope}%
+    \draw[SlideBorder, line width=0.5pt]
+      (0.26cm, \cgsh) -- (\cgsw, \cgsh) -- (\cgsw, 0) -- (1.26cm, 0) -- cycle;%
+  \end{tikzpicture}%
+}
+
+% Visuel découpé dans un médaillon circulaire avec halo d'accentuation
+\NewDocumentCommand{\circlebadgevisual}{O{4.2cm} +m}{%
+  \sbox{\cgs@visbox}{#2}%
+  \begin{tikzpicture}%
+    \pgfmathsetlengthmacro{\cgsrad}{0.5*#1}%
+    \fill[SlideFillAccent!65] (0.20cm, -0.14cm) circle (\cgsrad + 1.5pt);%
+    \begin{scope}%
+      \clip (0,0) circle (\cgsrad);%
+      \fill[SlideCardSurface] (-\cgsrad,-\cgsrad) rectangle (\cgsrad,\cgsrad);%
+      \node[inner sep=0pt] at (0,0) {\usebox{\cgs@visbox}};%
+    \end{scope}%
+    \draw[white, line width=2.2pt] (0,0) circle (\cgsrad);%
+    \draw[SlidePrimary!45, line width=0.7pt] (0,0) circle (\cgsrad);%
+  \end{tikzpicture}%
+}
+
+% ==============================================================================
+% 4. Fonds plein-cadre locaux (à entourer d'accolades { \usebandcanvas \begin{frame}... })
+% ==============================================================================
+
+% Bandeau horizontal plein bord pour cartes flottantes (\floatingcard)
+\NewDocumentCommand{\usebandcanvas}{O{SlideFillPrimary} O{3.75cm} O{1.20cm}}{%
+  \setbeamertemplate{background canvas}{%
+    \tikzexternaldisable%
+    \begin{tikzpicture}[inner sep=0pt, outer sep=0pt]%
+      \path[use as bounding box] (0,0) rectangle (\paperwidth,\paperheight);%
+      \clip (0,0) rectangle (\paperwidth,\paperheight);%
+      \fill[SlideBg] (-1pt,-1pt) rectangle (\paperwidth+1pt,\paperheight+1pt);%
+      \fill[#1] (-1pt,#3) rectangle (\paperwidth+1pt,#3+#2);%
+      \fill[SlideFillAccent] (-1pt,#3+#2) rectangle (\paperwidth+1pt,#3+#2+2.2pt);%
+    \end{tikzpicture}%
+    \tikzexternalenable%
+  }%
+}
+
+% Bande verticale latérale pleine hauteur (mise en page asymétrique)
+\NewDocumentCommand{\userailcanvas}{O{SlideFillPrimary} O{4.2cm}}{%
+  \setbeamertemplate{background canvas}{%
+    \tikzexternaldisable%
+    \begin{tikzpicture}[inner sep=0pt, outer sep=0pt]%
+      \path[use as bounding box] (0,0) rectangle (\paperwidth,\paperheight);%
+      \clip (0,0) rectangle (\paperwidth,\paperheight);%
+      \fill[SlideBg] (-1pt,-1pt) rectangle (\paperwidth+1pt,\paperheight+1pt);%
+      \fill[#1] (-1pt,-1pt) rectangle (#2,\paperheight+1pt);%
+      \fill[SlideFillAccent] (#2,-1pt) rectangle (#2+3pt,\paperheight+1pt);%
+    \end{tikzpicture}%
+    \tikzexternalenable%
+  }%
+}
+
+% ==============================================================================
+% 5. Stockage expl3 et diagrammes vectoriels sans boîtes lourdes
+% ==============================================================================
+
+\ExplSyntaxOn
+\seq_new:N \g_cgs_items_seq
+\int_new:N \l_cgs_idx_int
+\int_new:N \l_cgs_tot_int
+
+\cs_new_protected:Nn \cgs_items_clear:
+  { \seq_gclear:N \g_cgs_items_seq }
+
+\cs_new_protected:Nn \cgs_items_push:n
+  { \seq_gput_right:Nn \g_cgs_items_seq {#1} }
+
+\cs_new_protected:Npn \cgs_items_foreach:N #1
+  {
+    \int_zero:N \l_cgs_idx_int
+    \int_set:Nn \l_cgs_tot_int { \seq_count:N \g_cgs_items_seq }
+    \seq_map_inline:Nn \g_cgs_items_seq
+      {
+        \int_incr:N \l_cgs_idx_int
+        #1 { \int_use:N \l_cgs_idx_int } { \int_use:N \l_cgs_tot_int } ##1
+      }
+  }
+
+\cs_new_eq:NN \cgs@clear \cgs_items_clear:
+\cs_new_eq:NN \cgs@push \cgs_items_push:n
+\cs_new_eq:NN \cgs@foreach \cgs_items_foreach:N
+\cs_new:Npn \cgs@count { \seq_count:N \g_cgs_items_seq }
+\ExplSyntaxOff
+
+% Palette cyclique harmonieuse automatique pour nœuds/étapes
+\newcommand{\cgs@setcyclecolor}[1]{%
+  \ifcase\numexpr(#1-1) - 4*((#1-1)/4)\relax%
+    \def\cgs@curcol{SlideFillPrimary}%
+  \or%
+    \def\cgs@curcol{SlideFillSecondary}%
+  \or%
+    \def\cgs@curcol{SlideFillAccent}%
+  \or%
+    \def\cgs@curcol{ThesisHighlight}%
+  \fi%
+}
+\newcommand{\cgs@resolvecolor}[2]{%
+  \ifstrequal{#1}{auto}{\cgs@setcyclecolor{#2}}{\def\cgs@curcol{#1}}%
+}
+
+% --- 5a. railpoints : colonne vertébrale verticale avec badges circulaires ---
+\newlength{\cgs@rail@dy}
+\newlength{\cgs@rail@tw}
+
+\newcommand{\cgs@rail@draw}[6]{%
+  % #1=idx, #2=tot, #3=color, #4=badge, #5=title, #6=desc
+  \cgs@resolvecolor{#3}{#1}%
+  \pgfmathsetlengthmacro{\cgsry}{-(\numexpr#1-1\relax)*\cgs@rail@dy}%
+  \fill[SlideBg] (0.45cm, \cgsry) circle (0.47cm);%
+  \node[circle, fill=\cgs@curcol, text=white, font=\bfseries\sffamily\small,
+        minimum size=0.80cm, inner sep=0pt] at (0.45cm, \cgsry) {#4};%
+  \draw[\cgs@curcol!55, line width=1.1pt] (0.94cm, \cgsry) -- (1.28cm, \cgsry);%
+  \node[anchor=west, text width=\cgs@rail@tw, inner sep=0pt, align=left]
+    at (1.42cm, \cgsry) {%
+      {\small\bfseries\sffamily\color{SlideTitleFg}#5\par}%
+      \vspace*{2pt}%
+      {\footnotesize\sffamily\color{SlideMuted}#6}%
+    };%
+}
+
+\NewDocumentEnvironment{railpoints}{O{1.42cm}}{%
+  \cgs@clear%
+  \setlength{\cgs@rail@dy}{#1}%
+  \setlength{\cgs@rail@tw}{\dimexpr\linewidth-1.52cm\relax}%
+}{%
+  \par\noindent%
+  \begin{tikzpicture}%
+    \ifnum\cgs@count>1\relax%
+      \draw[SlideBorder, line width=1.8pt]
+        (0.45cm, 0cm) -- (0.45cm, -{(\cgs@count-1)*\cgs@rail@dy});%
+    \fi%
+    \cgs@foreach\cgs@rail@draw%
+  \end{tikzpicture}\par%
+}
+
+\NewDocumentCommand{\railpoint}{O{auto} m m +m}{%
+  \cgs@push{{#1}{#2}{#3}{#4}}%
+}
+
+% --- 5b. processline : séquence horizontale connectée sur toute la largeur ---
+\newlength{\cgs@proc@dx}
+\newlength{\cgs@proc@tw}
+
+\newcommand{\cgs@proc@draw}[6]{%
+  % #1=idx, #2=tot, #3=color, #4=num, #5=title, #6=desc
+  \cgs@resolvecolor{#3}{#1}%
+  \pgfmathsetlengthmacro{\cgspx}{(#1-0.5)*\cgs@proc@dx}%
+  \ifnum#1<#2\relax%
+    \pgfmathsetlengthmacro{\cgspmid}{#1*\cgs@proc@dx}%
+    \fill[SlideBg] (\cgspmid, 0) circle (0.14cm);%
+    \draw[SlideBorder, line width=1.1pt, fill=SlideCardSurface] (\cgspmid, 0) circle (0.09cm);%
+  \fi%
+  \fill[SlideBg] (\cgspx, 0) circle (0.50cm);%
+  \node[rounded corners=5pt, fill=\cgs@curcol, text=white,
+        font=\bfseries\sffamily\small, minimum size=0.84cm, inner sep=0pt]
+    at (\cgspx, 0) {#4};%
+  \node[anchor=north, text width=\cgs@proc@tw, align=center, inner sep=0pt]
+    at (\cgspx, -0.54cm) {%
+      {\small\bfseries\sffamily\color{SlideTitleFg}#5\par}%
+      \vspace*{2.5pt}%
+      {\color{\cgs@curcol}\rule{0.75cm}{1.1pt}\par}%
+      \vspace*{3pt}%
+      {\footnotesize\sffamily\color{SlideMuted}#6}%
+    };%
+}
+
+\NewDocumentEnvironment{processline}{O{}}{%
+  \cgs@clear%
+  \def\cgs@proc@start{#1}%
+}{%
+  \par\noindent%
+  \ifnum\cgs@count>0\relax%
+    \setlength{\cgs@proc@dx}{\dimexpr\linewidth/\cgs@count\relax}%
+    \setlength{\cgs@proc@tw}{\dimexpr 0.86\cgs@proc@dx\relax}%
+    \begin{tikzpicture}%
+      \path[use as bounding box] (0, -2.68cm) rectangle (\linewidth, 0.78cm);%
+      \ifstrempty{\cgs@proc@start}{}{%
+        \node[anchor=west, rounded corners=3.5pt,
+              fill=SlidePrimary!12!SlideCardSurface, draw=SlidePrimary!35,
+              font=\tiny\bfseries\sffamily\color{SlidePrimary},
+              inner xsep=6pt, inner ysep=3pt] at (0, 0.56cm) {\cgs@proc@start};%
+      }%
+      \draw[SlideBorder, line width=1.8pt]
+        ({0.5*\cgs@proc@dx}, 0) -- ({\linewidth - 0.5*\cgs@proc@dx}, 0);%
+      \cgs@foreach\cgs@proc@draw%
+    \end{tikzpicture}%
+  \fi\par%
+}
+
+\NewDocumentCommand{\processstep}{O{auto} m m +m}{%
+  \cgs@push{{#1}{#2}{#3}{#4}}%
+}
+
+% --- 5c. timelineflow : ruban chronologique segmenté alterné haut / bas ---
+\newlength{\cgs@tl@dx}
+\newlength{\cgs@tl@tw}
+
+\newcommand{\cgs@tl@draw}[7]{%
+  % #1=idx, #2=tot, #3=pos(auto|top|bottom), #4=color, #5=date, #6=title, #7=desc
+  \cgs@resolvecolor{#4}{#1}%
+  \pgfmathsetlengthmacro{\cgstlx}{(#1-0.5)*\cgs@tl@dx}%
+  \pgfmathsetlengthmacro{\cgstll}{(#1-1)*\cgs@tl@dx + 0.05cm}%
+  \pgfmathsetlengthmacro{\cgstlr}{#1*\cgs@tl@dx - 0.05cm}%
+  % Détermination haut/bas
+  \def\cgs@tl@dir{top}%
+  \ifstrequal{#3}{auto}{%
+    \ifodd#1\def\cgs@tl@dir{top}\else\def\cgs@tl@dir{bottom}\fi%
+  }{%
+    \def\cgs@tl@dir{#3}%
+  }%
+  % Segment ruban bicolore incliné
+  \fill[\cgs@curcol, rounded corners=3pt]
+    (\cgstll, -0.17cm) -- (\cgstlr, -0.17cm)
+    -- (\cgstlr+0.12cm, 0.17cm) -- (\cgstll+0.12cm, 0.17cm) -- cycle;%
+  \node[font=\scriptsize\bfseries\sffamily\color{white}] at (\cgstlx+0.06cm, 0) {#5};%
+  % Tige verticale + texte alterné
+  \ifdefstring{\cgs@tl@dir}{top}{%
+    \draw[\cgs@curcol!75, line width=1.1pt] (\cgstlx+0.06cm, 0.19cm) -- (\cgstlx+0.06cm, 0.62cm);%
+    \fill[\cgs@curcol] (\cgstlx+0.06cm, 0.64cm) circle (2.6pt);%
+    \node[anchor=south, text width=\cgs@tl@tw, align=center, inner sep=0pt]
+      at (\cgstlx+0.06cm, 0.78cm) {%
+        {\footnotesize\bfseries\sffamily\color{SlideTitleFg}#6\par}%
+        \vspace*{2pt}%
+        {\scriptsize\sffamily\color{SlideMuted}#7}%
+      };%
+  }{%
+    \draw[\cgs@curcol!75, line width=1.1pt] (\cgstlx+0.06cm, -0.19cm) -- (\cgstlx+0.06cm, -0.62cm);%
+    \fill[\cgs@curcol] (\cgstlx+0.06cm, -0.64cm) circle (2.6pt);%
+    \node[anchor=north, text width=\cgs@tl@tw, align=center, inner sep=0pt]
+      at (\cgstlx+0.06cm, -0.78cm) {%
+        {\footnotesize\bfseries\sffamily\color{SlideTitleFg}#6\par}%
+        \vspace*{2pt}%
+        {\scriptsize\sffamily\color{SlideMuted}#7}%
+      };%
+  }%
+}
+
+\NewDocumentEnvironment{timelineflow}{}{%
+  \cgs@clear%
+}{%
+  \par\noindent%
+  \ifnum\cgs@count>0\relax%
+    \setlength{\cgs@tl@dx}{\dimexpr(\linewidth-0.14cm)/\cgs@count\relax}%
+    \pgfmathsetlength{\cgs@tl@tw}{min(3.85cm, 1.45*\cgs@tl@dx)}%
+    \begin{tikzpicture}%
+      \path[use as bounding box] (0, -2.55cm) rectangle (\linewidth, 2.55cm);%
+      \cgs@foreach\cgs@tl@draw%
+    \end{tikzpicture}%
+  \fi\par%
+}
+
+\NewDocumentCommand{\timelineevent}{O{auto} O{auto} m m +m}{%
+  \cgs@push{{#1}{#2}{#3}{#4}{#5}}%
+}
+
+% --- 5d. funnelchart : entonnoir en trapèzes avec annotations gauche / droite ---
+\newlength{\cgs@fun@maxw}
+\newlength{\cgs@fun@tw}
+
+\newcommand{\cgs@fun@draw}[6]{%
+  % #1=idx, #2=tot, #3=color, #4=num, #5=title, #6=desc
+  \cgs@resolvecolor{#3}{#1}%
+  \pgfmathsetmacro{\cgsupt}{(#1-1)/#2}%
+  \pgfmathsetmacro{\cgsbot}{#1/#2}%
+  \pgfmathsetlengthmacro{\cgswt}{\cgs@fun@maxw*(1 - 0.68*\cgsupt)}%
+  \pgfmathsetlengthmacro{\cgswb}{\cgs@fun@maxw*(1 - 0.68*\cgsbot)}%
+  \pgfmathsetlengthmacro{\cgsyt}{-(\numexpr#1-1\relax)*0.92cm}%
+  \pgfmathsetlengthmacro{\cgsyb}{\cgsyt - 0.82cm}%
+  \pgfmathsetlengthmacro{\cgsym}{0.5*(\cgsyt+\cgsyb)}%
+  \pgfmathsetlengthmacro{\cgswm}{0.5*(\cgswt+\cgswb)}%
+  \fill[\cgs@curcol]
+    (-\cgswt, \cgsyt) -- (\cgswt, \cgsyt)
+    -- (\cgswb, \cgsyb) -- (-\cgswb, \cgsyb) -- cycle;%
+  \node[font=\bfseries\sffamily\small\color{white}] at (0, \cgsym) {#4};%
+  \ifodd#1%
+    \draw[\cgs@curcol!75, line width=1pt] (\cgswm+0.12cm, \cgsym) -- (2.95cm, \cgsym);%
+    \fill[\cgs@curcol] (2.95cm, \cgsym) circle (2.2pt);%
+    \node[anchor=west, text width=\cgs@fun@tw, align=left, inner sep=0pt]
+      at (3.12cm, \cgsym) {%
+        {\footnotesize\bfseries\sffamily\color{SlideTitleFg}#5\par}%
+        {\scriptsize\sffamily\color{SlideMuted}#6}%
+      };%
+  \else%
+    \draw[\cgs@curcol!75, line width=1pt] (-\cgswm-0.12cm, \cgsym) -- (-2.95cm, \cgsym);%
+    \fill[\cgs@curcol] (-2.95cm, \cgsym) circle (2.2pt);%
+    \node[anchor=east, text width=\cgs@fun@tw, align=right, inner sep=0pt]
+      at (-3.12cm, \cgsym) {%
+        {\footnotesize\bfseries\sffamily\color{SlideTitleFg}#5\par}%
+        {\scriptsize\sffamily\color{SlideMuted}#6}%
+      };%
+  \fi%
+}
+
+\NewDocumentEnvironment{funnelchart}{O{2.20cm}}{%
+  \cgs@clear%
+  \setlength{\cgs@fun@maxw}{#1}%
+  \setlength{\cgs@fun@tw}{\dimexpr 0.48\linewidth - 3.25cm\relax}%
+}{%
+  \par\centering%
+  \ifnum\cgs@count>0\relax%
+    \begin{tikzpicture}%
+      \path[use as bounding box] (-0.49\linewidth, -{\cgs@count*0.92cm}) rectangle (0.49\linewidth, 0.1cm);%
+      \cgs@foreach\cgs@fun@draw%
+    \end{tikzpicture}%
+  \fi\par%
+}
+
+\NewDocumentCommand{\funnellevel}{O{auto} m m +m}{%
+  \cgs@push{{#1}{#2}{#3}{#4}}%
+}
+
+% --- 5e. cyclechart : diagramme circulaire itératif à N étapes ---
+\newlength{\cgs@cyc@rad}
+\newlength{\cgs@cyc@tw}
+
+\newcommand{\cgs@cyc@draw}[6]{%
+  % #1=idx, #2=tot, #3=color, #4=num, #5=title, #6=desc
+  \cgs@resolvecolor{#3}{#1}%
+  \pgfmathsetmacro{\cgsstepdeg}{360/#2}%
+  \pgfmathsetmacro{\cgsstartdeg}{#2 == 4 || #2 == 6 ? (90 - 0.5*\cgsstepdeg) : 90}%
+  \pgfmathsetmacro{\cgsang}{\cgsstartdeg - (#1-1)*\cgsstepdeg}%
+  \pgfmathsetmacro{\cgsarcgap}{min(18, 0.30*\cgsstepdeg)}%
+  \pgfmathsetmacro{\cgsarcstart}{\cgsang - \cgsarcgap}%
+  \pgfmathsetmacro{\cgsarcend}{\cgsang - \cgsstepdeg + \cgsarcgap}%
+  % Arc fléché vers le nœud suivant
+  \draw[-{Stealth[length=5.5pt, width=4.5pt]}, \cgs@curcol, line width=2pt]
+    (\cgsarcstart:\cgs@cyc@rad) arc (\cgsarcstart:\cgsarcend:\cgs@cyc@rad);%
+  % Pastille numérotée sur le cercle
+  \fill[SlideBg] (\cgsang:\cgs@cyc@rad) circle (0.44cm);%
+  \node[circle, fill=\cgs@curcol, text=white, font=\bfseries\sffamily\footnotesize,
+        minimum size=0.72cm, inner sep=0pt] (cnode#1) at (\cgsang:\cgs@cyc@rad) {#4};%
+  % Connecteur et libellé sans collision gauche/droite
+  \pgfmathsetmacro{\cgscosa}{cos(\cgsang)}%
+  \pgfmathparse{\cgscosa >= -0.05 ? 1 : 0}%
+  \ifnum\pgfmathresult=1\relax%
+    \draw[\cgs@curcol!65, line width=0.9pt]
+      (\cgsang:\cgs@cyc@rad+0.42cm) -- ++(0.32cm, 0) coordinate (clab#1);%
+    \node[anchor=west, text width=\cgs@cyc@tw, align=left, inner sep=0pt]
+      at ([xshift=0.14cm]clab#1) {%
+        {\footnotesize\bfseries\sffamily\color{SlideTitleFg}#5\par}%
+        {\scriptsize\sffamily\color{SlideMuted}#6}%
+      };%
+  \else%
+    \draw[\cgs@curcol!65, line width=0.9pt]
+      (\cgsang:\cgs@cyc@rad+0.42cm) -- ++(-0.32cm, 0) coordinate (clab#1);%
+    \node[anchor=east, text width=\cgs@cyc@tw, align=right, inner sep=0pt]
+      at ([xshift=-0.14cm]clab#1) {%
+        {\footnotesize\bfseries\sffamily\color{SlideTitleFg}#5\par}%
+        {\scriptsize\sffamily\color{SlideMuted}#6}%
+      };%
+  \fi%
+}
+
+\NewDocumentEnvironment{cyclechart}{O{1.82cm} m}{%
+  \cgs@clear%
+  \setlength{\cgs@cyc@rad}{#1}%
+  \def\cgs@cyc@center{#2}%
+  \setlength{\cgs@cyc@tw}{\dimexpr 0.5\linewidth - \cgs@cyc@rad - 1.1cm\relax}%
+}{%
+  \par\centering%
+  \ifnum\cgs@count>0\relax%
+    \begin{tikzpicture}%
+      \path[use as bounding box]
+        (-0.49\linewidth, -{\cgs@cyc@rad+0.78cm}) rectangle (0.49\linewidth, {\cgs@cyc@rad+0.78cm});%
+      % Cœur central
+      \fill[SlidePrimary!9!SlideCardSurface] (0,0) circle ({0.60*\cgs@cyc@rad});%
+      \draw[SlideBorder, line width=0.7pt] (0,0) circle ({0.60*\cgs@cyc@rad});%
+      \node[text width={0.95*\cgs@cyc@rad}, align=center,
+            font=\small\bfseries\sffamily\color{SlideTitleFg}] at (0,0) {\cgs@cyc@center};%
+      \cgs@foreach\cgs@cyc@draw%
+    \end{tikzpicture}%
+  \fi\par%
+}
+
+\NewDocumentCommand{\cyclestep}{O{auto} m m +m}{%
+  \cgs@push{{#1}{#2}{#3}{#4}}%
+}
+
+% ==============================================================================
+% 6. Styles PGFPlots & listings éditoriaux
+% ==============================================================================
+
+\pgfplotscreateplotcyclelist{ClasseGuillaumePalette}{%
+  {SlidePrimary, fill=SlidePrimary!80, mark=*, mark options={fill=SlidePrimary}},%
+  {SlideAccent, fill=SlideAccent!80, mark=square*, mark options={fill=SlideAccent}},%
+  {SlideSecondary, fill=SlideSecondary!80, mark=triangle*, mark options={fill=SlideSecondary}},%
+  {ThesisHighlight, fill=ThesisHighlight!80, mark=diamond*, mark options={fill=ThesisHighlight}},%
+  {SlideMuted, fill=SlideMuted!70}%
+}
+
+\pgfplotsset{
+  ClasseGuillaumeAxis/.style={
+    axis lines*=left,
+    axis line style={SlideBorder, line width=0.7pt},
+    tick style={SlideBorder, line width=0.6pt},
+    tick label style={font=\scriptsize\sffamily\color{SlideMuted}},
+    label style={font=\footnotesize\bfseries\sffamily\color{SlideFg}},
+    ymajorgrids=true,
+    grid style={dashed, SlideBorder, line width=0.45pt},
+    area legend,
+    legend image post style={mark=none},
+    legend style={
+      draw=none,
+      fill=none,
+      font=\scriptsize\sffamily\color{SlideFg},
+      legend columns=-1,
+      /tikz/every even column/.append style={column sep=10pt}
+    },
+    cycle list name=ClasseGuillaumePalette,
+    enlarge x limits=0.12
+  }
+}
+
 \lstdefinestyle{ClasseGuillaumeSlidescode}{
   basicstyle=\ttfamily\scriptsize\color{SlideFg},
   backgroundcolor=\color{SlideCardBg},
@@ -252,9 +805,10 @@
   stepnumber=1,
   xleftmargin=14pt,
   framexleftmargin=14pt,
-  frame=single,
-  rulecolor=\color{SlideBorder},
-  framesep=4pt,
+  frame=leftline,
+  framerule=1.5pt,
+  rulecolor=\color{SlidePrimary},
+  framesep=5pt,
   breaklines=true,
   breakatwhitespace=true,
   tabsize=2,

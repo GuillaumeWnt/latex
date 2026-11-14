@@ -2,7 +2,7 @@
 %% figures/tikz/architecture-slides.tex
 %% Schéma d'architecture du socle modulaire ClasseGuillaumeSlides (standalone)
 %% ==============================================================================
-\documentclass[tikz, border=2mm]{standalone}
+\documentclass[tikz, border=1.5mm]{standalone}
 
 \usepackage{xcolor}
 \providecolor{ThesisPrimary}{RGB}{15, 60, 110}
@@ -12,84 +12,69 @@
 \providecolor{ThesisMuted}{RGB}{95, 105, 118}
 \providecolor{ThesisBackground}{RGB}{246, 248, 251}
 
-\usetikzlibrary{
-  arrows.meta,
-  positioning,
-  fit,
-  backgrounds
-}
+\usetikzlibrary{arrows.meta, positioning}
 
 \begin{document}
 \begin{tikzpicture}[
   >=Stealth,
-  every node/.style={font=\footnotesize\sffamily},
-  box/.style={
-    draw=ThesisPrimary!70,
-    line width=0.8pt,
+  every node/.style={font=\scriptsize\sffamily},
+  layer/.style={
+    draw=ThesisPrimary!28,
+    line width=0.6pt,
     rounded corners=3pt,
-    fill=white,
+    fill=ThesisBackground,
     text=ThesisText,
     align=center,
     minimum height=0.72cm,
-    minimum width=2.4cm,
+    text width=1.42cm,
     inner sep=4pt
   },
   core/.style={
     draw=ThesisPrimary,
-    line width=1.1pt,
+    line width=1pt,
     rounded corners=4pt,
-    fill=ThesisPrimary!10,
-    text=ThesisPrimary,
+    fill=ThesisPrimary,
+    text=white,
     align=center,
-    minimum height=0.95cm,
-    minimum width=2.9cm,
+    minimum height=0.88cm,
+    text width=4.65cm,
     inner sep=5pt,
     font=\footnotesize\bfseries\sffamily
   },
-  mode/.style={
-    draw=ThesisSecondary,
-    line width=0.9pt,
+  outmode/.style={
+    draw=ThesisSecondary!65,
+    line width=0.75pt,
     rounded corners=3pt,
-    fill=ThesisSecondary!8,
+    fill=white,
     text=ThesisText,
     align=center,
     minimum height=0.78cm,
-    minimum width=2.7cm,
+    text width=2.12cm,
     inner sep=4pt
   },
-  arrow/.style={
+  flow/.style={
     ->,
-    line width=0.9pt,
-    draw=ThesisText!80
+    line width=0.85pt,
+    draw=ThesisMuted
   }
 ]
+  % Couche d'entrée (haut)
+  \node[layer] (content) {\textbf{Contenu}\\{\tiny\color{ThesisMuted}sections/}};
+  \node[layer, right=0.22cm of content] (assets) {\textbf{Ressources}\\{\tiny\color{ThesisMuted}fig, bib, data}};
+  \node[layer, right=0.22cm of assets] (opts) {\textbf{Thème}\\{\tiny\color{ThesisMuted}palette, style}};
 
-  \node[box] (content) {\textbf{Contenu épuré}\\sections/*.tex};
-  \node[box, below=0.35cm of content] (assets) {\textbf{Ressources}\\figures, biblio, data};
-  \node[box, below=0.35cm of assets] (theme) {\textbf{Options}\\light/dark, FR/EN};
+  % Noyau central
+  \node[core, below=0.55cm of assets] (cls) {ClasseGuillaumeSlides v2.0\\{\tiny\color{white!82}LuaLaTeX \textbullet{} Beamer + Moloch}};
 
-  \node[core, right=0.95cm of assets] (cls) {ClasseGuillaumeSlides\\Beamer + Moloch};
+  % Deux modes de déploiement (bas)
+  \node[outmode, below=0.55cm of cls.south, xshift=-1.26cm, anchor=north] (standalone) {\textbf{\color{ThesisSecondary}Autonome}\\{\tiny\color{ThesisMuted}projets/<deck>/}};
+  \node[outmode, below=0.55cm of cls.south, xshift=1.26cm, anchor=north, draw=ThesisAccent!75] (integrated) {\textbf{\color{ThesisAccent}Intégré}\\{\tiny\color{ThesisMuted}<doc>/slides/}};
 
-  \node[mode, right=0.95cm of cls, yshift=0.62cm] (standalone) {\textbf{Mode Autonome}\\projets/mon-deck/};
-  \node[mode, right=0.95cm of cls, yshift=-0.62cm] (integrated) {\textbf{Mode Intégré}\\projet/slides/ (../*)};
+  \draw[flow] (content.south) -- (cls.north -| content.south);
+  \draw[flow] (assets.south) -- (cls.north);
+  \draw[flow] (opts.south) -- (cls.north -| opts.south);
 
-  \draw[arrow] (content.east) -- (cls.west);
-  \draw[arrow] (assets.east) -- (cls.west);
-  \draw[arrow] (theme.east) -- (cls.west);
-
-  \draw[arrow, draw=ThesisSecondary] (cls.east) -- (standalone.west);
-  \draw[arrow, draw=ThesisAccent] (cls.east) -- (integrated.west);
-
-  \begin{scope}[on background layer]
-    \node[
-      fit=(content)(assets)(theme),
-      draw=ThesisMuted!40,
-      dashed,
-      rounded corners=5pt,
-      fill=ThesisBackground,
-      inner sep=6pt
-    ] (grp) {};
-  \end{scope}
-
+  \draw[flow, draw=ThesisSecondary] (cls.south -| standalone.north) -- (standalone.north);
+  \draw[flow, draw=ThesisAccent] (cls.south -| integrated.north) -- (integrated.north);
 \end{tikzpicture}
 \end{document}
