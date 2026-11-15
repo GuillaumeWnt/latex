@@ -15,7 +15,7 @@
                                                           "@oscardvs/zoteus"
                                                       ],
                                              "env":  {
-                                                         "ZOTEUS_LOCAL":  "true"
+                                                         "ZOTEUS_LOCAL":  "auto"
                                                      }
                                          }
                 },
