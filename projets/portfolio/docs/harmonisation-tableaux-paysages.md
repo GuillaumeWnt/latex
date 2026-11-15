@@ -1,6 +1,6 @@
 # Harmonisation des Tableaux Paysages (`Tableau I.1` & `Tableau V.1`)
 
-Ce document consigne les décisions typographiques, le choix d'orientation, l'ajout des notes d'abréviations et les corrections de code effectués sur les deux tableaux paysages actifs de [`projets/portefolio_2/`](../main.tex) :
+Ce document consigne les décisions typographiques, le choix d'orientation, l'ajout des notes d'abréviations et les corrections de code effectués sur les deux tableaux paysages actifs de [`projets/portfolio/`](../main.tex) :
 
 - **Tableau I.1 (p. 4)** : [`content/tables/les-hypotheses-diagnostiques.tex`](../content/tables/les-hypotheses-diagnostiques.tex) (inclus dans [`content/01-cas-diagnostique/01-cas-clinique.tex`](../content/01-cas-diagnostique/01-cas-clinique.tex)) ;
 - **Tableau V.1 (p. 43–44)** : [`content/tables/medication-cas-polypathologique-penche.tex`](../content/tables/medication-cas-polypathologique-penche.tex).
@@ -59,4 +59,4 @@ Les abréviations posologiques `cp` et `inh` dans `Tableau V.1` sont expliquées
 | `les-hypotheses-diagnostiques.tex` | Espacement ad hoc `$\rightarrow$ \hspace{5pt}...` et trois points ASCII `...`. | Remplacement par `$\rightarrow$~` et `\ldots`. |
 | `medication-cas-polypathologique-penche.tex` | Puces simulées à la main via `\newline \textbullet~` dans la cellule *Dapagliflozine* et points de suspension `...` en pied de tableau. | Conversion vers l'environnement sémantique `tableitemize` et `\ldots`. |
 
-> **Remarque sur les règles `booktabs` et `chktex` :** conformément aux conventions du socle [`templates/template_officiel/`](../../../templates/template_officiel/README.md) (`.chktexrc` et `.agents/rules/coding-style.md`), les tableaux modernes privilégient `booktabs` sans filets verticaux (`Warning 44` dans `chktex`). Afin de respecter strictement votre consigne de conserver l'aspect visuel exact du Tableau I.1 (quadrillage fermé + double ligne), `hhline` et `tableitemize` restent localisés dans [`projets/portefolio_2/`](../README.md) et ne sont pas rétroportés dans `template_officiel`.
+> **Remarque sur les règles `booktabs` et `chktex` :** conformément aux conventions du socle [`templates/template_officiel/`](../../../templates/template_officiel/README.md) (`.chktexrc` et `.agents/rules/coding-style.md`), les tableaux modernes privilégient `booktabs` sans filets verticaux (`Warning 44` dans `chktex`). Afin de respecter strictement votre consigne de conserver l'aspect visuel exact du Tableau I.1 (quadrillage fermé + double ligne), `hhline` et `tableitemize` restent localisés dans [`projets/portfolio/`](../README.md) et ne sont pas rétroportés dans `template_officiel`.

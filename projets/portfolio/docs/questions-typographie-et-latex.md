@@ -1,8 +1,8 @@
-# Questions Techniques, Typographie LaTeX, Unités & Notes `guillaume` (`portefolio_2`)
+# Questions Techniques, Typographie LaTeX, Unités & Notes `guillaume` (`portfolio`)
 
 > **Intégrité rédactionnelle vérifiée :** Aucun mot de la prose des chapitres (`content/`, `backmatter/`, `frontmatter/`) n'a été ajouté, supprimé ou reformulé (contrôle programmatique de parité des 10 fichiers modifiés), et `projets/portefolio_1/` est resté strictement intact.
 
-Ce document complète [`refonte-styles-et-bibliographie.md`](refonte-styles-et-bibliographie.md) en répondant en détail aux questions techniques et en documentant les ajustements appliqués dans [`projets/portefolio_2/`](../README.md).
+Ce document complète [`refonte-styles-et-bibliographie.md`](refonte-styles-et-bibliographie.md) en répondant en détail aux questions techniques et en documentant les ajustements appliqués dans [`projets/portfolio/`](../README.md).
 
 ---
 
@@ -187,7 +187,7 @@ Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiq
 
 - **Aucune des deux commandes n'est plus « récente » ou « meilleure » techniquement :** les deux reposent sur le même moteur KOMA-Script (`tocbasic`) et produisent exactement la même mise en forme dans la table des matières et la liste (`tocentrystyle=tocline`, `tocentrydynnumwidth=true`).
 - `\listofillustrations` n'a d'utilité que dans les documents qui séparent explicitement deux familles de visuels (par exemple des `\begin{figure}` pour les schémas/graphiques et des `\begin{illustration}` pour les planches iconographiques, avec préfixes `\crefname{illustration}` / `\Crefname{illustration}` définis dans [`config/macros.sty`](../config/macros.sty#L228-L231)).
-- **Amélioration appliquée dans [`main.tex`](../main.tex#L65-L69) :** comme `portefolio_2` utilise exclusivement `\begin{figure}` (aucun environnement `\begin{illustration}` dans le projet), `\listofillustrations` générait auparavant une **page entièrement blanche**. Sa suppression élimine cette page vide et aligne `portefolio_2` sur [`templates/template_officiel/main.tex`](../../../templates/template_officiel/main.tex#L56-L59), qui n'appelle que `\tableofcontents`, `\listoffigures` et `\listoftables`.
+- **Amélioration appliquée dans [`main.tex`](../main.tex#L65-L69) :** comme `portfolio` utilise exclusivement `\begin{figure}` (aucun environnement `\begin{illustration}` dans le projet), `\listofillustrations` générait auparavant une **page entièrement blanche**. Sa suppression élimine cette page vide et aligne `portfolio` sur [`templates/template_officiel/main.tex`](../../../templates/template_officiel/main.tex#L56-L59), qui n'appelle que `\tableofcontents`, `\listoffigures` et `\listoftables`.
 
 
 ---
@@ -200,7 +200,7 @@ Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiq
 | :--- | :--- | :--- | :--- | :--- |
 | **1. Saut de page à chaque `\section`** | `\clearpage` avant `\section` | Présentation très cloisonnée | Crée de grandes zones blanches dès qu'une section est courte (ex. chapitres II ou VI) ; dénature le rôle des `\chapter` sous `scrbook` | À éviter |
 | **2. Flux continu actuel (sans garde de hauteur)** | `\clubpenalty=10000`, `\widowpenalty=10000` ([`ClasseGuillaume.cls`](../ClasseGuillaume.cls#L173-L177)) + `\@afterheading` KOMA-Script | Remplissage optimal des pages, zéro demi-page vide artificielle | Une `\section` peut démarrer tout en bas de page avec seulement 4–5 lignes (observé en **page 11** avec `3 Approche réflexive` et en **page 50** avec `2 Approche réflexive`) | Correct mais perfectible |
-| **3. Option mixte : seuil minimal (`needspace`)** | `\RequirePackage{needspace}` + `\AddToHook{cmd/section/before}` (`\sectionNeedspace`, `8\baselineskip` par défaut, relevé à `12\baselineskip` en `portefolio_2`) + `\subsectionNeedspace` (`5\baselineskip`) | Enchaînement fluide si l'espace suffit ; bascule propre en haut de page suivante si moins de ~5–6 lignes tiennent sous le titre | +1 page sur `portefolio_2` (`70 -> 71` p., avec suppression des coupures p. 11, p. 39 et p. 50) | **Implémentée** |
+| **3. Option mixte : seuil minimal (`needspace`)** | `\RequirePackage{needspace}` + `\AddToHook{cmd/section/before}` (`\sectionNeedspace`, `8\baselineskip` par défaut, relevé à `12\baselineskip` en `portfolio`) + `\subsectionNeedspace` (`5\baselineskip`) | Enchaînement fluide si l'espace suffit ; bascule propre en haut de page suivante si moins de ~5–6 lignes tiennent sous le titre | +1 page sur `portfolio` (`70 -> 71` p., avec suppression des coupures p. 11, p. 39 et p. 50) | **Implémentée** |
 
 ### B. Pourquoi ne pas « empêcher toute coupure d'une section » ?
 
@@ -211,11 +211,11 @@ Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiq
 
 ---
 
-## 12. Différencier deux types de listes à puces (courtes vs longs textes) dans `portefolio_2`
+## 12. Différencier deux types de listes à puces (courtes vs longs textes) dans `portfolio`
 
-### A. Constat sur le corpus actuel (`projets/portefolio_2/content/`)
+### A. Constat sur le corpus actuel (`projets/portfolio/content/`)
 
-Un audit des environnements de liste dans `projets/portefolio_2/content/` recense **28 `\begin{itemize}` actifs** (hors 5 occurrences archivées dans `content/tables/archives/les-hypotheses-diagnostiques-2.tex` ; aucun `enumerate` ni `description` actif dans `content/`), qui se répartissent en deux usages distincts :
+Un audit des environnements de liste dans `projets/portfolio/content/` recense **28 `\begin{itemize}` actifs** (hors 5 occurrences archivées dans `content/tables/archives/les-hypotheses-diagnostiques-2.tex` ; aucun `enumerate` ni `description` actif dans `content/`), qui se répartissent en deux usages distincts :
 
 1. **15 listes d'énumération courtes** (1 à 2 lignes par puce) :
    - `01-cas-diagnostique/01-cas-clinique.tex:12`
@@ -236,7 +236,7 @@ Un audit des environnements de liste dans `projets/portefolio_2/content/` recens
 
 ### C. Solutions propres via `enumitem` (sans `\begin{singlespace}` manuel)
 
-Il n'est **pas** nécessaire d'entourer chaque liste de `\begin{singlespace}...\end{singlespace}` comme dans l'ancien `portefolio_1` (`portefolio-style.sty` charge déjà `enumitem`, et conserve la liste dédiée `tableitemize` aux [lignes 269–275](../config/portefolio-style.sty#L269-L275)). Deux options nettes s'offrent pour `portefolio_2` uniquement (sans rétroportage dans `templates/template_officiel/`) :
+Il n'est **pas** nécessaire d'entourer chaque liste de `\begin{singlespace}...\end{singlespace}` comme dans l'ancien `portefolio_1` (`portefolio-style.sty` charge déjà `enumitem`, et conserve la liste dédiée `tableitemize` aux [lignes 269–275](../config/portefolio-style.sty#L269-L275)). Deux options nettes s'offrent pour `portfolio` uniquement (sans rétroportage dans `templates/template_officiel/`) :
 
 | Option | Réglage par défaut (`\setlist` global) | Marquage explicite dans `content/` | Avantages / compromis |
 | :--- | :--- | :--- | :--- |
@@ -246,7 +246,7 @@ Il n'est **pas** nécessaire d'entourer chaque liste de `\begin{singlespace}...\
 > [!NOTE]
 > Dans certains cas ponctuels à puce unique (`01-cas-diagnostique/01-cas-clinique.tex:56,71` avec `\item \textbf{Justification :}\\`), le rôle rédactionnel correspond sémantiquement à `\paragraph{Justification}`, mais l'utilisation de `[compact]` ou `[aeree]` permet d'ajuster uniquement l'interligne sans altérer ni les puces visuelles ni le texte du portfolio.
 
-### D. Implémentation retenue (Option 1 appliquée à `portefolio_2` uniquement)
+### D. Implémentation retenue (Option 1 appliquée à `portfolio` uniquement)
 
 - **Réglage dans [`config/portefolio-style.sty`](../config/portefolio-style.sty#L289-L295) :** retrait de `before=\singlespacing` sur `\setlist{topsep=0.35em, parsep=0.45em, itemsep=0.35em}` pour que les **13 listes longues** héritent de l'interligne double normal, et ajout de `\SetEnumitemKey{compact}{before=\setstretch{1}, topsep=0.35em, parsep=0.15em, itemsep=0.35em}` (l'emploi de `\setstretch{1}` plutôt que `\singlespacing` évite le `\vskip\baselineskip` non compensé injecté par `setspace.sty` au-dessus de la première puce).
 - **Application ciblée :** les **15 listes courtes** portent désormais `\begin{itemize}[compact, label=\textbullet]` (`label=\textbullet` conservé pour garder un repère uniforme sur les 28 listes sans modifier un seul mot rédactionnel ni rétroporter dans `templates/template_officiel/`).
@@ -287,7 +287,7 @@ Il n'est **pas** nécessaire d'entourer chaque liste de `\begin{singlespace}...\
 | **Citations biblio** (`citecolor`) | Appels `[1]`, `[2–5]`, rétro-liens `(cf. p. ...)` | **Prune assombri** (`CoverPlum!75!CoverNavy`, `PortfolioCite`), harmonisé avec la charte sans effet « néon » | Noir texte (`hidelinks`) |
 | **URL & DOI externes** (`urlcolor`) | Sortie vers le Web externe | **Couleur accent de la charte** (`CoverPlum`, `PortfolioUrl`), la plus distincte pour signaler un lien sortant | Noir texte (`hidelinks`) |
 
-### B. Implémentation dans `portefolio_2` et garde-fous indispensables
+### B. Implémentation dans `portfolio` et garde-fous indispensables
 
 - **Respect de `\ifprintversion` dans [`config/portefolio-style.sty`](../config/portefolio-style.sty) :** remplacement de `\hypersetup{hidelinks}` inconditionnel par `\ifprintversion \hypersetup{hidelinks} \else \hypersetup{colorlinks=true, linkcolor=PortfolioLink, citecolor=PortfolioCite, urlcolor=PortfolioUrl, ...} \fi`.
 - **Protection des listes de navigation (`linkcolor=.`) :** des hooks `\AddToHook{cmd/.../before}{\begingroup\hypersetup{linkcolor=.}}` et `after` autour de `\tableofcontents`, `\listoffigures`, `\listoftables` et `\listoftodos` empêchent toute la table des matières de passer en bleu uniforme et préservent la hiérarchie typographique (`CoverNavy` pour les chapitres, noir pour les sections) tout en gardant 100 % des clics actifs.

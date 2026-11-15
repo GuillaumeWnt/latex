@@ -1,4 +1,4 @@
-# Portfolio Médical (`portefolio_2`)
+# Portfolio Médical (`portfolio`)
 
 Migration architecturale du projet `portefolio_1` vers le socle modulaire [`templates/template_officiel/`](../../templates/template_officiel/README.md) (`ClasseGuillaume v2.0`, LuaLaTeX + Biber + KOMA-Script `scrbook` + `geometry`).
 

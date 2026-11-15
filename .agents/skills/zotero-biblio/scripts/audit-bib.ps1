@@ -2,11 +2,11 @@
 .SYNOPSIS
     Audits a BibTeX / BibLaTeX file for integrity, duplicates, and missing mandatory fields.
 .PARAMETER BibFile
-    Path to the .bib file to audit. Defaults to 'bib/references.bib'.
+    Path to the .bib file to audit. Defaults to 'biblio/references.bib'.
 #>
 
 param (
-    [string]$BibFile = "bib/references.bib"
+    [string]$BibFile = "biblio/references.bib"
 )
 
 if (-not (Test-Path $BibFile)) {

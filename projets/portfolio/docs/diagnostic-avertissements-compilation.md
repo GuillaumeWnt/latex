@@ -1,6 +1,6 @@
-# Diagnostic des 129 avertissements dans l'IDE (`portefolio_2`)
+# Diagnostic des 129 avertissements dans l'IDE (`portfolio`)
 
-Ce document explique pourquoi l'éditeur (panneau *Problèmes* / compteur LaTeX Workshop) affiche **129 avertissements** alors que la compilation LuaLaTeX du projet [`portefolio_2`](../README.md) réussit quasi silencieusement.
+Ce document explique pourquoi l'éditeur (panneau *Problèmes* / compteur LaTeX Workshop) affiche **129 avertissements** alors que la compilation LuaLaTeX du projet [`portfolio`](../README.md) réussit quasi silencieusement.
 
 ---
 
@@ -35,7 +35,7 @@ chktex -wall -n22 -n30 -e16 -q -l .chktexrc -f"%f:%l:%c:%d:%k:%n:%m\n" main.tex
 
 Cette exécution produit exactement **127 avertissements**, tous **hérités du source d'origine `portefolio_1`** (conservés volontairement pour ne modifier aucun mot ni la mise en forme quadrillée des tableaux) :
 
-| Code ChkTeX | Occurrences | Signification et origine dans `portefolio_2` |
+| Code ChkTeX | Occurrences | Signification et origine dans `portfolio` |
 | :--- | :---: | :--- |
 | **Warning 19** | **50** | *« Use `'` (ASCII 39) instead of `’` (ASCII 180) »* — Faux positif UTF-8 activé par `-wall` sur les apostrophes typographiques `’` (`U+2019`), que ChkTeX (conçu avant UTF-8) interprète octet par octet |
 | **Warning 44** | **33** | `\hline` détecté dans les tableaux (règle `booktabs` de `.chktexrc`) — conservé intentionnellement pour préserver les bordures quadrillées d'origine |
@@ -52,5 +52,5 @@ Cette exécution produit exactement **127 avertissements**, tous **hérités du 
 
 Si vous souhaitez réduire ce compteur **sans modifier un seul mot du portfolio** :
 1. **Éliminer les 50 faux positifs UTF-8 (`-n19`) :** ajouter `-n19` dans `CmdLine` de [`.chktexrc`](../.chktexrc) (le compteur passe immédiatement de 129 à **79**).
-2. **Tolérer temporairement les styles hérités de `portefolio_1` dans `.chktexrc` local :** désactiver aussi `-n2`, `-n8`, `-n11`, `-n13`, `-n18`, `-n37` et retirer ou assouplir la règle regex sur `\hline` (`Warning 44`) uniquement dans `projets/portefolio_2/.chktexrc`.
-3. **Masquer les `Underfull` dans l'éditeur (optionnel) :** passer `latex-workshop.message.badbox.show` à `"overfull"` dans vos réglages utilisateur VS Code si vous ne voulez voir que les débordements réels (`0` dans `portefolio_2`).
+2. **Tolérer temporairement les styles hérités de `portefolio_1` dans `.chktexrc` local :** désactiver aussi `-n2`, `-n8`, `-n11`, `-n13`, `-n18`, `-n37` et retirer ou assouplir la règle regex sur `\hline` (`Warning 44`) uniquement dans `projets/portfolio/.chktexrc`.
+3. **Masquer les `Underfull` dans l'éditeur (optionnel) :** passer `latex-workshop.message.badbox.show` à `"overfull"` dans vos réglages utilisateur VS Code si vous ne voulez voir que les débordements réels (`0` dans `portfolio`).

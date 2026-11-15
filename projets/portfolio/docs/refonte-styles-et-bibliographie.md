@@ -1,4 +1,4 @@
-# Refonte Visuelle, Déduplication & Assainissement Bibliographique (`portefolio_2`)
+# Refonte Visuelle, Déduplication & Assainissement Bibliographique (`portfolio`)
 
 > **Règle d'intégrité respectée :** Aucun mot du contenu rédactionnel (`content/` et `backmatter/`) n'a été ajouté, supprimé ou modifié, et `projets/portefolio_1/` n'a subi aucune modification.
 > **Complément ultérieur :** voir [`questions-typographie-et-latex.md`](questions-typographie-et-latex.md) pour le passage final à `spacing=double` (avec listes en `\singlespacing`), la modernisation des nombres/unités via `siunitx`, les explications techniques détaillées et l'ajout des 2 notes de marge vertes (`guillaume`).
@@ -7,7 +7,7 @@
 
 ## 1. Synthèse des objectifs et fichiers modifiés
 
-Cette intervention directe sur [`projets/portefolio_2/`](../README.md) visait trois axes :
+Cette intervention directe sur [`projets/portfolio/`](../README.md) visait trois axes :
 1. **Refonte esthétique complète** des chapitres, sections, sous-sections, paragraphes, listes, en-têtes et pieds de page dans un style éditorial professionnel, aéré et harmonisé avec les pages de garde ([`figures/covers/`](../figures/covers/)).
 2. **Assainissement et réorganisation complète de la bibliographie** sous le style **Vancouver**, suppression des redondances de code et nettoyage des fichiers inutiles.
 3. **Rétroportage générique** des améliorations partagées vers [`templates/template_officiel/`](../../../templates/template_officiel/README.md).
@@ -109,7 +109,7 @@ Respectant la consigne de ne jamais inventer de données manquantes ni changer l
 
 ## 6. Vérifications finales après dernières éditions
 
-- **Compilation `projets/portefolio_2/` (LuaLaTeX + Biber via `compile.ps1` après nettoyage `latexmk -C`) :**
+- **Compilation `projets/portfolio/` (LuaLaTeX + Biber via `compile.ps1` après nettoyage `latexmk -C`) :**
   - `64` pages générées dans `build/main.pdf` (`24 660 324` octets) ;
   - **Erreurs fatales :** `0` ;
   - **Débordements (`Overfull \hbox`) :** `0` ;
@@ -117,4 +117,4 @@ Respectant la consigne de ne jamais inventer de données manquantes ni changer l
   - **Biber (`build/main.blg`) :** `18 citekeys`, `0` avertissement ni erreur.
 - **Analyse statique (`chktex -q -l .chktexrc config\portefolio-style.sty config\packages.sty`) :** `0` avertissement sur la configuration de style et de paquets.
 - **Non-régression `templates/template_officiel/` :** compilation complète validée (`56` pages, `0` erreur fatale, `1` avertissement préexistant `Marginpar on page 17 moved.`) et `0` écart entre les fichiers `ClasseGuillaume.cls` et `config/packages.sty` des deux emplacements (`Compare-Object` vide).
-- **Contrôle de parité du texte :** `git diff` nul sur `projets/portefolio_1/`, `projets/portefolio_2/content/`, `projets/portefolio_2/backmatter/` et `projets/portefolio_2/frontmatter/`.
+- **Contrôle de parité du texte :** `git diff` nul sur `projets/portefolio_1/`, `projets/portfolio/content/`, `projets/portfolio/backmatter/` et `projets/portfolio/frontmatter/`.

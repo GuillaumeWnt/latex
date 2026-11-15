@@ -50,3 +50,26 @@ Quatre principes esthétiques majeurs en ont guidé la refonte :
   2. Le serveur **`io.draw/mcp`** déjà actif pour générer des schémas Draw.io complexes lorsque TikZ ne suffit pas.
   3. Les scripts PowerShell locaux (`compile.ps1`, `lint-latex.ps1 -RunChkTeX`) couplés à **`pdftoppm`** + inspection PNG directe par l'IA pour valider l'esthétique réelle page par page.
 - **Seule exception utile :** installer le plugin Marketplace **`antigravity-plugins-official/plugin/gslides`** (ou `GongRzhe/Office-PowerPoint-MCP-Server`) uniquement si vous devez produire/modifier des présentations **Google Slides** ou **PowerPoint (`.pptx`)** collaboratives hors LaTeX.
+
+---
+
+## 4. Diagnostic MCP : pourquoi `latex-compiler` et `latex-workshop-assistant` ne sont pas accessibles
+
+### 4.1 Constat de découverte côté Antigravity
+- Dans le dépôt, les deux serveurs sont déclarés dans [`.agents/mcp_config.json`](../.agents/mcp_config.json) via `uvx` (lignes 8 à 28).
+- Côté Antigravity, les schémas MCP actifs sont stockés dans le répertoire global `C:\Users\guill\.gemini\antigravity\mcp\` (`arxiv-latex`, `brave-search`, `io.draw`, `kicad-suite_jlc-parts`, `kicad-suite_konnect`, `zotero-citations`, etc.). Aucun dossier `latex-compiler` ou `latex-workshop-assistant` n'y figure.
+- Par ailleurs, les configurations globales `C:\Users\guill\.agents\mcp_config.json` et `C:\Users\guill\.gemini\config\mcp_config.json` sont vides (`{"mcpServers": {}}`) et `C:\Users\guill\.gemini\antigravity\mcp_config.json` n'existe pas. Antigravity n'expose donc pas automatiquement les entrées déclarées uniquement dans le fichier `.agents/mcp_config.json` / `.gemini/mcp_config.json` du workspace.
+
+### 4.2 Diagnostic détaillé des deux serveurs
+
+| Serveur (`.agents/mcp_config.json`) | Paquet GitHub visé | Résultat du test direct via `uvx` | Causes identifiées |
+| :--- | :--- | :--- | :--- |
+| `latex-compiler` | `RobertoDure/mcp-latex-server` | Échec (code `1`) | **1.** Nom d'exécutable erroné dans la config (`latex-server` au lieu de `mcp-latex-server.exe`).<br>**2.** Paquet amont cassé : même avec `mcp-latex-server --help`, le point d'entrée échoue sur `ModuleNotFoundError: No module named 'latex_server'`. |
+| `latex-workshop-assistant` | `Yeok-c/latex-mcp-server` | Démarre sur chemin réel (`0`), plante sur `${workspaceFolder}` (`1`) | **1.** Hors VS Code (ou sans interpolation de `${workspaceFolder}`), `--workspace "${workspaceFolder}"` échoue au démarrage avec `Workspace does not exist: C:\Users\guill\dev\perso\latex\${workspaceFolder}`.<br>**2.** Avec un chemin résolu, le serveur (`latex-mcp-server` v`0.1.0`) répond en JSON-RPC et expose 9 outils (`compile_latex`, `download_bibliography`, `extract_bibliography`, `list_tex_files`, `read_file`, `read_pdf`, `read_pdf_from_citation`, `suggest_bib_key`, `summarize_text`), mais `compile_latex` cible `pdflatex`/`xelatex` via `latexmk` plutôt que la chaîne locale LuaLaTeX + `chktex`. |
+
+### 4.3 Pistes d'action recommandées (sur accord préalable)
+1. **Supprimer `latex-compiler` de `.agents/mcp_config.json`** : le dépôt amont `RobertoDure/mcp-latex-server` ne fonctionne pas en l'état (`ModuleNotFoundError`).
+2. **Pour `latex-workshop-assistant` :**
+   - soit le **retirer** de `.agents/mcp_config.json` puisque les outils locaux ([`compile.ps1`](../.agents/skills/latex-document-manager/scripts/compile.ps1), [`lint-latex.ps1`](../.agents/skills/latex-quality-auditor/scripts/lint-latex.ps1)) gèrent déjà LuaLaTeX, Biber et `chktex` ;
+   - soit remplacer `--workspace "${workspaceFolder}"` par `--workspace "."` (si le répertoire courant du client MCP est déjà la racine du projet) et l'enregistrer côté configuration MCP globale Antigravity si vous souhaitez disposer de ses outils auxiliaires (`list_tex_files`, `suggest_bib_key`, etc.).
+
