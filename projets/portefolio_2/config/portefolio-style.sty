@@ -253,8 +253,24 @@
 }
 \renewcommand\thesubfigure{(\alph{subfigure})}
 
-% Préserve la compacité interne des tableaux cliniques existants
+% Préserve la compacité interne des tableaux cliniques existants et active hhline / notes de tableau
+\RequirePackage{hhline}
+\RequirePackage{threeparttablex}
 \renewcommand{\arraystretch}{1.05}
+
+% Légende de suite homogène pour tableaux multipages (conserve l'étiquette CoverPlum)
+\newcommand{\tableSuiteCaption}[2]{%
+  \caption*{\textbf{\textsc{\textcolor{CoverPlum}{\tablename~\ref{#1} (suite)}}.} #2}%
+}
+
+% Liste compacte dédiée aux cellules de tableaux (évite les bricolages \vspace{-3mm})
+\newlist{tableitemize}{itemize}{1}
+\setlist[tableitemize]{
+  label = \small\textbullet,
+  nosep,
+  leftmargin = *,
+  before = \singlespacing\@minipagetrue
+}
 
 % Grandeurs cliniques siunitx v3 (police du texte courant Calibri + notation fractionnaire)
 \sisetup{

@@ -11,26 +11,26 @@ flowchart LR
   P7 --> P89["Phases 8-9<br/>FR/EN, .ignore & Slides v1"]
   P89 --> P10["Phase 10<br/>Slides v2.0 & Règle Plan/Hist"]
   P10 --> P11["Phase 11<br/>portefolio_2 & Rétroportage"]
-  P11 --> P12["Phase 12<br/>Refonte Styles & Biblio portefolio_2"]
+  P11 --> P12["Phase 12<br/>Refonte Styles & Biblio"]
+  P12 --> P13["Phase 13<br/>Tableaux Paysages & Notes"]
 ```
 
 ---
 
 ## 1. Socle Ancien *(compacté)*
-- **Phases 1–4 :** Refonte `.agents/` & `AGENTS.md`, `sync-mcp.ps1`, skill `markdown-to-latex` et alignement `.vscode/`.
-- **Phases 5–7 :** Renommage `ClasseGuillaume.cls`, `clean.ps1`, citation libre, règle `> [!CAUTION]` et audits FR/`.ignore`.
-- **Phase 8–9 :** Option `french`/`english`, `.chktexrc-en`, exclusions globales et création de `ClasseGuillaumeSlides v1`.
+- **Phases 1–7 :** Refonte `.agents/` & `AGENTS.md`, `sync-mcp.ps1`, skill `markdown-to-latex`, alignement `.vscode/`, `ClasseGuillaume.cls`, `clean.ps1`, règle `> [!CAUTION]`.
+- **Phases 8–10 :** Options `french`/`english`, `.chktexrc-en`, gouvernance `docs/plan.md` + `docs/historique.md`, `ClasseGuillaumeSlides v2.0` (4 palettes / 3 styles).
 
 ---
 
 ## 2. Évolution Récente *(synthétique)*
-- **Phase 10 — Gouvernance Plan/Hist & `ClasseGuillaumeSlides v2.0` :** règle globale `docs/plan.md` éphémère + `docs/historique.md` compact, archivage [`templates/exemples-slides/`](file:///c:/Users/guill/dev/perso/latex/general/templates/exemples-slides) et refonte 4 palettes / 3 styles de `ClasseGuillaumeSlides v2.0`.
-- **Phase 11 — Création modulaire de [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) & rétroportage :** migration de `portefolio_1` vers `ClasseGuillaume v2.0` (`font=comicsans`, `bibstyle=custom|vancouver`, `spacing=*`, `lua-ul`, `\todoH` sécurisé) avec parité rédactionnelle stricte et diagnostic `build/` ([`diagnostic-avertissements-compilation.md`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/diagnostic-avertissements-compilation.md)).
+- **Phase 11 — Création modulaire de [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) & rétroportage :** migration de `portefolio_1` vers `ClasseGuillaume v2.0` (`lua-ul`, `\todoH` sécurisé) avec parité rédactionnelle stricte ([diagnostic](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/diagnostic-avertissements-compilation.md)).
+- **Phase 12 — Refonte éditoriale, Vancouver & typographie `portefolio_2` ([refonte](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/refonte-styles-et-bibliographie.md), [Q&R](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/questions-typographie-et-latex.md)) :** palette `CoverNavy`/`CoverPlum`/`CoverSky`/`CoverSlate`, `spacing=double` + listes `\singlespacing`, `siunitx` (`mode = text`), biblio Vancouver nettoyée, notes vertes `GuillaumeVertStyle` et `\let\textsc\@firstofone` rétroporté.
 
 ---
 
 ## 3. Session Courante *(détaillée — sera compactée au prochain changement majeur)*
-- **Phase 12 — Refonte éditoriale, bibliographie Vancouver & typographie de [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) ([refonte](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/refonte-styles-et-bibliographie.md), [Q&R techniques](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/questions-typographie-et-latex.md)) :**
-  - **Charte des pages de garde, interligne & listes ([`portefolio-style.sty`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/config/portefolio-style.sty)) :** palette `CoverNavy`/`CoverPlum`/`CoverSky`/`CoverSlate`, retour à `spacing=double` dans `main.tex` avec listes `\singlespacing`, chapitres à barre tricolore, en-têtes/pieds de page folio badge, `\DeclareSIUnit\dL` + `sisetup` (`mode = text`) et notes vertes `GuillaumeVertStyle` (`siep_formation_524`, `lagedamon2025accompagnement`).
-  - **Unités `siunitx`, bibliographie Vancouver & rétroportage `template_officiel` :** nettoyage des `$...$` superflus et passage aux macros `siunitx` dans 10 fichiers sans altérer un mot de prose ; suppression des `custom-style.{bbx,cbx}`, mois FR (EN conservés sous `[english]`), nettoyage UTF-8/BibLaTeX de [`references.bib`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/biblio/references.bib) et `\let\textsc\@firstofone` rétroporté.
-  - **Validation :** compilation (`68` p., `0` erreur, `0` `Overfull \hbox`, `2` avertissements `Marginpar` p. 16/18, `18` citekeys Biber), `0` avertissement ChkTeX sur style/config, contrôles visuels PNG et parité stricte des mots.
+- **Phase 13 — Harmonisation des tableaux paysages (`Tableau I.1` p. 4 & `Tableau V.1` p. 43–44) ([fiche](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/harmonisation-tableaux-paysages.md)) :**
+  - **Orientation unifiée `landscape` (`pdflscape`) :** conversion de [`les-hypotheses-diagnostiques.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/content/tables/les-hypotheses-diagnostiques.tex) de `sidewaystable` vers `landscape` + suppression de `\geometrieLarge`/`\geometrieWord` dans [`01-cas-clinique.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/content/01-cas-diagnostique/01-cas-clinique.tex).
+  - **Style unifié & notes d'abréviations ([`portefolio-style.sty`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/config/portefolio-style.sty), [`medication-cas-polypathologique-penche.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/content/tables/medication-cas-polypathologique-penche.tex)) :** retrait de `\rowcolor{gray!15}` et du gras superflu, double filet continu `\hhline`, légende de suite `\tableSuiteCaption`, notes `ThreePartTable` (`ᵃ cp : comprimé ; ᵇ inh : inhalation.`), liste `tableitemize`, suppression de 9 `\vspace{-3mm}`/`\parbox` et correction `\par` avant `\endgroup` (`Overfull \hbox` passé de `10.95pt` à `0`).
+  - **Validation :** compilation à froid LuaLaTeX + Biber (`68` p., `0` erreur, `0` `Overfull`/`Underfull`, `2` `Marginpar` p. 16/18 préexistants), inspection PNG pp. 4, 43 et 44, et parité textuelle maintenue.

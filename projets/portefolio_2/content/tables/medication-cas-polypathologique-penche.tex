@@ -1,109 +1,119 @@
-% ====================================================================================
-% VERSION 3 : PAYSAGE / PENCHÉ (STYLE LES_HYPOTHESES_DIAGNOSTIQUES)
-% Page pivotée automatiquement dans le visualiseur PDF avec grille complète (| et \hline)
-% ====================================================================================
+% Tableau V.1 : Médication du patient (paysage multi-pages harmonisé sur le style du Tableau I.1)
 \begin{landscape}
 \begingroup
 \footnotesize
+\setlength{\parindent}{0pt}
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.05}
 
-\begin{xltabular}{\linewidth}{|>{\raggedright\arraybackslash\bfseries}p{4.2cm}|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{5.8cm}|>{\raggedright\arraybackslash}X|}
+\begin{ThreePartTable}
+  \begin{TableNotes}[para, flushleft]
+    \footnotesize
+    \item[a] \textit{cp} : comprimé ;
+    \item[b] \textit{inh} : inhalation.
+  \end{TableNotes}
+
+  \begin{xltabular}{\linewidth}{|L{3.9cm}|L{3.9cm}|L{5.8cm}|Y|}
     \caption{Médication du patient (septembre 2026)} \label{tab:medication_patient} \\
     \hline
-    \rowcolor{gray!15}
-    \textbf{DCI} & \textbf{Nom commercial \& Posologie} & \textbf{Classe pharmacothérapeutique} & \textbf{Indication clinique} \\
-    \hline
+    DCI & Nom commercial \& Posologie & Classe pharmacothérapeutique & Indication clinique \\
+    \hhline{|====|}
     \endfirsthead
 
-    \caption*{Tableau~\ref{tab:medication_patient} (suite) -- Médication du patient (septembre 2026)} \\
+    \tableSuiteCaption{tab:medication_patient}{Médication du patient (septembre 2026)} \\
     \hline
-    \rowcolor{gray!15}
-    \textbf{DCI} & \textbf{Nom commercial \& Posologie} & \textbf{Classe pharmacothérapeutique} & \textbf{Indication clinique} \\
-    \hline
+    DCI & Nom commercial \& Posologie & Classe pharmacothérapeutique & Indication clinique \\
+    \hhline{|====|}
     \endhead
 
     \hline
-    \multicolumn{4}{|r|}{\footnotesize\textit{Suite du tableau à la page suivante...}} \\
+    \multicolumn{4}{|r|}{\footnotesize\textit{Suite du tableau à la page suivante\ldots}} \\
     \hline
+    \noalign{\vspace{3pt}}
+    \insertTableNotes \\
     \endfoot
 
     \hline
+    \noalign{\vspace{3pt}}
+    \insertTableNotes \\
     \endlastfoot
 
-    Ézétimibe / Atorvastatine & 
-    Atozet \qty{10}{\mg} / \qty{40}{\mg} \newline 1 cp/j & 
-    Hypolipémiant combiné (inhibiteur sélectif de l'absorption du cholestérol + statine de haute intensité) & 
+    Ézétimibe / Atorvastatine &
+    Atozet \qty{10}{\mg} / \qty{40}{\mg} \newline 1 cp/j\tnote{a} &
+    Hypolipémiant combiné (inhibiteur sélectif de l'absorption du cholestérol + statine de haute intensité) &
     Prévention cardiovasculaire secondaire. \\
     \hline
 
-    Bumétanide & 
-    Burinex \qty{1}{\mg} \newline 1 cp/j & 
-    Diurétique de l'anse de Henle & 
+    Bumétanide &
+    Burinex \qty{1}{\mg} \newline 1 cp/j &
+    Diurétique de l'anse de Henle &
     Traitement déplétif de la surcharge hydrosodée : contrôle des pressions de remplissage ventriculaire gauche élevées liées à la cardiopathie hypertensive avec dysfonction diastolique de grade 2. \\
     \hline
 
-    Bisoprolol & 
-    Bisoprolol \qty{10}{\mg} \newline ½ cp/j (\qty{5}{\mg}/j) & 
-    Bêtabloquant $\beta_1$ cardiosélectif & 
+    Bisoprolol &
+    Bisoprolol \qty{10}{\mg} \newline ½ cp/j (\qty{5}{\mg}/j) &
+    Bêtabloquant $\beta_1$ cardiosélectif &
     Cardiopathie hypertensive \& contrôle hémodynamique : baisse des résistances vasculaires périphériques, allongement du temps de remplissage diastolique par ralentissement de la fréquence cardiaque, et freinage de l'hyperactivité sympathique. \\
     \hline
 
-    Amiodarone & 
-    Cordarone \qty{200}{\mg} \newline 1 cp/j & 
-    Antiarythmique de classe III de Vaughan-Williams & 
+    Amiodarone &
+    Cordarone \qty{200}{\mg} \newline 1 cp/j &
+    Antiarythmique de classe III de Vaughan-Williams &
     Prévention des récidives de tachyarythmie supraventriculaire. \\
     \hline
 
-    Fluticasone furoate / Uméclidinium / Vilantérol & 
-    Trelegy Ellipta 92/55/22\,\unit{\ug} \newline 1 inh/j & 
-    Trithérapie inhalée fixe : Corticoïde inhalé (CSI) + Anticholinergique à longue durée d'action (LAMA) + $\beta_2$-mimétique à longue durée d'action (LABA) & 
+    Fluticasone furoate / Uméclidinium / Vilantérol &
+    Trelegy Ellipta 92/55/22\,\unit{\ug} \newline 1 inh/j\tnote{b} &
+    Trithérapie inhalée fixe : Corticoïde inhalé (CSI) + Anticholinergique à longue durée d'action (LAMA) + $\beta_2$-mimétique à longue durée d'action (LABA) &
     Traitement de fond de la BPCO. \\
     \hline
 
-    Bromure d'ipratropium / Fénotérol & 
-    Duovent \newline (posologie à la demande) & 
-    Bronchodilatateur d'action rapide combiné : Anticholinergique à courte durée d'action (SAMA) + $\beta_2$-mimétique à courte durée d'action (SABA) & 
+    Bromure d'ipratropium / Fénotérol &
+    Duovent \newline (posologie à la demande) &
+    Bronchodilatateur d'action rapide combiné : Anticholinergique à courte durée d'action (SAMA) + $\beta_2$-mimétique à courte durée d'action (SABA) &
     Traitement de secours / à la demande : levée immédiate du bronchospasme et prise en charge des accès dyspnéiques paroxystiques dans la BPCO. \\
     \hline
 
-    Apixaban & 
-    Eliquis \qty{5}{\mg} \newline 1 cp 2$\times$/j & 
-    Anticoagulant oral direct (AOD) & 
+    Apixaban &
+    Eliquis \qty{5}{\mg} \newline 1 cp 2$\times$/j &
+    Anticoagulant oral direct (AOD) &
     Thromboprophylaxie systémique liée à l'arythmie supraventriculaire associée (score $\mathrm{CHA_2DS_2}\text{-}\mathrm{VA}$ élevé). \\
     \hline
 
-    Cholécalciférol (Vitamine $\mathrm{D_3}$) & 
-    Vista $\mathrm{D_3}$ \newline 1 cp/j & 
-    Vitamine D / régulateur du métabolisme phosphocalcique & 
+    Cholécalciférol (Vitamine $\mathrm{D_3}$) &
+    Vista $\mathrm{D_3}$ \newline 1 cp/j &
+    Vitamine D / régulateur du métabolisme phosphocalcique &
     Prévention de l'ostéopénie / ostéoporose. \\
     \hline
 
-    Zolpidem & 
-    Stilnox \qty{10}{\mg} \newline 1 cp le soir & 
-    Hypnotique apparenté aux benzodiazépines & 
+    Zolpidem &
+    Stilnox \qty{10}{\mg} \newline 1 cp le soir &
+    Hypnotique apparenté aux benzodiazépines &
     Traitement symptomatique de courte durée de l'insomnie d'endormissement. \\
     \hline
 
-    Azacitidine & 
-    Vidaza \newline Cure palliative par voie sous-cutanée : 7 jours/mois pendant 28 jours & 
-    Agent déméthylant de l'ADN & 
+    Azacitidine &
+    Vidaza \newline Cure palliative par voie sous-cutanée : 7 jours/mois pendant 28 jours &
+    Agent déméthylant de l'ADN &
     Traitement de la leucémie myéloïde aiguë non éligible à une chimiothérapie d'induction intensive. \\
     \hline
 
-    Dapagliflozine & 
-    Forxiga \qty{10}{\mg} \newline 1 cp/j & 
-    Inhibiteur du cotransporteur sodium-glucose de type 2 (iSGLT2) & 
-    Triple indication : \newline
-    \textbullet~Diabète de type 2 ; \newline
-    \textbullet~Cardioprotection ; \newline
-    \textbullet~Néphroprotection. \\
+    Dapagliflozine &
+    Forxiga \qty{10}{\mg} \newline 1 cp/j &
+    Inhibiteur du cotransporteur sodium-glucose de type 2 (iSGLT2) &
+    Triple indication :
+    \begin{tableitemize}
+      \item Diabète de type 2 ;
+      \item Cardioprotection ;
+      \item Néphroprotection.
+    \end{tableitemize} \\
     \hline
 
-    Oxygénothérapie chronique & 
-    \qty{2}{\L\per\minute} par oxyconcentrateur & 
-    Support ventilatoire & 
+    Oxygénothérapie chronique &
+    \qty{2}{\L\per\minute} par oxyconcentrateur &
+    Support ventilatoire &
     Support pour l'hypoxémie nocturne et les troubles de diffusion dans le cadre de la BPCO. \\
-\end{xltabular}
+  \end{xltabular}
+\end{ThreePartTable}
 \endgroup
 \end{landscape}

@@ -17,7 +17,7 @@ Migration architecturale du projet `portefolio_1` vers le socle modulaire [`temp
 - `biblio/` : `references.bib` (18 entrées UTF-8 BibLaTeX/Biber sous style `vancouver`)
 - `figures/` : `covers/`, `logos/`, figures actives et orphelines classées par chapitre
 - `fonts/` : polices figées (`CalibriFontFiles/`, `AsapFontFiles/`, `ComicSansMSFontFiles/`, `texgyreheros-*.otf`)
-- `docs/` : notes conservées et fiches explicatives (`diagnostic-avertissements-compilation.md`, `refonte-styles-et-bibliographie.md`, `questions-typographie-et-latex.md`, `note.txt`, `Cas_polypathologique_M3.pdf`)
+- `docs/` : notes conservées et fiches explicatives (`diagnostic-avertissements-compilation.md`, `refonte-styles-et-bibliographie.md`, `questions-typographie-et-latex.md`, `harmonisation-tableaux-paysages.md`, `note.txt`, `Cas_polypathologique_M3.pdf`)
 
 ## Compilation
 
