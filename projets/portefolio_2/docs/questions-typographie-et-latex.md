@@ -251,3 +251,44 @@ Il n'est **pas** nécessaire d'entourer chaque liste de `\begin{singlespace}...\
 - **Réglage dans [`config/portefolio-style.sty`](../config/portefolio-style.sty#L289-L295) :** retrait de `before=\singlespacing` sur `\setlist{topsep=0.35em, parsep=0.45em, itemsep=0.35em}` pour que les **13 listes longues** héritent de l'interligne double normal, et ajout de `\SetEnumitemKey{compact}{before=\setstretch{1}, topsep=0.35em, parsep=0.15em, itemsep=0.35em}` (l'emploi de `\setstretch{1}` plutôt que `\singlespacing` évite le `\vskip\baselineskip` non compensé injecté par `setspace.sty` au-dessus de la première puce).
 - **Application ciblée :** les **15 listes courtes** portent désormais `\begin{itemize}[compact, label=\textbullet]` (`label=\textbullet` conservé pour garder un repère uniforme sur les 28 listes sans modifier un seul mot rédactionnel ni rétroporter dans `templates/template_officiel/`).
 - **Validation :** compilation complète `latexmk` (`73 pages`, `0` erreur, `0` `Overfull`, `0` `Underfull`, seuls les `2` `Marginpar` p. 16 et p. 18 préexistants), `chktex` à `0` avertissement sur `config/portefolio-style.sty` et contrôle visuel des rendus PNG (notamment p. 7, 10, 23, 27, 41, 43, 47 et 48 — à noter uniquement l'intitulé texte brut `Volet infectiologique :` resté en bas de la p. 48 avant son `itemize`).
+
+
+---
+
+## 13. Liens bidirectionnels Annexe A ↔ texte, note `cp/j` et numéros de sous-sections
+
+### A. Correspondance exacte des 4 pages de l'Annexe A
+
+| Page Annexe A | Contenu visuel / fichier | Ancre cible (aller) | Source dans le texte (retour) |
+| :--- | :--- | :--- | :--- |
+| **Page 61** *(p. 1 PDF)* | ECG (`ExamenParacliniqueCasM2.pdf`, `pages=1`) | `annexe:examens_cas_m2` | [`03-cas-therapeutique/01-cas-clinique.tex:L58`](../content/03-cas-therapeutique/01-cas-clinique.tex#L58) (`retour:examens_cas_iii`, **Chap. III, § 1.9, p. 24**) |
+| **Page 62** *(p. 2 PDF)* | Biologie CHL 1/2 (`ExamenParacliniqueCasM2.pdf`, `pages=2`) | `annexe:examens_cas_v` *(renvoi p. 50 corrigé)* | [`05-cas-polypathologique-complexe/01-rapport-synthetique.tex:L98`](../content/05-cas-polypathologique-complexe/01-rapport-synthetique.tex#L98) (`retour:examens_cas_v`, **Chap. V, § 1.2, p. 50**) |
+| **Page 63** *(p. 3 PDF)* | Biologie CHL 2/2 (`ExamenParacliniqueCasM2.pdf`, `pages=3-`) | — *(suite page 62)* | [`05-cas-polypathologique-complexe/01-rapport-synthetique.tex:L98`](../content/05-cas-polypathologique-complexe/01-rapport-synthetique.tex#L98) (`retour:examens_cas_v`, **Chap. V, § 1.2, p. 50**) |
+| **Page 64** *(p. 4 annexe)* | Radiographie thoracique (`radioPatient.jpeg`) | `annexe:radio_patient` | [`06-auto-evaluation/01-auto-evaluation.tex:L30`](../content/06-auto-evaluation/01-auto-evaluation.tex#L30) (`retour:radio_patient`, **Chap. VI, renvoi provisoire, p. 59**) + note `\todoH[GuillaumeVertStyle]` & `%` |
+
+### B. Choix techniques appliqués
+
+1. **Ancres de retour dans le texte sans décalage vertical :** `\leavevmode\phantomsection\label{retour:...}` placé directement en tête de phrase garantit que LaTeX est déjà en mode horizontal (évite l'insertion d'un paragraphe vide sous `parskip=half`) et positionne l'ancre PDF exactement sur la ligne du renvoi.
+2. **Pied de page dynamique sur `plain.scrheadings` :** [`config/portefolio-style.sty`](../config/portefolio-style.sty#L82-L108) définit `\setAnnexBackLink{<label>}{<libellé>}` et `\clearAnnexBackLink` (injectés dans `\ifoot[...]` sur `plain`). L'emploi de `\pageref*{#1}` à l'intérieur de `\hyperref[#1]{...}` évite tout lien hyperref imbriqué (*nested link*), et `\clearAnnexBackLink` en ouverture et après le `\clearpage` final de [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex) laisse les autres pages `plain` (couvertures de chapitres, page titre A p. 60, listes finales) parfaitement vierges.
+3. **Dégagement sous les scans PDF :** `scale=0.93, offset=0 0.35cm` sur `\includepdf` remonte légèrement le cadre gris des scans CHL (pp. 62–63) afin que le lien de retour à gauche et le folio `| 62` / `| 63` à droite reposent sur une marge blanche nette.
+4. **Note `cp/j` en page 24 & numéros de sous-sections :** ajout de `\footnote{\textit{cp/j} : comprimé(s) par jour.}` sur la première occurrence (`03-cas-therapeutique/01-cas-clinique.tex:L66`, cohérent avec `\textit{cp}` du Tableau V.1), et retrait du `\textcolor{CoverNavy}` forcé dans `\subsectionformat` ([`portefolio-style.sty`](../config/portefolio-style.sty)) afin que les numéros `1.8`, `1.9`, etc. héritent automatiquement de la couleur `CoverPlum` du titre.
+
+
+---
+
+## 14. Bonnes pratiques de couleurs pour les hyperliens (`screen` vs `print`)
+
+### A. Principes éditoriaux pour un portfolio / mémoire scientifique
+
+| Type de lien | Rôle sémantique | Recommandation `screen` *(lecture PDF)* | Recommandation `print` *(impression)* |
+| :--- | :--- | :--- | :--- |
+| **Cadres natifs (`colorlinks=false`)** | — | **À proscrire** : bordures rouges/cyan/vertes inesthétiques | Utiliser `hidelinks` (liens cliquables invisibles) |
+| **Liens internes** (`linkcolor`, `filecolor`) | `\cref`, `\cpageref`, notes, aller/retour annexe | **Bleu nuit / ardoise institutionnel** (`#1C4E7A`, `PortfolioLink`), contraste $\ge 4{,}5:1$, sobre dans le texte dense | Noir texte (`hidelinks`) |
+| **Citations biblio** (`citecolor`) | Appels `[1]`, `[2–5]`, rétro-liens `(cf. p. ...)` | **Prune assombri** (`CoverPlum!75!CoverNavy`, `PortfolioCite`), harmonisé avec la charte sans effet « néon » | Noir texte (`hidelinks`) |
+| **URL & DOI externes** (`urlcolor`) | Sortie vers le Web externe | **Couleur accent de la charte** (`CoverPlum`, `PortfolioUrl`), la plus distincte pour signaler un lien sortant | Noir texte (`hidelinks`) |
+
+### B. Implémentation dans `portefolio_2` et garde-fous indispensables
+
+- **Respect de `\ifprintversion` dans [`config/portefolio-style.sty`](../config/portefolio-style.sty) :** remplacement de `\hypersetup{hidelinks}` inconditionnel par `\ifprintversion \hypersetup{hidelinks} \else \hypersetup{colorlinks=true, linkcolor=PortfolioLink, citecolor=PortfolioCite, urlcolor=PortfolioUrl, ...} \fi`.
+- **Protection des listes de navigation (`linkcolor=.`) :** des hooks `\AddToHook{cmd/.../before}{\begingroup\hypersetup{linkcolor=.}}` et `after` autour de `\tableofcontents`, `\listoffigures`, `\listoftables` et `\listoftodos` empêchent toute la table des matières de passer en bleu uniforme et préservent la hiérarchie typographique (`CoverNavy` pour les chapitres, noir pour les sections) tout en gardant 100 % des clics actifs.
+- **Protection du texte surligné `\todoH` ([`config/macros.sty#L397`](../config/macros.sty#L397)) :** comme `\todoH` enveloppe `#4` dans `\hyperref[table_todos]{...}`, l'activation de `colorlinks=true` teintait auparavant en bleu tout le texte surligné dans les chapitres. Encadrer cet appel avec `{\hypersetup{linkcolor=.}...}` (correctif également rétroporté dans [`templates/template_officiel/config/macros.sty`](../../../templates/template_officiel/config/macros.sty#L397)) conserve la couleur noire d'origine sur les surlignages tout en maintenant le clic vers la `TODO list`.

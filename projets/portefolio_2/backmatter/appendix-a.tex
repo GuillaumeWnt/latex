@@ -1,21 +1,52 @@
 \chapter{Examens complémentaires}
 \label{annexe:examens_complementaires}
+\clearAnnexBackLink
 
+% Page 1 d'ExamenParacliniqueCasM2.pdf : ECG du cas thérapeutique (Chap. III, § 1.9)
 \includepdf[
   pages=1,
-  pagecommand={\thispagestyle{plain}\phantomsection\label{annexe:examens_cas_m2}}
+  scale=0.93,
+  offset=0 0.35cm,
+  pagecommand={%
+    \thispagestyle{plain}%
+    \phantomsection\label{annexe:examens_cas_m2}%
+    \setAnnexBackLink{retour:examens_cas_iii}{Chap.\,III, \S~1.9}%
+  }
 ]{figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf}
+
+% Page 2 d'ExamenParacliniqueCasM2.pdf : biologie CHL (1/2) du cas polypathologique (Chap. V, § 1.2)
 \includepdf[
-  pages=2-,
-  pagecommand={\thispagestyle{plain}}
+  pages=2,
+  scale=0.93,
+  offset=0 0.35cm,
+  pagecommand={%
+    \thispagestyle{plain}%
+    \phantomsection\label{annexe:examens_cas_v}%
+    \setAnnexBackLink{retour:examens_cas_v}{Chap.\,V, \S~1.2}%
+  }
+]{figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf}
+
+% Page 3 d'ExamenParacliniqueCasM2.pdf : biologie CHL (2/2) du cas polypathologique (Chap. V, § 1.2)
+\includepdf[
+  pages=3-,
+  scale=0.93,
+  offset=0 0.35cm,
+  pagecommand={%
+    \thispagestyle{plain}%
+    \setAnnexBackLink{retour:examens_cas_v}{Chap.\,V, \S~1.2}%
+  }
 ]{figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf}
 
 \clearpage
 \thispagestyle{plain}
+% Lien de retour préparé pour la 4e page (radioPatient.jpeg) : pointe actuellement vers le renvoi provisoire en fin de Chapitre VI et ne mène pas encore au bon endroit du Chapitre V
+\setAnnexBackLink{retour:radio_patient}{Chap.\,VI, renvoi provisoire}
 \phantomsection
 \label{annexe:radio_patient}
 \vspace*{\fill}
 {\centering
-  \includegraphics[width=\linewidth, height=0.88\textheight, keepaspectratio]{figures/05-cas-polypathologique-complexe/radioPatient.jpeg}\par}
+  \includegraphics[width=\linewidth, height=0.86\textheight, keepaspectratio]{figures/05-cas-polypathologique-complexe/radioPatient.jpeg}\par}%
+\todoH[GuillaumeVertStyle][green!25]{Lien de retour provisoire vers le Chap. VI : ne mène pas encore au bon endroit du Chap. V.}{}%
 \vspace*{\fill}
-
+\clearpage
+\clearAnnexBackLink

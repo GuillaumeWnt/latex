@@ -79,6 +79,18 @@
   \textcolor{CoverPlum}{\rule[-0.15em]{1.8pt}{0.9em}}\enskip\pagemark%
 }
 
+% Lien de retour configurable sur les pages de documents en annexe (vide ailleurs)
+\newcommand{\portfolio@annexbacklink}{}
+\newcommand{\setAnnexBackLink}[2]{%
+  \gdef\portfolio@annexbacklink{%
+    \hyperref[#1]{%
+      \normalfont\sffamily\footnotesize%
+      $\hookleftarrow$\enspace Retour au texte\,: #2 (p.\,\pageref*{#1})%
+    }%
+  }%
+}
+\newcommand{\clearAnnexBackLink}{\gdef\portfolio@annexbacklink{}}
+
 \ihead[]{%
   \Ifstr{\leftmark}{}{}{%
     \textcolor{CoverPlum}{\rule[0.12ex]{0.42em}{0.42em}}\enskip%
@@ -91,7 +103,7 @@
     \truncate{0.45\linewidth}{\rightmark}%
   }%
 }
-\ifoot[]{%
+\ifoot[\portfolio@annexbacklink]{%
   \getauthor\enspace\textcolor{CoverSky}{\textbullet}\enspace\textit{\gettitle\ --- \getinstitution}%
 }
 \ofoot[\portfolio@foliobadge]{\portfolio@foliobadge}
@@ -175,7 +187,7 @@
   \textcolor{CoverPlum}{\thesection\autodot}\enskip%
 }
 \renewcommand*{\subsectionformat}{%
-  \textcolor{CoverNavy}{\thesubsection\autodot}\enskip%
+  \thesubsection\autodot\enskip%
 }
 \renewcommand*{\subsubsectionformat}{%
   \textcolor{CoverSky}{\rule[0.12ex]{0.38em}{0.38em}}\enskip%
@@ -308,9 +320,34 @@
   \todostyle{FloraStyle}{color=CoverPlum!15, bordercolor=CoverPlum!55}
 \fi
 
-% --- 7. Hyperliens discrets (sans cadres colorés) ---
+% --- 7. Hyperliens éditoriaux (palette harmonisée en mode screen, hidelinks en mode print) ---
+\definecolor{PortfolioLink}{HTML}{1C4E7A}        % Bleu nuit/ardoise pour liens internes
+\colorlet{PortfolioCite}{CoverPlum!75!CoverNavy} % Prune assombri pour citations [n]
+\colorlet{PortfolioUrl}{CoverPlum}               % Prune institutionnel pour URL externes
+
 \AtEndPreamble{%
-  \hypersetup{hidelinks}%
+  \ifprintversion
+    \hypersetup{hidelinks}%
+  \else
+    \hypersetup{
+      colorlinks=true,
+      linkcolor=PortfolioLink,
+      citecolor=PortfolioCite,
+      urlcolor=PortfolioUrl,
+      filecolor=PortfolioLink,
+      anchorcolor=PortfolioLink
+    }%
+  \fi
 }
+
+% Préservation de la hiérarchie chromatique dans les listes de navigation (clics conservés)
+\AddToHook{cmd/tableofcontents/before}{\begingroup\hypersetup{linkcolor=.}}
+\AddToHook{cmd/tableofcontents/after}{\endgroup}
+\AddToHook{cmd/listoffigures/before}{\begingroup\hypersetup{linkcolor=.}}
+\AddToHook{cmd/listoffigures/after}{\endgroup}
+\AddToHook{cmd/listoftables/before}{\begingroup\hypersetup{linkcolor=.}}
+\AddToHook{cmd/listoftables/after}{\endgroup}
+\AddToHook{cmd/listoftodos/before}{\begingroup\hypersetup{linkcolor=.}}
+\AddToHook{cmd/listoftodos/after}{\endgroup}
 
 \endinput
