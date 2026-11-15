@@ -206,4 +206,4 @@ Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiq
 
 - Plusieurs sections du portfolio (`1.1`, `3.1`, `3.2`, `4.2`, `5.1`) s'étendent sur **3 à 9 pages** : une section multi-pages doit nécessairement se poursuivre sur les pages suivantes.
 - Le critère professionnel en typographie éditoriale (LaTeX / KOMA-Script) consiste donc uniquement à garantir une **masse minimale de lignes** sous le titre et son filet avant un changement de page (`\Needspace{8\baselineskip}` à `10\baselineskip`, mesuré dynamiquement via `\pagegoal - \pagetotal` dans `needspace.sty`).
-- Ce réglage se centralise proprement dans [`config/portefolio-style.sty`](../config/portefolio-style.sty) sans toucher aux fichiers `.tex` de `content/`.
+- Ce réglage se centralise **en une seule ligne** dans [`config/portefolio-style.sty`](../config/portefolio-style.sty) sans rien toucher dans `content/` : `\AddToHook{cmd/section/before}` intercepte automatiquement toutes les `\section` (existantes et futures) sans avoir à insérer de commande manuelle devant chaque titre.
