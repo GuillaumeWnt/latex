@@ -1,4 +1,21 @@
 \chapter{Examens complémentaires}
 \label{annexe:examens_complementaires}
 
-\includepdf[pages=-, pagecommand={\thispagestyle{plain}}]{figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf}
+\includepdf[
+  pages=1,
+  pagecommand={\thispagestyle{plain}\phantomsection\label{annexe:examens_cas_m2}}
+]{figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf}
+\includepdf[
+  pages=2-,
+  pagecommand={\thispagestyle{plain}}
+]{figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf}
+
+\clearpage
+\thispagestyle{plain}
+\phantomsection
+\label{annexe:radio_patient}
+\vspace*{\fill}
+{\centering
+  \includegraphics[width=\linewidth, height=0.88\textheight, keepaspectratio]{figures/05-cas-polypathologique-complexe/radioPatient.jpeg}\par}
+\vspace*{\fill}
+

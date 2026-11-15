@@ -141,3 +141,24 @@ Un style dédié `GuillaumeVertStyle` (`author=guillaume, color=green!25, border
 - **Analyse statique (`chktex -q -l .chktexrc config\portefolio-style.sty`) :** `0` avertissement.
 - **Contrôle visuel (rendus PNG à `120 DPI` des pages PDF `1`, `8`, `11`, `23`, `33`, `41`, `49`, `51`, `53`) :** police Calibri homogène sur les nombres isolés, unités `siunitx` (`mode = text`) et formules statistiques (`$p < \num{0.001}$`), listes compactes en `\singlespacing` dans le corps en `spacing=double`, notes vertes `guillaume` complètes et sans chevauchement ni dans la marge ni dans la `TODO list`.
 - **Parité rédactionnelle :** vérification programmatique des `10` fichiers modifiés dans `content/` (parité exacte des mots de prose) et `git status -s projets/portefolio_1/` vide.
+
+---
+
+## 9. Pourquoi les renvois vers plusieurs documents d'Annexe A pointaient-ils vers la page de garde (p. 55) ?
+
+### Le problème d'origine
+
+Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiquette `\label{annexe:examens_complementaires}` était placée juste sous `\chapter{Examens complémentaires}` (**page 55**). Comme `\includepdf` démarre ensuite une nouvelle page pour les pièces jointes (pages **56–58**), tout renvoi `\cref{annexe:examens_complementaires} en \cpageref{annexe:examens_complementaires}` affichait `annexe A en Page 55` et pointait vers la page titre de l'annexe plutôt que vers le document visé. En ajoutant un second document (`radioPatient.jpeg`), tous les renvois auraient convergé vers la même page 55.
+
+### Solution retenue : ancrage direct par page sans casser la numérotation d'annexe
+
+1. **Conserver le compteur `chapter` (`A`) sans créer de `\section` ni de `figure` parasite :**
+   - Document 1 ([`ExamenParacliniqueCasM2.pdf`](../figures/03-cas-therapeutique/ExamenParacliniqueCasM2.pdf), pp. 56–58) : la première page est incluse séparément avec `pagecommand={\thispagestyle{plain}\phantomsection\label{annexe:examens_cas_m2}}`, puis les pages suivantes avec `pages=2-`.
+   - Document 2 ([`radioPatient.jpeg`](../figures/05-cas-polypathologique-complexe/radioPatient.jpeg), p. 59) : placé juste après via `\clearpage\thispagestyle{plain}\phantomsection\label{annexe:radio_patient}` suivi de l'image centrée (`\includegraphics[width=\linewidth, height=0.88\textheight, keepaspectratio]`).
+2. **Pourquoi `\phantomsection` fonctionne ici :**
+   - `\phantomsection` crée une ancre PDF `hyperref` fraîche (`section*.24` en p. 56, `section*.25` en p. 59) exactement en haut de la page cible (`y = 768.2 pt`), tout en conservant le dernier compteur incrémenté (`appendix` = `A`).
+   - Ainsi, `\cref{...}` continue d'imprimer **`annexe A`**, `\cpageref{...}` imprime directement **`Page 56`** ou **`Page 59`**, la table des figures n'est pas polluée, et un clic sur l'un ou l'autre lien amène immédiatement sur le bon document.
+3. **Renvois mis à jour & renvoi temporaire :**
+   - Les deux renvois existants vers `ExamenParacliniqueCasM2.pdf` — en **page 47** ([`01-rapport-synthetique.tex`](../content/05-cas-polypathologique-complexe/01-rapport-synthetique.tex#L98)) et en **page 24** ([`01-cas-clinique.tex`](../content/03-cas-therapeutique/01-cas-clinique.tex#L58)) — pointent désormais vers `annexe:examens_cas_m2` (**page 56**).
+   - Le renvoi vers `radioPatient.jpeg` (`annexe:radio_patient`, **page 59**) a été placé provisoirement à la fin de [`01-auto-evaluation.tex`](../content/06-auto-evaluation/01-auto-evaluation.tex#L15) (bas de **page 54**, juste avant l'Annexe A) avec une note de marge verte `\todoH[GuillaumeVertStyle][green!25]{...}` (`author=guillaume`) signalant son caractère temporaire mais opérationnel.
+
