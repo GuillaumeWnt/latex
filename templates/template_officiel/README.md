@@ -141,6 +141,7 @@ Dans `main.tex`, modifiez simplement la première ligne :
 - **Interligne (`spacing=...`) :** `spacing=single` (défaut), `spacing=onehalf` ou `spacing=double` (via `setspace`, tout en gardant les titres KOMA-Script et sommaires en simple interligne).
 - **Annotations collaboratives :** `todos` / `todoNote` pour activer `\todoH` et `\thesistodolist`.
 - **Tableaux & flottants étendus :** `xltabular`, `rotating` (`sidewaystable` / `sidewaysfigure`) et `float` (`[H]`) chargés en standard dans `config/packages.sty`.
+- **Protection des titres (`needspace`) :** `config/packages.sty` charge `needspace` et applique un seuil automatique avant `\section` / `\addsec` (`\sectionNeedspace`, `8\baselineskip` par défaut) et `\subsection` (`\subsectionNeedspace`, `5\baselineskip` par défaut) pour éviter tout départ de titre isolé en bas de page.
 
 ## 5. Rédiger un Projet en Anglais (`english`)
 

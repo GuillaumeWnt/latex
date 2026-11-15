@@ -1,7 +1,6 @@
-# Plan d'Exécution — Politique de coupure des `\section` & Mise à jour de la règle globale Git
+# Plan d'Exécution — Garde de hauteur automatique (`needspace`) sur les sections (`portefolio_2` & `template_officiel`)
 
-- [x] Inspecter les réglages actuels de coupure de page / `\section` / veuves-orphelines dans `projets/portefolio_2/` et analyser les bonnes pratiques LaTeX/KOMA-Script
-- [x] Inspecter la structure et les fichiers maîtres dans `C:\Users\guill\.agents\` (`AGENTS.md`, `rules/01-git-et-planification.md`, `scripts/deploy-and-sync-global.ps1`)
-- [x] Compléter la règle globale sur les messages de commit Git (interdiction de tout guillemet) dans `.agents/` et exécuter la synchronisation globale
-- [x] Capitaliser l'explication sur le placement des `\section` dans `projets/portefolio_2/docs/questions-typographie-et-latex.md` et actualiser `docs/historique.md`
-- [x] Rédiger la réponse finale et régénérer la suggestion de commit Git précédente sans aucun guillemet
+- [x] Inspecter `ClasseGuillaume.cls`, `config/packages.sty`, `config/portefolio-style.sty` et `templates/template_officiel/` pour choisir l'architecture neutre et les seuils optimaux
+- [x] Implémenter `\RequirePackage{needspace}` et les hooks automatiques dans `projets/portefolio_2/` (sans modifier le texte rédactionnel) et rétroporter proprement dans `templates/template_officiel/` (+ `README.md`)
+- [x] Compiler `projets/portefolio_2/` et `templates/template_officiel/`, vérifier `0` erreur / `Overfull` / `Underfull`, exécuter `chktex` et inspecter les rendus PNG (notamment les anciennes coupures p. 11 et p. 50 de `portefolio_2`)
+- [x] Mettre à jour la documentation (`questions-typographie-et-latex.md` § 11 et `docs/historique.md`) avec les résultats observés

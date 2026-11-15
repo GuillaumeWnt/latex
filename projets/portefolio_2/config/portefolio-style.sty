@@ -28,6 +28,8 @@
 \KOMAoptions{parskip=half}
 \setlength{\footheight}{29pt}
 \raggedbottom
+% Seuil adapté à l'interligne double et au filet décoratif des \section (évite les départs à 4-5 lignes)
+\renewcommand{\sectionNeedspace}{12\baselineskip}
 
 % Helper unique évitant la répétition des clés communes entre gabarits de page
 \newcommand{\portfolio@applygeometry}[7]{%

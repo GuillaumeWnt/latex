@@ -230,6 +230,23 @@
 % Micro-typographie (crénage optique, saillie des marges)
 \RequirePackage{microtype}
 
+% Protection automatique des titres contre les départs isolés en bas de page
+% Bascule une \section / \addsec / \subsection sur la page suivante si l'espace restant
+% est inférieur au seuil défini (sans effet juste après \chapter ni en mode interne).
+\RequirePackage{needspace}
+\newcommand{\sectionNeedspace}{8\baselineskip}
+\newcommand{\subsectionNeedspace}{5\baselineskip}
+\newcommand{\ClasseGuillaume@guardheading}[1]{%
+  \if@nobreak\else\ifinner\else
+    \setlength{\@tempdima}{#1}%
+    \ifdim\@tempdima>\z@
+      \Needspace{\@tempdima}%
+    \fi
+  \fi\fi
+}
+\AddToHook{cmd/section/before}{\ClasseGuillaume@guardheading{\sectionNeedspace}}
+\AddToHook{cmd/subsection/before}{\ClasseGuillaume@guardheading{\subsectionNeedspace}}
+
 % --- Interligne global piloté par l'option spacing=... (avant geometry/captions/hyperref) ---
 \RequirePackage{setspace}
 \ifdefstring{\ClasseGuillaume@spacing}{onehalf}{%
