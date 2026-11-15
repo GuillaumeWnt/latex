@@ -91,5 +91,12 @@ Contrairement à une première interprétation erronée :
 2. **Harmonisation globale :**
    - Création de `C:\Users\guill\.agents\scripts\sync-mcp-global.ps1` et intégration dans `C:\Users\guill\.agents\scripts\deploy-and-sync-global.ps1` (étape 8), garantissant que tous les assistants globaux restent alignés sur `C:\Users\guill\.agents\mcp_config.json` sans aucun serveur réservé à LaTeX.
 
+### 4.5 Pourquoi `"env": { "VAR": "${env:VAR}" }` fonctionne dans VS Code et échoue dans Antigravity ?
+- **Rôle de `"env"` :** le bloc `"env"` d'un serveur MCP sert effectivement à injecter des variables d'environnement au processus démarré, mais **chaque assistant utilise sa propre syntaxe d'expansion** (ou aucune) :
+  - **VS Code** sait remplacer `${env:NOM}` dans ses configurations natives (`tasks.json`, `launch.json`, et le format natif `mcp.json`), tandis que son format MCP portable et **Claude Code** utilisent `${NOM}` (sans préfixe `env:`).
+  - **Antigravity** (`mcp_config.json`) ne résout pas la syntaxe VS Code `${env:NOM}` : il transmet la valeur littérale au processus enfant. Dans le cas de `brave-search`, l'entrée `"BRAVE_API_KEY": "${env:BRAVE_API_KEY}"` écrasait donc la vraie variable utilisateur Windows par le texte littéral `${env:BRAVE_API_KEY}`, provoquant l'erreur `422 SUBSCRIPTION_TOKEN_INVALID`.
+- **Solution propre retenue :** comme `BRAVE_API_KEY` est déjà définie dans les variables d'environnement utilisateur Windows, l'entrée `"env"` a été supprimée de `brave-search` dans `C:\Users\guill\.agents\mcp_config.json` puis propagée via `sync-mcp-global.ps1`. Tous les clients IA laissent ainsi le serveur hériter directement de la variable Windows (vérifié en JSON-RPC direct : `isError: false`), sans aucun secret en clair dans les fichiers JSON.
+
+
 
 
