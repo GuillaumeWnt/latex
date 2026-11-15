@@ -286,8 +286,10 @@
 \DeclareSIUnit\enzymU{U}
 \DeclareSIUnit\dL{\deci\liter}
 
-% Listes aérées en interligne simple (\singlespacing) et repères aux teintes des couvertures
-\setlist{before=\singlespacing, topsep=0.35em, parsep=0.15em, itemsep=0.35em}
+% Listes par défaut au rythme du texte (interligne double) pour les longs développements ;
+% clé [compact] en interligne simple sans saut vertical supplémentaire pour les énumérations brèves
+\setlist{topsep=0.35em, parsep=0.45em, itemsep=0.35em}
+\SetEnumitemKey{compact}{before=\setstretch{1}, topsep=0.35em, parsep=0.15em, itemsep=0.35em}
 \setlist[itemize,1]{label=\textcolor{CoverPlum}{\small\textbullet}}
 \setlist[itemize,2]{label=\textcolor{CoverSlateDark}{\footnotesize$\triangleright$}}
 \setlist[enumerate,1]{label=\textcolor{CoverPlum}{\bfseries\arabic*.}}

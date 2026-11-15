@@ -207,3 +207,47 @@ Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiq
 - Plusieurs sections du portfolio (`1.1`, `3.1`, `3.2`, `4.2`, `5.1`) s'étendent sur **3 à 9 pages** : une section multi-pages doit nécessairement se poursuivre sur les pages suivantes.
 - Le critère professionnel en typographie éditoriale (LaTeX / KOMA-Script) consiste donc uniquement à garantir une **masse minimale de lignes** sous le titre et son filet avant un changement de page (`\Needspace{...}`, mesuré dynamiquement via `\pagegoal - \pagetotal` dans `needspace.sty`).
 - Ce réglage est **100 % automatique** dans [`config/packages.sty`](../config/packages.sty#L233-L249) (rétroporté à l'identique dans [`templates/template_officiel/config/packages.sty`](../../../templates/template_officiel/config/packages.sty#L233-L249)) et personnalisé à `12\baselineskip` dans [`config/portefolio-style.sty`](../config/portefolio-style.sty#L31-L32) pour compenser l'interligne double et les sous-sections d'ouverture : aucune commande manuelle n'est à ajouter dans `content/` (l'outil ignore aussi les cas `\if@nobreak` juste après `\chapter` et `\ifinner` dans les boîtes).
+
+
+---
+
+## 12. Différencier deux types de listes à puces (courtes vs longs textes) dans `portefolio_2`
+
+### A. Constat sur le corpus actuel (`projets/portefolio_2/content/`)
+
+Un audit des environnements de liste dans `projets/portefolio_2/content/` recense **28 `\begin{itemize}` actifs** (hors 5 occurrences archivées dans `content/tables/archives/les-hypotheses-diagnostiques-2.tex` ; aucun `enumerate` ni `description` actif dans `content/`), qui se répartissent en deux usages distincts :
+
+1. **15 listes d'énumération courtes** (1 à 2 lignes par puce) :
+   - `01-cas-diagnostique/01-cas-clinique.tex:12`
+   - `01-cas-diagnostique/02-communication-au-patient.tex:11`
+   - `03-cas-therapeutique/01-cas-clinique.tex:15, 23, 32, 37, 54, 65`
+   - `03-cas-therapeutique/02-demarche-medecine-factuelle.tex:8`
+   - `05-cas-polypathologique-complexe/01-rapport-synthetique.tex:8, 21, 27, 48, 59, 109`
+2. **13 listes de rédaction longue / « pseudo-sous-sections »** (4 à 15+ lignes par puce) :
+   - `01-cas-diagnostique/01-cas-clinique.tex:21, 56, 71`
+   - `03-cas-therapeutique/02-demarche-medecine-factuelle.tex:39`
+   - `04-incident-medical/04-approche-reflexive.tex:3, 12, 19, 26`
+   - `05-cas-polypathologique-complexe/01-rapport-synthetique.tex:70, 77, 83, 91, 101`
+
+### B. Pourquoi LaTeX ne peut pas deviner automatiquement les deux cas ?
+
+- À l'ouverture de `\begin{itemize}`, LaTeX n'a pas encore lu les `\item` qui suivent : détecter la longueur réelle demanderait de capturer tout le corps de l'environnement (type `environ` / argument `+b`), mécanisme fragile en présence d'annotations (`\todoH`, `lua-ul`, `marginnote`) ou d'environnements imbriqués.
+- Une règle automatique basée sur des marqueurs visuels (`\underLine`, `\textbf`) produit aussi bien des faux positifs sur liste courte (`03-cas-therapeutique/01-cas-clinique.tex:15` : `\item \underLine{Depuis l’âge de 18 ans} : dépression récurrente.`) que des faux négatifs sur listes longues (`04-incident-medical/04-approche-reflexive.tex:3-30` contient 4 longues listes sans accroche soulignée ni en gras).
+
+### C. Solutions propres via `enumitem` (sans `\begin{singlespace}` manuel)
+
+Il n'est **pas** nécessaire d'entourer chaque liste de `\begin{singlespace}...\end{singlespace}` comme dans l'ancien `portefolio_1` (`portefolio-style.sty` charge déjà `enumitem`, et conserve la liste dédiée `tableitemize` aux [lignes 269–275](../config/portefolio-style.sty#L269-L275)). Deux options nettes s'offrent pour `portefolio_2` uniquement (sans rétroportage dans `templates/template_officiel/`) :
+
+| Option | Réglage par défaut (`\setlist` global) | Marquage explicite dans `content/` | Avantages / compromis |
+| :--- | :--- | :--- | :--- |
+| **Option 1 (recommandée)** | **Interligne normal (`doublespacing`)** — retrait de `before=\singlespacing` à [portefolio-style.sty:291](../config/portefolio-style.sty#L291) | Clé `[compact]` (via `\SetEnumitemKey{compact}{...}`) sur les **15 listes courtes** | Conforme aux usages académiques (les longs textes suivent l'interligne du document ; seules les brèves énumérations sont compactées) ; les 13 listes longues restent `\begin{itemize}` sans modification. |
+| **Option 2 (inverse)** | **Interligne simple (`\singlespacing`)** conservé à [portefolio-style.sty:291](../config/portefolio-style.sty#L291) | Clé `[aeree]` (via `\SetEnumitemKey{aeree}{before=\doublespacing, topsep=0.45em, parsep=0.25em, itemsep=0.45em}`) sur les **13 listes longues** | Toute nouvelle énumération standard `\begin{itemize}` ajoutée par la suite reste automatiquement compacte sans option ; les 13 « pseudo-sous-sections » existantes retrouvent l'interligne normal. |
+
+> [!NOTE]
+> Dans certains cas ponctuels à puce unique (`01-cas-diagnostique/01-cas-clinique.tex:56,71` avec `\item \textbf{Justification :}\\`), le rôle rédactionnel correspond sémantiquement à `\paragraph{Justification}`, mais l'utilisation de `[compact]` ou `[aeree]` permet d'ajuster uniquement l'interligne sans altérer ni les puces visuelles ni le texte du portfolio.
+
+### D. Implémentation retenue (Option 1 appliquée à `portefolio_2` uniquement)
+
+- **Réglage dans [`config/portefolio-style.sty`](../config/portefolio-style.sty#L289-L295) :** retrait de `before=\singlespacing` sur `\setlist{topsep=0.35em, parsep=0.45em, itemsep=0.35em}` pour que les **13 listes longues** héritent de l'interligne double normal, et ajout de `\SetEnumitemKey{compact}{before=\setstretch{1}, topsep=0.35em, parsep=0.15em, itemsep=0.35em}` (l'emploi de `\setstretch{1}` plutôt que `\singlespacing` évite le `\vskip\baselineskip` non compensé injecté par `setspace.sty` au-dessus de la première puce).
+- **Application ciblée :** les **15 listes courtes** portent désormais `\begin{itemize}[compact, label=\textbullet]` (`label=\textbullet` conservé pour garder un repère uniforme sur les 28 listes sans modifier un seul mot rédactionnel ni rétroporter dans `templates/template_officiel/`).
+- **Validation :** compilation complète `latexmk` (`73 pages`, `0` erreur, `0` `Overfull`, `0` `Underfull`, seuls les `2` `Marginpar` p. 16 et p. 18 préexistants), `chktex` à `0` avertissement sur `config/portefolio-style.sty` et contrôle visuel des rendus PNG (notamment p. 7, 10, 23, 27, 41, 43, 47 et 48 — à noter uniquement l'intitulé texte brut `Volet infectiologique :` resté en bas de la p. 48 avant son `itemize`).
