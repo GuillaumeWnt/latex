@@ -162,3 +162,48 @@ Dans [`backmatter/appendix-a.tex`](../backmatter/appendix-a.tex), l'unique étiq
    - Les deux renvois existants vers `ExamenParacliniqueCasM2.pdf` — en **page 47** ([`01-rapport-synthetique.tex`](../content/05-cas-polypathologique-complexe/01-rapport-synthetique.tex#L98)) et en **page 24** ([`01-cas-clinique.tex`](../content/03-cas-therapeutique/01-cas-clinique.tex#L58)) — pointent désormais vers `annexe:examens_cas_m2` (**page 56**).
    - Le renvoi vers `radioPatient.jpeg` (`annexe:radio_patient`, **page 59**) a été placé provisoirement à la fin de [`01-auto-evaluation.tex`](../content/06-auto-evaluation/01-auto-evaluation.tex#L15) (bas de **page 54**, juste avant l'Annexe A) avec une note de marge verte `\todoH[GuillaumeVertStyle][green!25]{...}` (`author=guillaume`) signalant son caractère temporaire mais opérationnel.
 
+
+
+---
+
+## 10. `\\` vs paragraphes, guillemets français et `\listoffigures` vs `\listofillustrations`
+
+### A. Pourquoi éviter `\\` pour séparer des paragraphes ou avant une ligne vide / un titre
+
+- Dans [`config/portefolio-style.sty`](../config/portefolio-style.sty), le document utilise l'option KOMA-Script `parskip=half` (aucun retrait de première ligne `\parindent` et un demi-interligne vertical automatique entre deux paragraphes).
+- L'insertion manuelle de `\\` en fin de phrase provoque un simple **retour à la ligne forcé au sein du même paragraphe**, sans insérer l'espacement vertical `parskip=half` : les blocs restent visuellement collés.
+- Pire, placer `\\` juste avant une ligne vide ou une commande de section (`\section`, `\subsection`) laisse une ligne vide logique que LaTeX signale par `Underfull \hbox (badness 10000)`.
+- **Bonne pratique appliquée :**
+  - Remplacer les `\\` de fin de paragraphe par une **ligne vide** dans le code source (notamment dans [`01-auto-evaluation.tex`](../content/06-auto-evaluation/01-auto-evaluation.tex), [`02-impact-personnel.tex`](../content/02-activite-exterieure/02-impact-personnel.tex#L5) et [`02-approche-reflexive.tex`](../content/05-cas-polypathologique-complexe/02-approche-reflexive.tex#L5)).
+  - Supprimer le `\\` superflu devant la `\section` de [`01-auto-evaluation.tex`](../content/06-auto-evaluation/01-auto-evaluation.tex), ce qui a éliminé l'unique `Underfull \hbox (badness 10000)` restant du document.
+  - Remplacer les guillemets droits ASCII `"mœurs"` par les guillemets typographiques français `« mœurs »`.
+
+### B. Différence entre `\listoffigures` (*Table des figures*) et `\listofillustrations` (*Liste des illustrations*) sous KOMA-Script
+
+| Commande | Titre français | Environnement listé | Mécanisme KOMA-Script (`tocbasic`) |
+| :--- | :--- | :--- | :--- |
+| `\listoffigures` | **Table des figures** | Flottants standards `\begin{figure}` | Natif dans `scrbook` (piloté par `listof=totoc` et `listof=entryprefix`) |
+| `\listofillustrations` | **Liste des illustrations** | Flottants personnalisés `\begin{illustration}` | Déclaré via `\DeclareNewTOC[type=illustration, types=illustrations, float, counterwithin=chapter, name=Illustration, listname={Liste des illustrations}, tocentrystyle=tocline, tocentrydynnumwidth=true]{loi}` dans [`config/packages.sty`](../config/packages.sty#L396-L419) |
+
+- **Aucune des deux commandes n'est plus « récente » ou « meilleure » techniquement :** les deux reposent sur le même moteur KOMA-Script (`tocbasic`) et produisent exactement la même mise en forme dans la table des matières et la liste (`tocentrystyle=tocline`, `tocentrydynnumwidth=true`).
+- `\listofillustrations` n'a d'utilité que dans les documents qui séparent explicitement deux familles de visuels (par exemple des `\begin{figure}` pour les schémas/graphiques et des `\begin{illustration}` pour les planches iconographiques, avec préfixes `\crefname{illustration}` / `\Crefname{illustration}` définis dans [`config/macros.sty`](../config/macros.sty#L228-L231)).
+- **Amélioration appliquée dans [`main.tex`](../main.tex#L65-L69) :** comme `portefolio_2` utilise exclusivement `\begin{figure}` (aucun environnement `\begin{illustration}` dans le projet), `\listofillustrations` générait auparavant une **page entièrement blanche**. Sa suppression élimine cette page vide et aligne `portefolio_2` sur [`templates/template_officiel/main.tex`](../../../templates/template_officiel/main.tex#L56-L59), qui n'appelle que `\tableofcontents`, `\listoffigures` et `\listoftables`.
+
+
+---
+
+## 11. Placement des `\section` : saut de page systématique, flux continu ou seuil minimal (`needspace`) ?
+
+### A. Comparatif des trois stratégies éditoriales
+
+| Stratégie | Mécanisme LaTeX | Avantages | Inconvénients | Recommandation |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Saut de page à chaque `\section`** | `\clearpage` avant `\section` | Présentation très cloisonnée | Crée de grandes zones blanches dès qu'une section est courte (ex. chapitres II ou VI) ; dénature le rôle des `\chapter` sous `scrbook` | À éviter |
+| **2. Flux continu actuel (sans garde de hauteur)** | `\clubpenalty=10000`, `\widowpenalty=10000` ([`ClasseGuillaume.cls`](../ClasseGuillaume.cls#L173-L177)) + `\@afterheading` KOMA-Script | Remplissage optimal des pages, zéro demi-page vide artificielle | Une `\section` peut démarrer tout en bas de page avec seulement 4–5 lignes (observé en **page 11** avec `3 Approche réflexive` et en **page 50** avec `2 Approche réflexive`) | Correct mais perfectible |
+| **3. Option mixte : seuil minimal (`needspace`)** | `\RequirePackage{needspace}` + `\AddToHook{cmd/section/before}{\Needspace{9\baselineskip}}` | Enchaînement fluide si l'espace suffit ; bascule propre en haut de page suivante si moins de ~5–6 lignes tiennent sous le titre | Légère variation du nombre total de pages (rare et maîtrisée selon le seuil choisi) | **Recommandée** |
+
+### B. Pourquoi ne pas « empêcher toute coupure d'une section » ?
+
+- Plusieurs sections du portfolio (`1.1`, `3.1`, `3.2`, `4.2`, `5.1`) s'étendent sur **3 à 9 pages** : une section multi-pages doit nécessairement se poursuivre sur les pages suivantes.
+- Le critère professionnel en typographie éditoriale (LaTeX / KOMA-Script) consiste donc uniquement à garantir une **masse minimale de lignes** sous le titre et son filet avant un changement de page (`\Needspace{8\baselineskip}` à `10\baselineskip`, mesuré dynamiquement via `\pagegoal - \pagetotal` dans `needspace.sty`).
+- Ce réglage se centralise proprement dans [`config/portefolio-style.sty`](../config/portefolio-style.sty) sans toucher aux fichiers `.tex` de `content/`.

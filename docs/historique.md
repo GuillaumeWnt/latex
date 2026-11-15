@@ -13,24 +13,26 @@ flowchart LR
   P10 --> P11["Phase 11<br/>portefolio_2 & Rétroportage"]
   P11 --> P12["Phase 12<br/>Refonte Styles & Biblio"]
   P12 --> P13["Phase 13<br/>Tableaux Paysages & Annexe A"]
+  P13 --> P14["Phase 14<br/>Paragraphes & Listes KOMA"]
 ```
 
 ---
 
 ## 1. Socle Ancien *(compacté)*
 - **Phases 1–7 :** Refonte `.agents/` & `AGENTS.md`, `sync-mcp.ps1`, skill `markdown-to-latex`, alignement `.vscode/`, `ClasseGuillaume.cls`, `clean.ps1`, règle `> [!CAUTION]`.
-- **Phases 8–10 :** Options `french`/`english`, `.chktexrc-en`, gouvernance `docs/plan.md` + `docs/historique.md`, `ClasseGuillaumeSlides v2.0` (4 palettes / 3 styles).
+- **Phases 8–11 :** Options `french`/`english`, `.chktexrc-en`, gouvernance `docs/plan.md` + `docs/historique.md`, `ClasseGuillaumeSlides v2.0` et création modulaire de [`portefolio_2`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) (`ClasseGuillaume v2.0`, parité rédactionnelle, rétroportages).
 
 ---
 
 ## 2. Évolution Récente *(synthétique)*
-- **Phase 11 — Création modulaire de [`projets/portefolio_2/`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/README.md) & rétroportage :** migration de `portefolio_1` vers `ClasseGuillaume v2.0` (`lua-ul`, `\todoH` sécurisé) avec parité rédactionnelle stricte ([diagnostic](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/diagnostic-avertissements-compilation.md)).
 - **Phase 12 — Refonte éditoriale, Vancouver & typographie `portefolio_2` ([refonte](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/refonte-styles-et-bibliographie.md), [Q&R](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/questions-typographie-et-latex.md)) :** palette des couvertures, `spacing=double` + listes `\singlespacing`, `siunitx` (`mode = text`), biblio Vancouver, notes vertes `GuillaumeVertStyle` et `\let\textsc\@firstofone` rétroporté.
+- **Phase 13 — Tableaux paysages & ancrage direct d'Annexe A ([tableaux](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/harmonisation-tableaux-paysages.md), [`appendix-a.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/backmatter/appendix-a.tex)) :** orientation unifiée `pdflscape`, double filet `\hhline`, notes `ThreePartTable` (`cp`/`inh`), ajout de `radioPatient.jpeg` après `ExamenParacliniqueCasM2.pdf` avec ancres `\phantomsection\label` distinctes et renvoi temporaire `\todoH[GuillaumeVertStyle]`.
 
 ---
 
 ## 3. Session Courante *(détaillée — sera compactée au prochain changement majeur)*
-- **Phase 13 — Tableaux paysages & ancrage direct des pièces d'Annexe A ([tableaux](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/harmonisation-tableaux-paysages.md), [Q&R](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/questions-typographie-et-latex.md)) :**
-  - **Tableaux paysages (`Tableau I.1` p. 4 & `Tableau V.1` p. 43–44) :** orientation unifiée `landscape` (`pdflscape`), retrait de `\geometrieLarge` et `\rowcolor`, double filet continu `\hhline`, `\tableSuiteCaption`, notes `ThreePartTable` (`cp`/`inh`), `tableitemize`, et `Overfull \hbox` éliminé (`\par` avant `\endgroup`).
-  - **Annexe A multi-documents ([`appendix-a.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/backmatter/appendix-a.tex)) :** ajout de `radioPatient.jpeg` (p. 59) après `ExamenParacliniqueCasM2.pdf` (pp. 56–58), ancres `\phantomsection\label` en pp. 56 et 59, renvois p. 24 & p. 47 pointés vers p. 56, et renvoi temporaire annoté `\todoH[GuillaumeVertStyle]` en p. 54 vers p. 59.
-  - **Validation :** compilation LuaLaTeX + Biber (`69` p., `0` erreur, `0` `Overfull`, `2` `Marginpar` p. 16/18), vérification `texlua` des destinations PDF (`section*.24` p. 61 / `section*.25` p. 64) et contrôles PNG.
+- **Phase 14 — Nettoyage `\\`/paragraphes, guillemets, listes KOMA-Script & règle Git ([Q&R §10–11](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/docs/questions-typographie-et-latex.md)) :**
+  - Remplacement des `\\` séparateurs de paragraphes par des lignes vides ([`01-auto-evaluation.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/content/06-auto-evaluation/01-auto-evaluation.tex), [`02-impact-personnel.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/content/02-activite-exterieure/02-impact-personnel.tex#L5), [`02-approche-reflexive.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/content/05-cas-polypathologique-complexe/02-approche-reflexive.tex#L5)) pour restaurer `parskip=half`, suppression du `\\` devant `\section` et `"mœurs"` $\rightarrow$ `« mœurs »`.
+  - Retrait de `\listofillustrations` (page blanche sans `\begin{illustration}`) dans [`portefolio_2/main.tex`](file:///c:/Users/guill/dev/perso/latex/general/projets/portefolio_2/main.tex#L65-L69) tout en conservant `\listoffigures` natif `tocbasic`, aligné sur [`template_officiel/main.tex`](file:///c:/Users/guill/dev/perso/latex/general/templates/template_officiel/main.tex#L56-L59).
+  - Mise à jour de la règle globale Git ([`AGENTS.md`](file:///C:/Users/guill/.agents/AGENTS.md) & [`01-git-et-planification.md`](file:///C:/Users/guill/.agents/rules/01-git-et-planification.md), synchronisés via `deploy-and-sync-global.ps1`) interdisant tout guillemet dans les messages de commit, et capitalisation de l'analyse sur le seuil `\Needspace` des `\section` (§ 11).
+  - **Validation :** compilation LuaLaTeX + Biber (`70` p., `0` erreur, `0` `Overfull`, `0` `Underfull \hbox`, `2` `Marginpar` p. 16/18 ; Annexe A `examens_cas_m2` p. 58, `radio_patient` p. 61) et `chktex` (`0` avertissement sur `main.tex -I0`, `01-auto-evaluation.tex` et `02-approche-reflexive.tex` ; `4` préexistants sur `02-impact-personnel.tex`).
