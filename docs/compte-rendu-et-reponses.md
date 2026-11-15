@@ -53,23 +53,43 @@ Quatre principes esthétiques majeurs en ont guidé la refonte :
 
 ---
 
-## 4. Diagnostic MCP : pourquoi `latex-compiler` et `latex-workshop-assistant` ne sont pas accessibles
+## 4. Diagnostic MCP : pourquoi `latex-compiler` et `latex-workshop-assistant` manquent & séparation Global / Local
 
-### 4.1 Constat de découverte côté Antigravity
-- Dans le dépôt, les deux serveurs sont déclarés dans [`.agents/mcp_config.json`](../.agents/mcp_config.json) via `uvx` (lignes 8 à 28).
-- Côté Antigravity, les schémas MCP actifs sont stockés dans le répertoire global `C:\Users\guill\.gemini\antigravity\mcp\` (`arxiv-latex`, `brave-search`, `io.draw`, `kicad-suite_jlc-parts`, `kicad-suite_konnect`, `zotero-citations`, etc.). Aucun dossier `latex-compiler` ou `latex-workshop-assistant` n'y figure.
-- Par ailleurs, les configurations globales `C:\Users\guill\.agents\mcp_config.json` et `C:\Users\guill\.gemini\config\mcp_config.json` sont vides (`{"mcpServers": {}}`) et `C:\Users\guill\.gemini\antigravity\mcp_config.json` n'existe pas. Antigravity n'expose donc pas automatiquement les entrées déclarées uniquement dans le fichier `.agents/mcp_config.json` / `.gemini/mcp_config.json` du workspace.
+### 4.1 Explication simple : pourquoi ces 2 MCP ne s'installent pas / ne démarrent pas
+Un serveur MCP est un petit programme externe que l'assistant lance automatiquement en arrière-plan pour disposer d'outils en plus. Dans ce projet, le fichier chef local [`.agents/mcp_config.json`](../.agents/mcp_config.json) utilise `uvx`, qui télécharge et démarre chaque serveur Python depuis GitHub à l'ouverture :
 
-### 4.2 Diagnostic détaillé des deux serveurs
+1. **`latex-compiler` (`RobertoDure/mcp-latex-server`) — le programme publié sur GitHub est cassé :**
+   - **Mauvais nom demandé :** notre configuration demande de lancer l'exécutable `latex-server`, alors que ce nom n'existe pas dans le paquet (le seul exécutable fourni s'appelle `mcp-latex-server.exe`).
+   - **Bogue dans le dépôt d'origine :** même quand on lance manuellement le bon exécutable (`uvx --from git+https://github.com/RobertoDure/mcp-latex-server mcp-latex-server --help`), le programme plante aussitôt (`ModuleNotFoundError: No module named 'latex_server'`). L'auteur a mal empaqueté son projet Python : personne ne peut le faire tourner tel quel.
+2. **`latex-workshop-assistant` (`Yeok-c/latex-mcp-server`) — un nom de dossier compris seulement par VS Code :**
+   - Ce programme fonctionne bien lorsqu'on lui passe le vrai chemin du projet (`C:\Users\guill\dev\perso\latex`) : il répond en JSON-RPC (`latex-mcp-server` v`0.1.0`) et expose 9 outils (`compile_latex`, `download_bibliography`, `extract_bibliography`, `list_tex_files`, `read_file`, `read_pdf`, `read_pdf_from_citation`, `suggest_bib_key`, `summarize_text`).
+   - Mais la configuration actuelle lui passe `--workspace "${workspaceFolder}"`. VS Code sait remplacer `${workspaceFolder}` par le vrai chemin du dossier, alors qu'hors VS Code ce mot-clé est transmis littéralement : le serveur cherche un sous-dossier nommé `${workspaceFolder}`, ne le trouve pas et s'arrête aussitôt (`Workspace does not exist: C:\Users\guill\dev\perso\latex\${workspaceFolder}`).
+   - De plus, son outil `compile_latex` lance `pdflatex`/`xelatex` via `latexmk`, alors que ce dépôt repose sur `LuaLaTeX` + `Biber` + `chktex` via [`compile.ps1`](../.agents/skills/latex-document-manager/scripts/compile.ps1) et [`lint-latex.ps1`](../.agents/skills/latex-quality-auditor/scripts/lint-latex.ps1).
 
-| Serveur (`.agents/mcp_config.json`) | Paquet GitHub visé | Résultat du test direct via `uvx` | Causes identifiées |
+### 4.2 Où sont vraiment lus les MCP ? (Rectification : Global vs Projet LaTeX)
+Contrairement à une première interprétation erronée :
+- **Antigravity lit bien la configuration locale du projet LaTeX à l'ouverture** (via `.gemini/config/mcp_config.json` / `.gemini/mcp_config.json`, générés depuis [`.agents/mcp_config.json`](../.agents/mcp_config.json)). C'est ainsi que les 4 autres serveurs du projet (`io.draw/mcp`, `arxiv-latex`, `zotero-citations`, `brave-search`) sont chargés et actifs dans la session.
+- Le dossier `C:\Users\guill\.gemini\antigravity\mcp\` n'est **pas** un fichier de configuration global : c'est uniquement un **cache technique** où Antigravity enregistre les définitions JSON des outils déjà rencontrés (anciens projets comme `ltspice`/`memory`, plus la mise à jour à l'ouverture de ce projet LaTeX pour `io.draw`, `arxiv-latex`, `brave-search` et `zotero-citations`).
+- Les 2 seuls serveurs manquants de la session (`latex-compiler` et `latex-workshop-assistant`) sont donc absents uniquement parce qu'ils plantent au démarrage.
+
+### 4.3 Cartographie finale des fichiers MCP (après harmonisation globale / locale)
+
+| Portée | Rôle / Outil | Fichier | État vérifié après synchronisation |
 | :--- | :--- | :--- | :--- |
-| `latex-compiler` | `RobertoDure/mcp-latex-server` | Échec (code `1`) | **1.** Nom d'exécutable erroné dans la config (`latex-server` au lieu de `mcp-latex-server.exe`).<br>**2.** Paquet amont cassé : même avec `mcp-latex-server --help`, le point d'entrée échoue sur `ModuleNotFoundError: No module named 'latex_server'`. |
-| `latex-workshop-assistant` | `Yeok-c/latex-mcp-server` | Démarre sur chemin réel (`0`), plante sur `${workspaceFolder}` (`1`) | **1.** Hors VS Code (ou sans interpolation de `${workspaceFolder}`), `--workspace "${workspaceFolder}"` échoue au démarrage avec `Workspace does not exist: C:\Users\guill\dev\perso\latex\${workspaceFolder}`.<br>**2.** Avec un chemin résolu, le serveur (`latex-mcp-server` v`0.1.0`) répond en JSON-RPC et expose 9 outils (`compile_latex`, `download_bibliography`, `extract_bibliography`, `list_tex_files`, `read_file`, `read_pdf`, `read_pdf_from_citation`, `suggest_bib_key`, `summarize_text`), mais `compile_latex` cible `pdflatex`/`xelatex` via `latexmk` plutôt que la chaîne locale LuaLaTeX + `chktex`. |
+| **Global (Chef)** | Source unique globale (0 MCP LaTeX) | `C:\Users\guill\.agents\mcp_config.json` | `io.draw/mcp`, `brave-search` |
+| **Global (Script)** | Synchronisation MCP globale | `C:\Users\guill\.agents\scripts\sync-mcp-global.ps1` (appelé aussi par `deploy-and-sync-global.ps1`) | Lit le chef global et copie en UTF-8 sans BOM |
+| **Global (Copiés)** | Antigravity, Gemini, Claude, Cline | `C:\Users\guill\.gemini\config\mcp_config.json`, `C:\Users\guill\.gemini\mcp_config.json`, `C:\Users\guill\.claude\mcp.json`, `C:\Users\guill\.cline\data\settings\cline_mcp_settings.json` | Tous identiques au chef global (`io.draw/mcp`, `brave-search`) |
+| **Global (Copié)** | VS Code global | `%APPDATA%\Code\User\mcp.json` | `servers` (`io.draw/mcp`, `brave-search`) + `inputs` préservés |
+| **Global (Plugin)** | Extension KiCad uniquement | `C:\Users\guill\.agents\plugins\kicad-suite\mcp_config.json` | `konnect`, `jlc-parts` (aucun MCP LaTeX) |
+| **Local LaTeX (Chef)** | Source unique du projet | [`.agents/mcp_config.json`](../.agents/mcp_config.json) | `arxiv-latex`, `zotero-citations` |
+| **Local LaTeX (Copiés)** | VS Code, Claude, Gemini projet | `.vscode/mcp.json`, `.mcp.json`, `.claude/mcp.json`, `.gemini/mcp_config.json`, `.gemini/config/mcp_config.json` | Tous identiques au chef local via [`.agents/scripts/sync-mcp.ps1`](../.agents/scripts/sync-mcp.ps1) |
 
-### 4.3 Pistes d'action recommandées (sur accord préalable)
-1. **Supprimer `latex-compiler` de `.agents/mcp_config.json`** : le dépôt amont `RobertoDure/mcp-latex-server` ne fonctionne pas en l'état (`ModuleNotFoundError`).
-2. **Pour `latex-workshop-assistant` :**
-   - soit le **retirer** de `.agents/mcp_config.json` puisque les outils locaux ([`compile.ps1`](../.agents/skills/latex-document-manager/scripts/compile.ps1), [`lint-latex.ps1`](../.agents/skills/latex-quality-auditor/scripts/lint-latex.ps1)) gèrent déjà LuaLaTeX, Biber et `chktex` ;
-   - soit remplacer `--workspace "${workspaceFolder}"` par `--workspace "."` (si le répertoire courant du client MCP est déjà la racine du projet) et l'enregistrer côté configuration MCP globale Antigravity si vous souhaitez disposer de ses outils auxiliaires (`list_tex_files`, `suggest_bib_key`, etc.).
+### 4.4 Actions appliquées (validées)
+1. **Nettoyage du projet LaTeX :**
+   - Suppression de `latex-compiler` (paquet amont cassé) et `latex-workshop-assistant` (`compile_latex` limité à `pdflatex`/`xelatex`, redondant avec [`compile.ps1`](../.agents/skills/latex-document-manager/scripts/compile.ps1), [`lint-latex.ps1`](../.agents/skills/latex-quality-auditor/scripts/lint-latex.ps1) et nos outils natifs), ainsi que de leur mention dans [`.agents/subagents/compiler-debugger.md`](../.agents/subagents/compiler-debugger.md).
+   - Promotion de `io.draw/mcp` et `brave-search` au niveau global pour éviter tout doublon dans ce dépôt, et resynchronisation locale via [`.agents/scripts/sync-mcp.ps1`](../.agents/scripts/sync-mcp.ps1) (`arxiv-latex` et `zotero-citations` uniquement).
+2. **Harmonisation globale :**
+   - Création de `C:\Users\guill\.agents\scripts\sync-mcp-global.ps1` et intégration dans `C:\Users\guill\.agents\scripts\deploy-and-sync-global.ps1` (étape 8), garantissant que tous les assistants globaux restent alignés sur `C:\Users\guill\.agents\mcp_config.json` sans aucun serveur réservé à LaTeX.
+
+
 

@@ -13,7 +13,6 @@ Assurer **z√©ro erreur fatale** et **le minimum d'avertissements possible** apr√
 
 ## Outils & Commandes
 - Build principal : `latexmk -lualatex -outdir=build -interaction=nonstopmode -synctex=1 main.tex` (ou `.\.agents\skills\latex-document-manager\scripts\compile.ps1 -ProjectDir "<projet>"`).
-- Serveurs MCP : `latex-compiler` et `latex-workshop-assistant`.
 - Linter : `chktex` (`.chktexrc`) et `.\.agents\skills\latex-quality-auditor\scripts\lint-latex.ps1 -TargetDir "<projet>" -RunChkTeX`.
 
 ---

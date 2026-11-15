@@ -1,31 +1,5 @@
 {
   "mcpServers": {
-    "io.draw/mcp": {
-      "url": "https://mcp.draw.io/mcp",
-      "gallery": "https://api.mcp.github.com",
-      "version": "1.0.3"
-    },
-    "latex-compiler": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/RobertoDure/mcp-latex-server",
-        "latex-server"
-      ],
-      "env": {
-        "LATEX_SERVER_BASE_PATH": "${workspaceFolder}"
-      }
-    },
-    "latex-workshop-assistant": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/Yeok-c/latex-mcp-server",
-        "latex-mcp-server",
-        "--workspace",
-        "${workspaceFolder}"
-      ]
-    },
     "arxiv-latex": {
       "command": "uvx",
       "args": [
@@ -40,17 +14,6 @@
       ],
       "env": {
         "ZOTEUS_LOCAL": "true"
-      }
-    },
-    "brave-search": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-brave-search"
-      ],
-      "env": {
-        "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
       }
     }
   }
