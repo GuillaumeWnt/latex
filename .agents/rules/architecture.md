@@ -15,7 +15,7 @@ projets/<nom_projet>/
 ├── .chktexrc-en              # Linter typographique anglais (sans -n26)
 ├── .editorconfig             # UTF-8, LF, indentation 2 espaces (.tex/.cls/.sty/.bib)
 ├── .gitignore                # Exclusion de build/ et des auxiliaires TeX
-├── .aiexclude / .claudeignore / .geminiignore # Règles d'exclusion IA (PDF et logs lisibles)
+├── .aiexclude / .geminiignore # Règles d'exclusion IA (PDF et logs lisibles)
 ├── config/
 │   ├── packages.sty          # Importation ordonnée et configuration des packages tiers
 │   └── macros.sty            # Macros maths/texte (\term, \code), boîtes tcolorbox, géométries, \todoH
@@ -66,14 +66,16 @@ Pour un jeu de diapositives indépendant d'un rapport, utiliser `templates/templ
 
 ```text
 .agents/
-├── mcp_config.json            # Serveurs MCP métier du workspace (synchronisés via sync-mcp.ps1)
+├── mcp_config.json            # Serveurs MCP métier du workspace
 ├── rules/                     # Règles locales (architecture, general, coding-style, testing, security)
-├── scripts/sync-mcp.ps1       # Synchronisation MCP vers .vscode, .claude, .gemini
-├── workflows/                 # Procédures pas-à-pas (new-project, new-slides, markdown-to-latex, latex-to-slides, build-and-verify)
-├── subagents/                 # Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille)
+├── agents/                    # Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille)
 └── skills/                    # Skills modulaires :
+    ├── new-project/           # Initialisation de projet depuis template_officiel
+    ├── new-slides/            # Initialisation de diaporama depuis template_slides ou integrated
+    ├── build-and-verify/      # Compilation LuaLaTeX + audit ChkTeX/log
     ├── markdown-to-latex/     # Conversion Markdown -> LaTeX enrichi (ClasseGuillaume)
     ├── latex-slides/          # Diaporamas modernes 16:9 (ClasseGuillaumeSlides, autonome ou integrated)
+    ├── latex-to-slides/       # Transformation document LaTeX/PDF -> diaporama moderne
     ├── latex-document-manager/# Gestion documentaire, KOMA+geometry, erreurs courantes
     ├── latex-quality-auditor/ # Audit typographique, booktabs, lint-latex.ps1 + chktex
     ├── visual-diagrams/       # Draw.io MCP & TikZ / cadreFigure

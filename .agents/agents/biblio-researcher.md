@@ -1,7 +1,9 @@
 ---
 name: biblio-researcher
-role: Spécialiste Bibliographie & Zotero
 description: Expert en recherche bibliographique, intégration MCP Zotero, gestion BibLaTeX/Biber (tous styles) et tableaux de synthèse.
+subagent: true
+mainAgent: false
+tools: [read_file, edit_file, write_file, run_command, manage_task, search_web]
 ---
 
 # Sous-agent : Spécialiste Bibliographie & Zotero

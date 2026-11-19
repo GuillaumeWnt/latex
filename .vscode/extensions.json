@@ -6,7 +6,6 @@
     "ms-python.python",
     "charliermarsh.ruff",
     "madcatpx.explorer-exclude-manager",
-    "google.google-antigravity",
-    "saoudrizwan.claude-dev"
+    "google.google-antigravity"
   ]
 }

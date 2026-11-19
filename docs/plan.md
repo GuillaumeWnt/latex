@@ -1,6 +1,5 @@
-# Plan d'exécution — Commentaire de marge sur le renvoi p. 50 vers l'annexe A (p. 62–63)
+# Plan d'exécution — Documentation `.chktexrc` et avertissements rencontrés sur `portfolio`
 
-- [x] Localiser dans `projets/portfolio/` le passage correspondant à la p. 50 et le renvoi vers l'annexe A (p. 62–63) ainsi que les macros de marge actives (`\todoH`, `\noteMarge`, options `main.tex`)
-- [x] Ajouter le commentaire de marge adéquat dans le fichier `.tex` concerné
-- [x] Compiler le document avec LuaLaTeX (`compile.ps1`) et exécuter `lint-latex.ps1` / `chktex` pour vérifier 0 erreur et un rendu propre
-- [x] Inspecter visuellement la p. 50 du PDF généré (ou vérifier la position/page dans le PDF/log) et mettre à jour `docs/plan.md`
+- [x] Collecter tous les types d'avertissements ChkTeX réellement émis sur `projets/portfolio/` (avec `.chktexrc`, avec `-w` sur les règles masquées et avec `.chktexrc-en`) ainsi que ceux de `lint-latex.ps1` et `build/main.log`
+- [x] Rédiger l'explication ciblée dans `docs/chktexrc-guide.md` (arguments/directives de `.chktexrc` / `.chktexrc-en` + typologie exacte des avertissements rencontrés dans `portfolio`)
+- [x] Relire `docs/chktexrc-guide.md`, vérifier `git status -s` et clôturer `docs/plan.md`

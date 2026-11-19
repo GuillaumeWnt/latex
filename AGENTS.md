@@ -1,6 +1,6 @@
 # AGENTS.md — Directives Locales du Workspace LaTeX
 
-> **Portée :** Ce fichier complète les directives globales (`C:\Users\guill\.agents\AGENTS.md`) pour l'écosystème LaTeX modulaire de ce dépôt. Les règles déjà définies globalement (langue française, commits Conventional Commits, suivi `docs/plan.md` et `docs/historique.md`, `uv`, capitalisation `.md`, gouvernance `.agents/`, économie de tokens) ne sont pas répétées ici.
+> **Portée :** Ce fichier complète les directives globales (`C:\Users\guill\.gemini\GEMINI.md`) pour l'écosystème LaTeX modulaire de ce dépôt. Les règles déjà définies globalement (langue française, commits Conventional Commits, suivi `docs/plan.md` et `docs/historique.md`, `uv`, capitalisation `.md`, gouvernance `.gemini/` / `.agents/`, économie de tokens) ne sont pas répétées ici.
 
 ---
 
@@ -40,9 +40,9 @@
    - Sauts de ligne sémantiques (une phrase ou clause par ligne) et indentation à 2 espaces.
    - Ne jamais commiter ni éditer les artefacts de `build/`.
 4. **Rédaction rapide Markdown $\rightarrow$ LaTeX enrichi :**
-   - Lorsqu'un brouillon est rédigé en Markdown puis transcrit en LaTeX, appliquer systématiquement le skill [`markdown-to-latex`](.agents/skills/markdown-to-latex/SKILL.md) et le workflow [`markdown-to-latex.md`](.agents/workflows/markdown-to-latex.md).
+   - Lorsqu'un brouillon est rédigé en Markdown puis transcrit en LaTeX, appliquer systématiquement le skill [`markdown-to-latex`](.agents/skills/markdown-to-latex/SKILL.md).
 5. **Présentations modernes (Beamer éditorial / `ClasseGuillaumeSlides`) :**
-   - Utiliser [`templates/template_slides/`](templates/template_slides/README.md) pour un diaporama autonome ou `<projet>/slides/` (`integrated`) pour un diaporama lié à un document, en suivant le skill [`latex-slides`](.agents/skills/latex-slides/SKILL.md) et le workflow [`latex-to-slides.md`](.agents/workflows/latex-to-slides.md) lorsqu'on part d'un document LaTeX (interne ou externe).
+   - Utiliser [`templates/template_slides/`](templates/template_slides/README.md) pour un diaporama autonome ou `<projet>/slides/` (`integrated`) pour un diaporama lié à un document, en suivant les skills [`latex-slides`](.agents/skills/latex-slides/SKILL.md) et [`latex-to-slides`](.agents/skills/latex-to-slides/SKILL.md) lorsqu'on part d'un document LaTeX (interne ou externe).
 
 ---
 
@@ -55,6 +55,5 @@
 | [`.agents/rules/coding-style.md`](.agents/rules/coding-style.md) | Syntaxe LaTeX, maths, tableaux, boîtes `tcolorbox`, labels et annotations |
 | [`.agents/rules/testing.md`](.agents/rules/testing.md) | Compilation LuaLaTeX, contrôle 0 erreur / avertissements minimaux, `chktex` |
 | [`.agents/rules/security.md`](.agents/rules/security.md) | Restriction `-shell-escape` et hygiène des métadonnées / `.bib` |
-| [`.agents/workflows/`](.agents/workflows) | Procédures (`new-project.md`, `new-slides.md`, `markdown-to-latex.md`, `latex-to-slides.md`, `build-and-verify.md`) |
-| [`.agents/skills/`](.agents/skills) | Skills spécialisés (`markdown-to-latex`, `latex-slides`, `latex-document-manager`, `latex-quality-auditor`, `visual-diagrams`, `zotero-biblio`) |
-| [`.agents/subagents/`](.agents/subagents) | Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille) |
+| [`.agents/skills/`](.agents/skills) | Skills spécialisés (`new-project`, `new-slides`, `build-and-verify`, `markdown-to-latex`, `latex-slides`, `latex-to-slides`, `latex-document-manager`, `latex-quality-auditor`, `visual-diagrams`, `zotero-biblio`) |
+| [`.agents/agents/`](.agents/agents) | Sous-agents spécialisés (compilateur, QA, diagrammes, biblio, documentation/veille) |

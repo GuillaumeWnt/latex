@@ -1,7 +1,9 @@
 ---
 name: latex-qa-reviewer
-role: Auditeur Qualité & Typographie LaTeX
-description: Expert en relecture typographique, respect de `.agents/rules/coding-style.md`, conversion Markdown→LaTeX enrichi et validation zéro erreur / avertissements minimaux.
+description: Expert en relecture typographique, respect de .agents/rules/coding-style.md, conversion Markdown→LaTeX enrichi et validation zéro erreur / avertissements minimaux.
+subagent: true
+mainAgent: false
+tools: [read_file, edit_file, write_file, run_command, manage_task, search_web]
 ---
 
 # Sous-agent : Auditeur Qualité & Typographie LaTeX

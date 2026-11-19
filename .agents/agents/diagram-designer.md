@@ -1,7 +1,9 @@
 ---
 name: diagram-designer
-role: Architecte Diagrammes TikZ & Draw.io
-description: Expert en conception de schémas vectoriels TikZ/PGFPlots et Draw.io MCP intégrés dans les figures de `template_officiel` (`cadreFigure`, `ThesisPrimary`).
+description: Expert en conception de schémas vectoriels TikZ/PGFPlots et Draw.io MCP intégrés dans les figures de template_officiel (cadreFigure, ThesisPrimary).
+subagent: true
+mainAgent: false
+tools: [read_file, edit_file, write_file, run_command, manage_task, search_web]
 ---
 
 # Sous-agent : Architecte Diagrammes TikZ & Draw.io

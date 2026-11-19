@@ -1,8 +1,10 @@
 ---
-description: Compiler un projet LaTeX avec latexmk (LuaLaTeX), auditer le log et ChkTeX pour garantir zéro erreur et le minimum d'avertissements.
+name: build-and-verify
+description: >-
+  Compiler un projet LaTeX avec latexmk (LuaLaTeX), auditer le log et ChkTeX pour garantir zéro erreur et le minimum d'avertissements.
 ---
 
-# Workflow : Compilation & Contrôle Zéro Erreur
+# Skill : Compilation & Contrôle Zéro Erreur
 
 À exécuter systématiquement après tout ajout ou modification significative de code LaTeX.
 

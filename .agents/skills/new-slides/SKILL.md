@@ -1,10 +1,12 @@
 ---
-description: Créer une nouvelle présentation LaTeX moderne (16:9) à partir de templates/template_slides/ ou dans le sous-dossier intégré slides/ d'un projet existant.
+name: new-slides
+description: >-
+  Créer une nouvelle présentation LaTeX moderne (16:9) à partir de templates/template_slides/ ou dans le sous-dossier intégré slides/ d'un projet existant.
 ---
 
-# Workflow : Initialiser une Présentation (`ClasseGuillaumeSlides`)
+# Skill : Initialiser une Présentation (`ClasseGuillaumeSlides`)
 
-Ce workflow permet de démarrer un jeu de diapositives propre, qu'il soit autonome ou lié à un document `ClasseGuillaume`.
+Ce skill permet de démarrer un jeu de diapositives propre, qu'il soit autonome ou lié à un document `ClasseGuillaume`.
 
 ---
 
@@ -23,10 +25,10 @@ Ce workflow permet de démarrer un jeu de diapositives propre, qu'il soit autono
 
 3. **Organiser le contenu dans `sections/` :**
    - Structurer les diapositives en fichiers thématiques (`sections/01-*.tex`, `02-*.tex`, ..., `99-backup.tex`) et utiliser les macros de `config/slides-macros.sty` (`slidecard`, `alertcard`, `\metriccard`, `\kpibadge`, `\takeaway`, `\sourcenote`, `\standoutslide`, `\slideasset`).
-   - Respecter la sobriété éditoriale définie dans [`.agents/skills/latex-slides/SKILL.md`](../skills/latex-slides/SKILL.md).
+   - Respecter la sobriété éditoriale définie dans [`latex-slides`](../latex-slides/SKILL.md).
 
 4. **Compiler et vérifier la qualité :**
-   - Suivre [`.agents/workflows/build-and-verify.md`](./build-and-verify.md) sur le dossier du diaporama (`templates/template_slides` ou `projets/<nom_projet>/slides`).
+   - Suivre [`build-and-verify`](../build-and-verify/SKILL.md) sur le dossier du diaporama (`templates/template_slides` ou `projets/<nom_projet>/slides`).
    - Exiger `0` erreur, `0` `Overfull \hbox`/`\vbox` et inspecter le PDF rendu (`pdftoppm` sur les slides denses ou graphiques).
 
 5. **Rétro-portage :**

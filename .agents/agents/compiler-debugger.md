@@ -1,7 +1,9 @@
 ---
 name: compiler-debugger
-role: Spécialiste Compilation LuaLaTeX & Logs
-description: Expert en diagnostic d'erreurs de compilation LuaLaTeX/Biber, conflits `fontspec`/`geometry`/`KOMA-Script` et réduction des avertissements dans `build/*.log`.
+description: Expert en diagnostic d'erreurs de compilation LuaLaTeX/Biber, conflits fontspec/geometry/KOMA-Script et réduction des avertissements dans build/*.log.
+subagent: true
+mainAgent: false
+tools: [read_file, edit_file, write_file, run_command, manage_task, search_web]
 ---
 
 # Sous-agent : Spécialiste Compilation LuaLaTeX & Logs
